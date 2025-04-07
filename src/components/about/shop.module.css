@@ -1,0 +1,663 @@
+@font-face {
+  font-family: font1;
+  src: url(/fonts/07070ee11dc38bfbd060.woff);
+}
+@font-face {
+  font-family: font2;
+  src: url(/fonts/b44b93a780ecd8dbafec.woff);
+}
+@font-face {
+  font-family: font3;
+  src: url(/fonts/bd8de66be4175fed48a7.woff);
+}
+@font-face {
+  font-family: font4;
+  src: url(/fonts/c77ea51aaaf5f15bd55d.woff);
+}
+@font-face {
+  font-family: font5;
+  src: url(/fonts/dd34dea82ffd23ec2838.woff);
+}
+
+.shopWrapper {
+  background-color: #f7f7f7;
+  position: relative;
+}
+.shopWrapper h2 {
+  font-family: font2;
+  font-size: 10.5vw;
+  line-height: 0.8;
+  text-transform: uppercase;
+  white-space: nowrap;
+  letter-spacing: -8px;
+}
+.shopSection1 {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+.shopSection1 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shopSection2 {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  padding: 160px 80px;
+  overflow: hidden;
+}
+.shopSection2Top {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.shopSection2Top .crossImg {
+  width: 12vw;
+  height: 5vw;
+  margin-bottom: 1.5vw;
+}
+.shopSection2Top .crossImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.shopSection2Top h2 {
+  position: relative;
+  z-index: 2;
+}
+.shopSection2Top h2 span {
+  color: #7546ff;
+}
+.shopSection2TopBtm {
+  width: 100%;
+  display: flex;
+  margin-top: 6vw;
+  position: relative;
+}
+.centerCard {
+  width: 27vw;
+  background-color: #f4fa26;
+  margin: 0 auto;
+  padding: 1.2vw;
+}
+.centerCard .imgCont {
+  width: 100%;
+  height: 21vw;
+}
+.centerCard .imgCont img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.centerCard p {
+  font-family: font2;
+  font-size: 1.5vw;
+  margin-top: 1vw;
+  line-height: 0.9;
+}
+.leftCard {
+  position: absolute;
+  width: 18vw;
+  top: -30%;
+  left: 4%;
+  transform: rotate(-16deg);
+  padding: 1vw;
+  padding-bottom: 3vw;
+  background-color: white;
+}
+.leftCard img {
+  width: 100%;
+  height: auto;
+}
+
+.rightCard {
+  position: absolute;
+  width: 17vw;
+  top: -15%;
+  right: 8%;
+  padding: 1vw;
+  background-color: white;
+  transform: rotate(17deg);
+}
+.rightCard img {
+  width: 100%;
+  height: auto;
+}
+.shopSection2Bottom {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 200px;
+  position: relative;
+}
+.shopSection2Bottom h5 {
+  font-size: 2vw;
+  font-family: font5;
+  margin-bottom: 2vw;
+}
+.shopSection2Bottom h3 {
+  font-size: 5.5vw;
+  font-family: font3;
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: -5px;
+  margin-bottom: 15vw;
+}
+.shopSection2Bottom h4 {
+  font-family: font2;
+  font-size: 3.5vw;
+  line-height: 0.8;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #7546ff;
+}
+
+.strip1 {
+  position: absolute;
+  bottom: -17%;
+  left: -5%;
+  width: 14.5vw;
+  background-color: white;
+  transform: rotate(-25deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1vw;
+  padding: 1vw;
+}
+.strip1 img{
+  width: 100%;
+  height: auto;
+}
+.strip2 {
+  position: absolute;
+  bottom: -17%;
+  right: -5%;
+  width: 14.5vw;
+  background-color: white;
+  transform: rotate(25deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1vw;
+  padding: 1vw;
+}
+.strip2 img{
+  width: 100%;
+  height: auto;
+}
+
+.shopSection3 {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+.shopSection3 img {
+  width: 100%;
+  height: auto;
+}
+.shopSection3 .overlay3 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 200px;
+  padding-bottom: 50px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.17);
+}
+
+.shopSection3 .overlay3 h2 {
+  color: #f4fa26;
+
+}
+
+.shopSection3 .overlay3 p {
+  font-family: font1;
+  font-size: 2.2vw;
+  line-height: 0.9;
+  color: white;
+  font-weight: 600;
+}
+
+.shopSection3 .overlay3 h3 {
+  font-size: 4.8vw;
+  font-family: font3;
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: -5px;
+  margin-bottom: 4vw;
+  color: white;
+  margin-top: 4vw;
+}
+.titleh2 {
+  font-size: 6vw !important;
+  letter-spacing: 0px !important;
+  margin-bottom: 15vw;
+}
+.Section33Btm {
+  width: 100%;
+}
+.shopSection3 .overlay3 .imageContainer2 {
+  width: 45%;
+  position: relative;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+}
+.imageContainer2 > img {
+  width: 25%;
+  height: auto;
+  position: absolute;
+  right: 25%;
+  top: -60%;
+}
+.imageContainer2 .imgCardSec3 {
+  width: 48%;
+  background-color: white;
+  padding: 1.2vw;
+}
+
+.imageContainer2 .imgCardSec3:nth-child(1) {
+  transform: rotate(-10deg) translateY(-40%);
+}
+
+.imageContainer2 .imgCardSec3:nth-child(2) {
+  transform: rotate(10deg);
+}
+.imageContainer2 .imgCardSec3 img {
+  width: 100%;
+  height: 15vw;
+  object-fit: cover;
+}
+
+.imageContainer2 .imgCardSec3 p {
+  font-family: font2;
+  font-size: 1.3vw;
+  margin-top: 1vw;
+  line-height: 0.9;
+  color: black;
+}
+
+.imageContainer2 .imgCardSec3 p span {
+  color: #7546ff;
+}
+
+.shopSection4 {
+  width: 100%;
+  padding-top: 150px;
+}
+
+.shopSection4 .topCont {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 80px;
+  gap: 80px;
+}
+.topContHeader {
+  width: 100%;
+  text-align: center;
+}
+.topContHeader span {
+  color: #7546ff;
+}
+.bottomContPara {
+  width: 100%;
+  padding-left: 50%;
+}
+.bottomContPara h6 {
+  font-family: font2;
+  font-size: 2vw;
+  line-height: 0.9;
+  color: #7546ff;
+  margin-bottom: 1vw;
+}
+
+.bottomContPara p {
+  font-family: font3;
+  font-size: 2.2vw;
+  color: black;
+}
+.bottomContPara p span {
+  font-family: font4;
+  font-weight: 800;
+}
+
+.shopSection4 .bottomCont {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+.shopSection4 .bottomCont img {
+  width: 100%;
+  height: auto;
+}
+
+.shopSection5 {
+  width: 100%;
+  height: 270vh;
+  position: relative;
+}
+.shopSection5 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.shopSection5 .overlay5 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 220px;
+  padding-bottom: 150px;
+  text-align: center;
+  color: #fff;
+}
+
+.bigCardContainer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.bigCard {
+  width: 38%;
+  padding: 1.5vw;
+  background-color: #fff;
+}
+.bigCard video {
+  width: 100%;
+}
+
+.bigCard p {
+  font-family: font2;
+  font-size: 1.9vw;
+  text-transform: capitalize;
+  color: #7546ff;
+  margin-top: 1vw;
+}
+
+.shopSection5 .overlay5 h2 {
+  font-family: font2;
+  font-size: 10.5vw;
+  line-height: 0.8;
+  text-transform: uppercase;
+  white-space: nowrap;
+  letter-spacing: -8px;
+}
+
+.shopSection6 {
+  width: 100%;
+  height: 120vh;
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 100px 0;
+  gap: 40px;
+}
+
+.shopSection6 div h2 {
+  font-size: 7.5vw;
+  font-family: font2;
+  line-height: 0.8;
+  text-transform: uppercase;
+  white-space: nowrap;
+  letter-spacing: -8px;
+}
+.shopSection6 h2 span {
+  color: #7546ff;
+}
+
+.shopSection6 img {
+  width: 70%;
+  height: auto;
+}
+
+.shopSection7 {
+  width: 100%;
+  height: 120vh;
+  padding: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  position: relative;
+}
+
+.secPara7 {
+  width: 55%;
+}
+.secPara7:nth-child(1) {
+  margin-right: 35%;
+  width: 43%;
+}
+.secPara7 h6 {
+  font-family: font2;
+  font-size: 2vw;
+  line-height: 0.9;
+  color: #7546ff;
+  margin-bottom: 1vw;
+}
+
+.secPara7 p {
+  font-family: font3;
+  font-size: 2.2vw;
+  color: black;
+}
+.secPara7 p span {
+  font-family: font4;
+  font-weight: 800;
+}
+
+.shopSection7 .strip7 {
+  position: absolute;
+  width: 14.5vw;
+  height: auto;
+  padding: 1vw;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1vw;
+  top: -10%;
+  left: 5%;
+  transform: rotate(-25deg);
+}
+.shopSection7 .strip7 img{
+  width: 100%;
+  height: auto;
+}
+.rightCardCont {
+  width: 42%;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.cardLg {
+  width: 50%;
+  transform: rotate(20deg) translateX(55%) translateY(-20%);
+  position: relative;
+  z-index: 2;
+}
+.cardLg img {
+  width: 100%;
+  height: auto;
+}
+
+.cardSm {
+  position: absolute;
+  width: 30%;
+  bottom: 0;
+  left: -5%;
+  transform: rotate(-20deg);
+}
+.cardSm img {
+  width: 100%;
+  height: auto;
+}
+
+.rightCardCont > img {
+  position: absolute;
+  bottom: -8%;
+  left: 35%;
+  transform: translateX(-50%);
+  width: 40%;
+  height: auto;
+  z-index: 3;
+}
+
+.shopSection8 {
+  width: 100%;
+  height: 120vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 80px;
+  padding-top: 220px;
+  overflow: hidden;
+}
+
+.shopSection8  h2 {
+  font-size: 4vw;
+  text-align: center;
+  letter-spacing: -1px;
+  font-family: font2;
+  line-height: .8;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.shopSection8  h2 span {
+  color: #7546ff;
+}
+
+.shopSection8 .strip8 {
+  width: 14.5vw;
+  height: auto;
+  position: absolute;
+  bottom: 0%;
+  right: 0;
+  padding: 1vw;
+  display: flex;
+  flex-direction: column;
+  gap: 1vw;
+  justify-content: space-between;
+  transform: rotate(25deg);
+}
+.shopSection8 .strip8 img{
+  width: 100%;
+  height: auto;
+}
+
+.productListing {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+.leftProCon {
+  position: sticky;
+  top: 0;
+  width: 50%;
+  height: 100vh;
+  border-right: 1px solid black;
+}
+.leftProCon img {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+}
+.overlayLeftp {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #f7f7f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all ease 0.2s;
+}
+.overlayLeftp:hover {
+  background-color: transparent;
+}
+
+.overlayLeftp img {
+  width: 50%;
+  height: auto;
+}
+
+.rightProCon {
+  width: 50%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.productCard {
+  width: 50%;
+  height: 50vh;
+  position: relative;
+  border-bottom: 1px solid black;
+}
+.productCard:nth-child(2n) {
+  border-left: 1px solid black;
+}
+
+.productCard img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlayRightp {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #f7f7f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all ease 0.2s;
+}
+
+.overlayRightp:hover {
+  background-color: transparent;
+}
+
+.overlayRightp img {
+  width: 50%;
+  height: auto;
+}

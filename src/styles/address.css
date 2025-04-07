@@ -1,0 +1,93 @@
+.address-div{
+    width: 49%;
+    border: 0.5px solid rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    min-height: 190px;
+    border-radius: 6px;
+    display: flex;
+    gap: 15px;
+    cursor: pointer;
+}
+.line-order{
+    margin-bottom: 30px !important;
+}
+.address-div:hover{
+    background-color: rgba(0, 0, 0, 0.03);
+}
+.wrap-payment-head{
+    padding: 20px;
+    padding-bottom: 0;
+}
+.localogo{
+    font-size: 25px;
+}
+.locationlogo{
+
+}
+.logoplus{
+    font-size: 25px;
+}
+.add-btn{
+    width: 10vw;
+}
+.add-detail{
+    width: 45vw;
+}
+.logowithadd{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+}
+.logowithadd p{
+    color: red;
+}
+.setadd{
+    /* padding: 14px; */
+    /* height: 60vh; */
+    overflow: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 3px;
+}
+.add-name{
+    font-weight: 400;
+    font-size: 12px;
+    font-family: var(--primary-font-Hel);
+}
+.phone-btn{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.btns-add {
+    display: flex;
+    gap: 10px;
+}
+.ava{
+    border-radius: 15px;
+    padding: 5px;
+    width: 80px;
+    height: 30px;
+}
+.ava:hover{
+    background-color: #e5f2fd;
+}
+.menupro:hover{
+    background-color: #e5f2fd;
+}
+
+.name-btn{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pro-name{
+    padding: 10px;
+}
+.itempro{
+    margin-left: 15px;
+}
