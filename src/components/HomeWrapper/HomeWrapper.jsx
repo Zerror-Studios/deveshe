@@ -21,7 +21,7 @@ const HomeWrapper = ({ children, openBag, setOpenBag  }) => {
       gsap.set(headerLogo.current, { opacity: 1, top: "0%" });
     } else {
       gsap.set(homeRef.current, { top: "0%" });
-      gsap.set(headerNav.current, { top: "calc(100vh - 65px)" });
+      gsap.set(headerNav.current, { top: "calc(100dvh - 65px)" });
       gsap.set(headerLogo.current, { opacity: 0, top: "calc(100vh - 130px)" });
     }
   }, []);
@@ -73,7 +73,7 @@ const HomeWrapper = ({ children, openBag, setOpenBag  }) => {
           ease: "power2.out",
         }, "a")
         .to(headerNav.current, {
-          top: "calc(100vh - 65px)",
+          top: "calc(100dvh - 65px)",
           duration: 0.8,
           ease: "power2.out",
         }, "a")
