@@ -1,5 +1,4 @@
 import Footer from "@/components/common/Footer";
-import Navbar from "@/components/common/Navbar";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "../../store";
@@ -30,9 +29,6 @@ export default function App({ Component, pageProps }) {
     <>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          {/* {!((pathName=='/checkout')||(pathName=='/profile')||(pathName=='/paymentstatus')||(pathName=='/product')) && 
-          <Navbar openBag={false} setOpenBag={setOpenBag} />
-          } */}
           <HomeWrapper  openBag={false} setOpenBag={setOpenBag} >
             <Component {...pageProps}/>
             { pathName !=='/' && <Footer />}

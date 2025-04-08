@@ -3,7 +3,6 @@ import HomeSlider from "../HomeSlider/HomeSlider";
 import { useRouter } from "next/router";
 import gsap from "gsap";
 import HeaderLogo from "../Common/HeaderLogo";
-import HeaderNavigation from "../Common/HeaderNavigation";
 import Navbar from "../common/Navbar";
 
 const HomeWrapper = ({ children, openBag, setOpenBag  }) => {
@@ -92,7 +91,6 @@ const HomeWrapper = ({ children, openBag, setOpenBag  }) => {
     <div className="home-wrapper">
       <HomeSlider homeRef={homeRef} />
       <HeaderLogo headerLogo={headerLogo} />
-      {/* <HeaderNavigation headerNav={headerNav} /> */}
       <Navbar headerNav={headerNav} openBag={openBag} setOpenBag={setOpenBag}/>
       {children}
     </div>
