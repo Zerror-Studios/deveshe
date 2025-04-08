@@ -2,8 +2,8 @@ import React, {useEffect, useRef} from "react";
 import HomeSlider from "../HomeSlider/HomeSlider";
 import { useRouter } from "next/router";
 import gsap from "gsap";
-import HeaderLogo from "../Common/HeaderLogo";
 import Navbar from "../common/Navbar";
+import HeaderLogo from "../common/HeaderLogo";
 
 const HomeWrapper = ({ children, openBag, setOpenBag  }) => {
   const route = useRouter();
