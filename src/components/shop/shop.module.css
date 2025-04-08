@@ -682,3 +682,106 @@
   width: 50%;
   height: auto;
 }
+
+
+
+@media (max-width: 576px) { 
+  .shopSection3 {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: white;
+  }
+  .shopSection3 .overlay3 h2 {
+    color: #f4fa26;
+    font-family: font2;
+    font-size: 10.5vw;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    letter-spacing: 0px;
+  }
+  .shopSection3> img {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+  }
+  .shopSection3 .overlay3 .Section33Btm > p {
+    font-family: font1;
+    font-size: 7vw;
+    line-height: 0.9;
+    color: white;
+    font-weight: 100;
+  }
+  .shopSection2Top h2 {
+    position: relative;
+    z-index: 2;
+    font-family: font2;
+    font-size: 10.5vw;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    letter-spacing: 0px;
+  }
+  .shopSection2Bottom h5 {
+    font-size: 6vw;
+    font-family: font5;
+    margin-bottom: 2vw;
+  }
+  .shopSection2Bottom h3 {
+    font-size: 5.5vw;
+    font-family: font3;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0px;
+    margin-bottom: 15vw;
+  }
+  
+.strip1 {
+  position: absolute;
+  bottom: -17%;
+  left: 0%;
+  width: 16vw;
+  background-color: white;
+  transform: rotate(-15deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1vw;
+  padding: 1vw;
+}
+
+.strip2 {
+  position: absolute;
+  bottom: -17%;
+  right: 0%;
+  width: 16vw;
+  background-color: white;
+  transform: rotate(15deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1vw;
+  padding: 1vw;
+}
+.shopSection2 {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  padding: 160px 20px 60px;
+  overflow: hidden;
+}
+.shopSection4 h2 {
+  font-family: font2;
+  font-size: 10.5vw;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-align: center;
+  letter-spacing: 0px;
+}
+.shopSection4 .topCont {
+  padding: 20px;
+}
+ }
