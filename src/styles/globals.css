@@ -1130,6 +1130,10 @@ li {
 
 /* Extra Small Devices (Phones) */
 @media (max-width: 576px) {  
+  .header-links a, .header-links span {
+    font-size: 10px;
+    font-weight: 600;
+}
   .Footer_wrapper{
     padding: 20px;
   }
