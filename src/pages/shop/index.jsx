@@ -6,10 +6,10 @@ import React from "react";
 
 const index = () => {
   return <>
-  <Section3/>
-  <Section2/>
-  <ShopAll />
-  <Section4/>
+    <Section3 />
+    <Section2 />
+    <ShopAll />
+    <Section4 />
   </>;
 };
 

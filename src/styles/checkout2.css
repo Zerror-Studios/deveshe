@@ -1,7 +1,8 @@
 .checkout-cont {
   display: flex;
-  margin: 50px 0px;
+  padding: 200px 0px 50px;
   justify-content: center;
+  background-color: white;
 }
 /* new-left-code */
 
@@ -777,7 +778,7 @@ input:focus {
 .final-checkout-cont {
   width: 100%;
   position: sticky;
-  top: 30px;
+  top: 150px;
   background-color: rgb(245 243 243 / 60%);
   padding: 30px 30px;
 }

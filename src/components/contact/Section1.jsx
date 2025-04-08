@@ -59,32 +59,32 @@ const Section1 = () => {
     <section id="page1">
         <div id="form">
             <div id="left">
-                <h2>CONTACT</h2>
+                <h2>contact</h2>
             </div>
             <div id="right">
                 <form action="">
                     <div className="input lineanime">
                         <input type="text"/>
-                        <h6>NAME*</h6>
+                        <h6>name*</h6>
                         <div className="linei"></div>
                     </div>
                     <div className="input lineanime">
                         <input type="text"/>
-                        <h6>EMAIL*</h6>
+                        <h6>email*</h6>
                         <div className="linei"></div>
                     </div>
                     <div className="input lineanime">
                         <input type="text"/>
-                        <h6>TOPICS*</h6>
+                        <h6>topic*</h6>
                         <div className="linei"></div>
                     </div>
                     <div className="input lineanime">
                         <input type="text"/>
-                        <h6>PHONE NUMBER*</h6>
+                        <h6>phone number*</h6>
                         <div className="linei"></div>
                     </div>
                     <div className="textarea lineanime">
-                        <h6>MESSGAE*</h6>
+                        <h6>message*</h6>
                         <div className="linei"></div>
                         <textarea name="" id=""></textarea>
                     </div>

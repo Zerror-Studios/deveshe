@@ -427,7 +427,7 @@ const Checkout2 = () => {
                 src="https://cdn.shopify.com/s/files/1/0030/2946/7203/files/NourHammour_Logo_Transparent_Black_x320.png?v=1693321966"
                 alt=""
               /> */}
-                <h1>SOULVEDIC</h1>
+                <h1>De Ve She Dreams</h1>
               </Link>
             </span>
             <span>

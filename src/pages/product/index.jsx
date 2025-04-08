@@ -278,7 +278,7 @@ const ProductPage = () => {
   }, [btnLoading]);
   return (
     <>  
-      <Navbar openBag={openBag} setOpenBag={setOpenBag} />
+      {/* <Navbar openBag={openBag} setOpenBag={setOpenBag} /> */}
       {isModalVisible && (
         <div className="ReactModalPortal_img_cntr">
           <div className="ReactModalPortal_img_cntr_overlay">

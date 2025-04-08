@@ -19,21 +19,24 @@ import "@/styles/collectionLoader.css";
 import "@/styles/collections.css";
 import "@/styles/shopAll.css";
 import { useState } from "react";
+import HomeWrapper from "@/components/HomeWrapper/HomeWrapper";
 // import Modal from "@/components/Modal";
 export default function App({ Component, pageProps }) {
   const router = useRouter();
   const pathName = router.pathname;
-  console.log(pathName,"path")
+  console.log(pathName, "path")
   const [openBag, setOpenBag] = useState(false)
   return (
     <>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          {!((pathName=='/checkout')||(pathName=='/profile')||(pathName=='/paymentstatus')||(pathName=='/product')) && 
+          {/* {!((pathName=='/checkout')||(pathName=='/profile')||(pathName=='/paymentstatus')||(pathName=='/product')) && 
           <Navbar openBag={false} setOpenBag={setOpenBag} />
-          }
-          <Component {...pageProps} />
-          <Footer />
+          } */}
+          <HomeWrapper  openBag={false} setOpenBag={setOpenBag} >
+            <Component {...pageProps}/>
+            { pathName !=='/' && <Footer />}
+          </HomeWrapper>
         </PersistGate>
       </Provider>
     </>
