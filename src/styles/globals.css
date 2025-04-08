@@ -1149,7 +1149,7 @@ li {
     white-space: nowrap;
 } 
 .header-links {
-  gap: 25px;
+  gap: 20px;
   padding: 0 15px;
 }
 #header-logo {
