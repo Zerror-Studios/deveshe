@@ -26,7 +26,7 @@ export default function About() {
         <Section8/>
         {/* <Hero /> */}
         <Nails_Cntr />
-        <ProductCards />
+        {/* <ProductCards /> */}
       </main>
     </>
   );

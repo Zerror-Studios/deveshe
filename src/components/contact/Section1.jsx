@@ -100,8 +100,8 @@ const Section1 = () => {
             <div className="elem">
                 <div className="add">
                     <h6>Business enquiries</h6>
-                    <h5>info@wealthfusion.co.uk</h5>
-                    <h5>+44 (0) 208 154 7030</h5>
+                    <h5>info@deveshe.co</h5>
+                    <h5>+44 208 154 7030</h5>
                 </div>
                 <div className="add">
                     <h6>Address</h6>

@@ -3,14 +3,16 @@ import Section2 from "@/components/shop/Section2";
 import Section3 from "@/components/shop/Section3";
 import Section4 from "@/components/shop/Section4";
 import React from "react";
+import ProductListing from "../../components/shop/ProductListing";
 
 const index = () => {
   return <>
     <Section3 />
     <Section2 />
-    <ShopAll />
+    <ProductListing/>
+    {/* <ShopAll /> */}
     <Section4 />
-  </>;
+  </>
 };
 
 export default index;

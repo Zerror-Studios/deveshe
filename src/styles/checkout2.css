@@ -1021,3 +1021,26 @@ input:focus {
   width: 500px;
   height: 35px;
 }
+
+
+
+@media (max-width: 576px){
+  .checkout-cont{
+    flex-direction: column;
+  }
+  .checkout-left {
+    width: 100%;
+    padding: 20px;
+  }
+  .checkout-right {
+    width: 100%;
+    margin: 0px 0px;
+    padding: 20px;
+}
+.summary-cont{
+  gap: 20px;
+}
+.checkout_header .checkout_header_titile h1 {
+  font-size: 2rem;
+}
+}

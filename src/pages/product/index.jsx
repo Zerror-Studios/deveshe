@@ -18,7 +18,11 @@ import AnimBtn from "@/components/common/AnimBtn";
 gsap.registerPlugin(ScrollTrigger);
 const ProductPage = () => {
   const [product, setProduct] = useState({});
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState([
+    "/product/Emerald Kaftan top (2).jpeg",
+    "/about/about-banner.webp",
+    "/shop/shop-banner1.webp",
+  ]);
   const router = useRouter();
   const dispatch = useDispatch();
   const { id } = router.query;
@@ -39,7 +43,7 @@ const ProductPage = () => {
 
         if (res) {
           setProduct(res);
-          setImages([...res.images]);
+          // setImages([...res.images]);
           if (res.discountperunit) {
             setFinalPrice(res.priceperunit - res.discountperunit);
           } else {
@@ -64,7 +68,6 @@ const ProductPage = () => {
       console.error(err);
     }
   };
-  console.log(selectedVarients, "sel");
   const handleEnablebtn = () => {
     if (product) {
       if (product.colorVar) {
@@ -276,6 +279,40 @@ const ProductPage = () => {
   useEffect(() => {
     handleBtnLoading();
   }, [btnLoading]);
+
+  const ShopCardDetails = [
+    {
+      id: 1,
+      image1: "/product/Ombré crochet patch dress- Brown (1).JPG",
+      BrandName: "BrandName",
+      ProductName: "ProductName",
+      price: "1200",
+    },
+    {
+      id: 2,
+      image1: "/product/Emerald Kaftan top (2).jpeg",
+      BrandName: "BrandName",
+      ProductName: "ProductName",
+      price: "1200",
+    },
+    {
+      id: 3,
+      image1: "/product/Ombré pink slit top (1).JPG",
+      BrandName: "BrandName",
+      ProductName: "ProductName",
+      price: "1200",
+    },
+    {
+      id: 4,
+      image1: "/product/Ombré yellow wrap shirt.jpeg",
+      BrandName: "BrandName",
+      ProductName: "ProductName",
+      price: "1200",
+    },
+  ]
+
+
+
   return (
     <>  
       {/* <Navbar openBag={openBag} setOpenBag={setOpenBag} /> */}
@@ -323,6 +360,7 @@ const ProductPage = () => {
                               </button>
                             );
                           })}
+
                         <div className="ProductDets_img_slider_bar_cntr">
                           <div className="ProductDets_img_slider_bar"></div>
                         </div>
@@ -583,7 +621,7 @@ const ProductPage = () => {
                   </span>
                 </h2>
                 <div className="Similar_prd_cntr">
-                  {ShopCardDetailsHome.map((items) => {
+                  {ShopCardDetailsHome.map((items,idx) => {
                     return (
                       <div key={items.id} className="Similar_prd_card_cntr">
                         <Link
@@ -593,7 +631,7 @@ const ProductPage = () => {
                           <div className="similar-prd shop_card_img_bgcover">
                             <div className="shop_card_img-main_cntr">
                               <img
-                                src={`${items.image1}`}
+                                src={`${ShopCardDetails[idx].image1}`}
                                 alt={`${items.BrandName}`}
                               />
                             </div>

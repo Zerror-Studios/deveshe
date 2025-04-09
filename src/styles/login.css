@@ -448,3 +448,16 @@
 	height: 25px;
 	animation: spin 2s linear infinite;
 }
+
+
+@media (max-width: 576px) {
+	.login-left-cont {
+		display: none;
+	}
+	.login-right-cont {
+		width: 100%;
+	}
+	.login-inner {
+		width: 85%;
+	}
+ }

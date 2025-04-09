@@ -1130,6 +1130,9 @@ li {
 
 /* Extra Small Devices (Phones) */
 @media (max-width: 576px) {  
+  .back{
+    display: none;
+  }
   .header-links a, .header-links span {
     font-size: 10px;
     font-weight: 600;
