@@ -363,7 +363,7 @@ const Navbar = ({ openBag, setOpenBag , headerNav}) => {
                 <Link href="/archives">archives</Link>
                 <Link href="/about">about</Link>
                 <Link href="/contact">contact</Link>
-                <Link href="/profile">account</Link>
+                <Link id='about-link' href="/profile">account</Link>
                 <span onClick={openModal}>bag</span>
             </div>
         <Modal

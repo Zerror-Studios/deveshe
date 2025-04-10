@@ -1108,6 +1108,9 @@ li {
   z-index: 9;
   top: calc(100vh - 65px);
 }
+#about-link{
+  margin-left:35px;
+}
 .header-links  a,.header-links  span{
   color: #000;
   line-height: 0;
@@ -1130,6 +1133,9 @@ li {
 
 /* Extra Small Devices (Phones) */
 @media (max-width: 576px) {  
+  #about-link{
+    margin-left: 0px;
+  }
   #left h2{
     font-size: 2.5rem;
   }
