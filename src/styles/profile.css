@@ -1117,3 +1117,74 @@ height: 40px;
   font-size: 16px;
 }
 }
+
+@media (max-width: 576px){
+  .div-tab {
+    margin-inline: 20px;
+    margin-top: 15px;
+    position: relative;
+    z-index: 0;
+}
+  .parent-div {
+    background-color: #fff;
+    background-image: none;
+    padding-bottom: 50px;
+  }
+  .outerdiv-pro {
+    margin-inline: 0;
+    border: none;
+  }
+  .noti-main-div {
+    flex-direction: column;
+  }
+  .pay-top {
+    width: 100% !important;
+    margin-inline: 0 !important;
+  }
+.user-details-profile {
+  width: 100%;
+}
+.general-container {
+  width: 100%;
+  margin: 20px auto;
+  padding: 0;
+}
+.noti-main-div{
+  padding: 10px 20px;
+}
+.css-1wcaknn{
+  padding: 0 !important;
+}
+.noti-main-div > div:nth-child(2){
+  width: 100% !important;
+}
+.form-secure {
+  padding: 20px 0;
+}
+.fixed-right ._btn_wrapper3{
+  width: fit-content !important;
+}
+.security-left {
+  width: 100%;
+}
+.delete-info {
+  padding: 20px 0;
+}
+.de-btn{
+  width: fit-content;
+}
+.css-19ums1e-MuiButtonBase-root-MuiTab-root {
+  padding: 12px 0 !important;
+}
+.css-1cgdl3v-MuiTabs-root {
+  margin-bottom: 30px !important;
+}
+.order-div{
+  margin-inline: 0 !important;
+}
+.pay-top2 {
+  flex-direction: column;
+  align-items: start;
+  gap: 20px;
+}
+}

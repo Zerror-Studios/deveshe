@@ -977,7 +977,7 @@
 
 .ProductDets_grid {
   display: grid;
-  transition: filter 0.3s ease;
+  /* transition: filter 0.3s ease; */
   background: #ffffff;
 }
 
@@ -1485,7 +1485,7 @@ button {
 
 .ProductDets-size_numbers_cntr {
   max-width: 280px;
-  display: none;
+  /* display: none; */
   /* position: absolute; */
   top: 0;
   /* left: 236px; */

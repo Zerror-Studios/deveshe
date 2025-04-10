@@ -203,7 +203,7 @@ const ProductPage = () => {
           start: "top -400%",
           end: "top 0%",
           scrub: true,
-          markers: false,
+          // markers: true,
         },
         filter: "blur(10px)",
         transform: "translateZ(0)",
@@ -304,6 +304,13 @@ const ProductPage = () => {
     },
     {
       id: 4,
+      image1: "/shop/shop-banner1.webp",
+      BrandName: "BrandName",
+      ProductName: "ProductName",
+      price: "1200",
+    },
+    {
+      id: 5,
       image1: "/product/Ombré yellow wrap shirt.jpeg",
       BrandName: "BrandName",
       ProductName: "ProductName",
@@ -653,6 +660,34 @@ const ProductPage = () => {
                       </div>
                     );
                   })}
+                   <div key={ShopCardDetails[0].id} className="Similar_prd_card_cntr">
+                        <Link
+                          href={""}
+                          className="shop-card_grid shop-card-w-full"
+                        >
+                          <div className="similar-prd shop_card_img_bgcover">
+                            <div className="shop_card_img-main_cntr">
+                              <img
+                                src={`${ShopCardDetails[4].image1}`}
+                                alt={`${ShopCardDetails[0].BrandName}`}
+                              />
+                            </div>
+                          </div>
+                          <div className="similar-prd-text">
+                            {/* <h3 className="similar-prd-dets _brandName">{`${ShopCardDetails[0].BrandName}`}</h3> */}
+                            <h4 className="similar-prd-dets _ProductName">
+                              {" "}
+                              {`${ShopCardDetails[0].ProductName}`}
+                            </h4>
+                            <div className="shop_card_price_wrap">
+                              <div className="shop_card_price_cntr">
+                                <span>{`${ShopCardDetails[0].price}`}</span>
+                                <span>&nbsp;INR</span>
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                      </div>                  
                 </div>
                 {/* <Footer /> */}
               </div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './shop.module.css'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -81,6 +81,22 @@ const ProductListing = () => {
       image2:""
     },
   ]
+  const [displayedProducts, setDisplayedProducts] = useState(products);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 576) {
+        setDisplayedProducts(products.slice(0, 6));
+      } else {
+        setDisplayedProducts(products);
+      }
+    };
+
+    handleResize(); // check on mount
+
+    window.addEventListener('resize', handleResize); // update on resize
+    return () => window.removeEventListener('resize', handleResize);
+  }, [products]);
   return (
     <div className={styles.productListing}>
       <Link href="/product?id=6752e99c935fd014e82be779" className={styles.leftProCon}>
@@ -91,7 +107,7 @@ const ProductListing = () => {
       </Link>
       <div className={styles.rightProCon}>
         {
-          products.map((product, index) => (
+          displayedProducts.map((product, index) => (
             <Link href={`/product?id=6752e99c935fd014e82be779`} key={index} className={styles.productCard}>
               <Image width={1000} height={1000} alt='image' src={product.image1} />
               {/* <div className={styles.overlayRightp}>

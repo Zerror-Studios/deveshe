@@ -684,13 +684,11 @@
   height: auto;
 }
 
-
-
-@media (max-width: 576px) { 
+@media (max-width: 576px) {
   .shopSection3 {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 190vh;
     overflow: hidden;
     background-color: white;
   }
@@ -703,9 +701,9 @@
     white-space: nowrap;
     letter-spacing: 0px;
   }
-  .shopSection3> img {
+  .shopSection3 > img {
     width: 100%;
-    height: 100vh;
+    height: 100%;
     object-fit: cover;
   }
   .shopSection3 .overlay3 .Section33Btm > p {
@@ -726,63 +724,264 @@
     letter-spacing: 0px;
   }
   .shopSection2Bottom h5 {
-    font-size: 6vw;
+    font-size: 5vw;
     font-family: font5;
-    margin-bottom: 2vw;
+    margin-bottom: 3vw;
   }
   .shopSection2Bottom h3 {
-    font-size: 5.5vw;
+    font-size: 10vw;
     font-family: font3;
     font-weight: 500;
     line-height: 1;
     letter-spacing: 0px;
     margin-bottom: 15vw;
   }
-  
-.strip1 {
-  position: absolute;
-  bottom: -17%;
-  left: 0%;
-  width: 16vw;
-  background-color: white;
-  transform: rotate(-15deg);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 1vw;
-  padding: 1vw;
-}
 
-.strip2 {
-  position: absolute;
-  bottom: -17%;
-  right: 0%;
-  width: 16vw;
-  background-color: white;
-  transform: rotate(15deg);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 1vw;
-  padding: 1vw;
+  .strip1 {
+    position: absolute;
+    bottom: -17%;
+    left: -10%;
+    width: 16vw;
+    background-color: white;
+    transform: rotate(-20deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1vw;
+    padding: 1vw;
+  }
+
+  .strip2 {
+    position: absolute;
+    bottom: -17%;
+    right: -10%;
+    width: 16vw;
+    background-color: white;
+    transform: rotate(20deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1vw;
+    padding: 1vw;
+  }
+  .shopSection2 {
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+    padding: 100px 20px 100px;
+    overflow: hidden;
+  }
+  .shopSection4 h2 {
+    font-family: font2;
+    font-size: 10.5vw;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-align: center;
+    letter-spacing: 0px;
+  }
+  .shopSection4 .topCont {
+    padding: 20px;
+  }
+  .shop_shopSection5 {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    background-color: #fff;
+  }
+  .bigCard {
+    width: 40%;
+    padding: 2vw;
+  }
+  .shopSection6 div h2 {
+    font-size: 7.5vw;
+    font-family: font2;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    letter-spacing: 0px;
+  }
+  .shopSection6 {
+    height: 50vh;
+  }
+  .shopSection3 .overlay3 .imageContainer2 {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+  }
+  .imageContainer2 .imgCardSec3 {
+    width: 85%;
+    padding: 3vw;
+  }
+  .imageContainer2 .imgCardSec3 img {
+    height: 70vw;
+  }
+  .imageContainer2 .imgCardSec3 p {
+    font-family: font2;
+    font-size: 5vw;
+    margin-top: 1vw;
+    line-height: 1;
+    color: black;
+  }
+  .imageContainer2 .imgCardSec3:nth-child(1) {
+    transform: rotate(-10deg) translateY(-10%);
+  }
+  .shopSection3 .overlay3 {
+    justify-content: flex-start;
+  }
+  .shopSection3 .overlay3 .Section33Btm >p {
+    margin-top: 15vw !important;
+    font-weight: 600;
+    font-size: 6.5vw;
+  }
+  .imageContainer2 > img {
+    top: -25%;
+  }
+  .titleh2 {
+    font-size: 8.5vw !important;
+    letter-spacing: 0px !important;
+    margin-bottom: 50vw;
+  }
+  .shopSection3 .overlay3 h3 {
+    font-size: 7vw;
+    line-height: 1;
+    letter-spacing: 0px;
+    margin-bottom: 6vw;
+  }
+  .rightCard , .leftCard{
+    display: none;
+  }
+
+  .centerCard {
+    width: 100%;
+    padding: 3vw;
+  }
+  .centerCard .imgCont {
+    width: 100%;
+    height: 65vw;
+  }
+  .centerCard p {
+    font-family: font2;
+    font-size: 5vw;
+    margin-top: 1vw;
+    line-height: 1;
+  }
+  .shopSection2Top .crossImg {
+    width: 20vw;
+    height: 15vw;
+    margin-bottom: 1.5vw;
+  }
+  .shopSection2Bottom h4 {
+    font-size: 5vw;
+    line-height: 1;
+  }
+  .shopSection4 .bottomCont {
+    width: 100%;
+    height: 35vh;
+    display: flex;
+    align-items: center;
+  }
+  .bottomContPara {
+    width: 100%;
+    padding-left: 0%;
+  }
+  .bottomContPara h6 {
+    font-size: 7vw;
+    line-height: 1;
+    margin-bottom: 3vw;
+  }
+  
+  .bottomContPara p {
+    font-size: 5vw;
+  }
+  .shopSection4 .topCont {
+    gap: 45px;
+  }
+  .shopSection4 {
+    padding-top: 100px;
+  }
+  
+
+
+  .productListing {
+    flex-direction: column;
+  }
+  .leftProCon {
+    position: relative;
+    top: none;
+    width: 100%;
+    height: 50vh;
+    border-right: 1px solid black;
+  }
+  .leftProCon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .rightProCon {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .productCard {
+    height: 30vh;
+  }
+
+
+  .shopSection7 {
+    width: 100%;
+    height: 120vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: relative;
+  }
+
+  .secPara7:nth-child(1) {
+    margin-right: 0%;
+    width: 100%;
+  }
+  .secPara7 p {
+    font-size: 5vw;
+  }
+  .secPara7 h6 {
+    font-size: 7vw;
+    line-height: 1;
+    margin-bottom: 3vw;
+  }
+  .rightCardCont {
+    width: 100%;
+    position: absolute;
+    top: 25%;
+    right: 0;
+  }
+  .secPara7 {
+    width: 70%;
+  }
+
+  
+.shopSection7 .strip7 {
+  top: 65%;
+  left: 0%;
+  transform: rotate(-15deg);
 }
-.shopSection2 {
-  width: 100%;
-  min-height: 100vh;
-  position: relative;
-  padding: 160px 20px 60px;
-  overflow: hidden;
+.shopSection8 {
+  height: 70vh;
+  padding: 20px;
+  padding-top: 100px;
 }
-.shopSection4 h2 {
-  font-family: font2;
-  font-size: 10.5vw;
-  line-height: 1;
-  text-transform: uppercase;
-  white-space: nowrap;
+.shopSection8 h2 {
+  font-size: 8vw;
   text-align: center;
   letter-spacing: 0px;
+  font-family: font2;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: wrap;
 }
-.shopSection4 .topCont {
-  padding: 20px;
+
 }
- }

@@ -799,6 +799,7 @@ input:focus {
 .summary-cont {
   display: flex;
   position: relative;
+  gap: 20px;
   padding: 10px 10px;
   margin: 10px 0px 0px 0px;
   height: 110px;

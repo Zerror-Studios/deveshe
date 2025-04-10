@@ -3,10 +3,10 @@ import { Inter } from "next/font/google";
 import Hero from "@/components/home/Hero";
 import Nails_Cntr from "@/components/home/Nails_Cntr";
 import ProductCards from "@/components/home/ProductCards";
-import Section5 from "@/components/about/Section5";
-import Section6 from "@/components/about/Section6";
-import Section7 from "@/components/about/Section7";
-import Section8 from "@/components/about/Section8";
+import Section5 from "@/components/shop/Section5";
+import Section6 from "@/components/shop/Section6";
+import Section7 from "@/components/shop/Section7";
+import Section8 from "@/components/shop/Section8";
 
 const inter = Inter({ subsets: ["latin"] });
 
