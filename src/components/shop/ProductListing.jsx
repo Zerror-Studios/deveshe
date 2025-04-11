@@ -90,7 +90,7 @@ const ProductListing = () => {
     if (window.innerWidth > 576) return;
     const container = document.querySelector('#productCont');
     const height = container.scrollHeight;
-    const containerHeight = document.querySelector("#productContwrap").getBoundingClientRect().height * 3.64;
+    const containerHeight = document.querySelector("#productContwrap").getBoundingClientRect().height * 3.66;
     const scrollHeight = height - containerHeight;
 
     gsap.to('#productCont', {
