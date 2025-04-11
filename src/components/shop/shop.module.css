@@ -642,6 +642,10 @@
 
 .rightProCon {
   width: 50%;
+}
+.rightProConWrap{
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-wrap: wrap;
 }
@@ -922,6 +926,14 @@
   
   .rightProCon {
     width: 100%;
+    height: 50vh;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .rightProConWrap{
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-wrap: wrap;
   }
