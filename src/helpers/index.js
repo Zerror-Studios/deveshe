@@ -90,6 +90,16 @@ export const ShopCardDetailsHome = [
       "https://cdn.shopify.com/s/files/1/0030/2946/7203/files/Drey-black_1.jpg?v=1710956335&width=420&height=630&crop=center",
     image2:
       "https://cdn.shopify.com/s/files/1/0030/2946/7203/files/Drey-black_2.jpg?v=1710956336&width=420&height=630&crop=center",
+  },
+  {
+    id: "6752e9ab935fd014e82be77a",
+    BrandName: "Zakary",
+    ProductName: "Belted Leather Jacket",
+    price: "1,545",
+    image1:
+      "https://cdn.shopify.com/s/files/1/0030/2946/7203/files/Drey-black_1.jpg?v=1710956335&width=420&height=630&crop=center",
+    image2:
+      "https://cdn.shopify.com/s/files/1/0030/2946/7203/files/Drey-black_2.jpg?v=1710956336&width=420&height=630&crop=center",
   }
 ];
 export const ShopAllCard = [

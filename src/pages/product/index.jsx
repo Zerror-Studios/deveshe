@@ -7,8 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { editProduct } from "../../../api_fetch/admin/Product";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Link from "next/link";
-import Navbar from "@/components/common/Navbar";
-import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/router";
 import ProductLoader from "@/components/loaders/ProductLoader";
 import { addtocart } from "@/features/cart/CartSlice";
@@ -36,7 +34,7 @@ const ProductPage = () => {
 
   const fetchData = async () => {
     try {
-      
+
       if (id) {
         // const res = await editProduct(id);
         const res = dbProdData.find(p => p._id === id);
@@ -48,7 +46,7 @@ const ProductPage = () => {
             setFinalPrice(res.priceperunit - res.discountperunit);
           } else {
             setFinalPrice(res.priceperunit);
-          } 
+          }
 
           if (res.color) {
             setColorSelect(0);
@@ -144,7 +142,7 @@ const ProductPage = () => {
     if (enableAddToCart) {
       setTimeout(() => {
         setOpenBag(true);
-      }, 1000);
+      }, 500);
       setBtnLoading(true);
       const vararray = [];
       vararray.push(selectedVarients);
@@ -197,20 +195,51 @@ const ProductPage = () => {
           'Element with className "ProductDets_Big_img_wrap" not found.'
         );
       }
-      gsap.to(BlurContainer, {
-        scrollTrigger: {
-          trigger: ".Similar_prd_wrap",
-          start: "top -400%",
-          end: "top 0%",
-          scrub: true,
-          markers: false,
-        },
-        filter: "blur(10px)",
-        transform: "translateZ(0)",
-      });
+      // gsap.to(document.querySelector(".ProductDets_grid"), {
+      //   // onComplete:()=>{
+      //   //   gsap.to(document.querySelector(".ProductDets_grid"), {filter: "blur(10px)",duration:.5})
+      //   // },
+      //   onUpdate: function(self) {
+      //     if (self.progress === 1) {
+      //       gsap.to(".ProductDets_grid", { filter: "blur(10px)", duration: 0.5 });
+      //     } else if (self.progress < 1) {
+      //       gsap.to(".ProductDets_grid", { filter: "blur(0px)", duration: 0.5 });
+      //     }
+      //   },
+      //   scrollTrigger: {
+      //     trigger: ".Similar_prd_wrap",
+      //     scroller:"body",
+      //     start: "top 0%",
+      //     end: "top -350%",
+      //     scrub: true,
+      //     markers: true,
+      //   },
+      //   filter: "blur(10px)",
+      //   transform: "translateZ(0)",
+      // });
     }
   }, []);
 
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+  
+    ScrollTrigger.create({
+      trigger: ".Similar_prd_wrap",
+      scroller: "body",
+      start: "top 0%",
+      end: "top -350%",
+      scrub: true,
+      markers: false,
+      onUpdate: (self) => {
+        if (self.progress === 1) {
+          gsap.to(".ProductDets_grid", { filter: "blur(10px)", duration: 0.5 });
+        } else {
+          gsap.to(".ProductDets_grid", { filter: "blur(0px)", duration: 0.5 });
+        }
+      }
+    });
+  }, []);
+  
   // State to manage modal visibility and the selected image
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -321,8 +350,7 @@ const ProductPage = () => {
 
 
   return (
-    <>  
-      {/* <Navbar openBag={openBag} setOpenBag={setOpenBag} /> */}
+    <>
       {isModalVisible && (
         <div className="ReactModalPortal_img_cntr">
           <div className="ReactModalPortal_img_cntr_overlay">
@@ -519,7 +547,7 @@ const ProductPage = () => {
                                           aria-current="page"
                                           className={
                                             variantSelect[variant.title] ==
-                                            `${variant.title}-${j}`
+                                              `${variant.title}-${j}`
                                               ? "ProductDets-size_numbers acitve"
                                               : "ProductDets-size_numbers"
                                           }
@@ -549,14 +577,14 @@ const ProductPage = () => {
                         <button
                           className="ProductDets_ntfy_btn ProductDets_ntfy_btn_grid"
                           id="easysize-cart-button"
-                          style={btnLoading ? {backgroundColor:'black'}:{}}
+                          style={btnLoading ? { backgroundColor: 'black' } : {}}
                           onClick={handleAddToCart}
                         >
                           {btnLoading ? (
                             <>
-                            <div className="ani-wrap">
+                              <div className="ani-wrap">
                                 <div className="ani-main"></div>
-                            </div>
+                              </div>
                             </>
                           ) : (
                             <>
@@ -628,11 +656,11 @@ const ProductPage = () => {
                   </span>
                 </h2>
                 <div className="Similar_prd_cntr">
-                  {ShopCardDetailsHome.map((items,idx) => {
+                  {ShopCardDetailsHome.map((items, idx) => {
                     return (
-                      <div key={items.id} className="Similar_prd_card_cntr">
+                      <div key={idx} className="Similar_prd_card_cntr">
                         <Link
-                          href={""}
+                          href={{ pathname: "/product", query: { id: items.id } }}
                           className="shop-card_grid shop-card-w-full"
                         >
                           <div className="similar-prd shop_card_img_bgcover">
@@ -660,50 +688,14 @@ const ProductPage = () => {
                       </div>
                     );
                   })}
-                   <div key={ShopCardDetails[0].id} className="Similar_prd_card_cntr">
-                        <Link
-                          href={""}
-                          className="shop-card_grid shop-card-w-full"
-                        >
-                          <div className="similar-prd shop_card_img_bgcover">
-                            <div className="shop_card_img-main_cntr">
-                              <img
-                                src={`${ShopCardDetails[4].image1}`}
-                                alt={`${ShopCardDetails[0].BrandName}`}
-                              />
-                            </div>
-                          </div>
-                          <div className="similar-prd-text">
-                            {/* <h3 className="similar-prd-dets _brandName">{`${ShopCardDetails[0].BrandName}`}</h3> */}
-                            <h4 className="similar-prd-dets _ProductName">
-                              {" "}
-                              {`${ShopCardDetails[0].ProductName}`}
-                            </h4>
-                            <div className="shop_card_price_wrap">
-                              <div className="shop_card_price_cntr">
-                                <span>{`${ShopCardDetails[0].price}`}</span>
-                                <span>&nbsp;INR</span>
-                              </div>
-                            </div>
-                          </div>
-                        </Link>
-                      </div>                  
                 </div>
                 {/* <Footer /> */}
               </div>
             </div>
-            {/* Render product details */}
           </div>
         </>
       ) : (
         <>
-          {/* <button
-            style={{ display: "none" }}
-            className="ProductDets_ntfy_btn ProductDets_ntfy_btn_grid"
-            id="easysize-cart-button"
-            onClick={handleAddToCart}
-          ></button> */}
-
           <ProductLoader />
         </>
       )}

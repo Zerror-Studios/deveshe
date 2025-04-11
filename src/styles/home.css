@@ -1024,6 +1024,7 @@
   display: grid;
   /* transition: filter 0.3s ease; */
   background: #ffffff;
+  filter: blur(0px);
 }
 
 .ProductDets_img_wrapper {
