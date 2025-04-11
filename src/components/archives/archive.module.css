@@ -44,9 +44,9 @@
   color: #000000;
 }
 
-.archiveSection2 h3 span{
-  opacity: .2;
-}
+/* .archiveSection2 h3 span{
+  opacity: 1;
+} */
 
 .archiveSection3{
     position: relative;
