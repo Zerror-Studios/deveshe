@@ -285,9 +285,10 @@ export default function BasicTabs() {
               </div>
               <div style={{ width: "50%" }}>
                 <div
+                id="edit_profile"
                   className="_btn_wrapper _btn_height _w-full"
                   onClick={()=>{Updatefun(userData)}}
-                  style={{ position: "relative", left: "93%", width:'35px', top:'15px', borderRadius:'50%', padding:'0' }}
+                  style={{ position: "relative", left: "93%", width:'40px', height:"40px", top:'15px', borderRadius:'50%', padding:'0' }}
                 >
                   {textbtn=='Edit' ? <FaUserEdit className="status-btnpro"/>:<MdOutlineDone className="status-btnpro"/>}
                 </div>

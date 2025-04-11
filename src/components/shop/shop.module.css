@@ -445,6 +445,7 @@
   align-items: center;
   padding: 100px 0;
   gap: 40px;
+  background-color: #fff;
 }
 
 .shopSection6 div h2 {
@@ -473,6 +474,7 @@
   justify-content: space-between;
   align-items: flex-end;
   position: relative;
+  background-color: #fff;
 }
 
 .secPara7 {
@@ -567,6 +569,7 @@
   padding: 80px;
   padding-top: 220px;
   overflow: hidden;
+  background-color: white;
 }
 
 .shopSection8 h2 {

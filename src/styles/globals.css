@@ -527,7 +527,7 @@ li {
   position: fixed;
   top: 0%;
   left: 0;
-  height: 100vh;
+  height: 100svh;
   width: 100%;
   display: flex;
   z-index: 9;
@@ -1218,10 +1218,29 @@ li {
 /* header end */
 
 
-
-
 /* Extra Small Devices (Phones) */
 @media (max-width: 576px) {  
+  #edit_profile{
+    left: 88% !important;
+  }
+  #page1 {
+    padding: 150px 20px;
+  }
+
+#right form .input.active h6{
+  top: 0%;
+  /* font-size: .7vw; */
+  opacity: .8;
+  font-size: calc(13px - 0.22vw);
+}
+#right form .textarea.active h6{
+  top: 0%;
+  font-size: .7vw;
+  font-size: calc(13px - 0.22vw);
+  opacity: .8;
+}
+
+
   .navbar-mobile{
     display: flex;
   }
@@ -1272,7 +1291,7 @@ li {
 #right{
   width: 100%;
 }
-#page1 {
+#11 {
   height: auto;
   width: 100%;
   padding: 150px 20px 80px;

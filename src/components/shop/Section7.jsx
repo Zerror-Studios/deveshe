@@ -19,10 +19,10 @@ const Section7 = () => {
                 </p>
             </div>
             <div className={styles.strip7}>
-            <Image width={1000} height={1000} src="/about/dress1.jpg" alt='card' />
-            <Image width={1000} height={1000} src="/about/dress2.jpg" alt='card' />
-            <Image width={1000} height={1000} src="/about/dress3.jpg" alt='card' />
-            <Image width={1000} height={1000} src="/about/dress4.jpg" alt='card' />
+            <Image width={1000} height={1000} src="/about/dress1.JPG" alt='card' />
+            <Image width={1000} height={1000} src="/about/dress2.JPG" alt='card' />
+            <Image width={1000} height={1000} src="/about/dress3.JPG" alt='card' />
+            <Image width={1000} height={1000} src="/about/dress4.JPG" alt='card' />
             </div>
             <div className={styles.rightCardCont}>
                 <div className={styles.cardLg}>
