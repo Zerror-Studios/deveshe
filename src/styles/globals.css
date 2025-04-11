@@ -520,13 +520,14 @@ li {
 
 .home-wrapper {
   position: relative;
+  width: 100%;
 }
 
 .home-slider {
   position: fixed;
   top: 0%;
   left: 0;
-  height: 100svh;
+  height: 100vh;
   width: 100%;
   display: flex;
   z-index: 9;
