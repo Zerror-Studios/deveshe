@@ -1081,7 +1081,8 @@ li {
   position: fixed;
   top: 0;
   z-index: 9;
-  padding:20px 20px;
+  height: 65px;
+  padding:0 20px;
   display: none;
   align-items: center;
   justify-content: space-between;

@@ -602,7 +602,7 @@
 
 .productListing {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
@@ -909,13 +909,14 @@
 
 
   .productListing {
+    height: calc(100vh - 65px) !important;
     flex-direction: column;
   }
   .leftProCon {
     position: relative;
     top: none;
     width: 100%;
-    height: 50vh;
+    height: 50%;
     border-right: 1px solid black;
   }
   .leftProCon img {
@@ -926,7 +927,7 @@
   
   .rightProCon {
     width: 100%;
-    height: 50vh;
+    height: 50%;
     overflow: hidden;
     display: flex;
     flex-wrap: wrap;

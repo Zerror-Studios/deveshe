@@ -90,7 +90,7 @@ const ProductListing = () => {
     if (window.innerWidth > 576) return;
     const container = document.querySelector('#productCont');
     const height = container.scrollHeight;
-    const containerHeight = document.querySelector("#productContwrap").getBoundingClientRect().height * 3.45;
+    const containerHeight = document.querySelector("#productContwrap").getBoundingClientRect().height * 3.62;
     const scrollHeight = height - containerHeight;
 
     gsap.to('#productCont', {
@@ -100,7 +100,7 @@ const ProductListing = () => {
       scrollTrigger: {
         trigger: '#productListing',
         scroller: "body",
-        start: 'top top',
+        start: 'top 65px',
         end: 'top -100%',
         scrub: 1,
         // markers: true,
