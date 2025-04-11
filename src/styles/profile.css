@@ -1126,6 +1126,7 @@ height: 40px;
     z-index: 0;
 }
   .parent-div {
+    padding-top: 100px;
     background-color: #fff;
     background-image: none;
     padding-bottom: 50px;
@@ -1176,7 +1177,7 @@ height: 40px;
 .css-19ums1e-MuiButtonBase-root-MuiTab-root {
   padding: 12px 0 !important;
 }
-.css-1cgdl3v-MuiTabs-root {
+.div-tab #ant-tabs{
   margin-bottom: 30px !important;
 }
 .order-div{

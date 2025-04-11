@@ -259,6 +259,7 @@ export default function BasicTabs() {
       <div className="div-tab">
         <Box sx={{ width: "100%" }}>
           <AntTabs
+          id="ant-tabs"
             value={value}
             onChange={handleChange}
             aria-label="ant example"
