@@ -60,6 +60,12 @@ const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
                 duration:0.3
             },"a")
 
+            document.querySelectorAll(".side-menu-links a").forEach((link) => {
+                link.addEventListener("click", () => {
+                    setIsMenuOpen(false);
+                    menuTL.current.reverse();
+                });
+            })
     }, []);
 
     const toggleMenu = () => {
@@ -73,6 +79,8 @@ const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
             return newState;
         });
     };
+    
+    
 
     return (
         <>
