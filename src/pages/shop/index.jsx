@@ -5,7 +5,7 @@ import Section4 from "@/components/shop/Section4";
 import React from "react";
 import ProductListing from "../../components/shop/ProductListing";
 
-const index = () => {
+const Shop = () => {
   return <>
     <Section3 />
     <Section2 />
@@ -15,4 +15,4 @@ const index = () => {
   </>
 };
 
-export default index;
+export default Shop;

@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import gsap from "gsap";
 import Navbar from "../common/Navbar";
 import HeaderLogo from "../common/HeaderLogo";
+import NavbarMobile from "../common/NavbarMobile";
 
 const HomeWrapper = ({ children, openBag, setOpenBag  }) => {
   const route = useRouter();
@@ -92,6 +93,7 @@ const HomeWrapper = ({ children, openBag, setOpenBag  }) => {
       <HomeSlider homeRef={homeRef} />
       <HeaderLogo headerLogo={headerLogo} />
       <Navbar headerNav={headerNav} openBag={openBag} setOpenBag={setOpenBag}/>
+      <NavbarMobile openBag={openBag} setOpenBag={setOpenBag}/>
       {children}
     </div>
   );

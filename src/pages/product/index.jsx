@@ -203,7 +203,7 @@ const ProductPage = () => {
           start: "top -400%",
           end: "top 0%",
           scrub: true,
-          // markers: true,
+          markers: false,
         },
         filter: "blur(10px)",
         transform: "translateZ(0)",

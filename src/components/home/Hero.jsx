@@ -4,18 +4,28 @@ import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
+
 const Hero = () => {
   useGSAP(() => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: ".Vertical_wrapper",
         start: "top top",
-        end: "+=200%",
+        end: "+=300%",
         pin: true,
-        // markers: true,
         scrub: 1,
+        snap: {
+          snapTo: (progress) => {
+            return Math.round(progress * 3) / 3; // 3 slides
+          },
+          duration: 0.5,
+          ease: "power1.inOut",
+        }
       },
+      
     });
+  
+    // First transition (1 -> 2)
     tl.to(
       ".Vertical_wrapper_video_sec-1",
       {
@@ -24,17 +34,39 @@ const Hero = () => {
       "a"
     )
       .to(
-        ".Vertical_wrapper_video_sec-2",
+        ".Vertical_wrapper_video_sec-1 img",
         {
-          clipPath: `inset(0% 0 0 0)`,
-          // scale: 1.2,
+          scale: 1.1,
         },
-        "a-=0.2"
+        "a"
       )
       .to(
         ".Vertical_wrapper_video_sec-2",
         {
+          clipPath: `inset(0% 0 0 0)`,
+        },
+        "a-=0.2"
+      )
+      .to(
+        ".Vertical_wrapper_video_sec-2 img",
+        {
+          scale: 1.1,
+        },
+        "a-=0.2"
+      )
+  
+      // Second transition (2 -> 3)
+      .to(
+        ".Vertical_wrapper_video_sec-2",
+        {
           clipPath: `inset(0 0 100% 0)`,
+        },
+        "b"
+      )
+      .to(
+        ".Vertical_wrapper_video_sec-2 img",
+        {
+          scale: 1,
         },
         "b"
       )
@@ -44,65 +76,86 @@ const Hero = () => {
           clipPath: `inset(0% 0 0 0)`,
         },
         "b-=0.1"
+      )
+      .to(
+        ".Vertical_wrapper_video_sec-3 img",
+        {
+          scale: 1.1,
+        },
+        "b-=0.1"
+      )
+  
+      // Third transition (3 -> 4)
+      .to(
+        ".Vertical_wrapper_video_sec-3",
+        {
+          clipPath: `inset(0 0 100% 0)`,
+        },
+        "c"
+      )
+      .to(
+        ".Vertical_wrapper_video_sec-3 img",
+        {
+          scale: 1,
+        },
+        "c"
+      )
+      .to(
+        ".Vertical_wrapper_video_sec-4",
+        {
+          clipPath: `inset(0% 0 0 0)`,
+        },
+        "c-=0.1"
+      )
+      .to(
+        ".Vertical_wrapper_video_sec-4 img",
+        {
+          scale: 1.1,
+        },
+        "c-=0.1"
       );
   });
+  
+  
 
   return (
     <>
       <div className="Vertical_wrapper">
         <div className="Vertical_wrapper_video_first_sec Vertical_wrapper_video_sec-1 Vertical_wrapper_video_sec_common">
-          <img
-            src="https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F2796x1573%2F981ca2286b%2Ftlb-hpban.jpg&w=1920&q=90"
-            alt=""
-          />
-          {/* <div className="tile__inner">
-            <div className="tiles_inner_text">
-              <Link href={""}>
-                <h1>
-                  RETURN TO <br /> THE LANDS BETWEEN{" "}
-                </h1>
-              </Link>
-            </div>
-            <Link href={""} className="tiles_inner_button">
-              <span>SEE COLLECTION</span>
-            </Link>
-          </div> */}
+          <img src="/archive/slide1.JPG" alt="" />
+          <div className="overlay3a">
+                    <div className="textContainer" id='textc1'>
+                        <h4>Collection One</h4>
+                        <p>An homage to the neighbourhood Indian bookstore, where rich scents of aged books and fresh ink create a unique atmosphere. Infused with sandalwood, leather, tobacco, cardamom and delicate floral notes, this fragrance captures the charm of these analog havens.</p>
+                    </div>
+                </div>
         </div>
         <div className="Vertical_wrapper_video_sec Vertical_wrapper_video_sec-2 Vertical_wrapper_video_sec_common">
-          <img
-            src="https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F3000x2007%2Faa5a74f01f%2Fantihero-home-16x9-2.jpg&w=1920&q=90"
-            alt=""
-          />
-          {/* <div className="tile__inner">
-            <div className="tiles_inner_text">
-              <Link href={""}>
-                <h1>
-                  AFTER DARK: <br /> CHAPTER 1
-                </h1>
-              </Link>
-            </div>
-            <Link href={""} className="tiles_inner_button">
-              <span>SEE COLLECTION</span>
-            </Link>
-          </div> */}
+          <img src="/archive/slide2.JPG" alt="" />
+          <div className="overlay3a">
+                    <div className="textContainer" id='textc1'>
+                        <h4>Collection One</h4>
+                        <p>An homage to the neighbourhood Indian bookstore, where rich scents of aged books and fresh ink create a unique atmosphere. Infused with sandalwood, leather, tobacco, cardamom and delicate floral notes, this fragrance captures the charm of these analog havens.</p>
+                    </div>
+                </div>
         </div>
         <div className="Vertical_wrapper_video_sec Vertical_wrapper_video_sec-3 Vertical_wrapper_video_sec_common">
-          <img
-            src="https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F3000x1688%2F5a3deae10e%2Foverwatch-home.jpg&w=1920&q=90"
-            alt=""
-          />
-          {/* <div className="tile__inner">
-            <div className="tiles_inner_text">
-              <Link href={""}>
-                <h1>
-                  FROM BUSAN <br /> TO HANAMURA
-                </h1>
-              </Link>
-            </div>
-            <Link href={""} className="tiles_inner_button">
-              <span>SEE COLLECTION</span>
-            </Link>
-          </div> */}
+          <img src="/archive/slide3.JPG" alt="" />
+          <div className="overlay3a">
+                    <div className="textContainer" id='textc1'>
+                        <h4>Collection One</h4>
+                        <p>An homage to the neighbourhood Indian bookstore, where rich scents of aged books and fresh ink create a unique atmosphere. Infused with sandalwood, leather, tobacco, cardamom and delicate floral notes, this fragrance captures the charm of these analog havens.</p>
+                    </div>
+                </div>
+        </div>
+        <div className="Vertical_wrapper_video_sec Vertical_wrapper_video_sec-4 Vertical_wrapper_video_sec_common">
+          <img src="/archive/slide1.JPG" alt="" />
+          <div className="overlay3a">
+                    <div className="textContainer" id='textc1'>
+                        <h4>Collection One</h4>
+                        <p>An homage to the neighbourhood Indian bookstore, where rich scents of aged books and fresh ink create a unique atmosphere. Infused with sandalwood, leather, tobacco, cardamom and delicate floral notes, this fragrance captures the charm of these analog havens.</p>
+                    </div>
+                </div>
         </div>
       </div>
     </>

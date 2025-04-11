@@ -96,7 +96,7 @@ const ProductListing = () => {
 
     window.addEventListener('resize', handleResize); // update on resize
     return () => window.removeEventListener('resize', handleResize);
-  }, [products]);
+  }, []);
   return (
     <div className={styles.productListing}>
       <Link href="/product?id=6752e99c935fd014e82be779" className={styles.leftProCon}>
