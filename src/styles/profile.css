@@ -1173,12 +1173,24 @@ height: 40px;
 }
 .de-btn{
   width: fit-content;
+  height: 34px;
 }
 #tab{
-  padding: 12px 0 !important;
+  padding: 12px 8px !important;
 }
 .div-tab #ant-tabs{
   margin-bottom: 30px !important;
+  overflow-x: auto;
+}
+.add-payment-main{
+  width: 100%;
+  height: 100%;
+}
+.card-details{
+  margin: 20px 0;
+}
+.div-tab #ant-tabs > div{
+  overflow-x: auto !important;
 }
 .order-div{
   margin-inline: 0 !important;
