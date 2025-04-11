@@ -87,14 +87,14 @@ const ProductListing = () => {
   const [displayedProducts, setDisplayedProducts] = useState(products);
 
   useGSAP(() => {
-    if(window.innerWidth > 576) return; 
+    if (window.innerWidth > 576) return;
     const container = document.querySelector('#productCont');
     const height = container.scrollHeight;
-    const containerHeight = document.querySelector("#productContwrap").getBoundingClientRect().height;
-    const scrollHeight = height - containerHeight*2;
+    const containerHeight = document.querySelector("#productContwrap").getBoundingClientRect().height * 3.45;
+    const scrollHeight = height - containerHeight;
 
     gsap.to('#productCont', {
-      y: -840,
+      y: -scrollHeight,
       // duration: 0.5,
       // ease: "power2.inOut",
       scrollTrigger: {
@@ -133,14 +133,16 @@ const ProductListing = () => {
         </div> */}
       </Link>
       <div className={styles.rightProCon} id='productContwrap'>
-        <div className={styles.rightProConWrap} id='productCont'>
-          {
-            displayedProducts.map((product, index) => (
-              <Link href={`/product?id=6752e99c935fd014e82be779`} key={index} className={styles.productCard}>
-                <Image width={1000} height={1000} alt='image' src={product.image1} />
-              </Link>
-            ))
-          }
+        <div id='productCont'>
+          <div className={styles.rightProConWrap} >
+            {
+              displayedProducts.map((product, index) => (
+                <Link href={`/product?id=6752e99c935fd014e82be779`} key={index} className={styles.productCard}>
+                  <Image width={1000} height={1000} alt='image' src={product.image1} />
+                </Link>
+              ))
+            }
+          </div>
         </div>
       </div>
     </div>
