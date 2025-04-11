@@ -265,10 +265,10 @@ export default function BasicTabs() {
             aria-label="ant example"
             sx={{ borderColor: "rgba(0,0,0,0.2)" }}
           >
-            <AntTab label="My Profile" />
-            <AntTab label="Order History" />
-            <AntTab label="Payment Method" />
-            <AntTab label="Saved Addresses" />
+            <AntTab id="tab" label="My Profile" />
+            <AntTab id="tab" label="Order History" />
+            <AntTab id="tab" label="Payment Method" />
+            <AntTab id="tab" label="Saved Addresses" />
           </AntTabs>
           <CustomTabPanel value={value} index={0}>
             <div className="noti-main-div">
