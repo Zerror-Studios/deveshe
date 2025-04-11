@@ -1159,7 +1159,9 @@ li {
   justify-content: flex-end;
   gap: 20px;
 }
-
+.menu-icons a{
+  line-height: 0;
+}
 #header-logo {
   font-family: var(--primary-font-Hel);
   font-size: 30px;

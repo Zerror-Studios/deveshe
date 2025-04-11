@@ -87,8 +87,8 @@ const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
             <div className='navbar-mobile'>
                 <Link href="/" id='nav-logo'>de ve she dreams</Link>
                 <div className="menu-icons">
-                    <Link href="/profile"><VscAccount size={25}/></Link>
-                    <HiOutlineShoppingBag onClick={openModal} size={25} />
+                    <Link href="/profile"><VscAccount size={22}/></Link>
+                    <HiOutlineShoppingBag onClick={openModal} size={23} />
                     <div id='menu-btn' onClick={toggleMenu}>
                         <span className="line1m linem"></span>
                         <span className="line2m linem"></span>
