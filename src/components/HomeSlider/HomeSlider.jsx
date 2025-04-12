@@ -81,7 +81,7 @@ const HomeSlider = ({ homeRef }) => {
                 id={`sl1-ig${i + 1}`}
                 width={1000}
                 height={1000}
-                src={`/images/img${i + 1}.avif`}
+                src={`/images/img${i + 1}.webp`}
                 alt='image'
               />
             ))}
@@ -95,23 +95,23 @@ const HomeSlider = ({ homeRef }) => {
             alt="image"
           />
           <div className='slide1-container'>
-            <Image id='sl2-ig1' width={1000} height={1000} src="/images/im1.avif" alt='image' />
-            <Image id='sl2-ig2' width={1000} height={1000} src="/images/im2.avif" alt='image' />
-            <Image id='sl2-ig3' width={1000} height={1000} src="/images/im3.avif" alt='image' />
-            <Image id='sl2-ig4' width={1000} height={1000} src="/images/im4.avif" alt='image' />
-            <Image id='sl2-ig5' width={1000} height={1000} src="/images/im5.avif" alt='image' />
-            <Image id='sl2-ig6' width={1000} height={1000} src="/images/im6.avif" alt='image' />
-            <Image id='sl2-ig7' width={1000} height={1000} src="/images/im7.avif" alt='image' />
-            <Image id='sl2-ig8' width={1000} height={1000} src="/images/im8.avif" alt='image' />
-            <Image id='sl2-ig9' width={1000} height={1000} src="/images/im9.avif" alt='image' />
-            <Image id='sl2-ig10' width={1000} height={1000} src="/images/im10.avif" alt='image' />
-            <Image id='sl2-ig11' width={1000} height={1000} src="/images/im10.avif" alt='image' />
-            <Image id='sl2-ig12' width={1000} height={1000} src="/images/im10.avif" alt='image' />
-            <Image id='sl2-ig13' width={1000} height={1000} src="/images/im11.avif" alt='image' />
-            <Image id='sl2-ig14' width={1000} height={1000} src="/images/im12.avif" alt='image' />
-            <Image id='sl2-ig15' width={1000} height={1000} src="/images/im13.avif" alt='image' />
-            <Image id='sl2-ig16' width={1000} height={1000} src="/images/im14.avif" alt='image' />
-            <Image id='sl2-ig17' width={1000} height={1000} src="/images/im15.avif" alt='image' />
+            <Image id='sl2-ig1' width={1000} height={1000} src="/images/im1.webp" alt='image' />
+            <Image id='sl2-ig2' width={1000} height={1000} src="/images/im2.webp" alt='image' />
+            <Image id='sl2-ig3' width={1000} height={1000} src="/images/im3.webp" alt='image' />
+            <Image id='sl2-ig4' width={1000} height={1000} src="/images/im4.webp" alt='image' />
+            <Image id='sl2-ig5' width={1000} height={1000} src="/images/im5.webp" alt='image' />
+            <Image id='sl2-ig6' width={1000} height={1000} src="/images/im6.webp" alt='image' />
+            <Image id='sl2-ig7' width={1000} height={1000} src="/images/im7.webp" alt='image' />
+            <Image id='sl2-ig8' width={1000} height={1000} src="/images/im8.webp" alt='image' />
+            <Image id='sl2-ig9' width={1000} height={1000} src="/images/im9.webp" alt='image' />
+            <Image id='sl2-ig10' width={1000} height={1000} src="/images/im10.webp" alt='image' />
+            <Image id='sl2-ig11' width={1000} height={1000} src="/images/im10.webp" alt='image' />
+            <Image id='sl2-ig12' width={1000} height={1000} src="/images/im10.webp" alt='image' />
+            <Image id='sl2-ig13' width={1000} height={1000} src="/images/im11.webp" alt='image' />
+            <Image id='sl2-ig14' width={1000} height={1000} src="/images/im12.webp" alt='image' />
+            <Image id='sl2-ig15' width={1000} height={1000} src="/images/im13.webp" alt='image' />
+            <Image id='sl2-ig16' width={1000} height={1000} src="/images/im14.webp" alt='image' />
+            <Image id='sl2-ig17' width={1000} height={1000} src="/images/im15.webp" alt='image' />
           </div>
         </div>
       </div>
