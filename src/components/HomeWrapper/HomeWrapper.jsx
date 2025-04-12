@@ -17,11 +17,11 @@ const HomeWrapper = ({ children, openBag, setOpenBag  }) => {
   useEffect(() => {
     const previousRoute = localStorage.getItem("previousRoute");
     if (!previousRoute || previousRoute !== "/") {
-      gsap.set(homeRef.current, { top: "-100%" });
+      gsap.set(homeRef.current, { y: "-100%" });
       gsap.set(headerNav.current, { top: "80px" });
       gsap.set(headerLogo.current, { opacity: 1, top: "0%" });
     } else {
-      gsap.set(homeRef.current, { top: "0%" });
+      gsap.set(homeRef.current, { y: "0%" });
       gsap.set(headerNav.current, { top: "calc(100dvh - 65px)" });
       gsap.set(headerLogo.current, { opacity: 0, top: "calc(100vh - 130px)" });
     }
@@ -43,7 +43,7 @@ const HomeWrapper = ({ children, openBag, setOpenBag  }) => {
       var tl = gsap.timeline()
       tl
         .to(homeRef.current, {
-          top: "-100%",
+          y: "-100%",
           duration: 1,
           ease: "power2.out",
         })
@@ -79,7 +79,7 @@ const HomeWrapper = ({ children, openBag, setOpenBag  }) => {
           ease: "power2.out",
         }, "a")
         .to(homeRef.current, {
-          top: "0%",
+          y: "0%",
           duration: .6,
           ease: "power2.out",
         })

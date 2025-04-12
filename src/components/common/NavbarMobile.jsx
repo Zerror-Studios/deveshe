@@ -10,6 +10,7 @@ import Modal from "./Modal";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { VscAccount } from "react-icons/vsc";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
+import Image from "next/image";
 gsap.registerPlugin(ScrollTrigger);
 
 const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
@@ -87,7 +88,9 @@ const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
             <div className='navbar-mobile'>
                 <Link href="/" id='nav-logo'>de ve she dreams</Link>
                 <div className="menu-icons">
-                    <Link href="/profile"><VscAccount size={22}/></Link>
+                    <Link href="/profile">
+                    <Image width={23} height={23} src="/images/user.png" />
+                    </Link>
                     <HiOutlineShoppingBag onClick={openModal} size={23} />
                     <div id='menu-btn' onClick={toggleMenu}>
                         <span className="line1m linem"></span>
