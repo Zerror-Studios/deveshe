@@ -99,8 +99,8 @@ const ProductListing = () => {
       scrollTrigger: {
         trigger: '#productListing',
         scroller: "body",
-        start: '35% 65px',
-        end: '35% -100%',
+        start: '35.2% 65px',
+        end: '35.2% -100%',
         scrub: 1,
         markers: true,
         pin: true
@@ -110,11 +110,11 @@ const ProductListing = () => {
     tl
     .to('#productStrip1', {
       transform: `translateY(-38%)`,
-      duration: .9,
+      duration: 1.2,
     },"a")
     .to('#productStrip2', {
       transform: `translateY(-38%)`,
-      duration: .7,
+      duration: 1.4,
     },"a");
 
   }, []);
