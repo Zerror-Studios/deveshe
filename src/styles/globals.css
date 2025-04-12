@@ -533,6 +533,7 @@ li {
   display: flex;
   z-index: 9;
   overflow: hidden;
+  background-color: brown;
 }
 .horizontal-scroll{
   width: fit-content;
