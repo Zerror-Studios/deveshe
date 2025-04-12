@@ -361,6 +361,7 @@ li {
   background-color: white;
 }
 #form {
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }
@@ -1227,6 +1228,7 @@ li {
   }
   #page1 {
     padding: 150px 20px;
+    width: 100% !important;
   }
 
 #right form .input.active h6{
@@ -1284,6 +1286,7 @@ li {
   white-space: nowrap;
 }
 #form {
+  width: 100% !important;
   flex-direction: column;
   gap: 35px;
 }
