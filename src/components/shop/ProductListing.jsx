@@ -100,7 +100,7 @@ const ProductListing = () => {
         trigger: '#productListing',
         scroller: "body",
         start: '35.3% 65px',
-        end: '35.3% -100%',
+        end: '35.3% -120%',
         scrub: 1,
         // markers: true,
         pin: true
@@ -109,11 +109,11 @@ const ProductListing = () => {
 
     tl
     .to('#productStrip1', {
-      transform: `translateY(-38%)`,
-      duration: 1.2,
+      transform: `translateY(-56%)`,
+      duration: 1.4,
     },"a")
     .to('#productStrip2', {
-      transform: `translateY(-38%)`,
+      transform: `translateY(-61.5%)`,
       duration: 1.4,
     },"a");
 
@@ -122,7 +122,7 @@ const ProductListing = () => {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 576) {
-        setDisplayedProducts(products.slice(0, 5));
+        setDisplayedProducts(products.slice(0, 10));
       } else {
         setDisplayedProducts(products);
       }
@@ -153,7 +153,7 @@ const ProductListing = () => {
           </div>
           <div className={styles.rightProConStrip} id="productStrip1">
             {
-              displayedProducts.map((product, index) => (
+              displayedProducts.slice(0, 7).map((product, index) => (
                 <Link href={`/product?id=6752e99c935fd014e82be779`} key={index} className={styles.productCard}>
                   <Image width={1000} height={1000} alt='image' src={product.image1} />
                 </Link>
@@ -162,7 +162,7 @@ const ProductListing = () => {
           </div>
           <div className={styles.rightProConStrip} id="productStrip2">
             {
-              displayedProducts.reverse().map((product, index) => (
+              displayedProducts.reverse().slice(0, 8).map((product, index) => (
                 <Link href={`/product?id=6752e99c935fd014e82be779`} key={index} className={styles.productCard}>
                   <Image width={1000} height={1000} alt='image' src={product.image1} />
                 </Link>
