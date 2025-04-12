@@ -525,7 +525,6 @@ li {
   display: flex;
   z-index: 9;
   overflow: hidden;
-  background-color: brown;
 }
 .horizontal-scroll {
   width: fit-content;
@@ -552,7 +551,6 @@ li {
   aspect-ratio: 16/9;
   position: relative;
   z-index: 2;
-  background-color: yellow;
 }
 .slide1 > img {
   position: absolute;
