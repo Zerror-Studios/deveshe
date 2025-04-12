@@ -552,6 +552,7 @@ li {
   aspect-ratio: 16/9;
   position: relative;
   z-index: 2;
+  background-color: yellow;
 }
 .slide1 > img {
   position: absolute;
@@ -1210,6 +1211,12 @@ li {
 
 /* Extra Small Devices (Phones) */
 @media (max-width: 576px) {
+  .slide1{
+    width: 385vw;
+  }
+  .slide2{
+    width: 385vw;
+  }
   #edit_profile {
     left: 88% !important;
   }
