@@ -2240,4 +2240,9 @@ button {
 .overlay3a .textContainer h4 {
   font-size: 5vw;
 }
+.ProductDets_add_btn_mobile{
+  width: 100%;
+  overflow: hidden;
+  border-radius: 50px;
+}
 }

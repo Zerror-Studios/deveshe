@@ -10,9 +10,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import ProductLoader from "@/components/loaders/ProductLoader";
 import { addtocart } from "@/features/cart/CartSlice";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import AnimBtn from "@/components/common/AnimBtn";
+import { ModalContext } from "@/components/context/ModalProvider";
 gsap.registerPlugin(ScrollTrigger);
 const ProductPage = () => {
   const [product, setProduct] = useState({});
@@ -31,6 +32,8 @@ const ProductPage = () => {
   const [finalPrice, setFinalPrice] = useState(0);
   const [desc, setDesc] = useState("");
   const [openBag, setOpenBag] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useContext(ModalContext);
+
 
   const fetchData = async () => {
     try {
@@ -93,6 +96,8 @@ const ProductPage = () => {
   }, [id]);
 
   const handleVariants = (name, value) => {
+    console.log("hey added");
+
     const newVar = { ...selectedVarients, [name]: value };
     setSelectedVariants((prev) => ({ ...prev, [name]: value }));
     handleEnablebtn();
@@ -141,6 +146,7 @@ const ProductPage = () => {
   const handleAddToCart = () => {
     if (enableAddToCart) {
       setTimeout(() => {
+        setModalIsOpen(true);
         setOpenBag(true);
       }, 500);
       setBtnLoading(true);
@@ -222,7 +228,7 @@ const ProductPage = () => {
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-  
+
     ScrollTrigger.create({
       trigger: ".Similar_prd_wrap",
       scroller: "body",
@@ -239,7 +245,7 @@ const ProductPage = () => {
       }
     });
   }, []);
-  
+
   // State to manage modal visibility and the selected image
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -636,15 +642,45 @@ const ProductPage = () => {
                 </div>
                 <div className="ProductDets_text_btn_resp_cntr ProductDets_common_style">
                   <div className="ProductDets_text_btn_resp_wrap">
-                    <Button className="ProductDets_text_btn_resp_w-full">
-                      <div className="ProductDets_text_btn_resp_flex">
-                        <span>Select a Size</span>
-                        <div>
-                          <span>{finalPrice}</span>
-                          <span>&nbsp;INR</span>
+                    <button
+                      style={btnLoading ? { backgroundColor: 'black' } : {}}
+                      onClick={handleAddToCart}
+                      className="ProductDets_text_btn_resp_w-full ProductDets_add_btn_mobile">
+                      <div className="_btn_wrapper _btn_height _w-full">
+                        <div className="ProductDets_text_btn_resp_flex">
+                          {btnLoading ? (
+                            <>
+                              <div className="ani-wrap">
+                                <div className="ani-main"></div>
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              {!enableAddToCart ? (
+                                <span className="ProductDets_ntfy_btn_slect_size">
+                                  Select a Size
+                                </span>
+                              ) : (
+                                <span className="ProductDets_ntfy_btn_slect_size">
+                                  Add to Bag
+                                </span>
+                              )}
+                              <span className="ProductDets_ntfy_btn_AddtoBeg">
+                                Add to Bag
+                              </span>
+
+                              <div className="ProductDets_ntfy_btn_price">
+                                <div className="">
+                                  <span>{finalPrice}</span>
+                                  <span>&nbsp;INR</span>
+                                </div>
+                              </div>
+                            </>
+                          )}
                         </div>
                       </div>
-                    </Button>
+                    </button>
+
                   </div>
                 </div>
               </div>

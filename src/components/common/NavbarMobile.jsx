@@ -1,7 +1,7 @@
 import { LuMenu } from "react-icons/lu";
 import { IoMdClose } from "react-icons/io";
 import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { useDispatch, useSelector } from "react-redux";
 import gsap from "gsap";
@@ -11,6 +11,7 @@ import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { VscAccount } from "react-icons/vsc";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Image from "next/image";
+import { ModalContext } from "../context/ModalProvider";
 gsap.registerPlugin(ScrollTrigger);
 
 const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
@@ -19,7 +20,7 @@ const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
     const router = useRouter();
     const path = router.pathname;
     const pathName = router.pathname.split("/")[1];
-    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [modalIsOpen, setModalIsOpen] = useContext(ModalContext);
     const user = useSelector((state) => state.user.user);
     const cartCount = useSelector((state) => state.cart.itemcount);
     const menuTL = useRef(null);

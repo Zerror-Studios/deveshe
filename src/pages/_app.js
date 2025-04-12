@@ -19,6 +19,7 @@ import "@/styles/collections.css";
 import "@/styles/shopAll.css";
 import { useState } from "react";
 import HomeWrapper from "@/components/HomeWrapper/HomeWrapper";
+import ModalProvider from "@/components/context/ModalProvider";
 // import Modal from "@/components/Modal";
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -29,10 +30,12 @@ export default function App({ Component, pageProps }) {
     <>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <HomeWrapper  openBag={false} setOpenBag={setOpenBag} >
-            <Component {...pageProps}/>
-            { pathName !=='/' && <Footer />}
-          </HomeWrapper>
+          <ModalProvider>
+            <HomeWrapper openBag={false} setOpenBag={setOpenBag} >
+              <Component {...pageProps} />
+              {pathName !== '/' && <Footer />}
+            </HomeWrapper>
+          </ModalProvider>
         </PersistGate>
       </Provider>
     </>
