@@ -88,32 +88,41 @@ const ProductListing = () => {
 
   useGSAP(() => {
     if (window.innerWidth > 576) return;
-    const container = document.querySelector('#productCont');
-    const height = container.scrollHeight;
-    const containerHeight = document.querySelector("#productContwrap").getBoundingClientRect().height * 3.66;
-    const scrollHeight = height - containerHeight;
+    const strip1Height = document.querySelector("#productStrip1").getBoundingClientRect().height/2
+    const strip2Height = document.querySelector("#productStrip2").getBoundingClientRect().height
+    const productContHeight = document.querySelector("#productCont").getBoundingClientRect().height
 
-    gsap.to('#productCont', {
-      y: -scrollHeight,
-      // duration: 0.5,
-      // ease: "power2.inOut",
+    const strip1Value = strip1Height - productContHeight
+    const strip2Value = strip2Height - productContHeight
+
+    var tl = gsap.timeline({
       scrollTrigger: {
         trigger: '#productListing',
         scroller: "body",
-        start: 'top 65px',
-        end: 'top -100%',
+        start: '35% 65px',
+        end: '35% -100%',
         scrub: 1,
-        // markers: true,
+        markers: true,
         pin: true
       }
-    });
+    })
+
+    tl
+    .to('#productStrip1', {
+      transform: `translateY(-38%)`,
+      duration: .9,
+    },"a")
+    .to('#productStrip2', {
+      transform: `translateY(-38%)`,
+      duration: .7,
+    },"a");
 
   }, []);
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 576) {
-        setDisplayedProducts(products.slice(0, 10));
+        setDisplayedProducts(products.slice(0, 5));
       } else {
         setDisplayedProducts(products);
       }
@@ -132,8 +141,7 @@ const ProductListing = () => {
           <Image width={1000} height={1000} src="https://www.datocms-assets.com/136001/1727704761-vazzi-water-based-lubricant-100ml-bottle.png?auto=format&fit=crop&h=620&w=520" alt='image' />
         </div> */}
       </Link>
-      <div className={styles.rightProCon} id='productContwrap'>
-        <div id='productCont'>
+      <div className={styles.rightProCon} id='productCont'>
           <div className={styles.rightProConWrap} >
             {
               displayedProducts.map((product, index) => (
@@ -143,7 +151,24 @@ const ProductListing = () => {
               ))
             }
           </div>
-        </div>
+          <div className={styles.rightProConStrip} id="productStrip1">
+            {
+              displayedProducts.map((product, index) => (
+                <Link href={`/product?id=6752e99c935fd014e82be779`} key={index} className={styles.productCard}>
+                  <Image width={1000} height={1000} alt='image' src={product.image1} />
+                </Link>
+              ))
+            }
+          </div>
+          <div className={styles.rightProConStrip} id="productStrip2">
+            {
+              displayedProducts.reverse().map((product, index) => (
+                <Link href={`/product?id=6752e99c935fd014e82be779`} key={index} className={styles.productCard}>
+                  <Image width={1000} height={1000} alt='image' src={product.image1} />
+                </Link>
+              ))
+            }
+          </div>
       </div>
     </div>
   )

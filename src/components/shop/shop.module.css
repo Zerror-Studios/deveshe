@@ -652,6 +652,15 @@
   display: flex;
   flex-wrap: wrap;
 }
+.rightProConStrip{
+  width: 50%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+}
+.rightProConStrip .productCard{
+  width: 100%;
+}
 
 .productCard {
   width: 50%;
@@ -912,14 +921,14 @@
 
 
   .productListing {
-    height: calc(100vh - 65px) !important;
+    height: calc(150vh - 65px) !important;
     flex-direction: column;
   }
   .leftProCon {
     position: relative;
     top: none;
     width: 100%;
-    height: 50%;
+    height: 50vh;
     border-right: 1px solid black;
   }
   .leftProCon img {
@@ -930,7 +939,7 @@
   
   .rightProCon {
     width: 100%;
-    height: 50%;
+    height: calc(100vh - 65px);
     overflow: hidden;
     display: flex;
     flex-wrap: wrap;
@@ -940,10 +949,12 @@
     height: 100%;
     display: flex;
     flex-wrap: wrap;
+    display: none;
   }
   
-  .productCard {
-    height: 30vh;
+  .rightProConStrip .productCard {
+    height: 30vh !important;
+    display: inline-block;
   }
 
 
