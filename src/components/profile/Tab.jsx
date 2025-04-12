@@ -345,9 +345,18 @@ export default function BasicTabs() {
                           {/* <label className="label-text text-sm font-bold">
                             Email
                           </label> */}
-                          <div className="general__input c0" name="email" style={{padding:'10px 14px 0px 14px'}}>
+                          <input
+                            className="general__input"
+                            type="email"
+                            disabled={!dis}
+                            placeholder="Email"
+                            name="email"
+                            value={userData.email || ""}
+                            onChange={handleData}
+                          />
+                          {/* <div className="general__input c0" name="email" style={{padding:'10px 14px 0px 14px'}}>
                             {userData.email}
-                          </div>
+                          </div> */}
                         </div>
                         <div className="div-name">
                           {/* <label className="label-text text-sm font-bold">

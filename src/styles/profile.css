@@ -1119,6 +1119,16 @@ height: 40px;
 }
 
 @media (max-width: 576px){
+  .general__input {
+    margin: 9px 0;
+    padding: 15px 14px;
+    font-size: 15px;
+}
+.phone-con2 {
+  padding: 15px 14px 0 !important;
+  background-color: #f5f5f5;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.2)!important;
+}
   .div-tab {
     margin-inline: 20px;
     margin-top: 15px;
