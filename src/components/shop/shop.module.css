@@ -655,7 +655,7 @@
 .rightProConStrip{
   width: 50%;
   height: fit-content;
-  display: flex;
+  display: none;
   flex-direction: column;
 }
 .rightProConStrip .productCard{
@@ -950,6 +950,9 @@
     display: flex;
     flex-wrap: wrap;
     display: none;
+  }
+  .rightProConStrip{
+    display: flex;
   }
   
   .rightProConStrip .productCard {
