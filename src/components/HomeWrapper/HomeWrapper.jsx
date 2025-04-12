@@ -13,6 +13,18 @@ const HomeWrapper = ({ children, openBag, setOpenBag  }) => {
   const headerLogo = useRef(null);
   const headerNav = useRef(null);
 
+  useEffect(() => {
+    const setVh = () => {
+      document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+    };
+    setVh();
+    window.addEventListener('resize', setVh);
+    return () => window.removeEventListener('resize', setVh);
+  }, []);
+  
+
+
+
   // Set initial position based on localStorage (fixes direct jump issue)
   useEffect(() => {
     const previousRoute = localStorage.getItem("previousRoute");

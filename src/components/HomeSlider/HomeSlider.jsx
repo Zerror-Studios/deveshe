@@ -5,16 +5,7 @@ import React, { useEffect, useRef } from 'react';
 const HomeSlider = ({ homeRef }) => {
   const scrollRef = useRef(null);
 
-  useEffect(() => {
-    const setVh = () => {
-      document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
-    };
-    setVh();
-    window.addEventListener('resize', setVh);
-    return () => window.removeEventListener('resize', setVh);
-  }, []);
-  
-
+ 
   // useEffect(() => {
   //   const handleWheel = (e) => {
   //     if (scrollRef.current) {
