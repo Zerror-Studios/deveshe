@@ -99,10 +99,10 @@ const ProductListing = () => {
       scrollTrigger: {
         trigger: '#productListing',
         scroller: "body",
-        start: '35.2% 65px',
-        end: '35.2% -100%',
+        start: '35.3% 65px',
+        end: '35.3% -100%',
         scrub: 1,
-        markers: true,
+        // markers: true,
         pin: true
       }
     })
