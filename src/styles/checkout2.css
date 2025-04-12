@@ -1027,7 +1027,8 @@ input:focus {
 
 @media (max-width: 576px){
   .checkout-cont{
-    flex-direction: column;
+    flex-direction:column-reverse;
+    padding: 100px 0px 50px;
   }
   .checkout-left {
     width: 100%;
@@ -1042,6 +1043,7 @@ input:focus {
   gap: 20px;
 }
 .checkout_header .checkout_header_titile h1 {
-  font-size: 2rem;
+  font-size: 1.8rem;
+  white-space: nowrap;
 }
 }

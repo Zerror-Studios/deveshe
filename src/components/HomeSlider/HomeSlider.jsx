@@ -65,12 +65,13 @@ const HomeSlider = ({ homeRef }) => {
   
 
   return (
-    <Link href='/' ref={homeRef} className='home-slider'>
+    <div ref={homeRef} className='home-slider'>
       <h2 id='logo-h'>de ve she dreams</h2>
       <div className='horizontal-scroll' ref={scrollRef} style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}>
         <div className='slide1'>
           <Image
-            fill
+             width={1000}
+            height={1000}
             src="https://dieselfarm.com/_next/image/?url=%2F_next%2Fstatic%2Fmedia%2FBG.46b433ec.webp&w=3840&q=65"
             alt="image"
           />
@@ -115,7 +116,7 @@ const HomeSlider = ({ homeRef }) => {
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 
