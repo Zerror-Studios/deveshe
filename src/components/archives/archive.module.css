@@ -95,6 +95,23 @@
   .overlay3a .textContainer{
     width: 30%;
   }
+  .overlay3a .textContainer h3{
+    font-family: font4;
+    color: white;
+    font-weight: 100;
+    font-size: 1.5vw;
+    margin-bottom: 8px;
+  }
+  .exploreBtn{
+    font-family: font4;
+    color: white;
+    font-weight: 100;
+    font-size: 1.3vw;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
   .overlay3a .textContainer h4{
     color: white;
     font-size: 2vw;

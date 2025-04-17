@@ -1442,10 +1442,9 @@ export const dbProdData = [
 }]
 export const footerLinks = {
   About: [
-    { name: "Our Story", path: "/about" },
-    { name: "Paris Boutique", path: "/parisBoutique" },
-    { name: "Stockists", path: "/Stockists" },
-    { name: "Sustainability", path: "/Sustainability" },
+    { name: "Shop", path: "/shop" },
+    { name: "Archives", path: "/archives" },
+    { name: "About", path: "/about" },
   ],
   "Customer Care": [
     { name: "Contact", path: "/Contact" },

@@ -8,8 +8,8 @@ const ArchiveWrapper = () => {
   return (
     <div className={styles.archiveWrapper}>
         <Section2/>
-        <Hero/>
-        {/* <Section3/> */}
+        {/* <Hero/> */}
+        <Section3/>
     </div>
   )
 }
