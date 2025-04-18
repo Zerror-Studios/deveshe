@@ -16,7 +16,7 @@ const Section3 = () => {
                 trigger: "#archiveSection3",
                 scroller: "body",
                 start: "top -0%",
-                end: "top -350%",
+                end: "top -400%",
                 pin: true,
                 // markers: true,
                 scrub: 1
@@ -25,16 +25,16 @@ const Section3 = () => {
 
         tl.to("#elem1", {
             clipPath: `polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)`,
-            backgroundPosition: "0 200%",
+            backgroundPosition: "0 110%",
             duration: 1.5,
-            delay: .1
+            // delay: .1
         }, "a")
 
         tl.to("#elem2", {
             clipPath: ` polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)`,
-            backgroundPosition: "0 100%",
+            backgroundPosition: "0 25%",
             duration: 1.5,
-            delay: .1
+            // delay: .1
         }, "a")
         tl.fromTo("#textc2", {
             y: 50,
@@ -49,12 +49,12 @@ const Section3 = () => {
 
         tl.to("#elem2", {
             clipPath: `polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)`,
-            backgroundPosition: "0 200%",
+            backgroundPosition: "0 110%",
             duration: 1.5
         }, "b")
         tl.to("#elem3", {
             clipPath: `polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)`,
-            backgroundPosition: "0 100%",
+            backgroundPosition: "0 25%",
             duration: 1.5
         }, "b")
         tl.fromTo("#textc3", {
@@ -69,13 +69,13 @@ const Section3 = () => {
         }, "b")
         tl.to("#elem3", {
             clipPath: `polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)`,
-            backgroundPosition: "0 200%",
+            backgroundPosition: "0 110%",
             duration: 1.5
         }, "c")
 
         tl.to("#elem4", {
             clipPath: ` polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)`,
-            backgroundPosition: "0 100%",
+            backgroundPosition: "0 25%",
             duration: 1.5
         }, "c")
         tl.fromTo("#textc4", {

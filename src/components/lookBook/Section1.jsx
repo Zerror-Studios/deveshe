@@ -1,6 +1,22 @@
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/dist/ScrollTrigger'
 import React from 'react'
-
+gsap.registerPlugin(ScrollTrigger)
 const Section1 = () => {
+
+    useGSAP(() => {
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#lookbook-Sec1",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 1,
+            }
+        })
+        tl.to("#lookbook-Sec1 .lb-header-image img",{ scale: 1.2,duration: 1 })
+    }, [])
+
     return (
         <div id='lookbook-Sec1'>
             <div className='lb-header-wrapper'>

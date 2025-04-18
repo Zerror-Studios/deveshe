@@ -21,6 +21,7 @@ import "@/styles/lookBook.css";
 import { useState } from "react";
 import HomeWrapper from "@/components/HomeWrapper/HomeWrapper";
 import ModalProvider from "@/components/context/ModalProvider";
+import SmoothScroller from "@/components/smoothScroll/SmoothScroll";
 // import Modal from "@/components/Modal";
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -33,6 +34,7 @@ export default function App({ Component, pageProps }) {
         <PersistGate loading={null} persistor={persistor}>
           <ModalProvider>
             <HomeWrapper openBag={false} setOpenBag={setOpenBag} >
+              <SmoothScroller/>
               <Component {...pageProps} />
               {pathName !== '/' && <Footer />}
             </HomeWrapper>

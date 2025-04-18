@@ -1,12 +1,48 @@
 import React from 'react'
 import styles from "./shop.module.css"
 import Image from 'next/image'
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
+import ScrollTrigger from 'gsap/dist/ScrollTrigger'
+gsap.registerPlugin(ScrollTrigger)
 
 const Section4 = () => {
+     useGSAP(()=>{
+            document.querySelectorAll('#title-main-wrap2 h2').forEach((h) => {
+                var clutter = ""
+                h.textContent.split("").forEach((letter, i) => {
+                    clutter += `<span>${letter}</span>`
+                })
+                h.innerHTML = clutter
+            });
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#section4-shop",
+                    scroller:"body",
+                    start: "top 70%",
+                    end: "top 40%",
+                    // scrub: true,
+                    // markers:true
+                }
+            })
+            tl.fromTo('#title-main-wrap2 h2 span',{
+                transform: "rotateX(90deg)",
+            } ,{
+                duration: .8,
+                transform:"rotateX(0deg)",
+                stagger: 0.05,
+                // ease: "power2.out",
+                ease: "bounce.out",
+            })
+
+            setTimeout(() => {
+                ScrollTrigger.refresh();
+            },500)
+        },[])
     return (
-        <div className={styles.shopSection4}>
+        <div className={styles.shopSection4} id='section4-shop'>
             <div className={styles.topCont}>
-                <div className={styles.topContHeader}>
+                <div className={styles.topContHeader} id='title-main-wrap2'>
                     <h2>The <span>science</span></h2>
                     <h2>behind the quiz</h2>
                 </div>

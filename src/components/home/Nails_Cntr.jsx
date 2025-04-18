@@ -4,6 +4,47 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 const Nails_Cntr = () => {
+
+  useGSAP(() => {
+    function splitText(element) {
+      document.querySelectorAll(element).forEach((h) => {
+        let clutter = "";
+        h.textContent.split("").forEach((letter) => {
+          if (letter === " ") {
+            clutter += `<span>&nbsp;</span>`; // preserve space
+          } else {
+            clutter += `<span>${letter}</span>`;
+          }
+        });
+        h.innerHTML = clutter;
+      });
+    }
+    splitText('#nailsIt')
+    const tl2 = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#nailsIt",
+        scroller: "body",
+        start: "top 80%",
+        end: "bottom 90%",
+        // scrub: true,
+        // markers: true
+      }
+    })
+    tl2.fromTo('#nailsIt span', {
+      transform: "rotateX(90deg)",
+    }, {
+      duration: .8,
+      transform: "rotateX(0deg)",
+      stagger: 0.05,
+      // ease: "power2.out",
+      ease: "bounce.out",
+    })
+
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 50)
+  }, [])
+
   useGSAP(() => {
     gsap.to(".line-wrapper svg path", {
       scrollTrigger: {
@@ -29,19 +70,19 @@ const Nails_Cntr = () => {
       },
       transform: "rotateZ(0deg)",
     });
-    gsap.to(".title_inner-nail h2 span", {
-      scrollTrigger: {
-        trigger: ".title_inner-nail h2 span",
-        start: "top 80%",
-        end: "bottom 90%",
-        // markers: true,
-        // scrub: 2,
-        duration: 0.5,
-      },
-      stagger: 0.1,
-      transform: `translateY(0%) skewX(0deg)`,
-      opacity: 1,
-    });
+    // gsap.to(".title_inner-nail h2 span", {
+    //   scrollTrigger: {
+    //     trigger: ".title_inner-nail h2 span",
+    //     start: "top 80%",
+    //     end: "bottom 90%",
+    //     // markers: true,
+    //     // scrub: 2,
+    //     duration: 0.5,
+    //   },
+    //   stagger: 0.1,
+    //   transform: `translateY(0%) skewX(0deg)`,
+    //   opacity: 1,
+    // });
     gsap.to(".title_inner-nail .arrow", {
       scrollTrigger: {
         trigger: ".title_inner-nail .arrow",
@@ -59,11 +100,7 @@ const Nails_Cntr = () => {
     <div id="How_to_Nail_it_Cntr">
       <div className="row title">
         <div className="title_inner-nail columns">
-          <h2>
-            <span className="serif-reg">How&nbsp;</span>
-            <span className="serif-italic">we&nbsp;</span>
-            <span className="serif-reg">nail it</span>
-          </h2>
+          <h2 id="nailsIt">How to nail it</h2>
           <div className="arrow">
             <svg
               width={113}
@@ -89,7 +126,7 @@ const Nails_Cntr = () => {
               y="0px"
               viewBox="0 0 1500 2200"
               xmlSpace="preserve"
-              // style={{ enableBackground: "new 0 0 1500 2200" }}
+            // style={{ enableBackground: "new 0 0 1500 2200" }}
             >
               {/* <style type="text/css" dangerouslySetInnerHTML={{ __html: "" }} /> */}
               <path

@@ -77,8 +77,13 @@
   white-space: nowrap;
   letter-spacing: -8px;
 }
-.shopSection2Top h2 span {
+.shopSection2Top h2:nth-child(2) span:nth-child(-n+7) {
   color: #7546ff;
+}
+.shopSection2Top h2 span {
+  color: black;
+  transform-origin: top;
+  display: inline-block;
 }
 .shopSection2TopBtm {
   width: 100%;
@@ -115,7 +120,7 @@
   transform: rotate(-16deg);
   padding: 1vw;
   padding-bottom: 3vw;
-  background-color: white;
+  background-color:#f7f7f7;
 }
 .leftCard img {
   width: 100%;
@@ -128,7 +133,7 @@
   top: -15%;
   right: 8%;
   padding: 1vw;
-  background-color: white;
+  background-color:#f7f7f7;
   transform: rotate(17deg);
 }
 .rightCard img {
@@ -157,10 +162,42 @@
   letter-spacing: -5px;
   margin-bottom: 15vw;
 }
-.shopSection2Bottom h4 {
+.shopSection2BottomBtn {
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .5vw;
+  color: #7546ff;
   font-family: font2;
   font-size: 3.5vw;
   line-height: 0.8;
+  text-transform: uppercase;
+}
+.shopSection2BottomBtnText{
+  height: 3.5vw;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.shopSection2BottomBtnText span{
+  display: inline-block;
+}
+.shopSection2BottomBtnText h4:nth-child(1){
+  opacity: 0;
+}
+.shopSection2BottomBtnText h4:nth-child(2){
+  position: absolute;
+  top: 0;
+}
+.shopSection2BottomBtnText h4:nth-child(3) {
+  position: absolute;
+  top: 100%;
+}
+.shopSection2Bottom h4 {
+  font-family: font2;
+  font-size: 3.5vw;
+  line-height: 1;
   text-transform: uppercase;
   white-space: nowrap;
   color: #7546ff;
@@ -171,7 +208,7 @@
   bottom: -17%;
   left: -5%;
   width: 14.5vw;
-  background-color: white;
+  background-color: #f7f7f7;
   transform: rotate(-25deg);
   display: flex;
   flex-direction: column;
@@ -188,7 +225,7 @@
   bottom: -17%;
   right: -5%;
   width: 14.5vw;
-  background-color: white;
+  background-color: #f7f7f7;
   transform: rotate(25deg);
   display: flex;
   flex-direction: column;
@@ -237,6 +274,10 @@
   text-transform: uppercase;
   white-space: nowrap;
   letter-spacing: -8px;
+}
+.shopSection3 .overlay3 h2 span{
+  display: inline-block;
+  transform-origin: top;
 }
 
 .shopSection3 .overlay3 p {
@@ -339,6 +380,16 @@
 }
 .topContHeader span {
   color: #7546ff;
+  display: inline-block;
+  transform-origin: top;
+}
+.topContHeader h2:nth-child(1) span:nth-child(1),
+.topContHeader h2:nth-child(1) span:nth-child(2),
+.topContHeader h2:nth-child(1) span:nth-child(3) {
+  color: black;
+}
+.topContHeader h2:nth-child(2) span{
+  color: black !important;
 }
 .bottomContPara {
   width: 100%;
@@ -434,6 +485,15 @@
   letter-spacing: -8px;
 }
 
+.shopSection5 .overlay5 h2 span {
+  display: inline-block;
+  transform-origin: top;
+}
+#title-main-wrap51 span{
+  display: inline-block;
+  transform-origin: top;
+}
+
 .shopSection6 {
   width: 100%;
   height: 120vh;
@@ -457,7 +517,16 @@
   letter-spacing: -8px;
 }
 .shopSection6 h2 span {
+  color: black;
+  display: inline-block;
+  transform-origin: top;
+}
+.shopSection6 h2:nth-child(2) span{
   color: #7546ff;
+}
+.shopSection6 h2:nth-child(2) span:nth-last-child(-n+2),
+.shopSection6 h2:nth-child(2) span:nth-child(-n+2) {
+  color: black;
 }
 
 .shopSection6 img {
@@ -569,6 +638,7 @@
   padding: 80px;
   padding-top: 220px;
   background-color: white;
+  overflow: hidden;
 }
 
 .shopSection8 h2 {
@@ -581,6 +651,15 @@
   white-space: nowrap;
 }
 .shopSection8 h2 span {
+  color: black;
+  display: inline-block;
+  transform-origin: top;
+}
+
+.shopSection8 h2:nth-child(2) span:nth-last-child(-n+12){
+  color: #7546ff;
+}
+.shopSection8 h2:nth-child(3) span {
   color: #7546ff;
 }
 
