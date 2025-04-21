@@ -1175,20 +1175,26 @@ li {
 }
 .header-links {
   display: flex;
-  gap: 60px;
+  gap: 35px;
   align-items: center;
   height: 30px;
-  background-color: #f7f7f7;
-  padding: 0 30px;
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
   z-index: 9;
   top: calc(100vh - 65px);
 }
-#about-link {
-  margin-left: 35px;
+.link-wp{
+  height: 100%;
+  display: flex;
+  gap: 60px;
+  align-items: center;
+  background-color: #f7f7f7;
+  padding: 0 30px;
 }
+/* #about-link {
+  margin-left: 35px;
+} */
 .header-links a,
 .header-links span {
   color: #000;

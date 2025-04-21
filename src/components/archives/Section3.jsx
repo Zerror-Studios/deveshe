@@ -98,46 +98,46 @@ const Section3 = () => {
 
     return (
         <div id="archiveSection3" className={styles.archiveSection3}>
-            <div className={`${styles.elem} ${styles.elem1}`} id='elem1'>
+            <Link href="/chapter1" className={`${styles.elem} ${styles.elem1}`} id='elem1'>
                 <div className={styles.overlay3a}>
                     <div className={styles.textContainer} id='textc1'>
                         <h3>Chapter 1</h3>
                         <h4>What’s on the menu?</h4>
                         <p>A tribute to food lovers everywhere, this summery capsule collection was created in collaboration with visual artist Rhea Zaveri. Inspired by abstract recipes, each print layers ingredients in playful proportions—think avocado toast, jalapeño bucatini, and watermelon lemonade. A vibrant nod to shared cravings and creative expression.</p>
-                        <Link className={styles.exploreBtn} href="/chapter1">Explore <FiArrowUpRight /></Link>
+                        <span className={styles.exploreBtn}>Explore <FiArrowUpRight /></span>
                     </div>
                 </div>
-            </div>
-            <div className={`${styles.elem} ${styles.elem2}`} id='elem2'>
+            </Link>
+            <Link href="/chapter1" className={`${styles.elem} ${styles.elem2}`} id='elem2'>
                 <div className={styles.overlay3a}>
                     <div className={styles.textContainer} id='textc2'>
                         <h3>Chapter 2</h3>
                         <h4> Its all about crochet!</h4>
                         <p>A celebration of festive elegance, this collection with artist Bindal Shah features handcrafted metallic crochet on vibrant ombré silks. In jewel tones of ruby, emerald, ochre, and blue, each piece blends lightness with intricate detail—perfect for wedding soirées and Diwali nights. Fusion wear made effortless, ornate, and unforgettable.</p>
-                        <Link className={styles.exploreBtn} href="/chapter1">Explore <FiArrowUpRight /></Link>
+                        <span className={styles.exploreBtn} >Explore <FiArrowUpRight /></span>
                     </div>
                 </div>
-            </div>
-            <div className={`${styles.elem} ${styles.elem3}`} id='elem3'>
+            </Link>
+            <Link href="/chapter1" className={`${styles.elem} ${styles.elem3}`} id='elem3'>
                 <div className={styles.overlay3a}>
                     <div className={styles.textContainer} id='textc3'>
                         <h3>Chapter 3</h3>
                         <h4>What’s on the menu?</h4>
                         <p>A tribute to food lovers everywhere, this summery capsule collection was created in collaboration with visual artist Rhea Zaveri. Inspired by abstract recipes, each print layers ingredients in playful proportions—think avocado toast, jalapeño bucatini, and watermelon lemonade. A vibrant nod to shared cravings and creative expression.</p>
-                        <Link className={styles.exploreBtn} href="/chapter1">Explore <FiArrowUpRight /></Link>
+                        <span className={styles.exploreBtn}>Explore <FiArrowUpRight /></span>
                     </div>
                 </div>
-            </div>
-            <div className={`${styles.elem} ${styles.elem4}`} id='elem4'>
+            </Link>
+            <Link href="/chapter1" className={`${styles.elem} ${styles.elem4}`} id='elem4'>
                 <div className={styles.overlay3a}>
                     <div className={styles.textContainer} id='textc4'>
                         <h3>Chapter 4</h3>
                         <h4>Its all about crochet!</h4>
                         <p>A tribute to food lovers everywhere, this summery capsule collection was created in collaboration with visual artist Rhea Zaveri. Inspired by abstract recipes, each print layers ingredients in playful proportions—think avocado toast, jalapeño bucatini, and watermelon lemonade. A vibrant nod to shared cravings and creative expression.</p>
-                        <Link className={styles.exploreBtn} href="/chapter1">Explore <FiArrowUpRight /></Link>
+                        <span className={styles.exploreBtn}>Explore <FiArrowUpRight /></span>
                     </div>
                 </div>
-            </div>
+            </Link>
         </div>
     )
 }

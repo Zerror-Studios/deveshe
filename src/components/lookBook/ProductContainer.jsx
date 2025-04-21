@@ -1,28 +1,54 @@
+import Link from 'next/link'
 import React from 'react'
 
 const ProductContainer = () => {
-    const products =[
-        "https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F1786x2500%2Ffa3880a39b%2Fsj001cod_1_frontweb.png&w=640&q=90",
-        "https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F1786x2500%2F6df946d5a7%2Ftsr003cod_1_frontweb.png&w=640&q=90",
-        "https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F1786x2500%2Fd4981330e7%2Fhdr002cod_1_frontweb.png&w=640&q=90",
-        "https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F1786x2500%2F04c32de2e7%2Fcap002cod_1_sideweb.png&w=640&q=90",
-        "https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F1786x2500%2Fdb82551388%2Fbjo001cod_1_frontweb.png&w=640&q=90",
-        "https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F1786x2500%2Fcd87538821%2Fcap003cod_1_sideweb.png&w=640&q=90",
-        "https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F1786x2500%2Fe78d5d11e6%2Fvj001cod_1_frontweb.png&w=640&q=90",
-        "https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F1786x2500%2Fcd87538821%2Fcap003cod_1_sideweb.png&w=640&q=90"
-    ]
+    const products = [
+        {
+          image1: "/product/Emerald Kaftan top (2).jpeg",
+          image2: ""
+        },
+        {
+          image1: "/product/Gold crochet bib (2).jpeg",
+          image2: ""
+        },
+    
+        {
+          image1: "/product/Ombré blue magia sleeve dress (1).jpeg",
+          image2: ""
+        },
+        {
+          image1: "/product/Ombré crochet patch dress- Brown (1).JPG",
+          image2: ""
+        },
+        {
+          image1: "/product/Emerald Kaftan top (2).jpeg",
+          image2: ""
+        },
+        {
+          image1: "/product/Golden fishnet crochet bag.jpeg",
+          image2: ""
+        },
+        {
+          image1: "/product/Emerald Kaftan top (2).jpeg",
+          image2: ""
+        },
+        {
+          image1: "/product/Gold crochet bib (2).jpeg",
+          image2: ""
+        },
+      ]
   return (
     <div id='prodcut-container'>
         {
             products.map((item, index) => {
                 return (
-                    <div className="product-lb" key={index}>
-                        <img src={item} alt={`Product ${item}`} />
+                    <Link href="/product?id=6752e99c935fd014e82be779" className="product-lb" key={index}>
+                        <img src={item.image1} alt={`Product image`} />
                         <div className="product-info">
-                            <h3>Product</h3>
-                            <p>Description for product</p>
+                            <p>Belted Leather Jacket</p>
+                            <p>1,545 INR</p>
                         </div>
-                    </div>
+                    </Link>
                 )
             })
         }

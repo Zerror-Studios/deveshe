@@ -359,12 +359,16 @@ const Navbar = ({ openBag, setOpenBag , headerNav}) => {
   return (
     <>
         <div ref={headerNav} className='header-links'>
+                <div className="link-wp">
                 <Link href="/shop">shop</Link>
                 <Link href="/archives">archives</Link>
                 <Link href="/about">about</Link>
                 <Link href="/contact">contact</Link>
+                </div>
+                <div className="link-wp">
                 <Link id='about-link' href="/profile">account</Link>
                 <span onClick={openModal}>bag</span>
+                </div>
             </div>
         <Modal
           closeModal={closeModal}

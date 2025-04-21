@@ -35,13 +35,17 @@
   color: white;
 }
 .archiveSection2 h3{
-  width: 70%;
-  font-size: 45px;
-  font-family: font2;
-  text-transform: uppercase;
+  width: 60%;
+  /* font-size: 45px; */
+  /* font-family: font3; */
+  /* text-transform: uppercase; */
   font-weight: 500;
-  line-height: 1;
-  color: #000000;
+  /* line-height: 1; */
+  /* color: #000000; */
+
+  font-family: font3;
+  font-size: 2.2vw;
+  color: black;
 }
 
 /* .archiveSection2 h3 span{
@@ -96,21 +100,21 @@
     width: 30%;
   }
   .overlay3a .textContainer h3{
-    font-family: font4;
     color: white;
-    font-weight: 100;
-    font-size: 1.5vw;
     margin-bottom: 8px;
+    font-weight: 400;
+    font-family: var(--secondary-font-Hen);
+    font-size: 1.5rem;
   }
   .exploreBtn{
-    font-family: font4;
     color: white;
-    font-weight: 100;
-    font-size: 1.3vw;
     margin-bottom: 8px;
     display: flex;
     align-items: center;
     gap: 6px;
+    font-weight: 400;
+    font-family: var(--secondary-font-Hen);
+    font-size: 1.5rem;
   }
   .overlay3a .textContainer h4{
     color: white;
