@@ -6,6 +6,7 @@ gsap.registerPlugin(ScrollTrigger)
 const Section5 = () => {
 
   useGSAP(() => {
+    if(window.innerWidth < 576) return;
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: "#lb-section5",
