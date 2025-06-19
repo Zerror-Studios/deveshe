@@ -100,8 +100,8 @@ const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
                 </div>
                 <div id='side-navbar'>
                     <div className='side-menu-links'>
-                        <Link href="/shop">shop</Link>
-                        <Link href="/archives">archives</Link>
+                        <Link href="/">shop</Link>
+                        <Link href="/lookbook">lookbook</Link>
                         <Link href="/about">about</Link>
                         <Link href="/contact">contact</Link>
                     </div>

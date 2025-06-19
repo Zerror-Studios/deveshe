@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from "./shop.module.css"
+import styles from "../shop/shop.module.css"
 import Image from 'next/image'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
@@ -67,7 +67,7 @@ const Section5 = () => {
             <div className={styles.overlay5}>
                 <div id='title-main-wrap5'>
                     <h2>The person</h2>
-                    <h2>behind the quiz</h2>
+                    <h2>behind the brand</h2>
                 </div>
                 <div className={styles.bigCardContainer}>
                     <div className={styles.bigCard}>

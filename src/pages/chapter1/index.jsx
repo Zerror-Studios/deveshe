@@ -12,7 +12,6 @@ import React from 'react'
 const index = () => {
     const text1 = "Signature camo, urban landscapes, and the vibrant colours of Zombies-mode combine with the edgy styles of 90’s gaming culture in our Call Of Duty®: Black Ops 6 capsule collection."
     const text2 = "Drawing on ARK/8’s iconic graphic tees and hoodies and infusing vintage-inspired outerwear and accessories like caps and socks, this elevated collection pays tribute to both the evolution of the iconic Black Ops franchise and the cultural era that shaped the gaming world."
-    const text3 = "Each item from the collection comes with an exclusive Calling Card which can only be obtained from ARK/8. This rare content code comes embossed on a wearable dog tag. More items mean more tags to share with your squad."
 
     return (
         <>
@@ -25,8 +24,6 @@ const index = () => {
             <Section3/>
             <Section4/>
             <Section5/>
-            <ProductContainer/>
-            <TextContainer text={text3} />
 
         </>
     )

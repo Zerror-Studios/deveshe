@@ -516,15 +516,14 @@ li {
 }
 
 .home-slider {
-  position: fixed;
-  top: 0%;
-  left: 0;
+  /* position: fixed; */
+  /* top: 0%; */
+  /* left: 0; */
   /* height: 100svh; */
   height: calc(var(--vh, 1vh) * 100);
   width: 100%;
   display: flex;
-  z-index: 9;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 .horizontal-scroll {
   width: fit-content;
@@ -1167,9 +1166,9 @@ li {
   left: 50%;
   transform: translateX(-50%);
   z-index: 9;
-  top: calc(100vh - 150px);
+  /* top: calc(100vh - 150px); */
+  top: 0%;
   text-decoration: none;
-  opacity: 0;
   color: #fff;
   mix-blend-mode: difference;
 }
@@ -1182,7 +1181,8 @@ li {
   left: 50%;
   transform: translateX(-50%);
   z-index: 9;
-  top: calc(100vh - 65px);
+  /* top: calc(100vh - 65px); */
+  top: 80px;
 }
 .link-wp{
   height: 100%;

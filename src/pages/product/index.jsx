@@ -18,9 +18,9 @@ gsap.registerPlugin(ScrollTrigger);
 const ProductPage = () => {
   const [product, setProduct] = useState({});
   const [images, setImages] = useState([
-    "/product/Emerald Kaftan top (2).jpeg",
-    "/about/about-banner.webp",
-    "/shop/shop-banner1.webp",
+    "/newproduct/BI07.jpg",
+    "/newproduct/BI072.jpg",
+    "/newproduct/BI071.jpg"
   ]);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -318,35 +318,35 @@ const ProductPage = () => {
   const ShopCardDetails = [
     {
       id: 1,
-      image1: "/product/Ombré crochet patch dress- Brown (1).JPG",
+      image1: "/newproduct/BI02.jpg",
       BrandName: "BrandName",
       ProductName: "ProductName",
       price: "1200",
     },
     {
       id: 2,
-      image1: "/product/Emerald Kaftan top (2).jpeg",
+      image1: "/newproduct/BI03.jpg",
       BrandName: "BrandName",
       ProductName: "ProductName",
       price: "1200",
     },
     {
       id: 3,
-      image1: "/product/Ombré pink slit top (1).JPG",
+      image1: "/newproduct/BI04.jpg",
       BrandName: "BrandName",
       ProductName: "ProductName",
       price: "1200",
     },
     {
       id: 4,
-      image1: "/shop/shop-banner1.webp",
+      image1: "/newproduct/BI05.jpg",
       BrandName: "BrandName",
       ProductName: "ProductName",
       price: "1200",
     },
     {
       id: 5,
-      image1: "/product/Ombré yellow wrap shirt.jpeg",
+      image1: "/newproduct/BI07.jpg",
       BrandName: "BrandName",
       ProductName: "ProductName",
       price: "1200",
@@ -358,7 +358,7 @@ const ProductPage = () => {
   return (
     <>
       {isModalVisible && (
-        <div className="ReactModalPortal_img_cntr">
+        <div className="ReactModalPortal_img_cntr" data-lenis-prevent>
           <div className="ReactModalPortal_img_cntr_overlay">
             <div className="ReactModalPortal_img_cntr_cursor">
               <div className="ReactModalPortal_img_cross">

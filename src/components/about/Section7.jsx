@@ -1,23 +1,28 @@
 import React from 'react'
-import styles from './shop.module.css'
+import styles from '../shop/shop.module.css'
 import Image from 'next/image'
 
 const Section7 = () => {
     return (
         <div className={styles.shopSection7}>
+           <div className={styles.secPara7}>
+  <h6>Where it all began</h6>
+  <p>
+    Raised in Mumbai, shaped by Parsons —  
+    I turned daydreams into fabric,  
+    and <span>fashion became my language.</span>
+  </p>
+</div>
+
             <div className={styles.secPara7}>
-                <h6>I kicked off my journey</h6>
-                <p>studying Politics and Law, worked as
-                    human rights advocacy - only to realize
-                    <span>my true passion lies in Creativity.</span>
-                </p>
-            </div>
-            <div className={styles.secPara7}>
-                <h6>With years of experience</h6>
-                <p>providing online education, I've learned
-                    that the key to supporting you is <span>helping you uncover</span> your strengths and passions.
-                </p>
-            </div>
+  <h6>Over the years</h6>
+  <p>
+    I've collaborated with artists,  
+    explored print and detail, and found joy in  
+    <span> creating stories through style.</span>
+  </p>
+</div>
+
             <div className={styles.strip7}>
             <Image width={1000} height={1000} src="/about/dress1.JPG" alt='card' />
             <Image width={1000} height={1000} src="/about/dress2.JPG" alt='card' />

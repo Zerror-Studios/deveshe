@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from "./shop.module.css"
+import styles from "../shop/shop.module.css"
 import Image from 'next/image'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
@@ -51,9 +51,11 @@ const Section6 = () => {
   return (
     <div className={styles.shopSection6}>
         <div id='title-main-wrap6'>
-            <h2>It's great to see you</h2>
-            <h2>on <span>your journey</span> to</h2>
-            <h2>discovering your</h2>
+           <h2>It's great to see you</h2>
+<h2>on <span>your journey</span> to</h2>
+<h2>discovering your</h2>
+<h2>style</h2>
+
         </div>
         <Image height={1000} width={1000} alt='image' src="https://emmpo.com/assets/af3020a78265de970759.png"/>
     </div>

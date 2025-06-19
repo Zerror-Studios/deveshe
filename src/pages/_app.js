@@ -1,4 +1,3 @@
-import Footer from "@/components/common/Footer";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "../../store";
@@ -22,7 +21,6 @@ import { useState } from "react";
 import HomeWrapper from "@/components/HomeWrapper/HomeWrapper";
 import ModalProvider from "@/components/context/ModalProvider";
 import SmoothScroller from "@/components/smoothScroll/SmoothScroll";
-// import Modal from "@/components/Modal";
 export default function App({ Component, pageProps }) {
   const router = useRouter();
   const pathName = router.pathname;
@@ -36,7 +34,6 @@ export default function App({ Component, pageProps }) {
             <HomeWrapper openBag={false} setOpenBag={setOpenBag} >
               <SmoothScroller/>
               <Component {...pageProps} />
-              {pathName !== '/' && <Footer />}
             </HomeWrapper>
           </ModalProvider>
         </PersistGate>

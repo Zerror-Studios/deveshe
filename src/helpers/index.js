@@ -1442,8 +1442,8 @@ export const dbProdData = [
 }]
 export const footerLinks = {
   About: [
-    { name: "Shop", path: "/shop" },
-    { name: "Archives", path: "/archives" },
+    { name: "Shop", path: "/" },
+    { name: "Lookbook", path: "/lookbook" },
     { name: "About", path: "/about" },
   ],
   "Customer Care": [

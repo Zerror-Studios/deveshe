@@ -371,12 +371,13 @@
   flex-direction: column;
   align-items: flex-end;
   justify-content: space-between;
-  padding: 80px;
+  padding: 80px 0;
   gap: 80px;
 }
 .topContHeader {
   width: 100%;
   text-align: center;
+  
 }
 .topContHeader span {
   color: #7546ff;
@@ -514,7 +515,7 @@
   line-height: 0.8;
   text-transform: uppercase;
   white-space: nowrap;
-  letter-spacing: -8px;
+  letter-spacing: -5px;
 }
 .shopSection6 h2 span {
   color: black;
@@ -573,7 +574,7 @@
 
 .shopSection7 .strip7 {
   position: absolute;
-  width: 14.5vw;
+  width: 14vw;
   height: auto;
   padding: 1vw;
   background-color: white;
@@ -581,9 +582,9 @@
   flex-direction: column;
   justify-content: space-between;
   gap: 1vw;
-  top: -10%;
+  top: -28%;
   left: 5%;
-  transform: rotate(-25deg);
+  transform: rotate(-28deg);
 }
 .shopSection7 .strip7 img {
   width: 100%;
