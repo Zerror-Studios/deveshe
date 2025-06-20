@@ -14,8 +14,6 @@ import "@/styles/navbar.css";
 import "@/styles/profile.css";
 import "@/styles/productLoader.css";
 import "@/styles/collectionLoader.css";
-import "@/styles/collections.css";
-import "@/styles/shopAll.css";
 import "@/styles/lookBook.css";
 import { useState } from "react";
 import HomeWrapper from "@/components/HomeWrapper/HomeWrapper";
@@ -32,7 +30,7 @@ export default function App({ Component, pageProps }) {
         <PersistGate loading={null} persistor={persistor}>
           <ModalProvider>
             <HomeWrapper openBag={false} setOpenBag={setOpenBag} >
-              <SmoothScroller/>
+              <SmoothScroller />
               <Component {...pageProps} />
             </HomeWrapper>
           </ModalProvider>

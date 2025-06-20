@@ -88,7 +88,7 @@ const Nails_Cntr = () => {
     <div id="How_to_Nail_it_Cntr">
       <div className="row title">
         <div className="title_inner-nail columns">
-          <h2 id="nailsIt">How to nail it</h2>
+          <h2 id="nailsIt">How we nail it</h2>
           <div className="arrow">
             <svg
               width={113}

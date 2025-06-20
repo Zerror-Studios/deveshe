@@ -1,29 +1,15 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import LinksDot from "../LinksDot";
-import { IoSearch } from "react-icons/io5";
-import { FaEuroSign } from "react-icons/fa";
-import { useGSAP } from "@gsap/react";
 import { useDispatch, useSelector } from "react-redux";
-import { FaRegUser } from "react-icons/fa";
 import gsap from "gsap";
 import { useRouter } from "next/router";
 import { fetchuser } from "../../features/user/UserSlice";
-import { getMenu, getSubMenu } from "../../../api_fetch/admin/Menu";
+import { getMenu } from "../../../api_fetch/admin/Menu";
 import Modal from "./Modal";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-  },
-};
-const Navbar = ({ openBag, setOpenBag , headerNav}) => {
+
+const Navbar = ({ openBag, setOpenBag }) => {
   const [menu, setMenu] = useState([]);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -60,7 +46,6 @@ const Navbar = ({ openBag, setOpenBag , headerNav}) => {
   const go = (cat, subcat) => {
     router.push(`/collections/${cat}&${subcat}`);
   };
-
 
   useEffect(() => {
     fetchData();
@@ -184,14 +169,11 @@ const Navbar = ({ openBag, setOpenBag , headerNav}) => {
       setColor("#000");
     } else if (router.pathname === "/") {
       setColor("#ffff");
-    } 
-    else if(router.pathname === "/archives"){
+    } else if (router.pathname === "/archives") {
       setColor("#000");
-    }
-    else if(router.pathname === "/contact"){
+    } else if (router.pathname === "/contact") {
       setColor("#000");
-    }
-    else if (router.pathname === "/collections") {
+    } else if (router.pathname === "/collections") {
       setColor("#ffff");
     }
   }, [router.pathname, color]);
@@ -207,25 +189,84 @@ const Navbar = ({ openBag, setOpenBag , headerNav}) => {
 
   return (
     <>
-        <div ref={headerNav} className='header-links'>
-                <div className="link-wp">
-                <Link href="/">shop</Link>
-                <Link href="/lookbook">lookbook</Link>
-                <Link href="/about">about</Link>
-                <Link href="/contact">contact</Link>
-                </div>
-                <div className="link-wp">
-                <Link id='about-link' href="/profile">account</Link>
-                <span onClick={openModal}>bag</span>
-                </div>
-            </div>
-        <Modal
-          closeModal={closeModal}
-          modalIsOpen={modalIsOpen}
-          setOpenBag={setOpenBag}
-          openBag={openBag}
-          setModalIsOpen={setModalIsOpen}
-        />
+      <div id="nav">
+        <Link href="/" id="logo-nav">
+          de ve she dreams
+        </Link>
+        <div className="nav-link">
+          <Link href="/">
+            shop
+            <div className="hoverline"></div>
+          </Link>
+          <Link href="/lookbook">
+            lookbook
+            <div className="hoverline"></div>
+          </Link>
+          <Link href="/about">
+            about
+            <div className="hoverline"></div>
+          </Link>
+          <Link href="/contact">
+            contact
+            <div className="hoverline"></div>
+          </Link>
+        </div>
+        <div id="nav-btns">
+          <button onClick={openModal}>
+            <svg
+              class="icon-cart"
+              width="15"
+              height="18"
+              viewBox="0 0 15 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              data-v-f756b3ad=""
+            >
+              <path
+                d="M1.19891 5.8049C1.2448 5.02484 1.89076 4.41576 2.67216 4.41576H12.0298C12.8112 4.41576 13.4572 5.02485 13.5031 5.8049L14.0884 15.7547C14.1382 16.6023 13.4643 17.3171 12.6151 17.3171H2.08688C1.23775 17.3171 0.563767 16.6023 0.61363 15.7547L1.19891 5.8049Z"
+                stroke-width="0.983866"
+              ></path>
+              <path
+                d="M11.4354 6.3737C11.4354 3.21604 9.60694 0.65625 7.35147 0.65625C5.096 0.65625 3.26758 3.21604 3.26758 6.3737"
+                stroke-width="0.983866"
+                stroke-linecap="round"
+              ></path>
+            </svg>
+          </button>
+          <div id="nav-line"></div>
+          <Link href="/profile">
+            <svg
+              class="icon-account"
+              width="16"
+              height="18"
+              viewBox="0 0 16 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              data-v-f756b3ad=""
+            >
+              <path
+                d="M15.024 17.0559V15.3068C15.024 14.379 14.6555 13.4892 13.9994 12.8332C13.3434 12.1772 12.4536 11.8086 11.5258 11.8086H4.52944C3.60166 11.8086 2.71188 12.1772 2.05585 12.8332C1.39981 13.4892 1.03125 14.379 1.03125 15.3068V17.0559"
+                stroke-width="0.983866"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+              <path
+                d="M8.02798 8.30986C9.95997 8.30986 11.5262 6.74367 11.5262 4.81167C11.5262 2.87967 9.95997 1.31348 8.02798 1.31348C6.09598 1.31348 4.52979 2.87967 4.52979 4.81167C4.52979 6.74367 6.09598 8.30986 8.02798 8.30986Z"
+                stroke-width="0.983866"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </Link>
+        </div>
+      </div>
+      <Modal
+        closeModal={closeModal}
+        modalIsOpen={modalIsOpen}
+        setOpenBag={setOpenBag}
+        openBag={openBag}
+        setModalIsOpen={setModalIsOpen}
+      />
     </>
   );
 };

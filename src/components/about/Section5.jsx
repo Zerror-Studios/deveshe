@@ -63,7 +63,7 @@ const Section5 = () => {
 
     return (
         <div className={styles.shopSection5}>
-            <Image width={1000} height={1000} src="/about/about-banner1.jpeg" alt='ig5-banner' />
+            <Image width={1000} height={1000} src="/newproduct/BI02.jpg" alt='ig5-banner' />
             <div className={styles.overlay5}>
                 <div id='title-main-wrap5'>
                     <h2>The person</h2>

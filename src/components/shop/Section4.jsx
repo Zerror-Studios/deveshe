@@ -24,8 +24,8 @@ const Section4 = () => {
       scrollTrigger: {
         trigger: "#section4-shop",
         scroller: "body",
-        start: "top 70%",
-        end: "top 40%",
+        start: "top 85%",
+        end: "top 55%",
         // scrub: true,
         // markers:true
       },

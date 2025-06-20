@@ -35,47 +35,42 @@ const Section3 = () => {
         delay: 0.8,
       }
     );
+    gsap.set("#imgCardSec31", {
+      y: -600,
+      scale: 0.8,
+      opacity: 0,
+    });
+    gsap.set("#imgCardSec32", {
+      y: -700,
+      scale: 0,
+      opacity: 0,
+    });
     const tl2 = gsap.timeline({
       scrollTrigger: {
         trigger: "#imageContainer2",
         scroller: "body",
-        start: "top 80%",
-        end: "top 40%",
+        start: "top 100%",
+        end: "top 50%",
         // scrub: true,
-        // markers: true
+        // markers: true,
       },
     });
-    tl2.fromTo(
-      "#imgCardSec31",
-      {
-        y: -600,
-        scale: 0.8,
-        opacity: 0,
-      },
-      {
-        y: 0,
-        scale: 1,
-        opacity: 1,
-        duration: 1.2,
-        ease: "power2.out",
-      }
-    );
-    tl2.fromTo(
-      "#imgCardSec32",
-      {
-        y: -700,
-        scale: 0,
-        opacity: 0,
-      },
-      {
-        y: 0,
-        scale: 1,
-        opacity: 1,
-        duration: 1.5,
-        delay: -0.2,
-        ease: "power2.out",
-      }
-    );
+
+    tl2.to("#imgCardSec31", {
+      y: 0,
+      scale: 1,
+      opacity: 1,
+      duration: 1,
+      ease: "power2.out",
+    });
+    tl2.to("#imgCardSec32", {
+      y: 0,
+      scale: 1,
+      opacity: 1,
+      duration: 1,
+      delay: -0.4,
+      ease: "power2.out",
+    });
     setTimeout(() => {
       ScrollTrigger.refresh();
     }, 50);
@@ -85,7 +80,7 @@ const Section3 = () => {
       <Image
         width={1000}
         height={1000}
-        src="/newproduct/BI02.jpg"
+        src="/about/about-banner1.jpeg"
         alt="image"
       />
       <div className={styles.overlay3}>
@@ -113,7 +108,7 @@ const Section3 = () => {
               <Image
                 width={1000}
                 height={1000}
-                src="/newproduct/BI07.jpg"
+                src="/newproduct/BI06.jpg"
                 alt="image"
               />
               <p>

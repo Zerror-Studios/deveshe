@@ -1,7 +1,7 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
-import Tempus from '@studio-freight/tempus';
-import Lenis from '@studio-freight/lenis';
-import { usePathname, useSearchParams } from 'next/navigation';
+import React, { useEffect, useLayoutEffect, useRef } from "react";
+import Tempus from "@studio-freight/tempus";
+import Lenis from "@studio-freight/lenis";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export default function SmoothScroller() {
   const lenis = useRef(null);
@@ -14,8 +14,15 @@ export default function SmoothScroller() {
 
   useLayoutEffect(() => {
     lenis.current = new Lenis({
-      smoothWheel: true,
-      // Customize other instance settings here
+      duration: 1.2,
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+      smooth: true,
+      smoothTouch: true,
+      direction: "vertical",
+      gestureDirection: "vertical",
+      wheelMultiplier: 0.8,
+      touchMultiplier: 1.2,
+      infinite: false,
     });
 
     const resize = setInterval(() => {

@@ -1,10 +1,15 @@
-import ArchiveWrapper from '@/components/archives/ArchiveWrapper'
-import React from 'react'
+import React from "react";
+import styles from "@/components/lookbook/lookbook.module.css";
+import Section2 from "@/components/lookbook/Section2";
+import Section3 from "@/components/lookbook/Section3";
 
-const Archives = () => {
+const Lookbook = () => {
   return (
-    <ArchiveWrapper />
-  )
-}
+    <div className={styles.archiveWrapper}>
+      <Section2 />
+      <Section3 />
+    </div>
+  );
+};
 
-export default Archives
+export default Lookbook;

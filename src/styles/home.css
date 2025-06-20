@@ -343,11 +343,11 @@
 
 #How_to_Nail_it_Cntr .pictos-label .p-normal {
   color: #222;
-  font-size: calc(1.275rem + 0.13333vw);
-  font-size: 1.3529411765vw;
-  letter-spacing: 0;
+  font-size: 14px;
+  letter-spacing: 1px;
   line-height: 1;
-  font-family: var(--primary-font-Hel);
+  font-family: font1;
+  font-weight: 500;
 }
 
 #How_to_Nail_it_Cntr .pictos-label .picto-two {
@@ -401,11 +401,11 @@
 
 .title_inner-nail h2 {
   font-family: font2;
-  font-size: 10.5vw;
+  font-size: 9vw;
   line-height: 0.8;
   text-transform: uppercase;
   white-space: nowrap;
-  letter-spacing: -8px;
+  letter-spacing: -2px;
   position: relative;
   text-align: center;
 }
@@ -542,7 +542,7 @@
   }
 
   #How_to_Nail_it_Cntr .pictos-label .p-normal {
-    font-size: 0.75rem;
+    font-size: 14px;
   }
 
   #How_to_Nail_it_Cntr .p-normal.text-top {

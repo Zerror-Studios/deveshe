@@ -5,17 +5,11 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import { useRouter } from "next/router";
 
 const General = () => {
-  const [section, setSection] = useState(0);
-  const router = useRouter();
-  const handleTabChange = (newValue) => {
-    setSection(newValue);
-  };
-
   return (
     <>
 
       <div className="parent-div">
-      <div
+      {/* <div
         className="_btn_wrapper _btn_height _w-full back bg-white"
         onClick={() => {
           router.back();
@@ -23,7 +17,7 @@ const General = () => {
       >
         <IoIosArrowRoundBack style={{ fontSize: "3rem" }} />
         <p>Back</p>
-      </div>
+      </div> */}
         <div className="outerdiv-pro">
           <Tab />
         </div>
