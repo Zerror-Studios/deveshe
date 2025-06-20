@@ -1,5 +1,5 @@
 import React  from 'react'
-import styles from './lookbook.module.css'
+import styles from './archive.module.css'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/dist/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)

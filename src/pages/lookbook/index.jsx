@@ -1,7 +1,7 @@
 import React from "react";
-import Section2 from "../../components/lookbook/Section2";
-import Section3 from "../../components/lookbook/Section3";
-import styles from "../../components/lookbook/lookbook.module.css";
+import Section2 from "@/components/archive/Section2";
+import Section3 from "@/components/archive/Section3";
+import styles from "@/components/archive/archive.module.css";
 
 const Lookbook = () => {
   return (

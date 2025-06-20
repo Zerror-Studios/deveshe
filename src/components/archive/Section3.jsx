@@ -1,7 +1,7 @@
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import React, { useEffect } from "react";
-import styles from "./lookbook.module.css";
+import styles from "./archive.module.css";
 import { useGSAP } from "@gsap/react";
 import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
