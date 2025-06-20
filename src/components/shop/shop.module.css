@@ -603,6 +603,11 @@
   transform: rotate(20deg) translateX(55%) translateY(-20%);
   position: relative;
   z-index: 2;
+  background-color: yellow;
+  display: flex;
+  justify-content: center;
+  padding: 1vw;
+  padding-bottom: 3vw;
 }
 .cardLg img {
   width: 100%;
@@ -612,9 +617,11 @@
 .cardSm {
   position: absolute;
   width: 30%;
-  bottom: 0;
+  bottom: -5%;
   left: -5%;
   transform: rotate(-20deg);
+  background-color: #F7F7F7;
+  padding: 1vw;
 }
 .cardSm img {
   width: 100%;
