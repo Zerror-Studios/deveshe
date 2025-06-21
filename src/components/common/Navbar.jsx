@@ -1,197 +1,157 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import gsap from "gsap";
-import { useRouter } from "next/router";
-import { fetchuser } from "../../features/user/UserSlice";
-import { getMenu } from "../../../api_fetch/admin/Menu";
 import Modal from "./Modal";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
+import Image from "next/image";
+import { useRouter } from "next/router";
 gsap.registerPlugin(ScrollTrigger);
 
 const Navbar = ({ openBag, setOpenBag }) => {
-  const [menu, setMenu] = useState([]);
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const path = router.pathname;
-  const pathName = router.pathname.split("/")[1];
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [color, setColor] = useState(null);
-  const [update, setUpdate] = useState(false);
-  const user = useSelector((state) => state.user.user);
   const cartCount = useSelector((state) => state.cart.itemcount);
-  useEffect(() => {
-    dispatch(fetchuser());
-  }, []);
-
-  const verifyUser = () => {
-    if (!user) {
-      router.push("/login");
-    } else {
-      router.push("/profile");
-    }
-  };
-
-  const fetchData = async () => {
-    try {
-      const res = await getMenu({ limit: 20, offset: 0 });
-      if (res) {
-        setMenu(res.data);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const go = (cat, subcat) => {
-    router.push(`/collections/${cat}&${subcat}`);
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-  useEffect(() => {
-    if (window.innerWidth >= 1000) {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".header_cntr",
-          start: "10% 0%",
-          end: "bottom 0%",
-          scrub: 0.5,
-          markers: false,
-        },
-      });
-      tl.to(
-        ".header_cntr",
-        {
-          height: "38px",
-          // transition: "height 0.4s, color 0.2s 0.4s",
-          // color: "#000",
-          // backgroundColor: "green",
-          duration: 1,
-        },
-        "a"
-      );
-      tl.to(
-        ".header_inner",
-        {
-          height: "22px",
-          // transition: "height 0.4s",
-          // backgroundColor: "red",
-          duration: 1,
-        },
-        "a"
-      );
-      tl.to(
-        ".header_logo_svg",
-        {
-          height: "22px",
-          // transition: "all .1s ",
-          duration: 1,
-        },
-        "a"
-      );
-      tl.to(
-        ".header_nav_links_wrap",
-        {
-          opacity: 0,
-          duration: 1,
-          // transition: "oapcity 0.4s, hidden 0.4s, height 0.4s",
-        },
-        "a"
-      );
-      tl.to(
-        ".header_nav_links_left_inner",
-        {
-          opacity: 0,
-          duration: 1,
-          transition: "opacity 0.1s, hidden 0.1s, height 0.4s",
-
-          // transition: "oapcity 0.4s, hidden 0.4s, height 0.4s",
-        },
-        "a"
-      );
-      tl.to(
-        ".header_nav_links_left",
-        {
-          color: "#000",
-          duration: 1,
-          transition: "color 0.1s 0s",
-          // transition: "oapcity 0.4s, hidden 0.4s, height 0.4s",
-        },
-        "b"
-      );
-      tl.to(
-        ".header_logo_svg",
-        {
-          color: "#000",
-          duration: 1,
-          transition: "color 0.1s 0s",
-        },
-        "b"
-      );
-      tl.to(
-        ".headerconatin",
-        {
-          backgroundColor: "#ffff",
-          duration: 0.5,
-          ease: "power1.inOut",
-          transition: "Background-color 0.2s 0s",
-        },
-        "b"
-      );
-      tl.to(
-        ".header_lineargradient",
-        {
-          display: "none",
-        },
-        "b"
-      );
-
-      gsap.to(".Shop_shopAll_text_onScroll", {
-        scrollTrigger: {
-          trigger: ".header_cntr",
-          start: "bottom 0%",
-          end: "bottom 10%",
-          scrub: 0.5,
-        },
-        opacity: 1,
-        visibility: "visible",
-        // display: "none",
-      });
-      return () => {
-        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-      };
-    }
-  }, []);
-  useEffect(() => {
-    if (router.pathname === "/collections/shop-all") {
-      setColor("#000");
-    } else if (router.pathname === "/") {
-      setColor("#ffff");
-    } else if (router.pathname === "/archives") {
-      setColor("#000");
-    } else if (router.pathname === "/contact") {
-      setColor("#000");
-    } else if (router.pathname === "/collections") {
-      setColor("#ffff");
-    }
-  }, [router.pathname, color]);
-
   function openModal() {
     setModalIsOpen(true);
   }
-
   function closeModal() {
     setModalIsOpen(false);
     setOpenBag(false);
   }
+  const router = useRouter();
+
+  useEffect(() => {
+    if(window.innerWidth < 576) return;
+    const initLogoAnimation = () => {
+      const logos = document.querySelectorAll(".logo");
+      const spacing = 10;
+      let xPositions = [];
+      let currentX = 0;
+
+      logos.forEach((logo) => {
+        const width = logo.getBoundingClientRect().width;
+        xPositions.push(currentX);
+        currentX += width + spacing;
+      });
+      document.querySelector(
+        "#logo-container"
+      ).style.width = `${xPositions[3]}px`;
+
+      const lastLogo = logos[logos.length - 1];
+      const lastLogoWidth = lastLogo.getBoundingClientRect().width;
+      const finalWidth = `${xPositions[logos.length - 1] + lastLogoWidth}px`;
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: document.documentElement,
+          start: "top top",
+          end: "400px 20%",
+          scrub: 1,
+          // markers: true,
+        },
+      });
+
+      tl.to(
+        ".logo",
+        {
+          top: 0,
+          x: (i) => xPositions[i],
+          ease: "sine.out",
+        },
+        "start"
+      )
+        .to(
+          "#logo-container",
+          {
+            height: "25px",
+            width: finalWidth,
+            ease: "sine.out",
+          },
+          "start"
+        )
+        .to(
+          "#nav",
+          {
+            backgroundColor: "rgba(255,255,255,1)",
+            duration: 0.3,
+            ease: "power1.out",
+          },
+          "s"
+        )
+
+        .to(
+          "#nav-btns",
+          {
+            backgroundColor: "rgba(255,255,255,1)",
+            duration: 0.3,
+            ease: "power1.out",
+          },
+          "s"
+        )
+        .to(
+          "#nav-line ",
+          {
+            backgroundColor: "black",
+            duration: 0.3,
+            ease: "power1.out",
+          },
+          "s"
+        )
+        .to(
+          "#nav-btns svg ",
+          {
+            stroke: "black",
+            duration: 0.3,
+            ease: "power1.out",
+          },
+          "s"
+        );
+    };
+
+    const timeout = setTimeout(() => {
+      requestAnimationFrame(initLogoAnimation);
+    }, 50);
+
+    // Cleanup
+    return () => {
+      clearTimeout(timeout);
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      gsap.globalTimeline.clear(); // clear timeline to avoid memory leaks
+    };
+  }, [router.asPath]); // 👈 re-run when route changes
 
   return (
     <>
       <div id="nav">
-        <Link href="/" id="logo-nav">
-          de ve she dreams
+        <Link href="/" id="logo-container">
+          <Image
+            width={1000}
+            height={1000}
+            src="/logo/d.png"
+            alt="D"
+            class="logo"
+          />
+          <Image
+            width={1000}
+            height={1000}
+            src="/logo/v.png"
+            alt="V"
+            class="logo"
+          />
+          <Image
+            width={1000}
+            height={1000}
+            src="/logo/s.png"
+            alt="S"
+            class="logo"
+          />
+          <Image
+            width={1000}
+            height={1000}
+            src="/logo/m.png"
+            alt="M"
+            class="logo"
+          />
         </Link>
         <div className="nav-link">
           <Link href="/">
