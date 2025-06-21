@@ -711,11 +711,74 @@
   width: 50%;
   height: 100vh;
   border-right: 1px solid black;
+  overflow: hidden;
 }
 .leftProCon img {
   width: 100%;
   height: 100vh;
   object-fit: cover;
+  transition: all ease .5s;
+}
+.productOverlay{
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1vw;
+}
+.bagCont{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  transform: translateY(-200%);
+  transition: all ease-in-out .5s;
+}
+.bagCont button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background-color: white;
+  border-radius: 50%;
+}
+.bagCont button svg{
+  width: 13px;
+  height: 13px;
+  stroke: black;
+}
+.proDets{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  transform: translateY(200%);
+  transition: all ease-in-out .5s;
+}
+
+.proDets h4 ,.proDets span{
+      font-family: var(--primary-font-Hel);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.35;
+  font-style: initial;
+}
+
+.leftProCon:hover img{
+  scale: 1.02;
+  filter:brightness(80%);
+}
+.leftProCon:hover .bagCont{
+  transform: translateY(0);
+}
+.leftProCon:hover .proDets{
+  transform: translateY(0);
 }
 .overlayLeftp {
   width: 100%;
@@ -741,6 +804,7 @@
 .rightProCon {
   width: 50%;
 }
+
 .rightProConWrap{
   width: 100%;
   height: 100%;
@@ -759,18 +823,30 @@
 
 .productCard {
   width: 50%;
-  height: 50vh;
+  height: 60vh;
   position: relative;
   border-bottom: 1px solid black;
+  overflow: hidden;
 }
 .productCard:nth-child(2n) {
   border-left: 1px solid black;
+}
+.productCard:hover img{
+  scale: 1.02;
+  filter:brightness(80%);
+}
+.productCard:hover .bagCont{
+  transform: translateY(0);
+}
+.productCard:hover .proDets{
+  transform: translateY(0);
 }
 
 .productCard img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+    transition: all ease .5s;
 }
 
 .overlayRightp {
