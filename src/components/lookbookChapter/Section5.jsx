@@ -5,9 +5,11 @@ import Image from "next/image";
 import React, { useEffect } from "react";
 gsap.registerPlugin(ScrollTrigger);
 const Section5 = () => {
-  useEffect(() => {
-    if (window.innerWidth < 576) return;
 
+useEffect(() => {
+  if (window.innerWidth < 576) return;
+
+  const ctx = gsap.context(() => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: "#lb-section5",
@@ -20,7 +22,7 @@ const Section5 = () => {
 
     tl.to(".scroll-section", {
       y: 270,
-      ease: "none", // no duration needed for scrub
+      ease: "none",
     });
 
     const tl2 = gsap.timeline({
@@ -35,11 +37,14 @@ const Section5 = () => {
 
     tl2.to(".parallex img", {
       y: 50,
-      ease: "none", // link tightly to scroll
+      ease: "none",
     });
 
-    requestAnimationFrame(() => ScrollTrigger.refresh()); // better than timeout
-  }, []);
+     setTimeout(() => ScrollTrigger.refresh(), 100); 
+  });
+
+  return () => ctx.revert(); // cleanup animations + triggers
+}, []);
 
   return (
     <div id="lb-section5">
