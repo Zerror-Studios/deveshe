@@ -21,8 +21,6 @@ import ModalProvider from "@/components/context/ModalProvider";
 import SmoothScroller from "@/components/smoothScroll/SmoothScroll";
 export default function App({ Component, pageProps }) {
   const router = useRouter();
-  const pathName = router.pathname;
-  console.log(pathName, "path")
   const [openBag, setOpenBag] = useState(false)
   return (
     <>

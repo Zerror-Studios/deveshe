@@ -729,6 +729,7 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 1vw;
+  pointer-events: none;
 }
 .bagCont{
   width: 100%;
@@ -746,6 +747,8 @@
   height: 28px;
   background-color: white;
   border-radius: 50%;
+  pointer-events: all;
+  cursor: pointer;
 }
 .bagCont button svg{
   width: 13px;

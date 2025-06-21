@@ -33,7 +33,7 @@ const Section7 = () => {
           <Image
             width={1000}
             height={1000}
-            src="/newproduct/BI01.jpg"
+            src="/about/about1.jpg"
             alt="card"
           />
         </div>
@@ -41,7 +41,7 @@ const Section7 = () => {
           <Image
             width={1000}
             height={1000}
-            src="/newproduct/BI07.jpg"
+            src="/about/about2.jpg"
             alt="card"
           />
         </div>
