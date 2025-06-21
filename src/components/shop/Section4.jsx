@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./shop.module.css";
 import Image from "next/image";
 import gsap from "gsap";
@@ -7,46 +7,53 @@ import ScrollTrigger from "gsap/dist/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const Section4 = () => {
-  useGSAP(() => {
-    document.querySelectorAll("#title-main-wrap2 h2").forEach((h) => {
-      let clutter = "";
-      h.textContent.split("").forEach((letter) => {
-        if (letter === " ") {
-          clutter += `<span>&nbsp;</span>`; // non-breaking space
-        } else {
-          clutter += `<span>${letter}</span>`;
+  useEffect(() => {
+    // Split text into <span> only once
+    function splitText(selector) {
+      document.querySelectorAll(selector).forEach((el) => {
+        if (!el.dataset.split) {
+          const letters = el.textContent
+            .split("")
+            .map((char) =>
+              char === " " ? `<span>&nbsp;</span>` : `<span>${char}</span>`
+            );
+          el.innerHTML = letters.join("");
+          el.dataset.split = "true";
         }
       });
-      h.innerHTML = clutter;
+    }
+
+    splitText("#title-main-wrap2 h2");
+
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#section4-shop",
+          start: "top 85%",
+          end: "top 55%",
+          // scrub: true,
+          // markers: true,
+        },
+      });
+
+      tl.fromTo(
+        "#title-main-wrap2 h2 span",
+        { rotateX: "90deg" },
+        {
+          duration: 0.8,
+          rotateX: "0deg",
+          stagger: 0.05,
+          ease: "bounce.out",
+        }
+      );
+
+      // Refresh in case layout/images/fonts shift anything
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 500);
     });
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: "#section4-shop",
-        scroller: "body",
-        start: "top 85%",
-        end: "top 55%",
-        // scrub: true,
-        // markers:true
-      },
-    });
-    tl.fromTo(
-      "#title-main-wrap2 h2 span",
-      {
-        transform: "rotateX(90deg)",
-      },
-      {
-        duration: 0.8,
-        transform: "rotateX(0deg)",
-        stagger: 0.05,
-        // ease: "power2.out",
-        ease: "bounce.out",
-      }
-    );
-
-    setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 500);
+    return () => ctx.revert();
   }, []);
   return (
     <div className={styles.shopSection4} id="section4-shop">

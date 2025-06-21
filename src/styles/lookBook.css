@@ -188,12 +188,15 @@
 #lb-section3-ig {
   width: 46.666vw;
   height: 55.9375rem;
+  display: flex;
+  align-items: end;
+  overflow: hidden;
 }
 #lb-section3-ig img {
   width: 100%;
-  height: 100%;
+  height: 110%;
   object-fit: cover;
-  object-position: center;
+  object-position: bottom;
 }
 
 #lb-section4 {
@@ -205,12 +208,14 @@
 }
 .lb-sec4-img {
   width: 49.5%;
-  height: auto;
+  height: 55vh;
   overflow: hidden;
+  display: flex;
+  align-items: end;
 }
 .lb-sec4-img img {
   width: 100%;
-  height: 100%;
+  height: 120%;
   object-fit: cover;
   object-position: center;
 }
@@ -229,6 +234,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.parallex{
+  display: flex;
+  height: 130vh;
+  align-items: end;
+  overflow: hidden;
+}
+.parallex img{
+  height: 105% !important;
 }
 
 .lb-section5-ig-wrap img {

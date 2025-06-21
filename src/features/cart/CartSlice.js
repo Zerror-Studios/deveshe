@@ -3,7 +3,8 @@ import {Addtocart} from "../../../api_fetch/admin/Cart"
 
 const initialState = {
   itemcount:0,
-  cart: []
+  cart: [],
+  
 };
 
 
