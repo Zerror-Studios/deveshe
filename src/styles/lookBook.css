@@ -281,6 +281,9 @@
     font-size: 7vw;
     padding: 5rem 20px;
   }
+  #main-banner-text p{
+    font-size: 7vw;
+  }
   #prodcut-container {
     width: 100%;
     padding: 0px 20px;

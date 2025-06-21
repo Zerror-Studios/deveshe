@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
@@ -43,7 +44,7 @@ const ProductContainer = () => {
             products.map((item, index) => {
                 return (
                     <Link href="/product?id=6752e99c935fd014e82be779" className="product-lb" key={index}>
-                        <img src={item.image1} alt={`Product image`} />
+                        <Image width={1000} height={1000} src={item.image1} alt={`Product image`} />
                         <div className="product-info">
                             <p>Belted Leather Jacket</p>
                             <p>1,545 INR</p>

@@ -137,6 +137,20 @@ const Section2 = () => {
     }, 100);
   }, []);
 
+  const strip1Images = [
+    "/shop/side1.jpg",
+    "/shop/side2.jpg",
+    "/shop/side3.jpg",
+    "/shop/side4.jpg",
+  ];
+
+  const strip2Images = [
+    "/shop/side5.jpg",
+    "/shop/side7.jpg",
+    "/shop/side6.jpg",
+    "/shop/shop1.jpg",
+  ];
+
   return (
     <div className={styles.shopSection2} id="section2-shop">
       <div className={styles.shopSection2Top}>
@@ -159,7 +173,7 @@ const Section2 = () => {
             <Image
               width={1000}
               height={1000}
-              src="/shop/Peach_crochet_shirt.webp"
+              src="/shop/shop2.jpg"
               alt="image"
             />
           </div>
@@ -168,7 +182,7 @@ const Section2 = () => {
               <Image
                 width={1000}
                 height={1000}
-                src="/shop/Silver metallic crochet bib.jpeg"
+                src="/shop/shop1.jpg"
                 alt="image"
               />
             </div>
@@ -180,7 +194,7 @@ const Section2 = () => {
             <Image
               width={1000}
               height={1000}
-              src="/shop/Gold crochet bib.JPG"
+              src="/shop/shop3.jpg"
               alt="image"
             />
           </div>
@@ -203,57 +217,27 @@ const Section2 = () => {
           ]
         </div>
         <div className={styles.strip1} id="strip1-shop">
+        {strip1Images.map((src, index) => (
           <Image
+            key={`strip1-${index}`}
             width={1000}
             height={1000}
-            src="/shop/dress1.jpeg"
-            alt="image"
+            src={src}
+            alt={`shop image ${index + 1}`}
           />
+        ))}
+      </div>
+      <div className={styles.strip2} id="strip2-shop">
+        {strip2Images.map((src, index) => (
           <Image
+            key={`strip2-${index}`}
             width={1000}
             height={1000}
-            src="/shop/dress4.jpeg"
-            alt="image"
+            src={src}
+            alt={`shop image ${index + 5}`}
           />
-          <Image
-            width={1000}
-            height={1000}
-            src="/shop/dress1.jpeg"
-            alt="image"
-          />
-          <Image
-            width={1000}
-            height={1000}
-            src="/shop/dress3.jpeg"
-            alt="image"
-          />
-        </div>
-        <div className={styles.strip2} id="strip2-shop">
-          <Image
-            width={1000}
-            height={1000}
-            src="/shop/dress5.JPG"
-            alt="image"
-          />
-          <Image
-            width={1000}
-            height={1000}
-            src="/shop/dress6.jpeg"
-            alt="image"
-          />
-          <Image
-            width={1000}
-            height={1000}
-            src="/shop/dress1.jpeg"
-            alt="image"
-          />
-          <Image
-            width={1000}
-            height={1000}
-            src="/shop/dress8.JPG"
-            alt="image"
-          />
-        </div>
+        ))}
+      </div>
       </div>
     </div>
   );

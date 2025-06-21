@@ -8,6 +8,7 @@
   left: 0;
   z-index: 9;
   padding: 1vw 3vw;
+  background-color: #fff;
 }
 
 #logo-nav {
@@ -36,7 +37,7 @@
   line-height: 0;
   text-decoration: none;
   text-transform: uppercase;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 100;
   font-family: var(--primary-font-Hel);
   cursor: pointer;
@@ -67,7 +68,7 @@
 .nav-link a:not(:hover)::after {
   transform: scaleX(0);
   transform-origin: right;
-  transition: transform 0.3s ease, transform-origin 0s;
+  transition: transform 0.3s ease;
 }
 
 #nav-btns {
@@ -91,4 +92,11 @@
   min-height: 1.1rem;
   min-width: 1.1rem;
   stroke: #fff;
+}
+
+
+@media (max-width: 576px) {
+    #nav{
+      display: none;
+    }
 }

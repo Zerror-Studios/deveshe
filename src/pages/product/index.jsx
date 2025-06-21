@@ -14,13 +14,14 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import AnimBtn from "@/components/common/AnimBtn";
 import { ModalContext } from "@/components/context/ModalProvider";
+import Image from "next/image";
 gsap.registerPlugin(ScrollTrigger);
 const ProductPage = () => {
   const [product, setProduct] = useState({});
   const [images, setImages] = useState([
     "/newproduct/BI07.jpg",
     "/newproduct/BI072.jpg",
-    "/newproduct/BI071.jpg"
+    "/newproduct/BI071.jpg",
   ]);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -34,13 +35,11 @@ const ProductPage = () => {
   const [openBag, setOpenBag] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useContext(ModalContext);
 
-
   const fetchData = async () => {
     try {
-
       if (id) {
         // const res = await editProduct(id);
-        const res = dbProdData.find(p => p._id === id);
+        const res = dbProdData.find((p) => p._id === id);
 
         if (res) {
           setProduct(res);
@@ -242,7 +241,7 @@ const ProductPage = () => {
         } else {
           gsap.to(".ProductDets_grid", { filter: "blur(0px)", duration: 0.5 });
         }
-      }
+      },
     });
   }, []);
 
@@ -351,9 +350,7 @@ const ProductPage = () => {
       ProductName: "ProductName",
       price: "1200",
     },
-  ]
-
-
+  ];
 
   return (
     <>
@@ -366,7 +363,9 @@ const ProductPage = () => {
               </div>
               <div className="ReactModalPortal_img_cntr_grid">
                 <div className="ReactModalPortal_img_cntr_grid_cover">
-                  <img
+                  <Image
+                    width={1000}
+                    height={1000}
                     src={selectedImage}
                     alt="Model is wearing Nour Hammour's Henri Double Breasted Leather Trench Coat in beige - Front  "
                   />
@@ -395,7 +394,12 @@ const ProductPage = () => {
                               >
                                 <div className="ProductDets_imgs_grid_cntr">
                                   <div className="ProductDets_img_single_cntr">
-                                    <img src={`${items}`} alt={`images`} />
+                                    <Image
+                                      width={1000}
+                                      height={1000}
+                                      src={`${items}`}
+                                      alt={`images`}
+                                    />
                                   </div>
                                 </div>
                               </button>
@@ -418,7 +422,12 @@ const ProductPage = () => {
                           >
                             <div className="shop_card_img_bgcover">
                               <div className="ProductDets_Big_card_img-main_cntr">
-                                <img src={`${items}`} alt={`images`} />
+                                <Image
+                                  width={1000}
+                                  height={1000}
+                                  src={`${items}`}
+                                  alt={`images`}
+                                />
                               </div>
                             </div>
                           </button>
@@ -553,7 +562,7 @@ const ProductPage = () => {
                                           aria-current="page"
                                           className={
                                             variantSelect[variant.title] ==
-                                              `${variant.title}-${j}`
+                                            `${variant.title}-${j}`
                                               ? "ProductDets-size_numbers acitve"
                                               : "ProductDets-size_numbers"
                                           }
@@ -583,7 +592,7 @@ const ProductPage = () => {
                         <button
                           className="ProductDets_ntfy_btn ProductDets_ntfy_btn_grid"
                           id="easysize-cart-button"
-                          style={btnLoading ? { backgroundColor: 'black' } : {}}
+                          style={btnLoading ? { backgroundColor: "black" } : {}}
                           onClick={handleAddToCart}
                         >
                           {btnLoading ? (
@@ -643,9 +652,10 @@ const ProductPage = () => {
                 <div className="ProductDets_text_btn_resp_cntr ProductDets_common_style">
                   <div className="ProductDets_text_btn_resp_wrap">
                     <button
-                      style={btnLoading ? { backgroundColor: 'black' } : {}}
+                      style={btnLoading ? { backgroundColor: "black" } : {}}
                       onClick={handleAddToCart}
-                      className="ProductDets_text_btn_resp_w-full ProductDets_add_btn_mobile">
+                      className="ProductDets_text_btn_resp_w-full ProductDets_add_btn_mobile"
+                    >
                       <div className="_btn_wrapper _btn_height _w-full">
                         <div className="ProductDets_text_btn_resp_flex">
                           {btnLoading ? (
@@ -680,7 +690,6 @@ const ProductPage = () => {
                         </div>
                       </div>
                     </button>
-
                   </div>
                 </div>
               </div>
@@ -696,12 +705,17 @@ const ProductPage = () => {
                     return (
                       <div key={idx} className="Similar_prd_card_cntr">
                         <Link
-                          href={{ pathname: "/product", query: { id: items.id } }}
+                          href={{
+                            pathname: "/product",
+                            query: { id: items.id },
+                          }}
                           className="shop-card_grid shop-card-w-full"
                         >
                           <div className="similar-prd shop_card_img_bgcover">
                             <div className="shop_card_img-main_cntr">
-                              <img
+                              <Image
+                                width={1000}
+                                height={1000}
                                 src={`${ShopCardDetails[idx].image1}`}
                                 alt={`${items.BrandName}`}
                               />

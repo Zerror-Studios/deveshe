@@ -1,6 +1,7 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
+import Image from 'next/image'
 import React from 'react'
 gsap.registerPlugin(ScrollTrigger)
 
@@ -37,7 +38,7 @@ const Section2 = ({text}) => {
   return (
     <div id='lb-banner2'>
       <div id="main-banner-container">
-        <img src="/lb-banner.webp" alt="" />
+        <Image width={1000} height={1000} src="/lb-banner.webp" alt="image" />
         <div id="main-banner-text">
           <p>{text}</p>
         </div>

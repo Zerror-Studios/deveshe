@@ -99,12 +99,13 @@
 }
 .centerCard .imgCont {
   width: 100%;
-  height: 21vw;
+  height: 22vw;
 }
 .centerCard .imgCont img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top;
 }
 .centerCard p {
   font-family: font2;
@@ -244,6 +245,9 @@
   overflow: hidden;
   background-color: white;
 }
+.shopSection3 >img{
+  object-position: top;
+}
 .shopSection3 img {
   width: 100%;
   height: 100%;
@@ -379,7 +383,9 @@
 .topContHeader {
   width: 100%;
   text-align: center;
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .topContHeader span {
   color: #7546ff;
@@ -789,6 +795,15 @@
 }
 
 @media (max-width: 576px) {
+  .shopSection5 .overlay5 h2 {
+  font-size: 8.5vw;
+  line-height: 1;
+  letter-spacing: 0;
+}
+.bigCard p {
+  font-size: 3.5vw;
+  margin-top: 2vw;
+}
   .shopSection3 {
     position: relative;
     width: 100%;
@@ -799,7 +814,7 @@
   .shopSection3 .overlay3 h2 {
     color: #f4fa26;
     font-family: font2;
-    font-size: 10.5vw;
+    font-size: 8.5vw;
     line-height: 1;
     text-transform: uppercase;
     white-space: nowrap;
@@ -821,7 +836,7 @@
     position: relative;
     z-index: 2;
     font-family: font2;
-    font-size: 10.5vw;
+    font-size: 8.5vw;
     line-height: 1;
     text-transform: uppercase;
     white-space: nowrap;
@@ -877,7 +892,7 @@
   }
   .shopSection4 h2 {
     font-family: font2;
-    font-size: 10.5vw;
+    font-size: 8.5vw;
     line-height: 1;
     text-transform: uppercase;
     white-space: nowrap;
@@ -894,7 +909,7 @@
     background-color: #fff;
   }
   .bigCard {
-    width: 40%;
+    width: 45%;
     padding: 2vw;
   }
   .shopSection6 div h2 {
@@ -912,6 +927,7 @@
     width: 100%;
     flex-direction: column;
     align-items: center;
+    gap: 15vw;
   }
   .imageContainer2 .imgCardSec3 {
     width: 85%;
@@ -936,14 +952,17 @@
   }
   .shopSection3 .overlay3 .Section33Btm >p {
     margin-top: 15vw !important;
-    font-weight: 600;
-    font-size: 6.5vw;
+    font-weight: 500;
+    font-size: 5vw;
+    line-height: 1;
+    letter-spacing: .5px;
   }
   .imageContainer2 > img {
     top: -25%;
+    right: 40%;
   }
   .titleh2 {
-    font-size: 8.5vw !important;
+    font-size: 7vw !important;
     letter-spacing: 0px !important;
     margin-bottom: 50vw;
   }
@@ -951,7 +970,8 @@
     font-size: 7vw;
     line-height: 1;
     letter-spacing: 0px;
-    margin-bottom: 6vw;
+    margin-bottom: 8vw;
+    margin-top: 8vw;
   }
   .rightCard , .leftCard{
     display: none;
@@ -963,7 +983,7 @@
   }
   .centerCard .imgCont {
     width: 100%;
-    height: 65vw;
+    height: 90vw;
   }
   .centerCard p {
     font-family: font2;
@@ -975,6 +995,13 @@
     width: 20vw;
     height: 15vw;
     margin-bottom: 1.5vw;
+  }
+
+    .shopSection2BottomBtn{
+    font-size: 5vw;
+  }
+  .shopSection2BottomBtnText{
+    height: 4.8vw;
   }
   .shopSection2Bottom h4 {
     font-size: 5vw;
@@ -1052,7 +1079,7 @@
 
   .shopSection7 {
     width: 100%;
-    height: 120vh;
+    height: 115vh;
     padding: 20px;
     display: flex;
     flex-direction: column;

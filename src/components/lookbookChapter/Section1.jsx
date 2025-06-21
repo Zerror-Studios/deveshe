@@ -1,6 +1,7 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/dist/ScrollTrigger'
+import Image from 'next/image'
 import React from 'react'
 gsap.registerPlugin(ScrollTrigger)
 const Section1 = () => {
@@ -28,7 +29,7 @@ const Section1 = () => {
                 </div>
             </div>
             <div className='lb-header-image'>
-                <img src="https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F2796x1573%2F43f4ad734f%2Fcod-ban-plp.jpg&w=3840&q=90" alt="" />
+                <Image width={1000} height={1000} src="https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F2796x1573%2F43f4ad734f%2Fcod-ban-plp.jpg&w=3840&q=90" alt="image" />
             </div>
         </div>
     )

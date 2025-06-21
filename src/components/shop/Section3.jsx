@@ -80,7 +80,7 @@ const Section3 = () => {
       <Image
         width={1000}
         height={1000}
-        src="/about/about-banner1.jpeg"
+        src="/shop/shop-banner.jpg"
         alt="image"
       />
       <div className={styles.overlay3}>
