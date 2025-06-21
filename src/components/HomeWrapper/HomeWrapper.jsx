@@ -4,13 +4,14 @@ import Navbar from "../common/Navbar";
 import HeaderLogo from "../common/HeaderLogo";
 import NavbarMobile from "../common/NavbarMobile";
 import Footer from "../common/Footer";
+import Navbar2 from "../common/Navbar2";
 
 const HomeWrapper = ({ children, openBag, setOpenBag }) => {
+  const router = useRouter();
 
   return (
     <div className="home-wrapper">
-      <Navbar openBag={openBag} setOpenBag={setOpenBag} />
-      <NavbarMobile openBag={openBag} setOpenBag={setOpenBag} />
+      {router.pathname !== "/" ? <Navbar2 openBag={openBag} setOpenBag={setOpenBag} /> : <Navbar openBag={openBag} setOpenBag={setOpenBag} />}
       {children}
       <Footer />
     </div>

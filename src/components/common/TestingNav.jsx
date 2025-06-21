@@ -5,6 +5,7 @@ import gsap from "gsap";
 import Modal from "./Modal";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
+import { useRouter } from "next/router";
 gsap.registerPlugin(ScrollTrigger);
 
 const Navbar = ({ openBag, setOpenBag }) => {
@@ -17,129 +18,145 @@ const Navbar = ({ openBag, setOpenBag }) => {
     setModalIsOpen(false);
     setOpenBag(false);
   }
-  useEffect(() => {
-    if (window.innerWidth < 576) return;
+  const router = useRouter();
 
-    const init = async () => {
-      const logos = document.querySelectorAll(".logo");
-      const logoContainer = document.querySelector("#logo-container");
-      const nav = document.querySelector("#nav");
+useEffect(() => {
+  if (window.innerWidth < 576) return;
 
-      if (!logos.length || !logoContainer || !nav) return;
+  const init = async () => {
+    const logos = document.querySelectorAll(".logo");
+    const logoContainer = document.querySelector("#logo-container");
+    const nav = document.querySelector("#nav");
 
-      // Wait for all logos to load
-      await Promise.all(
-        Array.from(logos).map((img) =>
-          img.complete
-            ? Promise.resolve()
-            : new Promise((res) => {
-                img.onload = img.onerror = res;
-              })
-        )
-      );
+    if (!logos.length || !logoContainer || !nav) return;
 
-      // Calculate positions
-      const spacing = 10;
-      const xPositions = [];
-      let currentX = 0;
+    // Wait for images to fully load
+    await Promise.all(
+      Array.from(logos)
+        .filter((img) => !img.complete)
+        .map((img) => new Promise((res) => (img.onload = img.onerror = res)))
+    );
 
-      logos.forEach((logo) => {
-        const width = logo.getBoundingClientRect().width;
-        xPositions.push(currentX);
-        currentX += width + spacing;
+    // Calculate X positions
+    const spacing = 10;
+    const xPositions = [];
+    let currentX = 0;
+
+    logos.forEach((logo) => {
+      const width = logo.getBoundingClientRect().width;
+      xPositions.push(currentX);
+      currentX += width + spacing;
+    });
+
+    const lastLogo = logos[logos.length - 1];
+    const lastLogoWidth = lastLogo?.getBoundingClientRect().width || 0;
+    const finalWidth = `${xPositions[logos.length - 1] + lastLogoWidth}px`;
+    logoContainer.style.width = `${xPositions[3] || currentX}px`;
+
+    //Case 1: Non-homepage — instantly set final states
+    if (router.pathname !== "/") {
+      logos.forEach((logo, i) => {
+        logo.style.transform = `translateX(${xPositions[i]}px)`;
+        logo.style.top = `0px`;
+        logo.style.filter = "invert(0)";
       });
 
-      const finalWidth = currentX;
-      logoContainer.style.width = `${xPositions[3] || finalWidth}px`;
+      logoContainer.style.width = finalWidth;
+      nav.style.backgroundColor = "white";
+      nav.classList.remove("active")
 
-      // GSAP Timeline
-      gsap
-        .timeline({
-          scrollTrigger: {
-            trigger: document.documentElement,
-            start: "top top",
-            end: "400px 20%",
-            scrub: 1,
-            // markers: true,
-          },
-        })
-        .to(
-          ".logo",
-          {
-            top: 0,
-            x: (i) => xPositions[i],
-            ease: "sine.out",
-            duration: 0.3,
-          },
-          "start"
-        )
-        .to(
-          "#logo-container",
-          {
-            width: `${finalWidth}px`,
-            ease: "sine.out",
-          },
-          "start"
-        )
-        .to(
-          "#nav",
-          {
-            backgroundColor: "white",
-            ease: "power1.out",
-            duration: 0.3,
-          },
-          "s"
-        )
-        .to(
-          ".logo",
-          {
-            filter: "invert(0)",
-            ease: "power1.out",
-            duration: 0.3,
-          },
-          "s"
-        )
-        .to(
-          ".nav-link a",
-          {
-            color: "black",
-            ease: "power1.out",
-            duration: 0.3,
-          },
-          "s"
-        )
-        .to(
-          "#nav-line",
-          {
-            backgroundColor: "black",
-            ease: "power1.out",
-            duration: 0.3,
-          },
-          "s"
-        )
-        .to(
-          "#nav-btns svg",
-          {
-            stroke: "black",
-            ease: "power1.out",
-            duration: 0.3,
-          },
-          "s"
-        );
-    };
+      document.querySelectorAll(".nav-link a").forEach((link) => {
+        link.style.color = "black";
+      });
+      const navLine = document.querySelector("#nav-line");
+      if (navLine) navLine.style.backgroundColor = "black";
 
-    const timeout = setTimeout(() => requestAnimationFrame(init), 30);
+      document.querySelectorAll("#nav-btns svg").forEach((svg) => {
+        svg.style.stroke = "black";
+      });
 
-    return () => {
-      clearTimeout(timeout);
-      ScrollTrigger.killAll();
-      gsap.globalTimeline.clear();
-    };
-  }, []);
+      return;
+    }
+
+    // ------------------------------------------
+    // ✅ Case 2: Homepage — set initial state & animate on scroll
+    // ------------------------------------------
+
+    // Set initial state before scroll
+    gsap.set("#nav", { backgroundColor: "rgba(255, 255, 255, 0)" });
+    gsap.set(".nav-link a", { color: "#fff" });
+    
+    gsap.set(".logo", { filter: "invert(1)", x: 0 }); // reset all
+    gsap.set("#nav-line", { backgroundColor: "white" });
+    gsap.set("#nav-btns svg", { stroke: "white" });
+
+    // Set top offsets for logos 2–4
+    gsap.set(".logo:nth-child(2)", { top: 30 });
+    gsap.set(".logo:nth-child(3)", { top: 60 });
+    gsap.set(".logo:nth-child(4)", { top: 90 });
+
+    // Play scroll animation
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: document.documentElement,
+        start: "top top",
+        end: "400px 20%",
+        scrub: 1,
+        // markers: true,
+      },
+    });
+
+    tl.to(".logo", {
+      top: 0,
+      x: (i) => xPositions[i],
+      ease: "sine.out",
+    }, "start")
+    .to("#logo-container", {
+      width: finalWidth,
+      ease: "sine.out",
+    }, "start")
+    .to("#nav", {
+      backgroundColor: "white",
+      duration: 0.3,
+      ease: "power1.out",
+    }, "s")
+    .to(".logo", {
+      filter: "invert(0)",
+      duration: 0.3,
+      ease: "power1.out",
+    }, "s")
+    .to(".nav-link a", {
+      color: "black",
+      duration: 0.3,
+      ease: "power1.out",
+    }, "s")
+    .to("#nav-line", {
+      backgroundColor: "black",
+      duration: 0.3,
+      ease: "power1.out",
+    }, "s")
+    .to("#nav-btns svg", {
+      stroke: "black",
+      duration: 0.3,
+      ease: "power1.out",
+    }, "s");
+  };
+
+  const timeout = setTimeout(() => {
+    requestAnimationFrame(init);
+  }, 30); // small delay for route load
+
+  return () => {
+    clearTimeout(timeout);
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    gsap.globalTimeline.clear();
+  };
+}, [router.asPath]);
+
 
   return (
     <>
-      <div id="nav" className="nav1">
+      <div id="nav" className="active">
         <Link href="/" id="logo-container">
           <Image
             width={1000}

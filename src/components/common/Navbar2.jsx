@@ -1,13 +1,10 @@
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import gsap from "gsap";
 import Modal from "./Modal";
-import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
-gsap.registerPlugin(ScrollTrigger);
 
-const Navbar = ({ openBag, setOpenBag }) => {
+const Navbar2 = ({ openBag, setOpenBag }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const cartCount = useSelector((state) => state.cart.itemcount);
   function openModal() {
@@ -17,129 +14,10 @@ const Navbar = ({ openBag, setOpenBag }) => {
     setModalIsOpen(false);
     setOpenBag(false);
   }
-  useEffect(() => {
-    if (window.innerWidth < 576) return;
-
-    const init = async () => {
-      const logos = document.querySelectorAll(".logo");
-      const logoContainer = document.querySelector("#logo-container");
-      const nav = document.querySelector("#nav");
-
-      if (!logos.length || !logoContainer || !nav) return;
-
-      // Wait for all logos to load
-      await Promise.all(
-        Array.from(logos).map((img) =>
-          img.complete
-            ? Promise.resolve()
-            : new Promise((res) => {
-                img.onload = img.onerror = res;
-              })
-        )
-      );
-
-      // Calculate positions
-      const spacing = 10;
-      const xPositions = [];
-      let currentX = 0;
-
-      logos.forEach((logo) => {
-        const width = logo.getBoundingClientRect().width;
-        xPositions.push(currentX);
-        currentX += width + spacing;
-      });
-
-      const finalWidth = currentX;
-      logoContainer.style.width = `${xPositions[3] || finalWidth}px`;
-
-      // GSAP Timeline
-      gsap
-        .timeline({
-          scrollTrigger: {
-            trigger: document.documentElement,
-            start: "top top",
-            end: "400px 20%",
-            scrub: 1,
-            // markers: true,
-          },
-        })
-        .to(
-          ".logo",
-          {
-            top: 0,
-            x: (i) => xPositions[i],
-            ease: "sine.out",
-            duration: 0.3,
-          },
-          "start"
-        )
-        .to(
-          "#logo-container",
-          {
-            width: `${finalWidth}px`,
-            ease: "sine.out",
-          },
-          "start"
-        )
-        .to(
-          "#nav",
-          {
-            backgroundColor: "white",
-            ease: "power1.out",
-            duration: 0.3,
-          },
-          "s"
-        )
-        .to(
-          ".logo",
-          {
-            filter: "invert(0)",
-            ease: "power1.out",
-            duration: 0.3,
-          },
-          "s"
-        )
-        .to(
-          ".nav-link a",
-          {
-            color: "black",
-            ease: "power1.out",
-            duration: 0.3,
-          },
-          "s"
-        )
-        .to(
-          "#nav-line",
-          {
-            backgroundColor: "black",
-            ease: "power1.out",
-            duration: 0.3,
-          },
-          "s"
-        )
-        .to(
-          "#nav-btns svg",
-          {
-            stroke: "black",
-            ease: "power1.out",
-            duration: 0.3,
-          },
-          "s"
-        );
-    };
-
-    const timeout = setTimeout(() => requestAnimationFrame(init), 30);
-
-    return () => {
-      clearTimeout(timeout);
-      ScrollTrigger.killAll();
-      gsap.globalTimeline.clear();
-    };
-  }, []);
 
   return (
     <>
-      <div id="nav" className="nav1">
+      <div id="nav" className="nav2">
         <Link href="/" id="logo-container">
           <Image
             width={1000}
@@ -248,4 +126,4 @@ const Navbar = ({ openBag, setOpenBag }) => {
   );
 };
 
-export default Navbar;
+export default Navbar2;

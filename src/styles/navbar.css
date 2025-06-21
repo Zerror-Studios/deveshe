@@ -11,6 +11,9 @@
    background-color: rgba(255, 255, 255, 0);
 }
 
+#nav.nav2{
+  background-color: #fff;
+}
 
 .nav-link {
   display: flex;
@@ -22,8 +25,11 @@
   transform: translate(-50%, -50%);
 }
 
-#nav.active .nav-link a{
+#nav.nav1 .nav-link a{
   color: #fff;
+}
+#nav.nav2 .nav-link a{
+  color: #000;
 }
 
 .nav-link a {
@@ -80,16 +86,28 @@
   background-color: #000;
 }
 
-#nav.active .nav-link a::after{
+#nav.nav1 .nav-link a::after{
   background-color: #fff ;
 }
-#nav.active #nav-line{
+#nav.nav1 #nav-line{
   background-color: #fff;
 }
 
-#nav.active #nav-btns svg {
+#nav.nav1 #nav-btns svg {
   stroke: #fff;
 }
+
+#nav.nav2 .nav-link a::after{
+  background-color: #000 ;
+}
+#nav.nav2 #nav-line{
+  background-color: #000;
+}
+
+#nav.nav2 #nav-btns svg {
+  stroke: #000;
+}
+
 #nav-btns svg {
   display: block;
   min-height: 1.1rem;
@@ -114,8 +132,18 @@
   width: auto;
   will-change: transform;
 }
-#nav.active  .logo{
+
+#nav.nav1  .logo{
   filter: invert(1);
+}
+#nav.nav2 #logo-container{
+  gap: 13px;
+  display: flex;
+  align-items: center;
+}
+#nav.nav2  .logo{
+  filter: invert(0);
+  position: static;
 }
 .logo:nth-child(2) {
   top: 30px;
