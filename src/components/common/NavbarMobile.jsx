@@ -87,7 +87,9 @@ const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
     return (
         <>
             <div className='navbar-mobile'>
-                <Link href="/" id='nav-logo'>de ve she dreams</Link>
+                <Link href="/" id='nav-logo'>
+                <Image width={1000} height={1000} src="/logo/logo-m.png" />
+                </Link>
                 <div className="menu-icons">
                     <Link href="/profile">
                     <Image width={23} height={23} src="/images/user.png" />

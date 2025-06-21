@@ -328,6 +328,7 @@
   }
   .lb-sec4-img {
     width: 100%;
+    height: auto;
     overflow: hidden;
   }
   #lb-section5 {
@@ -337,5 +338,6 @@
   }
   .lb-section5-ig-wrap {
     width: 100%;
+    height: auto;
   }
 }
