@@ -23,10 +23,23 @@ const Navbar = ({ openBag, setOpenBag }) => {
 useEffect(() => {
   if (window.innerWidth < 576) return;
 
-  const initLogoAnimation = () => {
+  const init = async () => {
     const logos = document.querySelectorAll(".logo");
+    const logoContainer = document.querySelector("#logo-container");
+    const nav = document.querySelector("#nav");
+
+    if (!logos.length || !logoContainer || !nav) return;
+
+    // Wait for images to fully load
+    await Promise.all(
+      Array.from(logos)
+        .filter((img) => !img.complete)
+        .map((img) => new Promise((res) => (img.onload = img.onerror = res)))
+    );
+
+    // Calculate X positions
     const spacing = 10;
-    let xPositions = [];
+    const xPositions = [];
     let currentX = 0;
 
     logos.forEach((logo) => {
@@ -35,14 +48,54 @@ useEffect(() => {
       currentX += width + spacing;
     });
 
-    // Set width based on 4th logo or fallback to total width
-    const logoContainer = document.querySelector("#logo-container");
+    const lastLogo = logos[logos.length - 1];
+    const lastLogoWidth = lastLogo?.getBoundingClientRect().width || 0;
+    const finalWidth = `${xPositions[logos.length - 1] + lastLogoWidth}px`;
     logoContainer.style.width = `${xPositions[3] || currentX}px`;
 
-    const lastLogo = logos[logos.length - 1];
-    const lastLogoWidth = lastLogo.getBoundingClientRect().width;
-    const finalWidth = `${xPositions[logos.length - 1] + lastLogoWidth}px`;
+    //Case 1: Non-homepage — instantly set final states
+    if (router.pathname !== "/") {
+      logos.forEach((logo, i) => {
+        logo.style.transform = `translateX(${xPositions[i]}px)`;
+        logo.style.top = `0px`;
+        logo.style.filter = "invert(0)";
+      });
 
+      logoContainer.style.width = finalWidth;
+      nav.style.backgroundColor = "white";
+      nav.classList.remove("active")
+
+      document.querySelectorAll(".nav-link a").forEach((link) => {
+        link.style.color = "black";
+      });
+      const navLine = document.querySelector("#nav-line");
+      if (navLine) navLine.style.backgroundColor = "black";
+
+      document.querySelectorAll("#nav-btns svg").forEach((svg) => {
+        svg.style.stroke = "black";
+      });
+
+      return;
+    }
+
+    // ------------------------------------------
+    // ✅ Case 2: Homepage — set initial state & animate on scroll
+    // ------------------------------------------
+
+    // Set initial state before scroll
+    gsap.set("#nav", { backgroundColor: "rgba(255, 255, 255, 0)" });
+    gsap.set(".nav-link a", { color: "#fff" });
+    
+    gsap.set(".logo", { filter: "invert(1)", x: 0 }); // reset all
+    gsap.set("#nav-line", { backgroundColor: "white" });
+    gsap.set("#nav-btns svg", { stroke: "white" });
+
+    // Set top offsets for logos 2–4
+    gsap.set(".logo:nth-child(2)", { top: 30 });
+    gsap.set(".logo:nth-child(3)", { top: 60 });
+    gsap.set(".logo:nth-child(4)", { top: 90 });
+
+    // Play scroll animation
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: document.documentElement,
@@ -53,58 +106,45 @@ useEffect(() => {
       },
     });
 
-    tl.to(
-      ".logo",
-      {
-        top: 0,
-        x: (i) => xPositions[i],
-        ease: "sine.out",
-      },
-      "start"
-    )
-      .to(
-        "#logo-container",
-        {
-          height: "25px",
-          width: finalWidth,
-          ease: "sine.out",
-        },
-        "start"
-      )
-      .to("#nav", {
-        backgroundColor: "rgba(255,255,255,1)",
-        duration: 0.3,
-        ease: "power1.out",
-      }, "s")
-      .to("#nav-btns", {
-        backgroundColor: "rgba(255,255,255,1)",
-        duration: 0.3,
-        ease: "power1.out",
-      }, "s")
-      .to("#nav-line", {
-        backgroundColor: "black",
-        duration: 0.3,
-        ease: "power1.out",
-      }, "s")
-      .to("#nav-btns svg", {
-        stroke: "black",
-        duration: 0.3,
-        ease: "power1.out",
-      }, "s");
+    tl.to(".logo", {
+      top: 0,
+      x: (i) => xPositions[i],
+      ease: "sine.out",
+    }, "start")
+    .to("#logo-container", {
+      width: finalWidth,
+      ease: "sine.out",
+    }, "start")
+    .to("#nav", {
+      backgroundColor: "white",
+      duration: 0.3,
+      ease: "power1.out",
+    }, "s")
+    .to(".logo", {
+      filter: "invert(0)",
+      duration: 0.3,
+      ease: "power1.out",
+    }, "s")
+    .to(".nav-link a", {
+      color: "black",
+      duration: 0.3,
+      ease: "power1.out",
+    }, "s")
+    .to("#nav-line", {
+      backgroundColor: "black",
+      duration: 0.3,
+      ease: "power1.out",
+    }, "s")
+    .to("#nav-btns svg", {
+      stroke: "black",
+      duration: 0.3,
+      ease: "power1.out",
+    }, "s");
   };
 
-  const waitForLogoAssets = async () => {
-    const logoImages = Array.from(document.querySelectorAll(".logo"));
-    await Promise.all(
-      logoImages
-        .filter((img) => !img.complete)
-        .map((img) => new Promise((res) => (img.onload = img.onerror = res)))
-    );
-
-    requestAnimationFrame(initLogoAnimation);
-  };
-
-  const timeout = setTimeout(waitForLogoAssets, 50);
+  const timeout = setTimeout(() => {
+    requestAnimationFrame(init);
+  }, 30); // small delay for route load
 
   return () => {
     clearTimeout(timeout);
@@ -113,9 +153,10 @@ useEffect(() => {
   };
 }, [router.asPath]);
 
+
   return (
     <>
-      <div id="nav">
+      <div id="nav" className="active">
         <Link href="/" id="logo-container">
           <Image
             width={1000}

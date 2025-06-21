@@ -9,102 +9,101 @@ import Image from "next/image";
 gsap.registerPlugin(ScrollTrigger);
 
 const Section3 = () => {
-useEffect(() => {
-  // Create a context for cleanup
-  const ctx = gsap.context(() => {
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: "#archiveSection3",
-        scroller: "body",
-        start: "top -0%",
-        end: "top -300%",
-        pin: true,
-        scrub: 1,
-        // markers: true,
-        invalidateOnRefresh: true, // makes pin and dimensions reliable on refresh
-      },
+  useEffect(() => {
+    // Create a context for cleanup
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#archiveSection3",
+          scroller: "body",
+          start: "top -0%",
+          end: "top -300%",
+          pin: true,
+          scrub: 1,
+          // markers: true,
+          invalidateOnRefresh: true, // makes pin and dimensions reliable on refresh
+        },
+      });
+
+      tl.to(
+        "#elem1",
+        {
+          clipPath: `polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)`,
+          duration: 1.5,
+          ease: "none",
+        },
+        "a"
+      );
+
+      tl.to(
+        "#elem2",
+        {
+          clipPath: `polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)`,
+          duration: 1.5,
+          ease: "none",
+        },
+        "a"
+      );
+
+      tl.fromTo(
+        "#textc2",
+        {
+          y: 50,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          ease: "none",
+        },
+        "a+=1.2"
+      );
+
+      tl.to(
+        "#elem2",
+        {
+          clipPath: `polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)`,
+          duration: 1.5,
+          ease: "none",
+        },
+        "b"
+      );
+
+      tl.to(
+        "#elem3",
+        {
+          clipPath: `polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)`,
+          duration: 1.5,
+          ease: "none",
+        },
+        "b"
+      );
+
+      tl.fromTo(
+        "#textc3",
+        {
+          y: 50,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          ease: "none",
+        },
+        "b+=1.2"
+      );
+
+      // Refresh ScrollTrigger after a delay
+      setTimeout(() => ScrollTrigger.refresh(), 200);
     });
 
-    tl.to(
-      "#elem1",
-      {
-        clipPath: `polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)`,
-        duration: 1.5,
-        ease: "none",
-      },
-      "a"
-    );
-
-    tl.to(
-      "#elem2",
-      {
-        clipPath: `polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)`,
-        duration: 1.5,
-        ease: "none",
-      },
-      "a"
-    );
-
-    tl.fromTo(
-      "#textc2",
-      {
-        y: 50,
-        opacity: 0,
-      },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "none",
-      },
-      "a+=1.2"
-    );
-
-    tl.to(
-      "#elem2",
-      {
-        clipPath: `polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)`,
-        duration: 1.5,
-        ease: "none",
-      },
-      "b"
-    );
-
-    tl.to(
-      "#elem3",
-      {
-        clipPath: `polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)`,
-        duration: 1.5,
-        ease: "none",
-      },
-      "b"
-    );
-
-    tl.fromTo(
-      "#textc3",
-      {
-        y: 50,
-        opacity: 0,
-      },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "none",
-      },
-      "b+=1.2"
-    );
-
-    // Refresh ScrollTrigger after a delay
-    setTimeout(() => ScrollTrigger.refresh(), 200);
-  });
-
-  return () => {
-    ctx.revert(); // clean everything created inside the context
-    ScrollTrigger.getAll().forEach((trigger) => trigger.kill()); // extra safety
-  };
-}, []);
-
+    return () => {
+      ctx.revert(); // clean everything created inside the context
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill()); // extra safety
+    };
+  }, []);
 
   const lookbookChapters = [
     {
