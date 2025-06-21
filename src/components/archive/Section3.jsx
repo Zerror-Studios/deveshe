@@ -101,7 +101,7 @@ const Section3 = () => {
   const lookbookChapters = [
     {
       href: "/lookbook/chapter1",
-      imgSrc: "/archive/wom.jpg",
+      imgSrc: "/archive/lookbook1.jpg",
       id: "elem1",
       textId: "textc1",
       chapter: "Chapter 1",
@@ -115,7 +115,7 @@ const Section3 = () => {
     },
     {
       href: "/lookbook/chapter2",
-      imgSrc: "/archive/cro.jpg",
+      imgSrc: "/archive/lookbook2.jpg",
       id: "elem2",
       textId: "textc2",
       chapter: "Chapter 2",
@@ -129,7 +129,7 @@ const Section3 = () => {
     },
     {
       href: "/lookbook/chapter3",
-      imgSrc: "/archive/live.jpg",
+      imgSrc: "/archive/lookbook3.jpg",
       id: "elem3",
       textId: "textc3",
       chapter: "Chapter 3",

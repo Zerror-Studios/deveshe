@@ -241,7 +241,8 @@
 .shopSection3 {
   position: relative;
   width: 100%;
-  height: 250vh;
+  height: auto;
+  min-height: 220vh;
   overflow: hidden;
   background-color: white;
 }
