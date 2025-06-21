@@ -20,105 +20,98 @@ const Navbar = ({ openBag, setOpenBag }) => {
   }
   const router = useRouter();
 
-  useEffect(() => {
-    if(window.innerWidth < 576) return;
-    const initLogoAnimation = () => {
-      const logos = document.querySelectorAll(".logo");
-      const spacing = 10;
-      let xPositions = [];
-      let currentX = 0;
+useEffect(() => {
+  if (window.innerWidth < 576) return;
 
-      logos.forEach((logo) => {
-        const width = logo.getBoundingClientRect().width;
-        xPositions.push(currentX);
-        currentX += width + spacing;
-      });
-      document.querySelector(
-        "#logo-container"
-      ).style.width = `${xPositions[3]}px`;
+  const initLogoAnimation = () => {
+    const logos = document.querySelectorAll(".logo");
+    const spacing = 10;
+    let xPositions = [];
+    let currentX = 0;
 
-      const lastLogo = logos[logos.length - 1];
-      const lastLogoWidth = lastLogo.getBoundingClientRect().width;
-      const finalWidth = `${xPositions[logos.length - 1] + lastLogoWidth}px`;
+    logos.forEach((logo) => {
+      const width = logo.getBoundingClientRect().width;
+      xPositions.push(currentX);
+      currentX += width + spacing;
+    });
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: document.documentElement,
-          start: "top top",
-          end: "400px 20%",
-          scrub: 1,
-          // markers: true,
-        },
-      });
+    // Set width based on 4th logo or fallback to total width
+    const logoContainer = document.querySelector("#logo-container");
+    logoContainer.style.width = `${xPositions[3] || currentX}px`;
 
-      tl.to(
-        ".logo",
+    const lastLogo = logos[logos.length - 1];
+    const lastLogoWidth = lastLogo.getBoundingClientRect().width;
+    const finalWidth = `${xPositions[logos.length - 1] + lastLogoWidth}px`;
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: document.documentElement,
+        start: "top top",
+        end: "400px 20%",
+        scrub: 1,
+        // markers: true,
+      },
+    });
+
+    tl.to(
+      ".logo",
+      {
+        top: 0,
+        x: (i) => xPositions[i],
+        ease: "sine.out",
+      },
+      "start"
+    )
+      .to(
+        "#logo-container",
         {
-          top: 0,
-          x: (i) => xPositions[i],
+          height: "25px",
+          width: finalWidth,
           ease: "sine.out",
         },
         "start"
       )
-        .to(
-          "#logo-container",
-          {
-            height: "25px",
-            width: finalWidth,
-            ease: "sine.out",
-          },
-          "start"
-        )
-        .to(
-          "#nav",
-          {
-            backgroundColor: "rgba(255,255,255,1)",
-            duration: 0.3,
-            ease: "power1.out",
-          },
-          "s"
-        )
+      .to("#nav", {
+        backgroundColor: "rgba(255,255,255,1)",
+        duration: 0.3,
+        ease: "power1.out",
+      }, "s")
+      .to("#nav-btns", {
+        backgroundColor: "rgba(255,255,255,1)",
+        duration: 0.3,
+        ease: "power1.out",
+      }, "s")
+      .to("#nav-line", {
+        backgroundColor: "black",
+        duration: 0.3,
+        ease: "power1.out",
+      }, "s")
+      .to("#nav-btns svg", {
+        stroke: "black",
+        duration: 0.3,
+        ease: "power1.out",
+      }, "s");
+  };
 
-        .to(
-          "#nav-btns",
-          {
-            backgroundColor: "rgba(255,255,255,1)",
-            duration: 0.3,
-            ease: "power1.out",
-          },
-          "s"
-        )
-        .to(
-          "#nav-line ",
-          {
-            backgroundColor: "black",
-            duration: 0.3,
-            ease: "power1.out",
-          },
-          "s"
-        )
-        .to(
-          "#nav-btns svg ",
-          {
-            stroke: "black",
-            duration: 0.3,
-            ease: "power1.out",
-          },
-          "s"
-        );
-    };
+  const waitForLogoAssets = async () => {
+    const logoImages = Array.from(document.querySelectorAll(".logo"));
+    await Promise.all(
+      logoImages
+        .filter((img) => !img.complete)
+        .map((img) => new Promise((res) => (img.onload = img.onerror = res)))
+    );
 
-    const timeout = setTimeout(() => {
-      requestAnimationFrame(initLogoAnimation);
-    }, 50);
+    requestAnimationFrame(initLogoAnimation);
+  };
 
-    // Cleanup
-    return () => {
-      clearTimeout(timeout);
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-      gsap.globalTimeline.clear(); // clear timeline to avoid memory leaks
-    };
-  }, [router.asPath]); // 👈 re-run when route changes
+  const timeout = setTimeout(waitForLogoAssets, 50);
+
+  return () => {
+    clearTimeout(timeout);
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    gsap.globalTimeline.clear();
+  };
+}, [router.asPath]);
 
   return (
     <>

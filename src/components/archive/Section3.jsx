@@ -9,8 +9,10 @@ import Image from "next/image";
 gsap.registerPlugin(ScrollTrigger);
 
 const Section3 = () => {
-  useGSAP(() => {
-    var tl = gsap.timeline({
+useEffect(() => {
+  // Create a context for cleanup
+  const ctx = gsap.context(() => {
+    const tl = gsap.timeline({
       scrollTrigger: {
         trigger: "#archiveSection3",
         scroller: "body",
@@ -18,6 +20,8 @@ const Section3 = () => {
         end: "top -300%",
         pin: true,
         scrub: 1,
+        // markers: true,
+        invalidateOnRefresh: true, // makes pin and dimensions reliable on refresh
       },
     });
 
@@ -54,7 +58,7 @@ const Section3 = () => {
         ease: "none",
       },
       "a+=1.2"
-    ); // Starts slightly before the animation ends, for smoothness
+    );
 
     tl.to(
       "#elem2",
@@ -91,12 +95,16 @@ const Section3 = () => {
       "b+=1.2"
     );
 
-    setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 100);
+    // Refresh ScrollTrigger after a delay
+    setTimeout(() => ScrollTrigger.refresh(), 200);
+  });
 
-    return () => tl.kill();
-  }, []);
+  return () => {
+    ctx.revert(); // clean everything created inside the context
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill()); // extra safety
+  };
+}, []);
+
 
   const lookbookChapters = [
     {
