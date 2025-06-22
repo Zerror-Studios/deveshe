@@ -6,10 +6,19 @@ import { useGSAP } from "@gsap/react";
 import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
 import Image from "next/image";
+import { useQuery } from "@apollo/client";
+import { GET_LOOKBOOKS } from "@/graphql/lookbook.gql";
 gsap.registerPlugin(ScrollTrigger);
 
 const Section3 = () => {
 	console.log("look book chapteres");
+
+	const { data, loading, error } = useQuery(GET_LOOKBOOKS, {
+		variables: {
+			offset: 0,
+			limit: 3,
+		},
+	});
 	useEffect(() => {
 		// Create a context for cleanup
 		const ctx = gsap.context(() => {
@@ -153,19 +162,24 @@ const Section3 = () => {
 
 	return (
 		<div id="archiveSection3" className={styles.archiveSection3}>
-			{lookbookChapters.map((item, index) => (
+			{data?.getClientSideLookBooks?.lookBooks?.map((item, index) => (
 				<Link
-					href={item.href}
+					href={`/lookbook/${item._id}`}
 					className={`${styles.elem} ${styles[`elem${index + 1}`]}`}
-					id={item.id}
-					key={item.id}
+					id={item._id}
+					key={item._id}
 				>
-					<Image width={1000} height={1000} src={item.imgSrc} alt="image" />
+					<Image
+						width={1000}
+						height={1000}
+						src={item.assets[0]?.path || "/archive/lookbook1.jpg"}
+						alt="image"
+					/>
 					<div className={styles.overlay3a}>
-						<div className={styles.textContainer} id={item.textId}>
-							<h3>{item.chapter}</h3>
+						<div className={styles.textContainer} id={`textc${index + 1}`}>
+							<h3>{item.subName}</h3>
 							<h4>{item.title}</h4>
-							<p>{item.desc}</p>
+							<p>{item.description}</p>
 							<span className={styles.exploreBtn}>
 								Explore <FiArrowUpRight />
 							</span>

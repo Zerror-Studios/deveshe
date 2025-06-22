@@ -92,7 +92,7 @@ const ProductListing = () => {
 	return (
 		<div className={styles.productListing} id="productListing">
 			<div className={styles.leftProCon}>
-				<Link href={`/product?id=${displayedProducts[0]._id}`}>
+				<Link href={`/product?id=${displayedProducts[0]?._id}`}>
 					<Image
 						width={1000}
 						height={1000}
