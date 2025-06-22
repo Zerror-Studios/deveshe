@@ -1015,7 +1015,7 @@
     gap: 15vw;
   }
   .imageContainer2 .imgCardSec3 {
-    width: 70%;
+    width: 60%;
     padding: 3vw;
   }
   .imageContainer2 .imgCardSec3 img {
@@ -1023,7 +1023,7 @@
   }
   .imageContainer2 .imgCardSec3 p {
     font-family: font2;
-    font-size: 5vw;
+    font-size: 3.5vw;
     margin-top: 1vw;
     line-height: 1;
     color: black;
@@ -1034,6 +1034,7 @@
   }
   .shopSection3 .overlay3 {
     justify-content: flex-start;
+    padding-top: 140px;
   }
   .shopSection3 .overlay3 .Section33Btm >p {
     margin-top: 55vw !important;
@@ -1075,7 +1076,7 @@
   }
   .centerCard p {
     font-family: font2;
-    font-size: 5vw;
+    font-size: 3.5vw;
     margin-top: 1vw;
     line-height: 1;
   }
