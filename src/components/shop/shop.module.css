@@ -241,10 +241,10 @@
 .shopSection3 {
   position: relative;
   width: 100%;
-  height: auto;
-  min-height: 220vh;
+  aspect-ratio: .8;
+  /* height: auto; */
+  /* min-height: 220vh; */
   overflow: hidden;
-  background-color: white;
 }
 .shopSection3 >img{
   object-position: top;
@@ -880,8 +880,12 @@
   line-height: 1;
   letter-spacing: 0;
 }
+.shopSection5 .overlay5{
+  padding-top: 100px;
+  padding-bottom: 100px;
+}
 .bigCard p {
-  font-size: 3.5vw;
+  font-size: 4vw;
   margin-top: 2vw;
 }
   .shopSection3 {
@@ -894,7 +898,7 @@
   .shopSection3 .overlay3 h2 {
     color: #f4fa26;
     font-family: font2;
-    font-size: 8.5vw;
+    font-size: 10.5vw;
     line-height: 1;
     text-transform: uppercase;
     white-space: nowrap;
@@ -916,8 +920,7 @@
     position: relative;
     z-index: 2;
     font-family: font2;
-    font-size: 8.5vw;
-    line-height: 1;
+    font-size: 10.5vw;
     text-transform: uppercase;
     white-space: nowrap;
     letter-spacing: 0px;
@@ -933,9 +936,11 @@
     font-weight: 500;
     line-height: 1;
     letter-spacing: 0px;
-    margin-bottom: 15vw;
+    margin-bottom: 27vw;
   }
-
+.productListing{
+  display: none;
+}
   .strip1 {
     position: absolute;
     bottom: -17%;
@@ -989,7 +994,7 @@
     background-color: #fff;
   }
   .bigCard {
-    width: 45%;
+    width: 50%;
     padding: 2vw;
   }
   .shopSection6 div h2 {
@@ -1010,11 +1015,11 @@
     gap: 15vw;
   }
   .imageContainer2 .imgCardSec3 {
-    width: 85%;
+    width: 70%;
     padding: 3vw;
   }
   .imageContainer2 .imgCardSec3 img {
-    height: 70vw;
+    height: 50vw;
   }
   .imageContainer2 .imgCardSec3 p {
     font-family: font2;
@@ -1031,20 +1036,20 @@
     justify-content: flex-start;
   }
   .shopSection3 .overlay3 .Section33Btm >p {
-    margin-top: 15vw !important;
+    margin-top: 55vw !important;
     font-weight: 500;
     font-size: 5vw;
     line-height: 1;
     letter-spacing: .5px;
   }
   .imageContainer2 > img {
-    top: -25%;
+    top: -19%;
     right: 40%;
   }
   .titleh2 {
     font-size: 7vw !important;
     letter-spacing: 0px !important;
-    margin-bottom: 50vw;
+    margin-bottom: 40vw;
   }
   .shopSection3 .overlay3 h3 {
     font-size: 7vw;
@@ -1058,12 +1063,15 @@
   }
 
   .centerCard {
-    width: 100%;
+    width: 75%;
     padding: 3vw;
   }
   .centerCard .imgCont {
     width: 100%;
-    height: 90vw;
+    height: 60vw;
+  }
+  .shopSection2Bottom {
+    margin-top: 120px;
   }
   .centerCard p {
     font-family: font2;
