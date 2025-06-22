@@ -2,20 +2,38 @@ import { gql } from "@apollo/client";
 
 // Product Queries
 export const GET_PRODUCTS = gql`
-	query GetProducts($limit: Int, $offset: Int, $category: String, $search: String) {
-		products(limit: $limit, offset: $offset, category: $category, search: $search) {
-			id
-			name
-			description
-			price
-			imageUrl
-			category {
-				id
+	query GetClientSideProducts($limit: Int, $offset: Int) {
+		getClientSideProducts(limit: $limit, offset: $offset) {
+			products {
+				_id
 				name
+				description
+				assets {
+					path
+					type
+					altText
+				}
+				price
+				discountedPrice
+				costOfGoods
+				productType
+				status
+				isDeleted
+				variants {
+					selectedOptions
+					priceDifference
+					variantPrice
+					sku
+					variantCostOfGoods
+					shippingWeight
+					trackInventory
+					stockQuantity
+					status
+					stockStatus
+					visibility
+				}
 			}
-			inStock
-			createdAt
-			updatedAt
+			totalCount
 		}
 	}
 `;

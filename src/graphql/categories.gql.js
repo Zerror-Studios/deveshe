@@ -2,17 +2,28 @@ import { gql } from "@apollo/client";
 
 // Category Queries
 export const GET_CLIENT_SIDE_CATEGORIES = gql`
-	query GetClientSideCategories($limit: Int, $offset: Int, $filter: CategoriesFilterInput) {
-		getClientSideCategories(limit: $limit, offset: $offset, filter: $filter) {
-			totalCount
+	query GetClientSideCategories($offset: Int, $limit: Int, $filter: CategoriesFilterInput) {
+		getClientSideCategories(offset: $offset, limit: $limit, filter: $filter) {
 			categories {
+				_id
 				name
+				imgsrc
 				products {
 					_id
+					name
+					description
+					assets {
+						path
+						type
+						altText
+						isFeatured
+						_id
+					}
+					discountedPrice
+					price
 				}
-				imgsrc
-				_id
 			}
+			totalCount
 		}
 	}
 `;
