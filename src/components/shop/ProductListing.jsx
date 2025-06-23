@@ -45,6 +45,7 @@ const ProductListing = () => {
     {
       image1: "/newproduct/BI07.jpg",
     },
+    
   ];
 
   const handleAddToCart = (index) => {
