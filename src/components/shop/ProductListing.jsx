@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import styles from "./shop.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
+import { ModalContext } from "../context/ModalProvider";
+import { useDispatch } from "react-redux";
+import { addtocart } from "@/features/cart/CartSlice";
 gsap.registerPlugin(ScrollTrigger);
 const ProductListing = () => {
+  const [modalIsOpen, setModalIsOpen] = useContext(ModalContext);
+  const dispatch = useDispatch();
   const products = [
     {
       image1: "/newproduct/BI02.jpg",
@@ -41,6 +46,33 @@ const ProductListing = () => {
       image1: "/newproduct/BI07.jpg",
     },
   ];
+
+  const handleAddToCart = (index) => {
+    setTimeout(() => {
+      setModalIsOpen(true);
+    }, 100);
+
+
+    const colors = ["Black", "Brown", "Grey", "White"];
+    const sizes = ["S", "M", "L", "XL"];
+
+    // generating random varient for now
+    const vararray = [
+      {
+        color: colors[Math.floor(Math.random() * colors.length)],
+        size: sizes[Math.floor(Math.random() * sizes.length)],
+      },
+    ];
+    dispatch(
+      addtocart({
+        name: "Belted Leather Jacket",
+        img: products[index].image1,
+        productid: index,
+        qty: 1,
+        variants: vararray,
+      })
+    );
+  };
   return (
     <div className={styles.productListing} id="productListing">
       <div className={styles.leftProCon}>
@@ -55,7 +87,7 @@ const ProductListing = () => {
 
         <div className={styles.productOverlay}>
           <div className={styles.bagCont}>
-            <button>
+            <button onClick={() => handleAddToCart(0)}>
               <svg
                 class="icon-cart"
                 width="15"
@@ -100,7 +132,7 @@ const ProductListing = () => {
               </Link>
               <div className={styles.productOverlay}>
                 <div className={styles.bagCont}>
-                  <button>
+                  <button onClick={() => handleAddToCart(index + 1)}>
                     <svg
                       class="icon-cart"
                       width="15"

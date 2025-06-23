@@ -47,7 +47,7 @@
   text-align: center;
 }
 
-.overlay3a{
+.overlay3a {
   position: absolute;
   top: 0;
   left: 0;
@@ -59,28 +59,28 @@
   background-color: rgba(0, 0, 0, 0.314);
   padding: 100px;
 }
-.Vertical_wrapper_video_sec-2 .overlay3a{
+.Vertical_wrapper_video_sec-2 .overlay3a {
   align-items: center;
 }
-.Vertical_wrapper_video_sec-3 .overlay3a{
+.Vertical_wrapper_video_sec-3 .overlay3a {
   align-items: center;
   justify-content: flex-end;
 }
-.Vertical_wrapper_video_sec-4 .overlay3a{
+.Vertical_wrapper_video_sec-4 .overlay3a {
   align-items: flex-end;
   justify-content: flex-end;
 }
-.overlay3a .textContainer{
+.overlay3a .textContainer {
   width: 30%;
 }
-.overlay3a .textContainer h4{
+.overlay3a .textContainer h4 {
   color: white;
   font-size: 2vw;
   font-family: font2;
   margin-bottom: 15px;
   text-transform: uppercase;
 }
-.overlay3a .textContainer p{
+.overlay3a .textContainer p {
   color: white;
   font-size: 14px;
   font-family: font1;
@@ -417,7 +417,7 @@
 .title_inner-nail h2 span:nth-last-child(4),
 .title_inner-nail h2 span:nth-last-child(5),
 .title_inner-nail h2 span:nth-last-child(6),
-.title_inner-nail h2 span:nth-last-child(7){
+.title_inner-nail h2 span:nth-last-child(7) {
   color: #7546ff !important;
 }
 
@@ -538,7 +538,7 @@
   }
 
   .title_inner-nail h2 {
-  font-size: 10.5vw;
+    font-size: 10.5vw;
   }
 
   #How_to_Nail_it_Cntr .pictos-label .p-normal {
@@ -947,31 +947,66 @@
     text-overflow: ellipsis;
     overflow: hidden;
   }
-  
-#How_to_Nail_it_Cntr .pictos-label .picto-one {
-  width: 35vw;
-}
 
-#How_to_Nail_it_Cntr .pictos-label .p-normal {
-  color: #222;
-  font-size: 11px;
-  letter-spacing: 1px;
-  line-height: 1;
-  font-family: font1;
-  font-weight: 500;
-}
+  #How_to_Nail_it_Cntr .pictos-label .picto-one {
+    width: 20vw;
+  }
+  #How_to_Nail_it_Cntr .pictos-label .picto-one {
+    left: 53.294118vw;
+    top: 33.411765vw;
+  }
 
-#How_to_Nail_it_Cntr .pictos-label .picto-two {
-  width: 35vw;
-}
+  #How_to_Nail_it_Cntr .pictos-label .p-normal {
+    color: #222;
+    font-size: 11px;
+    letter-spacing: 1px;
+    line-height: 1;
+    font-family: font1;
+    font-weight: 500;
+  }
 
-#How_to_Nail_it_Cntr .pictos-label .picto-three {
-  width: 35vw;
-}
+  #How_to_Nail_it_Cntr .pictos-label .picto-two {
+    width: 24vw;
+  }
+  #How_to_Nail_it_Cntr .pictos-label .picto-two {
+    top: 75.705882vw;
+  }
 
-#How_to_Nail_it_Cntr .pictos-label .picto-four {
-  width: 35vw;
-}
+  #How_to_Nail_it_Cntr .pictos-label .picto-three {
+    width: 23vw;
+  }
+  #How_to_Nail_it_Cntr .pictos-label .picto-three {
+    bottom: 21.411765vw;
+    left: 66.882353vw;
+  }
+
+  #How_to_Nail_it_Cntr .pictos-label .picto-four {
+    width: 22vw;
+  }
+  #How_to_Nail_it_Cntr .pictos-label .picto-four {
+    bottom: -11.941176vw;
+    left: 18.647059vw;
+  }
+  .line-wrapper svg path {
+    stroke-dasharray: 0 !important; /* Set to a large enough value */
+    stroke-dashoffset: 0 !important; /* Hide the path initially */
+  }
+  .number svg {
+    width: 20px;
+    height: 20px;
+  }
+  .title_inner-nail .arrow {
+    margin-top: 20px;
+  }
+  #How_to_Nail_it_Cntr .arrow svg {
+    width: 50px;
+  }
+  #How_to_Nail_it_Cntr {
+    padding: 20vw 0;
+  }
+  #How_to_Nail_it_Cntr .row {
+    padding: 0;
+  }
 }
 @media only screen and (min-width: 1120px) {
   .shop_card_brandwrap {
@@ -2257,8 +2292,7 @@ button {
 
 /* product card details */
 
-
-@media (max-width: 576px){
+@media (max-width: 576px) {
   .title_inner-nail h2 {
     font-family: font2;
     font-size: 8.4vw;
@@ -2269,19 +2303,19 @@ button {
     position: relative;
     text-align: center;
     transform: scale(1);
-}
-  .overlay3a{
-    padding:60px 20px;
+  }
+  .overlay3a {
+    padding: 60px 20px;
   }
   .overlay3a .textContainer {
     width: 100%;
-}
-.overlay3a .textContainer h4 {
-  font-size: 5vw;
-}
-.ProductDets_add_btn_mobile{
-  width: 100%;
-  overflow: hidden;
-  border-radius: 50px;
-}
+  }
+  .overlay3a .textContainer h4 {
+    font-size: 5vw;
+  }
+  .ProductDets_add_btn_mobile {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 50px;
+  }
 }

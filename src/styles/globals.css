@@ -1220,6 +1220,18 @@ li {
 
 /* Extra Small Devices (Phones) */
 @media (max-width: 576px) {
+  #menu-btn {
+  width: 22px;
+  height: 9px;
+}
+.bag-icon,.account-logo{
+  width: 19px;
+  height: 19px;
+}
+.linem {
+  width: 22px;
+  height: 1.2px;
+}
   .slide1{
     width: 385vw;
   }

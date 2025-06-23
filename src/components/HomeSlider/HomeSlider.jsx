@@ -1,8 +1,9 @@
 import gsap from "gsap";
+import ScrollToPlugin from "gsap/dist/ScrollToPlugin";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
 import React, { useEffect, useRef } from "react";
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 const HomeSlider = () => {
   const scrollRef = useRef(null);
@@ -16,21 +17,34 @@ const HomeSlider = () => {
 
     const totalScrollWidth = slider.scrollWidth - slider.clientWidth;
 
-    gsap.to(slider, {
-      scrollTrigger: {
-        trigger: home,
-        start: "top top",
-        end: () => `+=${totalScrollWidth}`,
-        scrub: 1,
-        pin: true,
-        anticipatePin: 1,
-        // markers: true,
-        onUpdate: (self) => {
-          const scrollAmount = self.progress * totalScrollWidth;
-          slider.scrollLeft = scrollAmount;
+    let currentScroll = 0;
+    let targetScroll = 0;
+    const isMobile = window.innerWidth <= 576;
+    const lerpFactor = isMobile ? 0.07 : 0.1;
+
+    gsap.to(
+      {},
+      {
+        scrollTrigger: {
+          trigger: home,
+          start: "top top",
+          end: () => `+=${totalScrollWidth}`,
+          scrub: 1,
+          pin: true,
+          anticipatePin: 1,
+          // markers: true,
+          onUpdate: (self) => {
+            targetScroll = self.progress * totalScrollWidth;
+          },
         },
-      },
-    });
+        duration: 1,
+        ease: "none",
+        onUpdate: () => {
+          currentScroll += (targetScroll - currentScroll) * 0.07; // lerp smoothing
+          slider.scrollLeft = currentScroll;
+        },
+      }
+    );
 
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
@@ -42,7 +56,11 @@ const HomeSlider = () => {
       <div
         className="horizontal-scroll"
         ref={scrollRef}
-        style={{ overflow: "hidden", whiteSpace: "nowrap" }}
+        style={{
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          scrollBehavior: "auto",
+        }}
       >
         <div className="slide1">
           <Image
