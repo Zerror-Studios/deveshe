@@ -306,14 +306,14 @@
   }
   #prodcut-container {
     width: 100%;
-    padding: 0px 20px;
+    padding: 0px 0;
   }
   #prodcut-container .product-lb {
-    width: 49%;
-    margin-bottom: 2%;
+    width: 50%;
+    margin-bottom: 0%;
   }
   .product-lb img {
-    height: 240px;
+    height: auto;
   }
   #main-banner-text {
     width: 100%;
@@ -323,6 +323,9 @@
   #lb-section3-ig {
     width: 100%;
     height: 28.9375rem;
+  }
+  .product-info {
+    padding: 8px 20px 16px;
   }
   #lb-section3 {
     width: 100%;

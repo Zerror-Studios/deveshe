@@ -487,6 +487,7 @@ const ProductPage = () => {
                         <span className="ProductDets_colorVariant">Scotch</span>
                       </div> */}
                           {/* )} */}
+                            <span className="title_size_color">Color</span>
                           <div className="ProductDets_collection-wrap">
                             <fieldset className="ProfuctDets_fieldset">
                               {product &&
@@ -532,6 +533,7 @@ const ProductPage = () => {
                           </div>
                         </div>
                         <div className="ProductDets_size_Mainwrap">
+                          <span className="title_size_color">Size</span>
                           {product &&
                             product.variants &&
                             product.variants.map((variant, i) => (
