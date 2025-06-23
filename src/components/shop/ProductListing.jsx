@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
 import { useQuery } from "@apollo/client";
 import { GET_CLIENT_SIDE_CATEGORIES } from "@/graphql/categories.gql";
 import { GET_PRODUCTS } from "@/graphql/products.gql";
@@ -27,63 +26,6 @@ const ProductListing = () => {
 		},
 	});
 
-	useGSAP(() => {
-		if (window.innerWidth > 576) return;
-		const strip1Height =
-			document.querySelector("#productStrip1").getBoundingClientRect().height / 2;
-		const strip2Height = document.querySelector("#productStrip2").getBoundingClientRect().height;
-		const productContHeight = document.querySelector("#productCont").getBoundingClientRect().height;
-
-		const strip1Value = strip1Height - productContHeight;
-		const strip2Value = strip2Height - productContHeight;
-
-		var tl = gsap.timeline({
-			scrollTrigger: {
-				trigger: "#productListing",
-				scroller: "body",
-				start: "35.3% 65px",
-				end: "35.3% -120%",
-				scrub: 1,
-				// markers: true,
-				pin: true,
-			},
-		});
-
-		tl.to(
-			"#productStrip1",
-			{
-				transform: `translateY(-56%)`,
-				duration: 1.4,
-			},
-			"a"
-		).to(
-			"#productStrip2",
-			{
-				transform: `translateY(-61.5%)`,
-				duration: 1.4,
-			},
-			"a"
-		);
-	}, []);
-
-	useEffect(() => {
-		const handleResize = () => {
-			if (window.innerWidth < 576) {
-				if (data) {
-					setDisplayedProducts(data.getClientSideProducts.products.slice(0, 10));
-				}
-			} else {
-				if (data) {
-					setDisplayedProducts(data.getClientSideProducts.products);
-				}
-			}
-		};
-
-		handleResize(); // check on mount
-
-		window.addEventListener("resize", handleResize); // update on resize
-		return () => window.removeEventListener("resize", handleResize);
-	}, []);
 
 	useEffect(() => {
 		if (data) {
@@ -134,7 +76,7 @@ const ProductListing = () => {
 
 				<div className={styles.productOverlay}>
 					<div className={styles.bagCont}>
-						<button onClick={() => handleAddToCart(displayedProducts[0]._id)}>
+						<button onClick={() => handleAddToCart(displayedProducts[0]?._id)}>
 							<svg
 								class="icon-cart"
 								width="15"
