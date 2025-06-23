@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "./shop.module.css";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,8 +9,13 @@ import { useQuery } from "@apollo/client";
 import { GET_CLIENT_SIDE_CATEGORIES } from "@/graphql/categories.gql";
 import { GET_PRODUCTS } from "@/graphql/products.gql";
 import ProductLoader from "@/components/loaders/ProductLoader";
+import { useDispatch } from "react-redux";
+import { addtocart } from "@/features/cart/CartSlice";
+import { ModalContext } from "../context/ModalProvider";
 gsap.registerPlugin(ScrollTrigger);
 const ProductListing = () => {
+	const [modalIsOpen, setModalIsOpen] = useContext(ModalContext);
+	const dispatch = useDispatch();
 	const [displayedProducts, setDisplayedProducts] = useState([]);
 	const { data, loading, error } = useQuery(GET_PRODUCTS, {
 		variables: {
@@ -86,6 +91,32 @@ const ProductListing = () => {
 		}
 	}, [data]);
 
+	const handleAddToCart = (index) => {
+		setTimeout(() => {
+			setModalIsOpen(true);
+		}, 100);
+
+		const colors = ["Black", "Brown", "Grey", "White"];
+		const sizes = ["S", "M", "L", "XL"];
+
+		// generating random varient for now
+		const vararray = [
+			{
+				color: colors[Math.floor(Math.random() * colors.length)],
+				size: sizes[Math.floor(Math.random() * sizes.length)],
+			},
+		];
+		dispatch(
+			addtocart({
+				name: "Belted Leather Jacket",
+				img: displayedProducts[index]?.assets[0]?.path,
+				productid: index,
+				qty: 1,
+				variants: vararray,
+			})
+		);
+	};
+
 	if (loading) {
 		return <ProductLoader />;
 	}
@@ -103,7 +134,7 @@ const ProductListing = () => {
 
 				<div className={styles.productOverlay}>
 					<div className={styles.bagCont}>
-						<button>
+						<button onClick={() => handleAddToCart(displayedProducts[0]._id)}>
 							<svg
 								class="icon-cart"
 								width="15"
@@ -126,9 +157,9 @@ const ProductListing = () => {
 						</button>
 					</div>
 					<div className={styles.proDets}>
-						<h4> Belted Leather Jacket</h4>
+						<h4> {displayedProducts[0]?.name}</h4>
 						<div>
-							<span>1,545</span>
+							<span>{displayedProducts[0]?.price}</span>
 							<span>&nbsp;INR</span>
 						</div>
 					</div>
@@ -136,23 +167,14 @@ const ProductListing = () => {
 			</div>
 			<div className={styles.rightProCon} id="productCont">
 				<div className={styles.rightProConWrap}>
-					{displayedProducts?.slice(1, 11).map((productItem, index) => (
+					{displayedProducts?.slice(1, 11)?.map((productItem, index) => (
 						<div key={index} className={styles.productCard}>
-							<Link href={`/product?id=${productItem._id}`}>
-								<Image
-									width={1000}
-									height={1000}
-									alt={productItem?.assets[0]?.altText || "image"}
-									src={
-										productItem?.assets[0]?.path
-											? productItem.assets[0].path
-											: "/newproduct/BI02.jpg"
-									}
-								/>
+							<Link href={`/product?id=${productItem?._id}`}>
+								<Image width={1000} height={1000} alt="image" src={productItem?.assets[0]?.path} />
 							</Link>
 							<div className={styles.productOverlay}>
 								<div className={styles.bagCont}>
-									<button>
+									<button onClick={() => handleAddToCart(productItem._id)}>
 										<svg
 											class="icon-cart"
 											width="15"
@@ -183,38 +205,6 @@ const ProductListing = () => {
 								</div>
 							</div>
 						</div>
-					))}
-				</div>
-				<div className={styles.rightProConStrip} id="productStrip1">
-					{displayedProducts.slice(0, 7).map((productItem, index) => (
-						<Link
-							href={`/product?id=${productItem._id}`}
-							key={index}
-							className={styles.productCard}
-						>
-							<Image
-								width={1000}
-								height={1000}
-								alt={productItem?.assets[0]?.altText || "image"}
-								src={productItem?.assets[0]?.path || "/newproduct/BI02.jpg"}
-							/>
-						</Link>
-					))}
-				</div>
-				<div className={styles.rightProConStrip} id="productStrip2">
-					{displayedProducts.slice(0, 8).map((productItem, index) => (
-						<Link
-							href={`/product?id=${productItem._id}`}
-							key={index}
-							className={styles.productCard}
-						>
-							<Image
-								width={1000}
-								height={1000}
-								alt={productItem?.assets[0]?.altText || "image"}
-								src={productItem?.assets[0]?.path || "/newproduct/BI02.jpg"}
-							/>
-						</Link>
 					))}
 				</div>
 			</div>
