@@ -111,7 +111,7 @@ const Modal = ({
                       <RxCross2 onClick={closeModal} />
                     </button>
                   </div>
-                  <div style={{ overflow: "auto" }}>
+                  <div style={{ overflow: "auto" }} data-lenis-prevent>
                     {cart &&
                       cart.map((item, i) => {
                         const price = prices[i];

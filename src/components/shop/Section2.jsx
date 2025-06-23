@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./shop.module.css";
 import Image from "next/image";
 import gsap from "gsap";
@@ -7,134 +7,134 @@ import ScrollTrigger from "gsap/dist/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const Section2 = () => {
-  useGSAP(() => {
-    function splitText(element) {
-      document.querySelectorAll(element).forEach((h) => {
-        let clutter = "";
-        h.textContent.split("").forEach((letter) => {
-          if (letter === " ") {
-            clutter += `<span>&nbsp;</span>`; // preserve space
-          } else {
-            clutter += `<span>${letter}</span>`;
-          }
-        });
-        h.innerHTML = clutter;
+  useEffect(() => {
+    // Text splitter utility
+    function splitText(selector) {
+      document.querySelectorAll(selector).forEach((el) => {
+        if (!el.dataset.split) {
+          const letters = el.textContent
+            .split("")
+            .map((char) =>
+              char === " " ? `<span>&nbsp;</span>` : `<span>${char}</span>`
+            );
+          el.innerHTML = letters.join("");
+          el.dataset.split = "true";
+        }
       });
     }
+
+    // Split headings
     splitText("#title-main-wrap3 h2");
     splitText("#btn-text-wrap h4");
 
-    //text animation
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: "#section2-shop",
-        scroller: "body",
-         start: "top 60%",
-        end: "top 20%",
-        // scrub: true,
-        // markers: true
-      },
-    });
-    tl.fromTo(
-      "#title-main-wrap3 h2 span",
-      {
-        transform: "rotateX(90deg)",
-      },
-      {
-        duration: 0.8,
-        transform: "rotateX(0deg)",
-        stagger: 0.05,
-        // ease: "power2.out",
-        ease: "bounce.out",
-      }
-    );
+    const ctx = gsap.context(() => {
+      // Scroll-based text animation
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#section2-shop",
+          start: "top 60%",
+          end: "top 20%",
+          // scrub: true,
+          // markers: true,
+        },
+      });
 
-    // btn hover animation
-    document
-      .querySelector("#btn-text-wrap")
-      .addEventListener("mouseenter", (e) => {
+      tl.fromTo(
+        "#title-main-wrap3 h2 span",
+        { rotateX: "90deg" },
+        {
+          rotateX: "0deg",
+          duration: 0.8,
+          stagger: 0.05,
+          ease: "bounce.out",
+        }
+      );
+
+      // Button hover animation
+      const btnEl = document.querySelector("#btn-text-wrap");
+      const enterHandler = () => {
         gsap.fromTo(
           ".text1-btn span",
+          { y: "0%" },
           {
-            y: "0%",
-          },
-          {
-            duration: 0.5,
             y: "-100%",
-            stagger: {
-              amount: 0.2,
-            },
-            // ease: "power2.out",
+            duration: 0.5,
+            stagger: { amount: 0.2 },
           }
         );
         gsap.fromTo(
           ".text2-btn span",
+          { y: "0%" },
           {
-            y: "0%",
-          },
-          {
-            duration: 0.5,
             y: "-100%",
-            stagger: {
-              amount: 0.2,
-            },
-            // ease: "power2.out",
+            duration: 0.5,
+            stagger: { amount: 0.2 },
           }
         );
+      };
+
+      if (btnEl) btnEl.addEventListener("mouseenter", enterHandler);
+
+      // Strip animation
+      const tl2 = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#section2-bottom-shop",
+          start: "top 70%",
+          end: "top 20%",
+          // scrub: true,
+          // markers: true,
+        },
       });
 
-    const tl2 = gsap.timeline({
-      scrollTrigger: {
-        trigger: "#section2-bottom-shop",
-        scroller: "body",
-        start: "top 70%",
-        end: "top 20%",
-        // scrub: true,
-        // markers: true
-      },
+      tl2.fromTo(
+        "#strip1-shop",
+        {
+          y: -300,
+          x: -300,
+          rotation: -25,
+          scale: 0.8,
+        },
+        {
+          y: 0,
+          x: 0,
+          rotation: -25,
+          scale: 1,
+          duration: 1.5,
+          ease: "power2.out",
+        },
+        "a"
+      );
+
+      tl2.fromTo(
+        "#strip2-shop",
+        {
+          y: -300,
+          x: 300,
+          rotation: 25,
+          scale: 0.8,
+        },
+        {
+          y: 0,
+          x: 0,
+          rotation: 25,
+          scale: 1,
+          opacity: 1,
+          duration: 1.5,
+          ease: "power2.out",
+        },
+        "a"
+      );
+
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100);
+
+      // Clean up: animations + event listener
+      return () => {
+        ctx.revert();
+        if (btnEl) btnEl.removeEventListener("mouseenter", enterHandler);
+      };
     });
-    tl2.fromTo(
-      "#strip1-shop",
-      {
-        y: -300,
-        x: -300,
-        rotation: -25,
-        scale: 0.8,
-      },
-      {
-        y: 0,
-        x: 0,
-        rotation: -25,
-        scale: 1,
-        duration: 1.5,
-        ease: "power2.out",
-      },
-      "a"
-    );
-
-    tl2.fromTo(
-      "#strip2-shop",
-      {
-        y: -300,
-        x: 300,
-        rotation: 25,
-        scale: 0.8,
-      },
-      {
-        y: 0,
-        x: 0,
-        opacity: 1,
-        rotation: 25,
-        scale: 1,
-        duration: 1.5,
-        ease: "power2.out",
-      },
-      "a"
-    );
-
-    setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 100);
   }, []);
 
   const strip1Images = [
@@ -217,27 +217,27 @@ const Section2 = () => {
           ]
         </div>
         <div className={styles.strip1} id="strip1-shop">
-        {strip1Images.map((src, index) => (
-          <Image
-            key={`strip1-${index}`}
-            width={1000}
-            height={1000}
-            src={src}
-            alt={`shop image ${index + 1}`}
-          />
-        ))}
-      </div>
-      <div className={styles.strip2} id="strip2-shop">
-        {strip2Images.map((src, index) => (
-          <Image
-            key={`strip2-${index}`}
-            width={1000}
-            height={1000}
-            src={src}
-            alt={`shop image ${index + 5}`}
-          />
-        ))}
-      </div>
+          {strip1Images.map((src, index) => (
+            <Image
+              key={`strip1-${index}`}
+              width={1000}
+              height={1000}
+              src={src}
+              alt={`shop image ${index + 1}`}
+            />
+          ))}
+        </div>
+        <div className={styles.strip2} id="strip2-shop">
+          {strip2Images.map((src, index) => (
+            <Image
+              key={`strip2-${index}`}
+              width={1000}
+              height={1000}
+              src={src}
+              alt={`shop image ${index + 5}`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

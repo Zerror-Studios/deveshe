@@ -52,23 +52,12 @@ const Nails_Cntr = () => {
         start: "top 10%",
         end: "bottom 100%",
         // markers: true,
-        scrub: 0.5,
+        scrub: 1.5,
         // pin: true,
-        duration: 2,
+        duration: 5,
       },
       //   strokeDasharray: 0,
       strokeDashoffset: 0,
-    });
-    gsap.to(".mask-memoji-wrapper .memoji img", {
-      scrollTrigger: {
-        trigger: ".how_we_picture",
-        start: "top 80%",
-        end: "bottom 50%",
-        // markers: true,
-        scrub: 2,
-        duration: 1,
-      },
-      transform: "rotateZ(0deg)",
     });
 
     gsap.to(".title_inner-nail .arrow", {

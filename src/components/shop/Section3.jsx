@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./shop.module.css";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
@@ -7,74 +7,77 @@ import ScrollTrigger from "gsap/dist/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const Section3 = () => {
-  useGSAP(() => {
-    document.querySelectorAll("#title-main-wrap h2").forEach((h) => {
-      let clutter = "";
-      h.textContent.split("").forEach((letter) => {
-        if (letter === " ") {
-          clutter += `<span>&nbsp;</span>`; // preserve space
-        } else {
-          clutter += `<span>${letter}</span>`;
+  useEffect(() => {
+    function splitText(selector) {
+      document.querySelectorAll(selector).forEach((el) => {
+        if (!el.dataset.split) {
+          const letters = el.textContent
+            .split("")
+            .map((char) =>
+              char === " " ? `<span>&nbsp;</span>` : `<span>${char}</span>`
+            );
+          el.innerHTML = letters.join("");
+          el.dataset.split = "true";
         }
       });
-      h.innerHTML = clutter;
+    }
+
+    splitText("#title-main-wrap h2");
+
+    const ctx = gsap.context(() => {
+      // Text animation
+      const textTimeline = gsap.timeline();
+      textTimeline.fromTo(
+        "#title-main-wrap h2 span",
+        { rotateX: "90deg" },
+        {
+          rotateX: "0deg",
+          duration: 0.8,
+          stagger: 0.05,
+          ease: "bounce.out",
+          delay: 0.8,
+        }
+      );
+
+      // Initial image styles
+      gsap.set("#imgCardSec31", { y: -600, scale: 0.8, opacity: 0 });
+      gsap.set("#imgCardSec32", { y: -700, scale: 0, opacity: 0 });
+
+      // Image animation
+      const imageTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#imageContainer2",
+          start: "top 100%",
+          end: "top 50%",
+          // scrub: true,
+          // markers: true,
+        },
+      });
+
+      imageTimeline.to("#imgCardSec31", {
+        y: 0,
+        scale: 1,
+        opacity: 1,
+        duration: 1,
+        ease: "power2.out",
+      });
+
+      imageTimeline.to("#imgCardSec32", {
+        y: 0,
+        scale: 1,
+        opacity: 1,
+        duration: 1,
+        delay: -0.4,
+        ease: "power2.out",
+      });
+
+      // Refresh ScrollTrigger to fix any layout issues
+      setTimeout(() => ScrollTrigger.refresh(), 50);
     });
 
-    const tl = gsap.timeline();
-    tl.fromTo(
-      "#title-main-wrap h2 span",
-      {
-        transform: "rotateX(90deg)",
-      },
-      {
-        duration: 0.8,
-        transform: "rotateX(0deg)",
-        stagger: 0.05,
-        // ease: "power2.out",
-        ease: "bounce.out",
-        delay: 0.8,
-      }
-    );
-    gsap.set("#imgCardSec31", {
-      y: -600,
-      scale: 0.8,
-      opacity: 0,
-    });
-    gsap.set("#imgCardSec32", {
-      y: -700,
-      scale: 0,
-      opacity: 0,
-    });
-    const tl2 = gsap.timeline({
-      scrollTrigger: {
-        trigger: "#imageContainer2",
-        scroller: "body",
-        start: "top 100%",
-        end: "top 50%",
-        // scrub: true,
-        // markers: true,
-      },
-    });
-
-    tl2.to("#imgCardSec31", {
-      y: 0,
-      scale: 1,
-      opacity: 1,
-      duration: 1,
-      ease: "power2.out",
-    });
-    tl2.to("#imgCardSec32", {
-      y: 0,
-      scale: 1,
-      opacity: 1,
-      duration: 1,
-      delay: -0.4,
-      ease: "power2.out",
-    });
-    setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 50);
+    return () => ctx.revert(); // clean up on unmount
   }, []);
+
   return (
     <div className={styles.shopSection3}>
       <Image

@@ -50,8 +50,8 @@
   /* font-size: calc(12px + 0.229167vw);
   font-family: font1; */
   font-weight: 400;
-    font-family: var(--secondary-font-Hen);
-    font-size: 1.5rem;
+  font-family: var(--secondary-font-Hen);
+  font-size: 1.5rem;
 }
 .lb-header-image {
   width: 100%;
@@ -188,12 +188,15 @@
 #lb-section3-ig {
   width: 46.666vw;
   height: 55.9375rem;
+  display: flex;
+  align-items: end;
+  overflow: hidden;
 }
 #lb-section3-ig img {
   width: 100%;
-  height: 100%;
+  height: 110%;
   object-fit: cover;
-  object-position: center;
+  object-position: bottom;
 }
 
 #lb-section4 {
@@ -205,12 +208,14 @@
 }
 .lb-sec4-img {
   width: 49.5%;
-  height: auto;
+  height: 55vh;
   overflow: hidden;
+  display: flex;
+  align-items: end;
 }
 .lb-sec4-img img {
   width: 100%;
-  height: 100%;
+  height: 120%;
   object-fit: cover;
   object-position: center;
 }
@@ -230,6 +235,15 @@
   align-items: center;
   justify-content: center;
 }
+.parallex {
+  display: flex;
+  height: 130vh;
+  align-items: end;
+  overflow: hidden;
+}
+.parallex img {
+  height: 105% !important;
+}
 
 .lb-section5-ig-wrap img {
   width: 100%;
@@ -245,6 +259,10 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+
+#prodcut-container.prodcut-container-mobile {
+  display: none !important;
 }
 
 #prodcut-container .product-lb {
@@ -267,21 +285,23 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
-  padding: 16px 0;
+  padding: 5px 0 16px;
 }
 @media (max-width: 576px) {
   .lb-header-text h2 {
-    font-size: 11vw;
+    font-size: 10.5vw;
+    line-height: 0.9;
   }
   .lb-header-text p {
-    font-size: 5vw;
+    font-size: 7vw;
+    margin-top: 2vw;
   }
   #lb-text-container {
     width: 100%;
     font-size: 7vw;
     padding: 5rem 20px;
   }
-  #main-banner-text p{
+  #main-banner-text p {
     font-size: 7vw;
   }
   #prodcut-container {
@@ -314,6 +334,7 @@
   }
   .lb-sec4-img {
     width: 100%;
+    height: auto;
     overflow: hidden;
   }
   #lb-section5 {
@@ -323,5 +344,9 @@
   }
   .lb-section5-ig-wrap {
     width: 100%;
+    height: auto;
+  }
+  #prodcut-container.prodcut-container-mobile {
+    display: flex !important;
   }
 }

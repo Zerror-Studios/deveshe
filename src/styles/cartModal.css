@@ -22,7 +22,7 @@
   background-color: rgb(0 0 0 / 60%);
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
-  transition: all 0.3s linear;
+  transition: all 0.6s linear;
   overflow: hidden;
 
   /* display: none; */
@@ -49,9 +49,9 @@
 .ReactModal__Content {
   background: #ffff;
   position: relative;
-  animation-timing-function: ease;
-  animation-duration: 0.3s;
-  transition: all 0.5s linear;
+  animation-timing-function: linear;
+  animation-duration: 0.6s;
+  transition: all 0.6s linear;
   outline: none;
   pointer-events: auto;
   z-index: 5;
@@ -277,6 +277,19 @@
   color: #767676;
 }
 
+@media (max-width:576px) {
+  .Modal_bgClr {
+  transition: all  0.8s cubic-bezier(0.18, 0.71, 0.11, 1);
+
+  /* display: none; */
+}
+  .ReactModal__Content {
+  animation-timing-function: cubic-bezier(0.18, 0.71, 0.11, 1);
+  animation-duration: 0.8s;
+  transition: all  0.8s cubic-bezier(0.18, 0.71, 0.11, 1);
+}
+}
+
 @media only screen and (min-width: 375px) {
   .ReactModal_Drawer_inner_top h1,
   .Modal_remove_btn,
@@ -301,3 +314,4 @@
     justify-content: flex-start;
   }
 }
+

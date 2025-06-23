@@ -87,12 +87,14 @@ const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
     return (
         <>
             <div className='navbar-mobile'>
-                <Link href="/" id='nav-logo'>de ve she dreams</Link>
+                <Link href="/" id='nav-logo'>
+                <Image width={1000} height={1000} src="/logo/logo-m.png" />
+                </Link>
                 <div className="menu-icons">
                     <Link href="/profile">
-                    <Image width={23} height={23} src="/images/user.png" />
+                    <Image className="account-logo" width={23} height={23} src="/images/user.png" />
                     </Link>
-                    <HiOutlineShoppingBag onClick={openModal} size={23} />
+                    <HiOutlineShoppingBag onClick={openModal} className="bag-icon" size={23} />
                     <div id='menu-btn' onClick={toggleMenu}>
                         <span className="line1m linem"></span>
                         <span className="line2m linem"></span>
@@ -104,6 +106,7 @@ const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
                         <Link href="/lookbook">lookbook</Link>
                         <Link href="/about">about</Link>
                         <Link href="/contact">contact</Link>
+                        {/* <Link href="/profile">Account</Link> */}
                     </div>
                 </div>
             </div>

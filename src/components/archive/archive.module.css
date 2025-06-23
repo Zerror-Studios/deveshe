@@ -142,6 +142,9 @@
   .overlay3a .textContainer h3 {
     font-size: 8vw;
   }
+  .elem1 .overlay3a {
+  justify-content: flex-start;
+}
   .exploreBtn {
     font-size: 8vw;
     margin-bottom: 20px;
