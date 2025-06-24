@@ -48,8 +48,7 @@
 }
 
 
-.nav-link a::after{
-  content: "";
+.nav-link a .hoverline{
   position: absolute;
   left: 0;
   bottom: -5%;
@@ -61,13 +60,13 @@
   transform-origin: left;
 }
 
-.nav-link a:hover::after {
+.nav-link a:hover .hoverline {
   transform: scaleX(1);
   transform-origin: left; 
   transition: transform 0.3s ease;
 }
 
-.nav-link a:not(:hover)::after {
+.nav-link a:not(:hover) .hoverline {
   transform: scaleX(0);
   transform-origin: right;
   transition: transform 0.3s ease;
@@ -124,6 +123,8 @@
 #logo-container {
   position: relative;
   height: 25px;
+  display: flex;
+  align-items: center;
 }
 
 .logo {

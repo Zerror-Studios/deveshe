@@ -1102,16 +1102,20 @@ li {
   transform-origin: center;
 }
 .side-menu-links {
+  user-select: none !important;
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 40px;
   padding: 20px;
+  justify-content: space-between;
+  height: 90%;
 }
+
 .side-menu-links a,
 .side-menu-links span {
   color: #000;
-  line-height: 0;
+  line-height: 1;
   text-decoration: none;
   text-transform: capitalize;
   font-size: calc(14.81px - 0.22vw);
@@ -1128,9 +1132,53 @@ li {
   background-color: white;
   z-index: 9;
   display: flex;
-  align-items: flex-start;
-  padding-top: 150px;
+  flex-direction: column;
+  padding-top: 50px;
   clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+}
+.nav-top{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+}
+/* .nav-contact{
+  margin-top: 15vh;
+} */
+.nav-wrapper{
+  display: flex;
+  gap: 30px;
+  margin-top: 3vh;
+  width: 100%;
+  justify-content: space-between;
+  align-items: end;
+}
+.login-nav {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  height: 50px;
+   border-radius: 50px;
+}
+
+
+.login-nav p{
+  font-size: calc(14.81px - 0.22vw);
+    font-weight: 500;
+    font-family: var(--primary-font-Hel);
+}
+.nav-contact p{
+  font-size: calc(14.81px - 0.22vw);
+    font-weight: 500;
+    font-family: var(--primary-font-Hel);
+    line-height: 1.4;
+}
+.nav-contact p:nth-child(1){
+  text-transform: capitalize;
+  margin-bottom: 10px;
+  opacity: .6;
 }
 
 #nav-logo {
@@ -1143,9 +1191,11 @@ li {
   z-index: 10;
   text-decoration: none;
   color: black;
+  width: 100%;
+  gap: 8px;
 }
 #nav-logo img{
-  width: 100%;
+  width: auto;
   height: 4vw;
 }
 .menu-icons {
@@ -1218,6 +1268,30 @@ li {
 } */
 /* header end */
 
+
+.nav-social-icons{
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+  
+}
+.nav-social-icons .nav-s-icon{
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+.nav-social-icons .nav-s-icon svg{
+  fill: black !important;
+  width: 14px;
+  height: 14px;
+}
+.nav-social-icons .nav-s-icon svg path{
+  fill: black;
+}
 /* Extra Small Devices (Phones) */
 @media (max-width: 576px) {
   #menu-btn {
