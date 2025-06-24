@@ -5,6 +5,7 @@ import gsap from "gsap";
 import Modal from "./Modal";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
+import { useRouter } from "next/router";
 gsap.registerPlugin(ScrollTrigger);
 
 const Navbar = ({ openBag, setOpenBag }) => {
@@ -17,6 +18,7 @@ const Navbar = ({ openBag, setOpenBag }) => {
     setModalIsOpen(false);
     setOpenBag(false);
   }
+  const router = useRouter();
   useEffect(() => {
     if (window.innerWidth < 576) return;
 
@@ -48,6 +50,26 @@ const Navbar = ({ openBag, setOpenBag }) => {
         xPositions.push(currentX);
         currentX += width + spacing;
       });
+
+      if (router.pathname !== "/") {
+        gsap.set("#logo-container img", { filter: "invert(0)" });
+        gsap.set(".nav-link a", { color: "#000" });
+        gsap.set("#nav", { backgroundColor: "#fff" });
+        gsap.set("#nav-btns svg", { stroke: "#000" });
+        gsap.set("#nav-line", { backgroundColor: "#000" });
+        gsap.set(".logo", { position: "static" });
+        gsap.set("#logo-container", { gap: "13px" });
+        gsap.set(".hoverline", { backgroundColor: "#000" });
+        return;
+      }
+
+      gsap.set("#logo-container img", { filter: "invert(1)" });
+      gsap.set(".nav-link a", { color: "#fff" });
+      gsap.set("#nav", { backgroundColor: "transparent" });
+      gsap.set("#nav-btns svg", { stroke: "#fff" });
+      gsap.set("#nav-line", { backgroundColor: "#fff" });
+      gsap.set(".logo", { position: "absolute" });
+      gsap.set(".hoverline", { backgroundColor: "#fff" });
 
       const finalWidth = currentX;
       logoContainer.style.width = `${xPositions[3] || finalWidth}px`;
@@ -85,6 +107,15 @@ const Navbar = ({ openBag, setOpenBag }) => {
           "#nav",
           {
             backgroundColor: "white",
+            ease: "power1.out",
+            duration: 0.3,
+          },
+          "s"
+        )
+        .to(
+          ".hoverline",
+          {
+            backgroundColor: "#000",
             ease: "power1.out",
             duration: 0.3,
           },
@@ -135,7 +166,7 @@ const Navbar = ({ openBag, setOpenBag }) => {
       ScrollTrigger.killAll();
       gsap.globalTimeline.clear();
     };
-  }, []);
+  }, [router.asPath]);
 
   return (
     <>
