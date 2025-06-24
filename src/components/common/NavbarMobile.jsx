@@ -111,8 +111,34 @@ const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
     <>
       <div className="navbar-mobile">
         <Link href="/" id="nav-logo">
-          <Image width={1000} height={1000} src="/logo/logo-m.png" />
+          <Image
+            width={1000}
+            height={1000}
+            src="/logo/d.png"
+            alt="D"
+          />
+          <Image
+            width={1000}
+            height={1000}
+            src="/logo/v.png"
+            alt="V"
+          />
+          <Image
+            width={1000}
+            height={1000}
+            src="/logo/s.png"
+            alt="S"
+          />
+          <Image
+            width={1000}
+            height={1000}
+            src="/logo/m.png"
+            alt="M"
+          />
         </Link>
+        {/* <Link href="/" id="nav-logo">
+          <Image width={1000} height={1000} src="/logo/logo-m.png" />
+        </Link> */}
         <div className="menu-icons">
           <Link href="/profile">
             <Image
@@ -134,13 +160,13 @@ const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
         </div>
         <div id="side-navbar">
           <div className="side-menu-links">
-            <Link href="/">shop</Link>
+            <div className="nav-top">
+                <Link href="/">shop</Link>
             <Link href="/lookbook">lookbook</Link>
             <Link href="/about">about</Link>
             <Link href="/contact">contact</Link>
-           <div className="nav-wrapper">
-             <Link href="/login" className="login-nav">
-                <p>Login / Signup</p>
+            <Link href="/login" className="login-nav">
+              <p>Login / Signup</p>
             </Link>
             <div className="nav-social-icons">
               <span className="nav-s-icon">
@@ -208,14 +234,16 @@ const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
                 </svg>
               </span>
             </div>
-            <div className="nav-contact">
-              <p>contact us</p>
-              <p>
-                info@deveshe.com <br />
-                +91893990000
-              </p>
             </div>
-           </div>
+            <div className="nav-wrapper">
+              <div className="nav-contact">
+                <p>contact us</p>
+                <p>
+                  info@deveshe.com <br />
+                  +91893990000
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -1102,16 +1102,19 @@ li {
   transform-origin: center;
 }
 .side-menu-links {
+  user-select: none;
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 40px;
   padding: 20px;
+  justify-content: space-between;
+  height: 85%;
 }
 .side-menu-links a,
 .side-menu-links span {
   color: #000;
-  line-height: 0;
+  line-height: 1;
   text-decoration: none;
   text-transform: capitalize;
   font-size: calc(14.81px - 0.22vw);
@@ -1129,12 +1132,17 @@ li {
   z-index: 9;
   display: flex;
   flex-direction: column;
-  padding-top: 150px;
+  padding-top: 90px;
   clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
 }
-.nav-contact{
-  margin-top: 15vh;
+.nav-top{
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
+/* .nav-contact{
+  margin-top: 15vh;
+} */
 .nav-wrapper{
   display: flex;
   flex-direction: column;
@@ -1182,9 +1190,11 @@ li {
   z-index: 10;
   text-decoration: none;
   color: black;
+  width: 100%;
+  gap: 8px;
 }
 #nav-logo img{
-  width: 100%;
+  width: auto;
   height: 4vw;
 }
 .menu-icons {
