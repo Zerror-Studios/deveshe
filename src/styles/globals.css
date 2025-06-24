@@ -1115,13 +1115,17 @@ li {
 .side-menu-links a,
 .side-menu-links span {
   color: #000;
-  line-height: 1;
   text-decoration: none;
   text-transform: capitalize;
-  font-size: calc(14.81px - 0.22vw);
-  font-weight: 500;
-  font-family: var(--primary-font-Hel);
   cursor: pointer;
+  font-size: calc(14.81px - 0.22vw);
+  font-family: var(--primary-font-Hel);
+  line-height: 1.4;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
 }
 #side-navbar {
   width: 100%;
@@ -1159,7 +1163,7 @@ li {
   width: 100%;
   margin-bottom: 20px;
 }
-.login-nav ._btn_wrapper{
+.login-nav ._btn_wrapper {
   width: 100% !important;
 }
 .login-nav p {
@@ -1169,9 +1173,13 @@ li {
 }
 .nav-contact p {
   font-size: calc(14.81px - 0.22vw);
-  font-weight: 500;
   font-family: var(--primary-font-Hel);
   line-height: 1.4;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
 }
 .nav-contact p:nth-child(1) {
   text-transform: capitalize;
