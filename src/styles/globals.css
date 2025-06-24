@@ -1128,9 +1128,48 @@ li {
   background-color: white;
   z-index: 9;
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
   padding-top: 150px;
   clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+}
+.nav-contact{
+  margin-top: 15vh;
+}
+.nav-wrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 3vh;
+}
+.login-nav {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  height: 50px;
+   border-radius: 50px;
+}
+.login-nav:hover {
+  background-color: black;
+  color: white;
+}
+
+.login-nav p{
+  font-size: calc(14.81px - 0.22vw);
+    font-weight: 500;
+    font-family: var(--primary-font-Hel);
+}
+.nav-contact p{
+  font-size: calc(14.81px - 0.22vw);
+    font-weight: 500;
+    font-family: var(--primary-font-Hel);
+    line-height: 1.4;
+}
+.nav-contact p:nth-child(1){
+  text-transform: capitalize;
+  margin-bottom: 10px;
+  opacity: .6;
 }
 
 #nav-logo {
@@ -1218,6 +1257,29 @@ li {
 } */
 /* header end */
 
+
+.nav-social-icons{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.nav-social-icons .nav-s-icon{
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+.nav-social-icons .nav-s-icon svg{
+  fill: black !important;
+  width: 14px;
+  height: 14px;
+}
+.nav-social-icons .nav-s-icon svg path{
+  fill: black;
+}
 /* Extra Small Devices (Phones) */
 @media (max-width: 576px) {
   #menu-btn {
