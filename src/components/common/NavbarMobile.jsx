@@ -12,6 +12,7 @@ import { VscAccount } from "react-icons/vsc";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Image from "next/image";
 import { ModalContext } from "../context/ModalProvider";
+import Button from "./Button";
 gsap.registerPlugin(ScrollTrigger);
 
 const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
@@ -139,7 +140,7 @@ const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
           <div className="side-menu-links">
             <div className="nav-top">
               <Link href="/login" className="login-nav">
-                <p>Login / Signup</p>
+               <Button className="_btn-width">Login / Signup</Button>
               </Link>
               <Link href="/">shop</Link>
               <Link href="/lookbook">lookbook</Link>

@@ -124,6 +124,9 @@
   padding: 28px;
   font-size: 16px;
 }
+.Modal_cancel_btn svg path{
+  fill: black !important;
+}
 .ReactModal_Drawer_center {
   display: grid;
   grid-template-columns: 130px 1fr;
