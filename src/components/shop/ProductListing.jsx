@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import styles from "./shop.module.css";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -16,6 +16,7 @@ gsap.registerPlugin(ScrollTrigger);
 const ProductListing = () => {
 	const [modalIsOpen, setModalIsOpen] = useContext(ModalContext);
 	const dispatch = useDispatch();
+	const router = useRouter();
 	const [displayedProducts, setDisplayedProducts] = useState([]);
 	const { data, loading, error } = useQuery(GET_PRODUCTS, {
 		variables: {
@@ -26,6 +27,8 @@ const ProductListing = () => {
 			},
 		},
 	});
+
+	console.log(data, " data");
 
 	useGSAP(() => {
 		if (window.innerWidth > 576) return;
@@ -70,11 +73,11 @@ const ProductListing = () => {
 		const handleResize = () => {
 			if (window.innerWidth < 576) {
 				if (data) {
-					setDisplayedProducts(data.getClientSideProducts.products.slice(0, 10));
+					setDisplayedProducts(data?.getClientSideProducts?.products.slice(0, 10));
 				}
 			} else {
 				if (data) {
-					setDisplayedProducts(data.getClientSideProducts.products);
+					setDisplayedProducts(data?.getClientSideProducts?.products);
 				}
 			}
 		};
@@ -90,6 +93,15 @@ const ProductListing = () => {
 			setDisplayedProducts(data.getClientSideProducts.products);
 		}
 	}, [data]);
+
+	// Function to handle navigation to product details with state
+	const handleProductNavigation = (productData) => {
+		// Store product data in localStorage to pass to product details page (persists across refreshes)
+		localStorage.setItem(`product_${productData._id}`, JSON.stringify(productData));
+
+		// Navigate to product details page
+		router.push(`/product?id=${productData._id}`);
+	};
 
 	const handleAddToCart = (index) => {
 		setTimeout(() => {
@@ -123,14 +135,17 @@ const ProductListing = () => {
 	return (
 		<div className={styles.productListing} id="productListing">
 			<div className={styles.leftProCon}>
-				<Link href={`/product?id=${displayedProducts[0]?._id}`}>
+				<div
+					onClick={() => displayedProducts[0] && handleProductNavigation(displayedProducts[0])}
+					style={{ cursor: "pointer" }}
+				>
 					<Image
 						width={1000}
 						height={1000}
 						alt="image"
 						src={displayedProducts[0]?.assets[0]?.path || "/newproduct/BI02.jpg"}
 					/>
-				</Link>
+				</div>
 
 				<div className={styles.productOverlay}>
 					<div className={styles.bagCont}>
@@ -169,9 +184,12 @@ const ProductListing = () => {
 				<div className={styles.rightProConWrap}>
 					{displayedProducts?.slice(1, 11)?.map((productItem, index) => (
 						<div key={index} className={styles.productCard}>
-							<Link href={`/product?id=${productItem?._id}`}>
+							<div
+								onClick={() => handleProductNavigation(productItem)}
+								style={{ cursor: "pointer" }}
+							>
 								<Image width={1000} height={1000} alt="image" src={productItem?.assets[0]?.path} />
-							</Link>
+							</div>
 							<div className={styles.productOverlay}>
 								<div className={styles.bagCont}>
 									<button onClick={() => handleAddToCart(productItem._id)}>

@@ -32,6 +32,14 @@ export const GET_PRODUCTS = gql`
 					stockStatus
 					visibility
 				}
+				productOptions {
+					choices {
+						images
+						name
+					}
+					optionName
+					showInProductPageAs
+				}
 			}
 			totalCount
 		}
