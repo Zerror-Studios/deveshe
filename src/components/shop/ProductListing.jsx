@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import styles from "./shop.module.css";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { useQuery } from "@apollo/client";
@@ -15,6 +15,7 @@ gsap.registerPlugin(ScrollTrigger);
 const ProductListing = () => {
 	const [modalIsOpen, setModalIsOpen] = useContext(ModalContext);
 	const dispatch = useDispatch();
+	const router = useRouter();
 	const [displayedProducts, setDisplayedProducts] = useState([]);
 	const { data, loading, error } = useQuery(GET_PRODUCTS, {
 		variables: {
@@ -26,6 +27,65 @@ const ProductListing = () => {
 		},
 	});
 
+	console.log(data, " data");
+
+	useGSAP(() => {
+		if (window.innerWidth > 576) return;
+		const strip1Height =
+			document.querySelector("#productStrip1").getBoundingClientRect().height / 2;
+		const strip2Height = document.querySelector("#productStrip2").getBoundingClientRect().height;
+		const productContHeight = document.querySelector("#productCont").getBoundingClientRect().height;
+
+		const strip1Value = strip1Height - productContHeight;
+		const strip2Value = strip2Height - productContHeight;
+
+		var tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: "#productListing",
+				scroller: "body",
+				start: "35.3% 65px",
+				end: "35.3% -120%",
+				scrub: 1,
+				// markers: true,
+				pin: true,
+			},
+		});
+
+		tl.to(
+			"#productStrip1",
+			{
+				transform: `translateY(-56%)`,
+				duration: 1.4,
+			},
+			"a"
+		).to(
+			"#productStrip2",
+			{
+				transform: `translateY(-61.5%)`,
+				duration: 1.4,
+			},
+			"a"
+		);
+	}, []);
+
+	useEffect(() => {
+		const handleResize = () => {
+			if (window.innerWidth < 576) {
+				if (data) {
+					setDisplayedProducts(data?.getClientSideProducts?.products.slice(0, 10));
+				}
+			} else {
+				if (data) {
+					setDisplayedProducts(data?.getClientSideProducts?.products);
+				}
+			}
+		};
+
+		handleResize(); // check on mount
+
+		window.addEventListener("resize", handleResize); // update on resize
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
 
 	useEffect(() => {
 		if (data) {
@@ -33,31 +93,40 @@ const ProductListing = () => {
 		}
 	}, [data]);
 
-	const handleAddToCart = (index) => {
-		setTimeout(() => {
-			setModalIsOpen(true);
-		}, 100);
+	// Function to handle navigation to product details with state
+	const handleProductNavigation = (productData) => {
+		// Store product data in localStorage to pass to product details page (persists across refreshes)
+		localStorage.setItem(`product_${productData._id}`, JSON.stringify(productData));
 
-		const colors = ["Black", "Brown", "Grey", "White"];
-		const sizes = ["S", "M", "L", "XL"];
-
-		// generating random varient for now
-		const vararray = [
-			{
-				color: colors[Math.floor(Math.random() * colors.length)],
-				size: sizes[Math.floor(Math.random() * sizes.length)],
-			},
-		];
-		dispatch(
-			addtocart({
-				name: "Belted Leather Jacket",
-				img: displayedProducts[index]?.assets[0]?.path,
-				productid: index,
-				qty: 1,
-				variants: vararray,
-			})
-		);
+		// Navigate to product details page
+		router.push(`/product?id=${productData._id}`);
 	};
+
+  const handleAddToCart = (index) => {
+    setTimeout(() => {
+      setModalIsOpen(true);
+    }, 100);
+
+    const colors = ["Black", "Brown", "Grey", "White"];
+    const sizes = ["S", "M", "L", "XL"];
+
+    // generating random varient for now
+    const vararray = [
+      {
+        color: colors[Math.floor(Math.random() * colors.length)],
+        size: sizes[Math.floor(Math.random() * sizes.length)],
+      },
+    ];
+    dispatch(
+      addtocart({
+        name: "Belted Leather Jacket",
+        img: displayedProducts[index]?.assets[0]?.path,
+        productid: index,
+        qty: 1,
+        variants: vararray,
+      })
+    );
+  };
 
 	if (loading) {
 		return <ProductLoader />;
@@ -65,18 +134,21 @@ const ProductListing = () => {
 	return (
 		<div className={styles.productListing} id="productListing">
 			<div className={styles.leftProCon}>
-				<Link href={`/product?id=${displayedProducts[0]?._id}`}>
+				<div
+					onClick={() => displayedProducts[0] && handleProductNavigation(displayedProducts[0])}
+					style={{ cursor: "pointer" }}
+				>
 					<Image
 						width={1000}
 						height={1000}
 						alt="image"
 						src={displayedProducts[0]?.assets[0]?.path || "/newproduct/BI02.jpg"}
 					/>
-				</Link>
+				</div>
 
 				<div className={styles.productOverlay}>
 					<div className={styles.bagCont}>
-						<button onClick={() => handleAddToCart(displayedProducts[0]?._id)}>
+						<button onClick={() => handleAddToCart(displayedProducts[0]._id)}>
 							<svg
 								class="icon-cart"
 								width="15"
@@ -111,9 +183,12 @@ const ProductListing = () => {
 				<div className={styles.rightProConWrap}>
 					{displayedProducts?.slice(1, 11)?.map((productItem, index) => (
 						<div key={index} className={styles.productCard}>
-							<Link href={`/product?id=${productItem?._id}`}>
+							<div
+								onClick={() => handleProductNavigation(productItem)}
+								style={{ cursor: "pointer" }}
+							>
 								<Image width={1000} height={1000} alt="image" src={productItem?.assets[0]?.path} />
-							</Link>
+							</div>
 							<div className={styles.productOverlay}>
 								<div className={styles.bagCont}>
 									<button onClick={() => handleAddToCart(productItem._id)}>

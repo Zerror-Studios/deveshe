@@ -9,6 +9,7 @@ const nextConfig = {
 			"ark8.net",
 			"localhost",
 			"manifest-dev-bucket.s3.ap-south-1.amazonaws.com",
+			"cdn.deveshedreams.com",
 		],
 	},
 };
