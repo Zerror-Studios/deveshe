@@ -14,7 +14,7 @@ const Section3 = () => {
           start: "top bottom",     // element top hits bottom of viewport
           end: "bottom top",          // element top reaches top of viewport
           scrub: 1,
-          // markers: true,    
+          markers: false,    
         },
       });
 
