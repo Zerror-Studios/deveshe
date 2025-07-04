@@ -1447,17 +1447,33 @@ export const footerLinks = {
     { name: "About", path: "/about" },
   ],
   "Customer Care": [
-    { name: "Contact", path: "/Contact" },
-    { name: "Returns & Exchanges", apth: "/Returns&Exchanges" },
-    { name: "General Sizing", path: "/GeneralSizing" },
-    "FAQs",
+    {
+    name:"Privacy Policy",
+    path:"privacy-policy"
+  },
+   {
+    name:"Shipping & Returns",
+    path:"/shipping-returns"
+  },
+   {
+    name:"Terms Of Service",
+    path:"/terms-of-service"
+  }
   ],
   Social: [{ name: "Instagram", path: "/Instagram" }],
 };
 
 export const footerNavlinks = [
-  "Privacy Policy",
-  "Terms and Conditions",
-  "Accessibility",
-  "Credits",
-];
+  {
+    name:"Privacy Policy",
+    path:"privacy-policy"
+  },
+   {
+    name:"Shipping & Returns",
+    path:"/shipping-returns"
+  },
+   {
+    name:"Terms Of Service",
+    path:"/terms-of-service"
+  }
+]

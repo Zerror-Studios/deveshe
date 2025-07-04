@@ -18,23 +18,12 @@ const Footer = () => {
                 >
                   <p className="">{section}</p>
                   <ul>
-                    {/* {footerLinks[section].map((link, linkIndex) => (
-                      <li
-                        key={linkIndex}
-                        className="_list-links _list-links-redirect links"
-                      >
-                        <Link href={""} className="footer_links links">
-                          <LinksDot>{link}</LinksDot>
-                        </Link>
-                      </li>
-                    ))} */}
-
                     {footerLinks[section].map((link, linkIndex) => (
                       <li
                         key={linkIndex}
                         className="_list-links _list-links-redirect"
                       >
-                        <Link href={""} passHref className="footer_links links">
+                        <Link href={link.path} passHref className="footer_links links">
                           <LinksDot>{link.name}</LinksDot>
                         </Link>
                       </li>
@@ -56,35 +45,15 @@ const Footer = () => {
       <div className="Footer_SocialLinks_cntr">
         <nav aria-label="Additional navigation links">
           <ul className="Footer_SocialLinks_bottom">
-            {footerNavlinks.map((items, id) => {
+            {footerNavlinks.map((item, id) => {
               return (
                 <li key={id} className="">
-                  <Link href={""} className="links">
-                    <linksDot>{items}</linksDot>
+                  <Link href={item.path} className="links">
+                    <linksDot>{item.name}</linksDot>
                   </Link>
                 </li>
               );
             })}
-            {/* <li className="">
-              <Link href={""} className="links">
-                Privacy Policy
-              </Link>
-            </li>
-            <li className="">
-              <Link href={""} className="links">
-                Terms and Conditions
-              </Link>
-            </li>
-            <li className="">
-              <Link href={""} className="links">
-                Accessibility
-              </Link>
-            </li>
-            <li className="">
-              <Link href={""} className="links">
-                Credits
-              </Link>
-            </li> */}
           </ul>
         </nav>
       </div>
