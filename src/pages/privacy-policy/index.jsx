@@ -1,7 +1,10 @@
+import SeoHeader from "@/components/seo/SeoHeader";
 import React from "react";
 
-const privacyPolicy = () => {
+const privacyPolicy = ({meta}) => {
   return (
+   <>
+   <SeoHeader meta={meta} />
     <div id="legal-page">
       <h2>Privacy Policy</h2>
       <div className="legal-container">
@@ -70,7 +73,22 @@ const privacyPolicy = () => {
         </p>
       </div>
     </div>
+   </>
   );
 };
 
 export default privacyPolicy;
+
+
+export async function getStaticProps() {
+  const meta = {
+    title: "Privacy Policy – DeVeSheDreams",
+    description:
+      "Learn how DeVeSheDreams collects, uses, and protects your personal information while shopping with us.",
+    keywords:
+      "privacy policy, personal data, data protection, DeVeSheDreams privacy",
+    author: "DeVeSheDreams",
+    robots: "index,follow",
+  };
+  return { props: { meta } };
+}

@@ -17,8 +17,9 @@ import {
 } from "../../../api_fetch/admin/Checkout";
 import { FinalPrice } from "../../../api_fetch/admin/Cart";
 import Link from "next/link";
+import SeoHeader from "@/components/seo/SeoHeader";
 
-const Checkout2 = () => {
+const Checkout2 = ({meta}) => {
   const router = useRouter();
   const cartdata = useSelector((state) => state.cart);
   const [user, setUser] = useState(null);
@@ -409,6 +410,7 @@ const Checkout2 = () => {
 
   return (
     <>
+    <SeoHeader meta={meta} />
       <div
         className="_btn_wrapper _btn_height _w-full back bg-white"
         onClick={() => {
@@ -1030,3 +1032,17 @@ const Checkout2 = () => {
 };
 
 export default Checkout2;
+
+
+export async function getStaticProps() {
+  const meta = {
+    title: "Checkout – DeVeSheDreams",
+    description:
+      "Review your cart, enter shipping details, and complete your DeVeSheDreams order securely.",
+    keywords:
+      "checkout, DeVeSheDreams cart, order process, shipping information, payment",
+    author: "DeVeSheDreams",
+    robots: "noindex,follow",
+  };
+  return { props: { meta } };
+}

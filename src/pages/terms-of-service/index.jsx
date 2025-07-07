@@ -1,7 +1,10 @@
+import SeoHeader from "@/components/seo/SeoHeader";
 import React from "react";
 
-const TermsOfService = () => {
+const TermsOfService = ({meta}) => {
   return (
+   <>
+   <SeoHeader meta={meta} />
     <div id="legal-page">
       <h2>Terms Of Service</h2>
       <div className="legal-container">
@@ -61,7 +64,22 @@ const TermsOfService = () => {
         </p>
       </div>
     </div>
+   </>
   );
 };
 
 export default TermsOfService;
+
+
+export async function getStaticProps() {
+  const meta = {
+    title: "Terms of Service – DeVeSheDreams",
+    description:
+      "Read the terms and conditions that govern your use of DeVeSheDreams. Understand your rights and responsibilities.",
+    keywords:
+      "terms of service, DeVeSheDreams terms, conditions, user agreement, policies",
+    author: "DeVeSheDreams",
+    robots: "index,follow",
+  };
+  return { props: { meta } };
+}

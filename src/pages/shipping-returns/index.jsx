@@ -1,7 +1,10 @@
+import SeoHeader from "@/components/seo/SeoHeader";
 import React from "react";
 
-const shippingReturns = () => {
+const shippingReturns = ({meta}) => {
   return (
+    <>
+    <SeoHeader meta={meta} />
     <div id="legal-page">
       <h2>Shipping & Returns</h2>
       <div className="legal-container">
@@ -28,7 +31,22 @@ const shippingReturns = () => {
         </ul>
       </div>
     </div>
+    </>
   );
 };
 
 export default shippingReturns;
+
+
+export async function getStaticProps() {
+  const meta = {
+    title: "Shipping & Returns – DeVeSheDreams",
+    description:
+      "Get information about shipping timelines, delivery charges, and return policies at DeVeSheDreams.",
+    keywords:
+      "shipping policy, return policy, delivery info, DeVeSheDreams returns, exchange policy",
+    author: "DeVeSheDreams",
+    robots: "index,follow",
+  };
+  return { props: { meta } };
+}

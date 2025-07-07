@@ -4,19 +4,34 @@ import Section6 from "@/components/about/Section6";
 import Section7 from "@/components/about/Section7";
 import Nails_Cntr from "@/components/about/Nails_Cntr";
 import HomeSlider from "@/components/HomeSlider/HomeSlider";
+import SeoHeader from "@/components/seo/SeoHeader";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function About() {
+export default function About({ meta }) {
   return (
     <>
+      <SeoHeader meta={meta} />
       <main>
-        <HomeSlider/>
+        <HomeSlider />
         <Nails_Cntr />
-        <Section5/>
-        <Section6/>
-        <Section7/>
+        <Section5 />
+        <Section6 />
+        <Section7 />
       </main>
     </>
   );
+}
+
+export async function getStaticProps() {
+  const meta = {
+    title: "About – The Story of DeVeSheDreams",
+    description:
+      "Born from the mind of a passionate daydreamer, DeVeSheDreams is a Mumbai-based fashion brand shaped by global influences and creative collaborations. Learn about our vision, founder, and artistic journey.",
+    keywords:
+      "about DeVeSheDreams, fashion brand story, designer background, Parsons School of Design, Mumbai fashion",
+    author: "DeVeSheDreams",
+    robots: "index,follow",
+  };
+  return { props: { meta } };
 }
