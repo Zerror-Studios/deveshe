@@ -71,7 +71,7 @@
   position: relative;
   z-index: 2;
   font-family: font2;
-  font-size: 9vw;
+  font-size: 8vw;
   line-height: 0.8;
   text-transform: uppercase;
   white-space: nowrap;
@@ -265,7 +265,7 @@
   align-items: center;
   flex-direction: column;
   justify-content: space-between;
-  padding-top: 200px;
+  padding-top: 180px;
   padding-bottom: 80px;
   text-align: center;
   background-color: rgba(0, 0, 0, 0.17);
@@ -274,7 +274,7 @@
 .shopSection3 .overlay3 h2 {
   color: rgb(246,178,183);
   font-family: font2;
-  font-size: 9vw;
+  font-size: 8vw;
   line-height: 0.8;
   text-transform: uppercase;
   white-space: nowrap;
@@ -365,7 +365,7 @@
 }
 .shopSection4 h2 {
   font-family: font2;
-  font-size: 9vw;
+  font-size: 8vw;
   line-height: 0.8;
   text-transform: uppercase;
   white-space: nowrap;
@@ -488,7 +488,7 @@
 
 .shopSection5 .overlay5 h2 {
   font-family: font2;
-  font-size: 9vw;
+  font-size: 8vw;
   line-height: 0.8;
   text-transform: uppercase;
   white-space: nowrap;
