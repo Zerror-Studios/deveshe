@@ -76,6 +76,8 @@ const Section2 = () => {
       if (btnEl) btnEl.addEventListener("mouseenter", enterHandler);
 
       // Strip animation
+      const isMobile = window.innerWidth < 576;
+
       const tl2 = gsap.timeline({
         scrollTrigger: {
           trigger: "#section2-bottom-shop",
@@ -86,10 +88,13 @@ const Section2 = () => {
         },
       });
 
+      const strip1Y = isMobile ? -100 : -200;
+      const strip2Y = isMobile ? -100 : -200;
+
       tl2.fromTo(
         "#strip1-shop",
         {
-          y: -300,
+          y: strip1Y,
           x: -300,
           rotation: -25,
           scale: 0.8,
@@ -108,7 +113,7 @@ const Section2 = () => {
       tl2.fromTo(
         "#strip2-shop",
         {
-          y: -300,
+          y: strip2Y,
           x: 300,
           rotation: 25,
           scale: 0.8,
