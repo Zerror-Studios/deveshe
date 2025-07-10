@@ -88,13 +88,13 @@ const Section3 = () => {
       />
       <div className={styles.overlay3}>
         <div id="title-main-wrap">
-          <h2>Discover New</h2>
-          <h2>Collection!</h2>
+          <h2>Check out the </h2>
+          <h2>new collection</h2>
         </div>
         <div className={styles.Section33Btm}>
           <p>
-            Fashion that feels like you <br />
-            expressive, bold, and one of a kind.
+            Fashion that feels like you. <br />
+            Dopamine dressing for everday.
           </p>
 
           <h3>
@@ -115,8 +115,7 @@ const Section3 = () => {
                 alt="image"
               />
               <p>
-                Limited-edition drops with <span>soul</span>. Made in collab,
-                made to stand out.
+                From office to OOO
               </p>
             </div>
             <div className={styles.imgCardSec3} id="imgCardSec32">
@@ -134,7 +133,7 @@ const Section3 = () => {
             <Image
               width={1000}
               height={1000}
-              src="https://emmpo.com/assets/0a541af8d51a8cd9d385.png"
+              src="/shop/arrow.png"
               alt="image"
             />
           </div>

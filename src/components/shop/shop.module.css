@@ -78,7 +78,7 @@
   letter-spacing: -2px;
 }
 .shopSection2Top h2:nth-child(2) span:nth-child(-n+7) {
-  color: #7546ff;
+  color: #FE0000;
 }
 .shopSection2Top h2 span {
   color: black;
@@ -93,7 +93,7 @@
 }
 .centerCard {
   width: 27vw;
-  background-color: #f4fa26;
+  background-color: rgb(246,178,183);
   margin: 0 auto;
   padding: 1.2vw;
 }
@@ -121,7 +121,7 @@
   transform: rotate(-16deg);
   padding: 1vw;
   padding-bottom: 3vw;
-  background-color:#f7f7f7;
+  background-color:#e9e9e9;
 }
 .leftCard img {
   width: 100%;
@@ -134,7 +134,7 @@
   top: -15%;
   right: 8%;
   padding: 1vw;
-  background-color:#f7f7f7;
+  background-color:#e9e9e9;
   transform: rotate(17deg);
 }
 .rightCard img {
@@ -168,7 +168,7 @@
   justify-content: center;
   align-items: center;
   gap: .5vw;
-  color: #7546ff;
+  color: #FE0000;
   font-family: font2;
   font-size: 3.5vw;
   line-height: 0.8;
@@ -200,7 +200,7 @@
   line-height: 1;
   text-transform: uppercase;
   white-space: nowrap;
-  color: #7546ff;
+  color: #FE0000;
 }
 
 .strip1 {
@@ -208,7 +208,7 @@
   bottom: -17%;
   left: -5%;
   width: 14.5vw;
-  background-color: #f7f7f7;
+  background-color: #e9e9e9;
   transform: rotate(-25deg);
   display: flex;
   flex-direction: column;
@@ -225,7 +225,7 @@
   bottom: -17%;
   right: -5%;
   width: 14.5vw;
-  background-color: #f7f7f7;
+  background-color: #e9e9e9;
   transform: rotate(25deg);
   display: flex;
   flex-direction: column;
@@ -272,7 +272,7 @@
 }
 
 .shopSection3 .overlay3 h2 {
-  color: #f4fa26;
+  color: rgb(246,178,183);
   font-family: font2;
   font-size: 9vw;
   line-height: 0.8;
@@ -355,7 +355,7 @@
 }
 
 .imageContainer2 .imgCardSec3 p span {
-  color: #7546ff;
+  color: #FE0000;
 }
 
 .shopSection4 {
@@ -389,7 +389,7 @@
   align-items: center;
 }
 .topContHeader span {
-  color: #7546ff;
+  color: #FE0000;
   display: inline-block;
   transform-origin: top;
 }
@@ -409,7 +409,7 @@
   font-family: font2;
   font-size: 2vw;
   line-height: 0.9;
-  color: #7546ff;
+  color: #FE0000;
   margin-bottom: 1vw;
 }
 
@@ -482,7 +482,7 @@
   font-family: font2;
   font-size: 1.9vw;
   text-transform: capitalize;
-  color: #7546ff;
+  color: #FE0000;
   margin-top: 1vw;
 }
 
@@ -506,7 +506,7 @@
 
 .shopSection6 {
   width: 100%;
-  height: 120vh;
+  height: 85vh;
   position: relative;
   text-align: center;
   display: flex;
@@ -532,7 +532,7 @@
   transform-origin: top;
 }
 .shopSection6 h2:nth-child(2) span{
-  color: #7546ff;
+  color: #FE0000;
 }
 .shopSection6 h2:nth-child(2) span:nth-last-child(-n+2),
 .shopSection6 h2:nth-child(2) span:nth-child(-n+2) {
@@ -567,7 +567,7 @@
   font-family: font2;
   font-size: 2vw;
   line-height: 0.9;
-  color: #7546ff;
+  color: #FE0000;
   margin-bottom: 1vw;
 }
 
@@ -586,7 +586,7 @@
   width: 14vw;
   height: auto;
   padding: 1vw;
-  background-color: #F7F7F7;
+  background-color: #e9e9e9;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -610,7 +610,7 @@
   transform: rotate(20deg) translateX(55%) translateY(-20%);
   position: relative;
   z-index: 2;
-  background-color: yellow;
+  background-color: rgb(246,178,183);
   display: flex;
   justify-content: center;
   padding: 1vw;
@@ -627,7 +627,7 @@
   bottom: -5%;
   left: -5%;
   transform: rotate(-20deg);
-  background-color: #F7F7F7;
+  background-color:#e9e9e9 ;
   padding: 1vw;
 }
 .cardSm img {
@@ -707,9 +707,9 @@
 }
 .leftProCon {
   position: sticky;
-  top: 0;
+  top: 60px;
   width: 50%;
-  height: 100vh;
+  height: calc(100vh - 60px);
   border-right: 1px solid black;
   overflow: hidden;
 }

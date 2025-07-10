@@ -26,7 +26,7 @@ const Section3 = () => {
 				scrollTrigger: {
 					trigger: "#archiveSection3",
 					scroller: "body",
-					start: "top -0%",
+					start: "top 60px",
 					end: "top -300%",
 					pin: true,
 					scrub: 1,

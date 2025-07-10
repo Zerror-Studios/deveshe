@@ -74,14 +74,14 @@ const Section4 = () => {
           </p>
         </div>
       </div>
-      <div className={styles.bottomCont}>
+      {/* <div className={styles.bottomCont}>
         <Image
           width={1000}
           height={1000}
           src="https://emmpo.com/assets/ce3c8196da068a1ba841.png"
           alt="image"
         />
-      </div>
+      </div> */}
     </div>
   );
 };

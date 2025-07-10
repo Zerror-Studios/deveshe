@@ -20,8 +20,6 @@ useEffect(() => {
   }
 
   splitText("#title-main-wrap5 h2");
-  splitText("#title-main-wrap51");
-
   const ctx = gsap.context(() => {
     const tl1 = gsap.timeline({
       scrollTrigger: {
@@ -35,27 +33,6 @@ useEffect(() => {
 
     tl1.fromTo(
       "#title-main-wrap5 h2 span",
-      { rotateX: "90deg" },
-      {
-        duration: 0.8,
-        rotateX: "0deg",
-        stagger: 0.05,
-        ease: "bounce.out",
-      }
-    );
-
-    const tl2 = gsap.timeline({
-      scrollTrigger: {
-        trigger: "#title-main-wrap51",
-        start: "top 70%",
-        end: "top 50%",
-        // scrub: true,
-        // markers: true,
-      },
-    });
-
-    tl2.fromTo(
-      "#title-main-wrap51 span",
       { rotateX: "90deg" },
       {
         duration: 0.8,
@@ -96,7 +73,6 @@ useEffect(() => {
             <p>follow my instagram</p>
           </div>
         </div>
-        <h2 id="title-main-wrap51">Hey there!</h2>
       </div>
     </div>
   );

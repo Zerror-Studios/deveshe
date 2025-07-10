@@ -63,12 +63,6 @@ const Section6 = () => {
         <h2>discovering your</h2>
         <h2>style</h2>
       </div>
-      <Image
-        height={1000}
-        width={1000}
-        alt="image"
-        src="https://emmpo.com/assets/af3020a78265de970759.png"
-      />
     </div>
   );
 };

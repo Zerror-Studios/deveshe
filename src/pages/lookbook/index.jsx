@@ -1,5 +1,4 @@
 import React from "react";
-import Section2 from "@/components/archive/Section2";
 import Section3 from "@/components/archive/Section3";
 import styles from "@/components/archive/archive.module.css";
 import SeoHeader from "@/components/seo/SeoHeader";
@@ -9,7 +8,6 @@ const Lookbook = ({ meta }) => {
     <>
       <SeoHeader meta={meta} />
       <div className={styles.archiveWrapper}>
-        <Section2 />
         <Section3 />
       </div>
     </>
