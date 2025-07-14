@@ -31,11 +31,14 @@ const Section7 = () => {
       <div className={styles.rightCardCont}>
         <div className={styles.cardLg}>
           <Image
+          className={styles.cardIg}
             width={1000}
             height={1000}
             src="/about/about1.jpg"
             alt="card"
           />
+          
+          <Image className={styles.cardCorner}  width={1000} height={1000} src="/corner.png" />
         </div>
         <div className={styles.cardSm}>
           <Image
