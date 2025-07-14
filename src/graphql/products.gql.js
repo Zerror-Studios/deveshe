@@ -74,3 +74,56 @@ export const GET_PRODUCT_BY_ID = gql`
 		}
 	}
 `;
+export const GET_CLIENT_SIDE_PRODUCT_BY_ID = gql`
+	query GetClientSideProductById($getClientSideProductByIdId: ID!) {
+		getClientSideProductById(id: $getClientSideProductByIdId) {
+			_id
+			additionalInfo {
+				description
+				title
+			}
+			margin
+			discountedPrice
+			createdAt
+			costOfGoods
+			categoryIds
+			categories {
+				_id
+				name
+			}
+			description
+			name
+			price
+			productOptions {
+				optionName
+				choices {
+					images
+					name
+				}
+				showInProductPageAs
+			}
+			assets {
+				_id
+				path
+				type
+				altText
+			}
+			saleType
+			saleValue
+			status
+			variants {
+				priceDifference
+				shippingWeight
+				selectedOptions
+				status
+				variantPrice
+				variantCostOfGoods
+			}
+			ribbon {
+				name
+				ribbonId
+			}
+			profit
+		}
+	}
+`;
