@@ -1,10 +1,7 @@
 import Button from "@/components/common/Button";
 import Footer from "@/components/common/Footer";
-import { dbProdData, ShopCardDetailsHome } from "@/helpers";
-import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { useDispatch, useSelector } from "react-redux";
-import { editProduct } from "../../../api_fetch/admin/Product";
+import { useDispatch } from "react-redux";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -16,15 +13,9 @@ import AnimBtn from "@/components/common/AnimBtn";
 import { ModalContext } from "@/components/context/ModalProvider";
 import Image from "next/image";
 import { useQuery } from "@apollo/client";
-import { GET_PRODUCT_BY_ID, GET_PRODUCTS } from "@/graphql/products.gql";
+import { GET_CLIENT_SIDE_PRODUCT_BY_ID, GET_PRODUCTS } from "@/graphql/products.gql";
 gsap.registerPlugin(ScrollTrigger);
 const ProductPage = () => {
-  const [product, setProduct] = useState({});
-  const [images, setImages] = useState([
-    "/newproduct/BI07.jpg",
-    "/newproduct/BI072.jpg",
-    "/newproduct/BI071.jpg",
-  ]);
   const router = useRouter();
   const dispatch = useDispatch();
   const { id } = router.query;
@@ -33,11 +24,17 @@ const ProductPage = () => {
   const [enableAddToCart, setEnableAddToCart] = useState(false);
   const [selectedVarients, setSelectedVariants] = useState({});
   const [finalPrice, setFinalPrice] = useState(0);
-  const [desc, setDesc] = useState("");
   const [openBag, setOpenBag] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useContext(ModalContext);
 
-  const { data, loading, error } = useQuery(GET_PRODUCTS, {
+  const { data: productData, loading: productLoading, error: productError } = useQuery(GET_CLIENT_SIDE_PRODUCT_BY_ID, {
+    variables: {
+      getClientSideProductByIdId: id,
+    },
+    skip: !id,
+  });
+
+  const { data: productsData, loading, error } = useQuery(GET_PRODUCTS, {
     variables: {
       offset: 0,
       limit: 5,
@@ -47,178 +44,74 @@ const ProductPage = () => {
     },
   });
 
-  const fetchData = async () => {
-    try {
-      if (id) {
-        // First, try to get product data from localStorage (passed from ProductListing)
-        const storedProductData = localStorage.getItem(`product_${id}`);
+  const product = productData?.getClientSideProductById;
+  const images = product?.assets?.map(asset => asset.path) || [];
+  const desc = product?.description || "";
 
-        if (storedProductData) {
-          // Use the product data passed from ProductListing
-          const productData = JSON.parse(storedProductData);
-          setProduct(productData);
 
-          // Set images from assets
-          if (productData.assets && productData.assets.length > 0) {
-            setImages(productData.assets.map((asset) => asset.path));
-          }
-
-          // Set price - handle both discountedPrice and price from GraphQL response
-          if (productData.discountedPrice && productData.discountedPrice > 0) {
-            setFinalPrice(productData.discountedPrice);
-          } else {
-            setFinalPrice(productData.price);
-          }
-
-          // Set description
-          if (productData.description) {
-            setDesc(productData.description);
-          }
-
-          // Process variants and productOptions from GraphQL API structure
-          if (
-            productData.productOptions &&
-            productData.productOptions.length > 0
-          ) {
-            // Update product with original data
-            setProduct((prev) => ({
-              ...prev,
-              variantsData: productData.variantsData || [],
-              variantsDetails: productData.variantsDetails || [],
-              productOptions: productData.productOptions,
-            }));
-
-            // Set default selections for all product options
-            const defaultSelections = {};
-
-            productData.productOptions.forEach((option) => {
-              if (option.choices && option.choices.length > 0) {
-                // Set default selection for each option type
-                defaultSelections[option.optionName] = option.choices[0].name;
-              }
-            });
-
-            setSelectedVariants(defaultSelections);
-
-            // Set default color selection index
-            const colorOption = productData.productOptions.find(
-              (option) => option.showInProductPageAs === "Color"
-            );
-            if (colorOption && colorOption.choices.length > 0) {
-              setColorSelect(0);
-            }
-          }
-
-          // Don't remove data immediately - keep it for page refreshes
-          // Optional: Set expiration time (e.g., 1 hour)
-          const expirationTime = Date.now() + 60 * 60 * 1000; // 1 hour
-          localStorage.setItem(
-            `product_${id}_expires`,
-            expirationTime.toString()
-          );
-        } else {
-          // Check if stored data has expired and clean up
-          const expirationTime = localStorage.getItem(`product_${id}_expires`);
-          if (expirationTime && Date.now() > parseInt(expirationTime)) {
-            localStorage.removeItem(`product_${id}`);
-            localStorage.removeItem(`product_${id}_expires`);
-          }
-
-          // Fallback to existing logic if no data in localStorage
-          // const res = await editProduct(id);
-          const res = dbProdData.find((p) => p._id === id);
-
-          if (res) {
-            setProduct(res);
-            // setImages([...res.images]);
-            if (res.discountperunit) {
-              setFinalPrice(res.priceperunit - res.discountperunit);
-            } else {
-              setFinalPrice(res.priceperunit);
-            }
-
-            if (res.color) {
-              setColorSelect(0);
-              const c = res.colorVar.options[0];
-              setSelectedVariants((prev) => ({ ...prev, Color: c }));
-            }
-
-            if (res.info) {
-              const parser = new DOMParser();
-              const doc = parser.parseFromString(res.info, "text/html");
-              const paragraph = doc.body.firstChild;
-              setDesc(paragraph.textContent, "eedcde");
-            }
-          }
-        }
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
   const handleEnablebtn = () => {
-    if (product) {
-      if (product.colorVar) {
-        if (
-          Object.keys(selectedVarients).length + 1 ==
-          product.variants.length + 1
-        ) {
-          setEnableAddToCart(true);
-        }
-      } else {
-        if (
-          Object.keys(selectedVarients).length + 1 ==
-          product.variants.length
-        ) {
-          setEnableAddToCart(true);
-        }
-      }
+    if (product && product.productOptions) {
+      const requiredOptions = product.productOptions.length;
+      const selectedOptions = Object.keys(selectedVarients).length;
+      setEnableAddToCart(selectedOptions >= requiredOptions);
     }
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      fetchData();
-    }, 200);
-  }, [id]);
+    if (product) {
+      // Set price - handle both discountedPrice and price
+      if (product.discountedPrice && product.discountedPrice > 0) {
+        setFinalPrice(product.discountedPrice);
+      } else {
+        setFinalPrice(product.price);
+      }
+
+      // Set default selections for all product options
+      if (product.productOptions && product.productOptions.length > 0) {
+        const defaultSelections = {};
+        product.productOptions.forEach((option) => {
+          if (option.choices && option.choices.length > 0) {
+            defaultSelections[option.optionName] = option.choices[0].name;
+          }
+        });
+        setSelectedVariants(defaultSelections);
+
+        // Set default color selection index
+        const colorOption = product.productOptions.find(
+          (option) => option.showInProductPageAs === "Color"
+        );
+        if (colorOption && colorOption.choices.length > 0) {
+          setColorSelect(0);
+        }
+      }
+    }
+  }, [product]);
 
   const handleVariants = (name, value) => {
-    console.log("hey added");
-
     const newVar = { ...selectedVarients, [name]: value };
     setSelectedVariants((prev) => ({ ...prev, [name]: value }));
     handleEnablebtn();
-    const resultIndex = linearSearch(product.variantsData, newVar);
-    if (resultIndex != -1) {
-      const diffPrice =
-        product.variantsDetails[resultIndex].priceDifference || 0;
+    
+    // Find matching variant and update price
+    const matchingVariant = product?.variants?.find(variant => {
+      return variant.selectedOptions?.some(option => 
+        option[name] === value
+      );
+    });
+    
+    if (matchingVariant) {
+      const diffPrice = matchingVariant.priceDifference || 0;
       let finalPriceNew = 0;
-      if (product.discountperunit) {
-        finalPriceNew =
-          product.priceperunit - product.discountperunit + diffPrice;
+      if (product.discountedPrice && product.discountedPrice > 0) {
+        finalPriceNew = product.discountedPrice + diffPrice;
       } else {
-        finalPriceNew = product.priceperunit + diffPrice;
+        finalPriceNew = product.price + diffPrice;
       }
       setFinalPrice(finalPriceNew);
     }
   };
 
-  function linearSearch(arr, criteria) {
-    for (let i = 0; i < arr.length; i++) {
-      const variant = arr[i];
-      if (isObjectMatch(variant, criteria)) {
-        return i;
-      }
-    }
 
-    return -1;
-  }
-
-  function isObjectMatch(obj, criteria) {
-    return Object.keys(criteria).every((key) =>
-      obj.some((prop) => prop[key] === criteria[key])
-    );
-  }
 
   const handleVariantSelection = (variantTitle, option, index) => {
     setVariantSelect((prev) => {
@@ -402,43 +295,7 @@ const ProductPage = () => {
     handleBtnLoading();
   }, [btnLoading]);
 
-  const ShopCardDetails = [
-    {
-      id: 1,
-      image1: "/newproduct/BI02.jpg",
-      BrandName: "BrandName",
-      ProductName: "ProductName",
-      price: "1200",
-    },
-    {
-      id: 2,
-      image1: "/newproduct/BI03.jpg",
-      BrandName: "BrandName",
-      ProductName: "ProductName",
-      price: "1200",
-    },
-    {
-      id: 3,
-      image1: "/newproduct/BI04.jpg",
-      BrandName: "BrandName",
-      ProductName: "ProductName",
-      price: "1200",
-    },
-    {
-      id: 4,
-      image1: "/newproduct/BI05.jpg",
-      BrandName: "BrandName",
-      ProductName: "ProductName",
-      price: "1200",
-    },
-    {
-      id: 5,
-      image1: "/newproduct/BI07.jpg",
-      BrandName: "BrandName",
-      ProductName: "ProductName",
-      price: "1200",
-    },
-  ];
+
 
   return (
     <>
@@ -463,7 +320,7 @@ const ProductPage = () => {
           </div>
         </div>
       )}
-      {Object.keys(product).length > 0 ? (
+      {product && !productLoading ? (
         <>
           <div className="ProductDetails_wrapper">
             <div className="ProductDetails_cntr">
@@ -815,7 +672,7 @@ const ProductPage = () => {
                   </span>
                 </h2>
                 <div className="Similar_prd_cntr">
-                  {data?.getClientSideProducts?.products.map((items, idx) => {
+                  {productsData?.getClientSideProducts?.products.map((items, idx) => {
                     return (
                       <div key={idx} className="Similar_prd_card_cntr">
                         <Link
@@ -888,9 +745,7 @@ const ProductPage = () => {
           </div>
         </>
       ) : (
-        <>
-          <ProductLoader />
-        </>
+        <ProductLoader />
       )}
     </>
   );
