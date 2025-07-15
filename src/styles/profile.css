@@ -7,9 +7,8 @@
   .parent-div{
     padding-top: 200px;
     padding-bottom: 100px;
-    background-color: #f9fbfc;
+    background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
     min-height: 100vh;
-    background: url("https://res.cloudinary.com/dhlsvwpny/image/upload/v1711703321/bgpro_gfnjos.jpg") no-repeat;
   }
   .order-div{
     /* margin-block: 0vh;

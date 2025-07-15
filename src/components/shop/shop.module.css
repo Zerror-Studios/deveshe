@@ -48,7 +48,11 @@
   position: relative;
   padding: 160px 80px;
   overflow: hidden;
-  background-color: #fff;
+  /* background-color: #fff; */
+      /* background-image: url(/svg_homepage_bg.svg);
+    background-repeat: no-repeat;
+    background-size: contain; */
+    background-color: #fde5d8;
 }
 .shopSection2Top {
   width: 100%;
@@ -92,18 +96,18 @@
   position: relative;
 }
 .centerCard {
-  width: 27vw;
+  width: 25vw;
   /* background-color: rgb(246,178,183); */
   background-image: url("/frame.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center;
   margin: 0 auto;
-  padding: 3vw;
+  padding: 2.5vw;
 }
 .centerCard .imgCont {
   width: 100%;
-  height: 22vw;
+  height: 20vw;
 }
 
 .centerCard .imgCont img {
@@ -366,7 +370,8 @@
 
 .shopSection4 {
   width: 100%;
-  background-color: white;
+  /* background-color: white; */
+  background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
   padding-top: 150px;
 }
 .shopSection4 h2 {
@@ -521,7 +526,8 @@
   align-items: center;
   padding: 100px 0;
   gap: 40px;
-  background-color: #fff;
+  /* background-color: #fff; */
+  background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
 }
 
 .shopSection6 div h2 {
@@ -559,7 +565,8 @@
   justify-content: space-between;
   align-items: flex-end;
   position: relative;
-  background-color: #fff;
+  /* background-color: #fff; */
+  background-color: #f4f0eb;
 }
 
 .secPara7 {
@@ -723,6 +730,7 @@
   display: flex;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
+  background: linear-gradient(180deg, rgba(253, 230, 221, 1) 0%, rgba(253, 229, 216, 1) 100%);
 }
 .leftProCon {
   position: sticky;

@@ -73,7 +73,8 @@
 .left-two {
 	height: 50%;
 	width: 100%;
-	background-color: #fff;
+	/* background-color: #fff; */
+	background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
 }
 
 .login-inner {

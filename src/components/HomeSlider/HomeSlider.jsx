@@ -66,7 +66,7 @@ const HomeSlider = () => {
           <Image
             width={1000}
             height={1000}
-            src="https://dieselfarm.com/_next/image/?url=%2F_next%2Fstatic%2Fmedia%2FBG.46b433ec.webp&w=3840&q=65"
+            src="/images/bg1.png"
             alt="image"
           />
           <div className="slide1-container">
@@ -86,7 +86,7 @@ const HomeSlider = () => {
           <Image
             width={1000}
             height={1000}
-            src="https://dieselfarm.com/_next/image/?url=%2F_next%2Fstatic%2Fmedia%2FBG.3a61546b.webp&w=3840&q=65"
+            src="/images/bg1.png"
             alt="image"
           />
           <div className="slide1-container">
@@ -108,7 +108,7 @@ const HomeSlider = () => {
               id="sl2-ig3"
               width={1000}
               height={1000}
-              src="/images/im3.webp"
+              src="/images/sticker1.png"
               alt="image"
             />
             <Image

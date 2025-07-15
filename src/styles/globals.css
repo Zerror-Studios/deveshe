@@ -29,7 +29,8 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #ffff;
+  /* background-color: #ffff; */
+  background: linear-gradient(4.66deg, #FD8D6C -8%, rgba(244, 240, 235, 1) 14%);
   position: relative;
   border-top: 0.5px solid rgba(128, 128, 128, 0.307);
 }
@@ -355,7 +356,8 @@ li {
   position: relative;
   overflow: hidden;
   color: black;
-  background-color: white;
+  background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
+  /* background-color: white; */
 }
 #form {
   width: 100%;
@@ -513,6 +515,7 @@ li {
 .home-wrapper {
   position: relative;
   width: 100%;
+  background: linear-gradient(180deg, rgba(243, 239, 237, 1) 0%, rgba(252, 230, 222, 1) 100%);
 }
 
 .home-slider {
@@ -700,11 +703,11 @@ li {
 
 #sl1-ig10 {
   position: absolute;
-  width: 15%;
+  width: 12%;
   height: auto;
   object-fit: cover;
   right: 10%;
-  top: 5%;
+  top: 12%;
   transform-origin: bottom;
   animation-name: img6;
   animation-duration: 9s;
@@ -771,11 +774,11 @@ li {
 }
 #sl1-ig15 {
   position: absolute;
-  width: 25%;
+  width: 20%;
   height: auto;
   object-fit: cover;
-  left: -4%;
-  top: 2%;
+  left: -2%;
+  top: 10%;
   z-index: 1;
   transform-origin: bottom;
   animation-name: img6;
@@ -787,11 +790,11 @@ li {
 }
 #sl1-ig16 {
   position: absolute;
-  width: 70%;
+  width: 55%;
   height: auto;
   object-fit: cover;
-  right: -45%;
-  top: -7%;
+  right: -40%;
+  top: 6%;
   z-index: 99;
   transform-origin: bottom;
   animation-name: img5;
