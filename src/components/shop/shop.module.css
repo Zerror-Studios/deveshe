@@ -48,7 +48,11 @@
   position: relative;
   padding: 160px 80px;
   overflow: hidden;
-  background-color: #fff;
+  /* background-color: #fff; */
+      /* background-image: url(/svg_homepage_bg.svg);
+    background-repeat: no-repeat;
+    background-size: contain; */
+    background-color: #fde5d8;
 }
 .shopSection2Top {
   width: 100%;
@@ -78,7 +82,7 @@
   letter-spacing: -2px;
 }
 .shopSection2Top h2:nth-child(2) span:nth-child(-n+7) {
-  color: #FE0000;
+  color: rgb(246,178,183);
 }
 .shopSection2Top h2 span {
   color: black;
@@ -92,15 +96,20 @@
   position: relative;
 }
 .centerCard {
-  width: 27vw;
-  background-color: rgb(246,178,183);
+  width: 25vw;
+  /* background-color: rgb(246,178,183); */
+  background-image: url("/frame.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
   margin: 0 auto;
-  padding: 1.2vw;
+  padding: 2.5vw;
 }
 .centerCard .imgCont {
   width: 100%;
-  height: 22vw;
+  height: 20vw;
 }
+
 .centerCard .imgCont img {
   width: 100%;
   height: 100%;
@@ -109,7 +118,7 @@
 }
 .centerCard p {
   font-family: font2;
-  font-size: 1.5vw;
+  font-size: 1.2vw;
   margin-top: 1vw;
   line-height: 0.9;
 }
@@ -168,11 +177,12 @@
   justify-content: center;
   align-items: center;
   gap: .5vw;
-  color: #FE0000;
+  color: rgb(246,178,183);
   font-family: font2;
   font-size: 3.5vw;
   line-height: 0.8;
   text-transform: uppercase;
+  
 }
 .shopSection2BottomBtnText{
   height: 3.5vw;
@@ -200,7 +210,7 @@
   line-height: 1;
   text-transform: uppercase;
   white-space: nowrap;
-  color: #FE0000;
+  color: rgb(246,178,183);
 }
 
 .strip1 {
@@ -355,12 +365,13 @@
 }
 
 .imageContainer2 .imgCardSec3 p span {
-  color: #FE0000;
+  color: rgb(246,178,183);
 }
 
 .shopSection4 {
   width: 100%;
-  background-color: white;
+  /* background-color: white; */
+  background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
   padding-top: 150px;
 }
 .shopSection4 h2 {
@@ -389,7 +400,7 @@
   align-items: center;
 }
 .topContHeader span {
-  color: #FE0000;
+  color: rgb(246,178,183);
   display: inline-block;
   transform-origin: top;
 }
@@ -409,7 +420,7 @@
   font-family: font2;
   font-size: 2vw;
   line-height: 0.9;
-  color: #FE0000;
+  color: rgb(246,178,183);
   margin-bottom: 1vw;
 }
 
@@ -482,7 +493,7 @@
   font-family: font2;
   font-size: 1.9vw;
   text-transform: capitalize;
-  color: #FE0000;
+  color: rgb(246,178,183);
   margin-top: 1vw;
 }
 
@@ -515,7 +526,8 @@
   align-items: center;
   padding: 100px 0;
   gap: 40px;
-  background-color: #fff;
+  /* background-color: #fff; */
+  background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
 }
 
 .shopSection6 div h2 {
@@ -532,7 +544,7 @@
   transform-origin: top;
 }
 .shopSection6 h2:nth-child(2) span{
-  color: #FE0000;
+  color: rgb(246,178,183);
 }
 .shopSection6 h2:nth-child(2) span:nth-last-child(-n+2),
 .shopSection6 h2:nth-child(2) span:nth-child(-n+2) {
@@ -553,7 +565,8 @@
   justify-content: space-between;
   align-items: flex-end;
   position: relative;
-  background-color: #fff;
+  /* background-color: #fff; */
+  background-color: #f4f0eb;
 }
 
 .secPara7 {
@@ -567,7 +580,7 @@
   font-family: font2;
   font-size: 2vw;
   line-height: 0.9;
-  color: #FE0000;
+  color: rgb(246,178,183);
   margin-bottom: 1vw;
 }
 
@@ -610,14 +623,27 @@
   transform: rotate(20deg) translateX(55%) translateY(-20%);
   position: relative;
   z-index: 2;
-  background-color: rgb(246,178,183);
+  /* background-color: rgb(246,178,183); */
+  background-image: url(/frame2.png);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
   display: flex;
   justify-content: center;
-  padding: 1vw;
-  padding-bottom: 3vw;
+  padding: 2vw;
+  /* padding-bottom: 3vw; */
 }
-.cardLg img {
+.cardLg .cardIg {
   width: 100%;
+  height: auto;
+}
+
+.cardCorner{
+  position: absolute;
+  width: 20%;
+  rotate: -116deg;
+  top: -20%;
+  left: -10%;
   height: auto;
 }
 
@@ -704,6 +730,7 @@
   display: flex;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
+  background: linear-gradient(180deg, rgba(253, 230, 221, 1) 0%, rgba(253, 229, 216, 1) 100%);
 }
 .leftProCon {
   position: sticky;
@@ -1005,7 +1032,7 @@
     letter-spacing: 0px;
   }
   .shopSection6 {
-    height: 50vh;
+    height: auto;
   }
   .shopSection3 .overlay3 .imageContainer2 {
     width: 100%;
@@ -1064,10 +1091,13 @@
 
   .centerCard {
     width: 55%;
-    padding: 2vw;
+    padding: 6vw;
     margin-top: 10vw;
     transform: rotate(13deg);
     transform-origin: center;
+  }
+  .cardLg {
+    padding: 4.5vw;
   }
   .centerCard .imgCont {
     width: 100%;

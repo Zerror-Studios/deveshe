@@ -43,7 +43,7 @@ const Navbar = () => {
       if (router.pathname !== "/") {
         gsap.set("#logo-container img", { filter: "invert(0)" });
         gsap.set(".nav-link a", { color: "#000" });
-        gsap.set("#nav", { backgroundColor: "rgb(246,178,183)" });
+        gsap.set("#nav", { backgroundColor: "#fff" });
         gsap.set("#nav-btns svg", { stroke: "#000" });
         gsap.set("#nav-line", { backgroundColor: "#000" });
         gsap.set(".logo", { position: "static" });
@@ -95,7 +95,7 @@ const Navbar = () => {
         .to(
           "#nav",
           {
-            backgroundColor: "rgb(246,178,183)",
+            backgroundColor: "#fff",
             ease: "power1.out",
             duration: 0.3,
           },

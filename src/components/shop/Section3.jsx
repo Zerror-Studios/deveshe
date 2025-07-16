@@ -114,9 +114,7 @@ const Section3 = () => {
                 src="/newproduct/BI06.jpg"
                 alt="image"
               />
-              <p>
-                From office to OOO
-              </p>
+              <p>From office to OOO</p>
             </div>
             <div className={styles.imgCardSec3} id="imgCardSec32">
               <Image

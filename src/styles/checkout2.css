@@ -2,7 +2,8 @@
   display: flex;
   padding: 200px 0px 50px;
   justify-content: center;
-  background-color: white;
+  /* background-color: white; */
+  background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
 }
 /* new-left-code */
 
@@ -82,6 +83,7 @@ a {
   padding-inline: 1rem;
   font-size: 0.75rem;
   margin: 0.6rem 0;
+  background-color: rgb(245 243 243 / 60%);
 }
 
 .contact_input_cntr input::placeholder {
@@ -114,7 +116,7 @@ a {
   height: 20px;
   border: 2px solid black;
   border-radius: 50%; /* Makes the checkbox circular */
-  background-color: white;
+  background-color: rgb(245 243 243 / 60%);
   position: relative;
   transition: background-color 0.1s, border-color 0.3s;
   /* Center the SVG arrow within the checkmark */
@@ -193,9 +195,9 @@ a {
   width: 100%;
   font-size: 0.75rem;
   color: rgba(0, 0, 0, 0.5);
+  background-color: rgb(245 243 243 / 60%);
   height: 100%;
   padding-left: 12px;
-  background-color: transparent;
   outline: none;
   cursor: pointer;
   border: none;
@@ -215,6 +217,7 @@ a {
   padding-block: 1rem;
   border: 1px solid #dedede;
   padding-inline: 1rem;
+  background-color: rgb(245 243 243 / 60%);
   font-size: 0.75rem;
 }
 .Company_input_cntr {
@@ -227,6 +230,7 @@ a {
   font-size: 0.75rem;
   border: 1px solid #dedede;
   width: 100%;
+  background-color: rgb(245 243 243 / 60%);
 }
 .pincode_city_input_cntr {
   display: grid;
@@ -244,6 +248,7 @@ a {
   padding-inline: 1rem;
   border: 1px solid #dedede;
   font-size: 0.75rem;
+  background-color: rgb(245 243 243 / 60%);
 }
 .Address_input_cntr {
   position: relative;
@@ -255,7 +260,7 @@ a {
   padding-inline: 1rem;
   border: 1px solid #dedede;
   font-size: 0.75rem;
-
+  background-color: rgb(245 243 243 / 60%);
   width: 100%;
 }
 .Appartment_input_cntr {
@@ -267,7 +272,7 @@ a {
   border: 1px solid #dedede;
   padding-inline: 1rem;
   font-size: 0.75rem;
-
+background-color: rgb(245 243 243 / 60%);
   width: 100%;
 }
 .Phone_input_cntr {
@@ -280,6 +285,7 @@ a {
   border: 1px solid #dedede;
   font-size: 0.75rem;
   width: 100%;
+  background-color: rgb(245 243 243 / 60%);
 }
 .Shipping_container {
   position: relative;
@@ -301,7 +307,7 @@ a {
   cursor: pointer;
   color: #767676;
   font-family: var(--primary-font-Hel);
-  background-color: rgb(246, 246, 246);
+  background-color: rgb(245 243 243 / 60%);
 }
 .Shipping_method_cntr p {
   font-size: 0.857143rem;
@@ -377,6 +383,7 @@ a {
   padding-inline: 1rem;
   border-bottom: none;
   cursor: pointer;
+  background-color: rgb(245 243 243 / 60%);
 }
 
 .cards_inner_content input {
@@ -575,7 +582,7 @@ input:focus {
   appearance: none; /* Remove default styling */
   border: 1px solid #ccc; /* Default border color */
   border-radius: 50%; /* Make it round */
-  background-color: #fff; /* Default background color */
+  background-color: rgb(245 243 243 / 60%); /* Default background color */
   cursor: pointer;
   position: relative;
 }

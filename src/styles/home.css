@@ -126,7 +126,8 @@
 
 /* How_to_Nail_it_Cntr */
 #How_to_Nail_it_Cntr {
-  background-color: #fff;
+  /* background-color: #fff; */
+  background: linear-gradient(180deg, rgba(243, 239, 237, 1) 0%, rgba(252, 230, 222, 1) 100%);
   width: 100%;
   position: relative;
   /* background-color: #cbbbbb; */
@@ -418,7 +419,7 @@
 .title_inner-nail h2 span:nth-last-child(5),
 .title_inner-nail h2 span:nth-last-child(6),
 .title_inner-nail h2 span:nth-last-child(7) {
-  color: #FE0000 !important;
+  color: rgb(246,178,183) !important;
 }
 
 .title_inner-nail h2 .serif-italic {
