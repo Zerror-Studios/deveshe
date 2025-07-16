@@ -1,23 +1,12 @@
+import React, { useEffect } from "react";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import gsap from "gsap";
-import Modal from "./Modal";
-import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/dist/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
-const Navbar = ({ openBag, setOpenBag }) => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const cartCount = useSelector((state) => state.cart.itemcount);
-  function openModal() {
-    setModalIsOpen(true);
-  }
-  function closeModal() {
-    setModalIsOpen(false);
-    setOpenBag(false);
-  }
+const Navbar = () => {
   const router = useRouter();
   useEffect(() => {
     if (window.innerWidth < 576) return;
@@ -220,7 +209,7 @@ const Navbar = ({ openBag, setOpenBag }) => {
           </Link>
         </div>
         <div id="nav-btns">
-          <button onClick={openModal}>
+          <button>
             <svg
               class="icon-cart"
               width="15"
@@ -268,13 +257,6 @@ const Navbar = ({ openBag, setOpenBag }) => {
           </Link>
         </div>
       </div>
-      <Modal
-        closeModal={closeModal}
-        modalIsOpen={modalIsOpen}
-        setOpenBag={setOpenBag}
-        openBag={openBag}
-        setModalIsOpen={setModalIsOpen}
-      />
     </>
   );
 };

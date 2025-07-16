@@ -1,0 +1,31 @@
+import React from "react";
+import { ApolloProvider } from "@apollo/client";
+import apolloClient from "@/lib/apolloClient";
+import Layout from "@/components/layouts/Layout";
+import SmoothScroller from "@/components/smoothScroll/SmoothScroll";
+import "@/styles/globals.css";
+import "@/styles/home.css";
+import "@/styles/login.css";
+import "@/styles/checkout.css";
+import "@/styles/checkout2.css";
+import "@/styles/success.css";
+import "@/styles/address.css";
+import "@/styles/cartModal.css";
+import "@/styles/navbar.css";
+import "@/styles/profile.css";
+import "@/styles/productLoader.css";
+import "@/styles/collectionLoader.css";
+import "@/styles/lookBook.css";
+import "@/styles/legal.css";
+export default function App({ Component, pageProps }) {
+  return (
+    <>
+      <ApolloProvider client={apolloClient}>
+        <Layout>
+          <SmoothScroller />
+          <Component {...pageProps} />
+        </Layout>
+      </ApolloProvider>
+    </>
+  );
+}
