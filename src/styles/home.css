@@ -411,6 +411,32 @@
   text-align: center;
 }
 
+.title_inner-nail h2{
+  position: relative;
+}
+.title_inner-nail h2::before{
+  content: "";
+  position: absolute;
+  width: 36px;
+  height: 40px;
+  top: 0%;
+  left: 0%;
+  background-image: url(/star.svg);
+  background-repeat: no-repeat;
+  z-index: 1; 
+}
+.title_inner-nail h2::after{
+  content: "";
+  position: absolute;
+  width: 36px;
+  height: 40px;
+  top: 50%;
+  left: 95%;
+  background-image: url(/start2.svg);
+  background-repeat: no-repeat;
+  z-index: 1; 
+}
+
 .title_inner-nail h2 span {
   display: inline-block;
   transform-origin: top;

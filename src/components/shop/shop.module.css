@@ -41,6 +41,57 @@
   height: 100%;
   object-fit: cover;
 }
+.explore{
+  position: relative;
+}
+.explore::before{
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 35%;
+  left: -30%;
+  background-image: url(/star.svg);
+  background-repeat: no-repeat;
+  z-index: 1; 
+}
+.explore::after{
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 120%;
+  background-image: url(/start2.svg);
+  background-repeat: no-repeat;
+  z-index: 1; 
+}
+
+.inspo{
+  position: relative;
+}
+.inspo::before{
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: -100%;
+  left: -150%;
+  background-image: url(/start2.svg);
+  background-repeat: no-repeat;
+  z-index: 1; 
+}
+.inspo::after{
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 100%;
+  left: 200%;
+  background-image: url(/start2.svg);
+  background-repeat: no-repeat;
+  z-index: 1; 
+}
 
 .shopSection2 {
   width: 100%;
@@ -49,9 +100,9 @@
   padding: 160px 80px;
   overflow: hidden;
   /* background-color: #fff; */
-      /* background-image: url(/svg_homepage_bg.svg);
+      background-image: url(/svg_homepage_bg.svg);
     background-repeat: no-repeat;
-    background-size: contain; */
+    background-size: 100%;
     background-color: #fde5d8;
 }
 .shopSection2Top {
@@ -132,6 +183,29 @@
   padding-bottom: 3vw;
   background-color:#e9e9e9;
 }
+.leftCard::before{
+  content: "";
+  position: absolute;
+  width: 36px;
+  height: 40px;
+  top: -5%;
+  left: -6%;
+  background-image: url(/svg_border_corner_coral2\ \(1\).svg);
+  background-repeat: no-repeat;
+  z-index: 1; 
+}
+.leftCard::after{
+  content: "";
+  position: absolute;
+  width: 36px;
+  height: 40px;
+  top: 95%;
+  left: 94%;
+  background-image: url(/svg_border_corner_coral2\ \(2\).svg);
+  background-repeat: no-repeat;
+  z-index: 1; 
+  transform: rotate(180deg);
+}
 .leftCard img {
   width: 100%;
   height: auto;
@@ -145,6 +219,29 @@
   padding: 1vw;
   background-color:#e9e9e9;
   transform: rotate(17deg);
+}
+.rightCard::before{
+  content: "";
+  position: absolute;
+  width: 36px;
+  height: 40px;
+  top: -5%;
+  left: -6%;
+  background-image: url(/svg_border_corner_coral2\ \(1\).svg);
+  background-repeat: no-repeat;
+  z-index: 1; 
+}
+.rightCard::after{
+  content: "";
+  position: absolute;
+  width: 36px;
+  height: 40px;
+  top: 95%;
+  left: 94%;
+  background-image: url(/svg_border_corner_coral2\ \(2\).svg);
+  background-repeat: no-repeat;
+  z-index: 1; 
+  transform: rotate(180deg);
 }
 .rightCard img {
   width: 100%;
@@ -369,6 +466,7 @@
 }
 
 .shopSection4 {
+  overflow: hidden;
   width: 100%;
   /* background-color: white; */
   background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
@@ -656,6 +754,31 @@
   background-color:#e9e9e9 ;
   padding: 1vw;
 }
+
+.cardSm::before{
+  content: "";
+  position: absolute;
+  width: 28px;
+  height: 36px;
+  top: -5%;
+  left: -8%;
+  background-image: url(/svg_border_corner_coral2\ \(1\).svg);
+  background-repeat: no-repeat;
+  z-index: 1; 
+}
+.cardSm::after{
+  content: "";
+  position: absolute;
+  width: 28px;
+  height: 36px;
+  top: 90%;
+  left: 94%;
+  background-image: url(/svg_border_corner_coral2\ \(2\).svg);
+  background-repeat: no-repeat;
+  z-index: 1; 
+  transform: rotate(180deg);
+}
+
 .cardSm img {
   width: 100%;
   height: auto;

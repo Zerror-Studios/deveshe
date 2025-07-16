@@ -590,13 +590,20 @@ li {
   display: none;
 }
 #sl1-ig4 {
-  height: 31%;
-  position: absolute;
-  width: 120%;
   height: auto;
+  position: absolute;
+  width: 60%;
   object-fit: cover;
   left: 0%;
-  bottom: 0%;
+  bottom: -5%;
+}
+#sl1-ig44 {
+  height: auto;
+  position: absolute;
+  width: 60%;
+  object-fit: cover;
+  left: 50%;
+  bottom: -5%;
 }
 #sl1-ig5 {
   position: absolute;
@@ -634,9 +641,9 @@ li {
 }
 #sl1-ig6 {
   position: absolute;
-  width: 25%;
+  width: 45%;
   height: auto;
-  left: 15%;
+  left: 12%;
   bottom: 8%;
   transform-origin: bottom;
   animation-name: img6;
@@ -667,11 +674,12 @@ li {
 }
 #sl1-ig7 {
   position: absolute;
-  width: 18%;
+  width: 24%;
   height: auto;
   object-fit: cover;
-  left: 27%;
-  bottom: 12%;
+  left: 25%;
+  bottom: 0%;
+  rotate: 20deg;
   z-index: 3;
 }
 #sl1-ig8 {
@@ -726,11 +734,11 @@ li {
 }
 #sl1-ig12 {
   position: absolute;
-  width: 5%;
+  width: 45%;
   height: auto;
   object-fit: cover;
-  left: 75%;
-  top: 34%;
+  left: 45%;
+  top: 28%;
   z-index: 1;
   transform-origin: bottom;
   animation-name: img6;
@@ -739,6 +747,16 @@ li {
   animation-iteration-count: infinite;
   animation-direction: alternate;
   animation-fill-mode: forwards;
+}
+#sl1-ig122 {
+  position: absolute;
+  width: 20%;
+  height: auto;
+  object-fit: cover;
+  left: 55%;
+  top: 6%;
+  z-index: 1;
+  transform-origin: bottom;
 }
 #sl1-ig13 {
   position: absolute;
@@ -848,7 +866,7 @@ li {
 
 #sl2-ig3 {
   position: absolute;
-  width: 35%;
+  width: 31%;
   height: auto;
   object-fit: cover;
   bottom: 27%;
@@ -930,9 +948,9 @@ li {
 }
 #sl2-ig8 {
   position: absolute;
-  width: 20%;
+  width: 22%;
   height: auto;
-  left: 15%;
+  left: 11%;
   bottom: 5%;
   transform-origin: bottom;
   animation-name: img6;
@@ -1003,10 +1021,10 @@ li {
 
 #sl2-ig13 {
   position: absolute;
-  width: 13%;
+  width: 18%;
   height: auto;
-  left: 45%;
-  bottom: 20%;
+  left: 42%;
+  bottom: 10%;
   transform-origin: bottom;
   animation-name: img7;
   animation-duration: 5s;
@@ -1032,9 +1050,9 @@ li {
 }
 #sl2-ig16 {
   position: absolute;
-  width: 5%;
+  width: 5.5%;
   height: auto;
-  right: 6%;
+  right: 5.3%;
   top: 15%;
 }
 
