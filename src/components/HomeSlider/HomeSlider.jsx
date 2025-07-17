@@ -111,7 +111,7 @@ const HomeSlider = () => {
               id={`sl1-ig6`}
               width={1000}
               height={1000}
-              src={`/images/sticker2.png`}
+              src={`/images/sticker (9).png`}
               alt="image"
             />
             <Image
@@ -136,13 +136,6 @@ const HomeSlider = () => {
               alt="image"
             />
             <Image
-              id={`sl1-ig10`}
-              width={1000}
-              height={1000}
-              src={`/images/img10.webp`}
-              alt="image"
-            />
-            <Image
               id={`sl1-ig11`}
               width={1000}
               height={1000}
@@ -153,7 +146,7 @@ const HomeSlider = () => {
               id={`sl1-ig12`}
               width={1000}
               height={1000}
-              src={`/images/sticker3.png`}
+              src={`/images/sticker (10).png`}
               alt="image"
             />
              <Image
@@ -161,6 +154,13 @@ const HomeSlider = () => {
               width={1000}
               height={1000}
               src={`/images/sticker9.png`}
+              alt="image"
+            />
+               <Image
+              id={`sl1-ig1222`}
+              width={1000}
+              height={1000}
+              src={`/images/sticker (13).png`}
               alt="image"
             />
             <Image
@@ -181,7 +181,7 @@ const HomeSlider = () => {
               id={`sl1-ig15`}
               width={1000}
               height={1000}
-              src={`/images/img15.webp`}
+              src={`/images/sticker (14).png`}
               alt="image"
             />
             <Image
@@ -214,7 +214,14 @@ const HomeSlider = () => {
               id="sl2-ig3"
               width={1000}
               height={1000}
-              src="/images/sticker1.png"
+              src="/images/sticker (8).png"
+              alt="image"
+            />
+              <Image
+              id="sl2-ig33"
+              width={1000}
+              height={1000}
+              src="/images/sticker (6).png"
               alt="image"
             />
             <Image
@@ -249,7 +256,7 @@ const HomeSlider = () => {
               id="sl2-ig8"
               width={1000}
               height={1000}
-              src="/images/sticker8.png"
+              src="/images/sticker (1).png"
               alt="image"
             />
             <Image

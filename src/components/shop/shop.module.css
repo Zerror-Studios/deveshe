@@ -471,6 +471,9 @@
   /* background-color: white; */
   background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
   padding-top: 150px;
+       background-image: url(/svg_homepage_bg.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 .shopSection4 h2 {
   font-family: font2;
@@ -626,6 +629,10 @@
   gap: 40px;
   /* background-color: #fff; */
   background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
+    background-image: url(/bg-n.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 100%;
 }
 
 .shopSection6 div h2 {
@@ -665,6 +672,9 @@
   position: relative;
   /* background-color: #fff; */
   background-color: #f4f0eb;
+    background-image: url(/svg_homepage_bg.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .secPara7 {
