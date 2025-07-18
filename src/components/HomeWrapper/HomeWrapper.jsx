@@ -130,28 +130,23 @@ const HomeWrapper = ({ children, openBag, setOpenBag }) => {
           "b"
         )
 
-        // Phase C: Loader panels slide out
-        .to(
-          ".loader-left",
-          {
-            width: "0",
-            duration: 0.8,
-          },
-          "c"
-        )
-        .to(
-          ".loader-right",
-          {
-            width: "0",
-            duration: 0.8,
-            onComplete: () => {
-              if (loaderRef.current) {
-                loaderRef.current.style.display = "none";
-              }
-            },
-          },
-          "c"
-        );
+       // Phase C: Fade out loader-main
+.to(
+  loaderRef.current,
+  {
+    opacity: 0,
+    duration: .8, // smooth fade-out
+    delay:-.1,
+    ease: "power1.out",
+    onComplete: () => {
+      if (loaderRef.current) {
+        loaderRef.current.style.display = "none";
+      }
+    },
+  },
+  "c"
+);
+
     }
   }, [router.pathname]);
 
