@@ -29,7 +29,7 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: linear-gradient(4.66deg, #FD8D6C -8%, #FDE5D8 14%);
+  background: linear-gradient(4.66deg, #fd8d6c -8%, #fde5d8 14%);
   position: relative;
   border-top: 0.5px solid rgba(128, 128, 128, 0.307);
 }
@@ -355,10 +355,14 @@ li {
   position: relative;
   overflow: hidden;
   color: black;
-  background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
-   background-image: url(/svg_homepage_bg.svg);
+  background: linear-gradient(
+    180deg,
+    rgba(252, 230, 222, 1) 0%,
+    rgba(244, 240, 235, 1) 100%
+  );
+  background-image: url(/svg_homepage_bg.svg);
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-size: cover;
   position: relative;
 }
 #form {
@@ -517,7 +521,11 @@ li {
 .home-wrapper {
   position: relative;
   width: 100%;
-  background: linear-gradient(180deg, rgba(243, 239, 237, 1) 0%, rgba(252, 230, 222, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(243, 239, 237, 1) 0%,
+    rgba(252, 230, 222, 1) 100%
+  );
 }
 
 .home-slider {
@@ -613,7 +621,7 @@ li {
   width: 25%;
   height: auto;
   object-fit: cover;
-  left: -16%;
+  left: -6%;
   bottom: -4%;
   z-index: 2;
   transform-origin: bottom;
@@ -643,11 +651,11 @@ li {
   }
 }
 #sl1-ig6 {
-      position: absolute;
-    width: 41%;
-    height: auto;
-    left: 12%;
-    bottom: 6%;
+  position: absolute;
+  width: 41%;
+  height: auto;
+  left: 12%;
+  bottom: 6%;
   transform-origin: bottom;
   animation-name: img6;
   animation-duration: 6s;
@@ -676,12 +684,12 @@ li {
   }
 }
 #sl1-ig7 {
-     position: absolute;
-    width: 12%;
-    height: auto;
-    object-fit: cover;
-    left: 40%;
-    top: 8%;
+  position: absolute;
+  width: 15%;
+  height: auto;
+  object-fit: cover;
+  left: 12%;
+  top: 6%;
   rotate: 20deg;
   z-index: 3;
 }
@@ -712,13 +720,12 @@ li {
   animation-fill-mode: forwards;
 }
 
-
 #sl1-ig11 {
- position: absolute;
-    width: 12%;
-    height: auto;
-    left: 77%;
-    top: 52%;
+  position: absolute;
+  width: 12%;
+  height: auto;
+  left: 77%;
+  top: 52%;
 }
 #sl1-ig12 {
   position: absolute;
@@ -741,8 +748,8 @@ li {
   width: 20%;
   height: auto;
   object-fit: cover;
-  left: 55%;
-  top: 6%;
+  left: 42%;
+  top: 7%;
   z-index: 1;
   transform-origin: bottom;
 }
@@ -758,11 +765,11 @@ li {
 }
 #sl1-ig13 {
   position: absolute;
-    width: 15%;
-    height: auto;
-    object-fit: cover;
-    right: -21%;
-    top: 50%;
+  width: 20%;
+  height: auto;
+  object-fit: cover;
+  right: -21%;
+  top: 39%;
   z-index: 3;
   transform-origin: bottom;
   animation-name: img5;
@@ -773,12 +780,12 @@ li {
   animation-fill-mode: forwards;
 }
 #sl1-ig14 {
-     position: absolute;
-    width: 21%;
-    height: auto;
-    object-fit: cover;
-    right: -23%;
-    bottom: -10%;
+  position: absolute;
+  width: 21%;
+  height: auto;
+  object-fit: cover;
+  right: -23%;
+  bottom: -10%;
   z-index: 6;
   transform-origin: bottom;
   animation-name: img6;
@@ -788,22 +795,14 @@ li {
   animation-direction: alternate;
   animation-fill-mode: forwards;
 }
-#sl1-ig15 {
-  position: absolute;
-  width: 60%;
-  height: auto;
-  object-fit: cover;
-  left: -9%;
-  top: -5%;
-  z-index: 1;
-}
+
 #sl1-ig16 {
   position: absolute;
-    width: 20%;
-    height: auto;
-    object-fit: cover;
-    right: -16%;
-    top: 61%;
+  width: 26%;
+  height: auto;
+  object-fit: cover;
+  right: -32%;
+  top: 43%;
   z-index: 99;
   transform-origin: bottom;
   animation-name: img5;
@@ -866,22 +865,21 @@ li {
 }
 
 #sl2-ig33 {
-  position: absolute;
-  width: 31%;
-  height: auto;
-  object-fit: cover;
-  bottom: 27%;
-  left: 7%;
-  transform: translate(-50%, 0);
-}
-
-#sl2-ig4 {
-  position: absolute;
-    width: 3%;
+    position: absolute;
+    width: 35%;
     height: auto;
     object-fit: cover;
-    bottom: 26%;
-    right: 9%;
+    bottom: 11%;
+    right: -34%;
+    transform: translate(-50%, 0);
+}
+#sl2-ig4 {
+  position: absolute;
+  width: 3%;
+  height: auto;
+  object-fit: cover;
+  bottom: 26%;
+  right: 9%;
   transform-origin: bottom;
   animation-name: img5;
   animation-duration: 5s;
@@ -893,10 +891,10 @@ li {
 
 #sl2-ig5 {
   position: absolute;
-    width: 6%;
-    height: auto;
-    object-fit: cover;
-    bottom: 25%;
+  width: 10%;
+  height: auto;
+  object-fit: cover;
+  bottom: 25%;
   right: 2%;
   transform-origin: bottom;
   animation-name: img7;
@@ -941,11 +939,11 @@ li {
 }
 
 #sl2-ig7 {
-      position: absolute;
-    width: 14%;
-    height: auto;
-    left: 17%;
-    bottom: 20%;
+  position: absolute;
+  width: 14%;
+  height: auto;
+  left: 17%;
+  bottom: 20%;
 }
 #sl2-ig8 {
   position: absolute;
@@ -1006,26 +1004,26 @@ li {
 }
 
 #sl2-ig12 {
-  position: absolute;
-  width: 6%;
-  height: auto;
-  left: 55%;
-  bottom: 25%;
-  transform-origin: bottom;
-  animation-name: img7;
-  animation-duration: 3s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate-reverse;
-  animation-fill-mode: forwards;
+    position: absolute;
+    width: 9%;
+    height: auto;
+    left: 55%;
+    bottom: 22%;
+    transform-origin: bottom;
+    animation-name: img7;
+    animation-duration: 3s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+    animation-fill-mode: forwards;
 }
 
 #sl2-ig13 {
   position: absolute;
-    width: 11%;
-    height: auto;
-    left: 42%;
-    bottom: 13%;
+  width: 11%;
+  height: auto;
+  left: 42%;
+  top: 5%;
   transform-origin: bottom;
   animation-name: img7;
   animation-duration: 5s;
@@ -1037,33 +1035,32 @@ li {
 
 #sl2-ig14 {
   position: absolute;
-  width: 23%;
+  width: 30%;
   height: auto;
   right: 7%;
   bottom: 10%;
 }
 #sl2-ig15 {
   position: absolute;
-    width: 5%;
-    height: auto;
-    right: 23%;
-    bottom: 52%;
+  width: 5%;
+  height: auto;
+  right: 28%;
+  bottom: 65%;
 }
 #sl2-ig16 {
   position: absolute;
-    width: 4.5%;
-    height: auto;
-    right: 81%;
-    top: 21%;
-
+  width: 4.5%;
+  height: auto;
+  right: 81%;
+  top: 21%;
 }
 
 #sl2-ig17 {
   position: absolute;
   width: 6%;
   height: auto;
-      right: 80%;
-    top: 18%;
+  right: 80%;
+  top: 18%;
   transform-origin: top;
   animation-name: upDown;
   animation-duration: 10s;

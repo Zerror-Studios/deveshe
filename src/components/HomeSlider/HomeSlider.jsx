@@ -111,7 +111,7 @@ const HomeSlider = () => {
               id={`sl1-ig6`}
               width={1000}
               height={1000}
-              src={`/images/sticker (9).png`}
+              src={`/images/sticker (6).png`}
               alt="image"
             />
             <Image
@@ -178,17 +178,17 @@ const HomeSlider = () => {
               alt="image"
             />
             <Image
-              id={`sl1-ig15`}
-              width={1000}
-              height={1000}
-              src={`/images/sticker (14).png`}
-              alt="image"
-            />
-            <Image
               id={`sl1-ig16`}
               width={1000}
               height={1000}
               src={`/images/img16.webp`}
+              alt="image"
+            />
+             <Image
+              id="sl2-ig33"
+              width={1000}
+              height={1000}
+              src="/images/sticker (9).png"
               alt="image"
             />
           </div>
@@ -217,13 +217,7 @@ const HomeSlider = () => {
               src="/images/sticker (8).png"
               alt="image"
             />
-              <Image
-              id="sl2-ig33"
-              width={1000}
-              height={1000}
-              src="/images/sticker (6).png"
-              alt="image"
-            />
+             
             <Image
               id="sl2-ig4"
               width={1000}
