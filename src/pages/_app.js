@@ -18,6 +18,7 @@ import "@/styles/productLoader.css";
 import "@/styles/collectionLoader.css";
 import "@/styles/lookBook.css";
 import "@/styles/legal.css";
+import "@/styles/loader.css";
 import { useState } from "react";
 import HomeWrapper from "@/components/HomeWrapper/HomeWrapper";
 import ModalProvider from "@/components/context/ModalProvider";

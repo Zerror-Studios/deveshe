@@ -35,7 +35,7 @@ const Section3 = () => {
           duration: 0.8,
           stagger: 0.05,
           ease: "bounce.out",
-          delay: 0.8,
+          delay: 4.8,
         }
       );
 
