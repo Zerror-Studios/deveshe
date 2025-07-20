@@ -1,22 +1,23 @@
-import React from "react";
-import Section3 from "@/components/archive/Section3";
-import styles from "@/components/archive/archive.module.css";
+import React, { Suspense } from "react";
 import SeoHeader from "@/components/seo/SeoHeader";
+import ChapterList from "@/components/lookbook/ChapterList";
+import { createApolloClient } from "@/lib/apolloClient";
+import { GET_LOOKBOOKS } from "@/graphql";
 
-const Lookbook = ({ meta }) => {
+const Lookbook = ({ meta, data }) => {
   return (
     <>
       <SeoHeader meta={meta} />
-      <div className={styles.archiveWrapper}>
-        <Section3 />
-      </div>
+      <Suspense fallback={"Loading..."}>
+        <ChapterList data={data || []} />
+      </Suspense>
     </>
   );
 };
 
 export default Lookbook;
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const meta = {
     title: "Lookbook – Explore DeVeSheDreams Collections",
     description:
@@ -24,7 +25,32 @@ export async function getStaticProps() {
     keywords:
       "DeVeSheDreams lookbook, fashion capsule collection, artistic fashion photos, designer collection showcase",
     author: "DeVeSheDreams",
-    robots: "index,follow",
+    robots: "index, follow",
   };
-  return { props: { meta } };
+
+  try {
+    const client = createApolloClient();
+    const { data } = await client.query({
+      query: GET_LOOKBOOKS,
+      variables: {
+        offset: 0,
+        limit: 3,
+      },
+    });
+    
+    return {
+      props: {
+        meta,
+        data: data?.getClientSideLookBooks?.lookBooks || [],
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error.message);
+    return {
+      props: {
+        meta,
+        data: [],
+      },
+    };
+  }
 }

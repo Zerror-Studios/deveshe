@@ -1,6 +1,6 @@
 import React from "react";
 import { ApolloProvider } from "@apollo/client";
-import apolloClient from "@/lib/apolloClient";
+import { createApolloClient } from "@/lib/apolloClient";
 import Layout from "@/components/layouts/Layout";
 import SmoothScroller from "@/components/smoothScroll/SmoothScroll";
 import "@/styles/globals.css";
@@ -18,9 +18,10 @@ import "@/styles/collectionLoader.css";
 import "@/styles/lookBook.css";
 import "@/styles/legal.css";
 export default function App({ Component, pageProps }) {
+  const client = createApolloClient();
   return (
     <>
-      <ApolloProvider client={apolloClient}>
+      <ApolloProvider client={client}>
         <Layout>
           <SmoothScroller />
           <Component {...pageProps} />

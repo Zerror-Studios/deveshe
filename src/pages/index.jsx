@@ -1,33 +1,61 @@
+import React, { Suspense } from "react";
 import SeoHeader from "@/components/seo/SeoHeader";
-// import ProductListing from "@/components/shop/ProductListing";
-// import ProductListMobile from "@/components/shop/ProductListMobile";
-// import Section2 from "@/components/shop/Section2";
-import Section3 from "@/components/shop/Section3";
-// import Section4 from "@/components/shop/Section4";
-import React from "react";
+import HeroSection from "@/components/home/HeroSection";
+import ExploreSection from "@/components/home/ExploreSection";
+import VisionSection from "@/components/home/VisionSection";
+import ProductSection from "@/components/home/ProductSection";
+import ProductLoader from "@/components/home/loaders/ProductLoader";
+import { createApolloClient } from "@/lib/apolloClient";
+import { GET_PRODUCTS } from "@/graphql";
 
-const Home = ({ meta }) => {
-  return <>
-    <SeoHeader meta={meta} />
-    <Section3 />
-    {/* <Section2 />
-    <ProductListing />
-    <ProductListMobile />
-    <Section4 /> */}
-  </>
+const Home = ({ meta, productData }) => {
+  return (
+    <>
+      <SeoHeader meta={meta} />
+      <HeroSection />
+      <ExploreSection />
+      <Suspense fallback={<ProductLoader />}>
+        <ProductSection data={productData} />
+      </Suspense>
+      <VisionSection />
+    </>
+  );
 };
 
 export default Home;
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const meta = {
     title: "DeVeSheDreams – Wear Your Imagination",
     description:
       "DeVeSheDreams is a fashion label that turns dreams into wearable art. Collaborating with artists from different disciplines, we create capsule collections that reflect vibrant expression and individuality.",
-    keywords: "DeVeSheDreams, wearable art, capsule collections, fashion collaborations, expressive clothing, artistic fashion",
+    keywords:
+      "DeVeSheDreams, wearable art, capsule collections, fashion collaborations, expressive clothing, artistic fashion",
     author: "DeVeSheDreams",
     robots: "index,follow",
   };
-  return { props: { meta } };
+  try {
+    const client = createApolloClient();
+    const { data } = await client.query({
+      query: GET_PRODUCTS,
+      variables: {
+        offset: 0,
+        limit: 11,
+      },
+    });
+    return {
+      props: {
+        meta: meta,
+        productData: data?.getClientSideProducts?.products || [],
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error.message);
+    return {
+      props: {
+        meta: meta,
+        productData: [],
+      },
+    };
+  }
 }
-

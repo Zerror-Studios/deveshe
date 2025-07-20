@@ -1,16 +1,23 @@
+// store/cartStore.js
 import { create } from "zustand";
 
-const useCartStore = create((set, get) => ({
+export const useCartStore = create((set) => ({
   cart: [],
+  isCartOpen: false,
+
   addToCart: (product) =>
     set((state) => ({
       cart: [...state.cart, product],
     })),
+
   removeFromCart: (productId) =>
     set((state) => ({
       cart: state.cart.filter((item) => item.id !== productId),
     })),
-  clearCart: () => set({ cart: [] }),
-}));
 
-export default useCartStore;
+  clearCart: () => set({ cart: [] }),
+
+  openCart: () => set({ isCartOpen: true }),
+  closeCart: () => set({ isCartOpen: false }),
+  toggleCart: () => set((state) => ({ isCartOpen: !state.isCartOpen })),
+}));

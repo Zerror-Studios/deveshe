@@ -6,9 +6,11 @@ import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Button from "./Button";
+import { useCartStore } from "@/store/cartStore";
 gsap.registerPlugin(ScrollTrigger);
 
 const NavbarMobile = () => {
+  const { openCart } = useCartStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuTL = useRef(null);
 
@@ -106,7 +108,7 @@ const NavbarMobile = () => {
             />
           </Link>
           <HiOutlineShoppingBag
-            // onClick={openModal}
+            onClick={openCart}
             className="bag-icon"
             size={23}
           />

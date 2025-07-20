@@ -4,10 +4,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
+import { useCartStore } from "@/store/cartStore";
 gsap.registerPlugin(ScrollTrigger);
 
 const Navbar = () => {
   const router = useRouter();
+  const { openCart } = useCartStore();
   useEffect(() => {
     if (window.innerWidth < 576) return;
 
@@ -209,7 +211,7 @@ const Navbar = () => {
           </Link>
         </div>
         <div id="nav-btns">
-          <button>
+          <button onClick={openCart}>
             <svg
               class="icon-cart"
               width="15"
