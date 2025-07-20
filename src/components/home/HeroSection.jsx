@@ -91,48 +91,52 @@ const HeroSection = () => {
           <h2>new collection</h2>
         </div>
         <div className={styles.Section33Btm}>
-          <p>
-            Fashion that feels like you. <br />
-            Dopamine dressing for everday.
-          </p>
+          <div className={styles.Section33Btmleft}>
+            <p>
+              Fashion that feels like you. <br />
+              Dopamine dressing for everday.
+            </p>
 
-          <h3>
-            Dreamy prints, bold collabs
-            <br />
-            each piece is a feeling,
-            <br />
-            stitched into fabric.
-          </h3>
+            <h3>
+              Dreamy prints, bold collabs
+              <br />
+              each piece is a feeling,
+              <br />
+              stitched into fabric.
+            </h3>
+          </div>
 
-          <h2 className={styles.titleh2}>you will get:</h2>
-          <div className={styles.imageContainer2} id="imageContainer2">
-            <div className={styles.imgCardSec3} id="imgCardSec31">
+          <div className={styles.Section33Btmright}>
+            <h2 className={styles.titleh2}>you will get:</h2>
+            <div className={styles.imageContainer2} id="imageContainer2">
+              <div className={styles.imgCardSec3} id="imgCardSec31">
+                <Image
+                  width={1000}
+                  height={1000}
+                  src="/newproduct/BI06.jpg"
+                  alt="image"
+                />
+                <p>From office to OOO</p>
+              </div>
+              <div className={styles.imgCardSec3} id="imgCardSec32">
+                <Image
+                  width={1000}
+                  height={1000}
+                  src="/newproduct/BI04.jpg"
+                  alt="image"
+                />
+                <p>
+                  Bold pieces you won’t find <span>twice</span>. Crafted for
+                  dreamers, worn by you.
+                </p>
+              </div>
               <Image
                 width={1000}
                 height={1000}
-                src="/newproduct/BI06.jpg"
+                src="/shop/arrow.png"
                 alt="image"
               />
-              <p>From office to OOO</p>
             </div>
-            <div className={styles.imgCardSec3} id="imgCardSec32">
-              <Image
-                width={1000}
-                height={1000}
-                src="/newproduct/BI04.jpg"
-                alt="image"
-              />
-              <p>
-                Bold pieces you won’t find <span>twice</span>. Crafted for
-                dreamers, worn by you.
-              </p>
-            </div>
-            <Image
-              width={1000}
-              height={1000}
-              src="/shop/arrow.png"
-              alt="image"
-            />
           </div>
         </div>
       </div>

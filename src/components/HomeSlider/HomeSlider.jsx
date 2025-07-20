@@ -63,32 +63,138 @@ const HomeSlider = () => {
         }}
       >
         <div className="slide1">
-          <Image
-            width={1000}
-            height={1000}
-            src="/images/bg1.png"
-            alt="image"
-          />
+          <Image width={1000} height={1000} src="/images/bg1.png" alt="image" />
           <div className="slide1-container">
-            {[...Array(16)].map((_, i) => (
-              <Image
-                key={i}
-                id={`sl1-ig${i + 1}`}
-                width={1000}
-                height={1000}
-                src={`/images/img${i + 1}.webp`}
-                alt="image"
-              />
-            ))}
+            <Image
+              id={`sl1-ig1`}
+              width={1000}
+              height={1000}
+              src={`/images/img1.webp`}
+              alt="image"
+            />
+            <Image
+              id={`sl1-ig2`}
+              width={1000}
+              height={1000}
+              src={`/images/img2.webp`}
+              alt="image"
+            />
+            <Image
+              id={`sl1-ig3`}
+              width={1000}
+              height={1000}
+              src={`/images/img3.webp`}
+              alt="image"
+            />
+            <Image
+              id={`sl1-ig4`}
+              width={1000}
+              height={1000}
+              src={`/images/sticker7.png`}
+              alt="image"
+            />
+             <Image
+              id={`sl1-ig44`}
+              width={1000}
+              height={1000}
+              src={`/images/sticker7.png`}
+              alt="image"
+            />
+            <Image
+              id={`sl1-ig5`}
+              width={1000}
+              height={1000}
+              src={`/images/img5.webp`}
+              alt="image"
+            />
+            <Image
+              id={`sl1-ig6`}
+              width={1000}
+              height={1000}
+              src={`/images/sticker (6).png`}
+              alt="image"
+            />
+            <Image
+              id={`sl1-ig7`}
+              width={1000}
+              height={1000}
+              src={`/images/sticker5.png`}
+              alt="image"
+            />
+            <Image
+              id={`sl1-ig8`}
+              width={1000}
+              height={1000}
+              src={`/images/img8.webp`}
+              alt="image"
+            />
+            <Image
+              id={`sl1-ig9`}
+              width={1000}
+              height={1000}
+              src={`/images/img9.webp`}
+              alt="image"
+            />
+            <Image
+              id={`sl1-ig11`}
+              width={1000}
+              height={1000}
+              src={`/images/img11.webp`}
+              alt="image"
+            />
+            <Image
+              id={`sl1-ig12`}
+              width={1000}
+              height={1000}
+              src={`/images/sticker (10).png`}
+              alt="image"
+            />
+             <Image
+              id={`sl1-ig122`}
+              width={1000}
+              height={1000}
+              src={`/images/sticker9.png`}
+              alt="image"
+            />
+               <Image
+              id={`sl1-ig1222`}
+              width={1000}
+              height={1000}
+              src={`/images/sticker (13).png`}
+              alt="image"
+            />
+            <Image
+              id={`sl1-ig13`}
+              width={1000}
+              height={1000}
+              src={`/images/img13.webp`}
+              alt="image"
+            />
+            <Image
+              id={`sl1-ig14`}
+              width={1000}
+              height={1000}
+              src={`/images/img14.webp`}
+              alt="image"
+            />
+            <Image
+              id={`sl1-ig16`}
+              width={1000}
+              height={1000}
+              src={`/images/img16.webp`}
+              alt="image"
+            />
+             <Image
+              id="sl2-ig33"
+              width={1000}
+              height={1000}
+              src="/images/sticker (9).png"
+              alt="image"
+            />
           </div>
         </div>
         <div className="slide2">
-          <Image
-            width={1000}
-            height={1000}
-            src="/images/bg1.png"
-            alt="image"
-          />
+          <Image width={1000} height={1000} src="/images/bg1.png" alt="image" />
           <div className="slide1-container">
             <Image
               id="sl2-ig1"
@@ -108,9 +214,10 @@ const HomeSlider = () => {
               id="sl2-ig3"
               width={1000}
               height={1000}
-              src="/images/sticker1.png"
+              src="/images/sticker (8).png"
               alt="image"
             />
+             
             <Image
               id="sl2-ig4"
               width={1000}
@@ -143,7 +250,7 @@ const HomeSlider = () => {
               id="sl2-ig8"
               width={1000}
               height={1000}
-              src="/images/im8.webp"
+              src="/images/sticker (1).png"
               alt="image"
             />
             <Image
@@ -178,7 +285,7 @@ const HomeSlider = () => {
               id="sl2-ig13"
               width={1000}
               height={1000}
-              src="/images/im11.webp"
+              src="/images/sticker4.png"
               alt="image"
             />
             <Image

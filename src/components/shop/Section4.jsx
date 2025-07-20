@@ -59,7 +59,7 @@ const Section4 = () => {
     <div className={styles.shopSection4} id="section4-shop">
       <div className={styles.topCont}>
         <div className={styles.topContHeader} id="title-main-wrap2">
-          <h2>
+          <h2 className={styles.explore}>
             The <span>vision</span>
           </h2>
           <h2>behind the brand</h2>

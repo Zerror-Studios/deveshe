@@ -2,7 +2,7 @@ import React from "react";
 import { ApolloProvider } from "@apollo/client";
 import { createApolloClient } from "@/lib/apolloClient";
 import Layout from "@/components/layouts/Layout";
-import SmoothScroller from "@/components/smoothScroll/SmoothScroll";
+import SmoothScroller from "@/components/common/SmoothScroll";
 import "@/styles/globals.css";
 import "@/styles/home.css";
 import "@/styles/login.css";
@@ -17,6 +17,7 @@ import "@/styles/productLoader.css";
 import "@/styles/collectionLoader.css";
 import "@/styles/lookBook.css";
 import "@/styles/legal.css";
+import "@/styles/loader.css";
 export default function App({ Component, pageProps }) {
   const client = createApolloClient();
   return (

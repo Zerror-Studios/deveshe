@@ -16,7 +16,6 @@ const ChapterList = ({ data = [] }) => {
       const timeline = gsap.timeline({
         scrollTrigger: {
           trigger: "#archiveSection3",
-          start: "top 60px",
           end: `+=${data.length * 100}%`,
           pin: true,
           scrub: 1,
@@ -95,10 +94,7 @@ const ChapterList = ({ data = [] }) => {
               alt={item?.assets?.[0]?.altText || ""}
             />
             <div className={styles.overlay3a}>
-              <div
-                className={styles.textContainer}
-                id={`textc${index + 1}`}
-              >
+              <div className={styles.textContainer} id={`textc${index + 1}`}>
                 <h3>{item?.subName || ""}</h3>
                 <h4>{item?.title || ""}</h4>
                 <p>{item?.description || ""}</p>

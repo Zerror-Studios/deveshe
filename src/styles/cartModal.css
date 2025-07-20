@@ -48,7 +48,11 @@
 }
 .ReactModal__Content {
   /* background: #ffff; */
-background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
+   background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
+   background-image: url(/svg_homepage_bg.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
   position: relative;
   animation-timing-function: linear;
   animation-duration: 0.6s;

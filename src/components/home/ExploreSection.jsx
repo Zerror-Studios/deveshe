@@ -167,7 +167,7 @@ const ExploreSection = () => {
           />
         </div>
         <div id="title-main-wrap3">
-          <h2>Explore</h2>
+          <h2 className={styles.explore}>Explore</h2>
           <h2>styles that</h2>
           <h2>feel like</h2>
           <h2>you.</h2>
@@ -205,7 +205,7 @@ const ExploreSection = () => {
         </div>
       </div>
       <div className={styles.shopSection2Bottom} id="section2-bottom-shop">
-        <h5>All inspired by</h5>
+        <h5 className={styles.inspo}>All inspired by</h5>
         <h3>
           Creativity, <br />
           Collaboration, <br />
