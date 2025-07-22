@@ -1,37 +1,18 @@
-import { LuMenu } from "react-icons/lu";
-import { IoMdClose } from "react-icons/io";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { useGSAP } from "@gsap/react";
-import { useDispatch, useSelector } from "react-redux";
-import gsap from "gsap";
-import { useRouter } from "next/router";
-import Modal from "./Modal";
-import ScrollTrigger from "gsap/dist/ScrollTrigger";
-import { VscAccount } from "react-icons/vsc";
-import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Image from "next/image";
-import { ModalContext } from "../context/ModalProvider";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import ScrollTrigger from "gsap/dist/ScrollTrigger";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Button from "./Button";
+import { useCartStore } from "@/store/cartStore";
 gsap.registerPlugin(ScrollTrigger);
 
-const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
+const NavbarMobile = () => {
+  const { openCart } = useCartStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const path = router.pathname;
-  const pathName = router.pathname.split("/")[1];
-  const [modalIsOpen, setModalIsOpen] = useContext(ModalContext);
-  const user = useSelector((state) => state.user.user);
-  const cartCount = useSelector((state) => state.cart.itemcount);
   const menuTL = useRef(null);
-
-  const openModal = () => setModalIsOpen(true);
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-    setOpenBag(false);
-  };
 
   useGSAP(() => {
     menuTL.current = gsap
@@ -127,7 +108,7 @@ const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
             />
           </Link>
           <HiOutlineShoppingBag
-            onClick={openModal}
+            onClick={openCart}
             className="bag-icon"
             size={23}
           />
@@ -140,13 +121,12 @@ const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
           <div className="side-menu-links">
             <div className="nav-top">
               <Link href="/login" className="login-nav">
-               <Button className="_btn-width">Login / Signup</Button>
+                <Button className="_btn-width">Login / Signup</Button>
               </Link>
               <Link href="/">shop</Link>
               <Link href="/lookbook">lookbook</Link>
               <Link href="/about">about</Link>
               <Link href="/contact">contact</Link>
-             
             </div>
             <div className="nav-wrapper">
               <div className="nav-contact">
@@ -156,7 +136,7 @@ const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
                   +91893990000
                 </p>
               </div>
-               <div className="nav-social-icons">
+              <div className="nav-social-icons">
                 <Link href="/" className="nav-s-icon">
                   <svg
                     class="icon-instagram"
@@ -226,13 +206,6 @@ const NavbarMobile = ({ openBag, setOpenBag, headerNav }) => {
           </div>
         </div>
       </div>
-      <Modal
-        closeModal={closeModal}
-        modalIsOpen={modalIsOpen}
-        setOpenBag={setOpenBag}
-        openBag={openBag}
-        setModalIsOpen={setModalIsOpen}
-      />
     </>
   );
 };

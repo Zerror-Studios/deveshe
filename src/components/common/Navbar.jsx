@@ -1,24 +1,15 @@
+import React, { useEffect } from "react";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import gsap from "gsap";
-import Modal from "./Modal";
-import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/dist/ScrollTrigger";
+import { useCartStore } from "@/store/cartStore";
 gsap.registerPlugin(ScrollTrigger);
 
-const Navbar = ({ openBag, setOpenBag }) => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const cartCount = useSelector((state) => state.cart.itemcount);
-  function openModal() {
-    setModalIsOpen(true);
-  }
-  function closeModal() {
-    setModalIsOpen(false);
-    setOpenBag(false);
-  }
+const Navbar = () => {
   const router = useRouter();
+  const { openCart } = useCartStore();
   useEffect(() => {
     if (window.innerWidth < 576) return;
 
@@ -54,11 +45,11 @@ const Navbar = ({ openBag, setOpenBag }) => {
       if (router.pathname !== "/") {
         gsap.set("#logo-container img", { filter: "invert(0)" });
         gsap.set(".nav-link a", { color: "#000" });
-      gsap.set("#nav", {
-  backgroundColor: "rgba(255, 255, 255, 0.1)", // semi-transparent white
-  backdropFilter: "blur(8px)",
-  WebkitBackdropFilter: "blur(8px)", // for Safari support
-});
+        gsap.set("#nav", {
+          backgroundColor: "rgba(255, 255, 255, 0.1)", // semi-transparent white
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)", // for Safari support
+        });
         gsap.set("#nav-btns svg", { stroke: "#000" });
         gsap.set("#nav-line", { backgroundColor: "#000" });
         gsap.set(".logo", { position: "static" });
@@ -110,9 +101,9 @@ const Navbar = ({ openBag, setOpenBag }) => {
         .to(
           "#nav",
           {
-           backgroundColor: "rgba(255, 255, 255, 0.1)", // semi-transparent white
-  backdropFilter: "blur(8px)",
-  WebkitBackdropFilter: "blur(8px)", // for Safari support
+            backgroundColor: "rgba(255, 255, 255, 0.1)", // semi-transparent white
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)", // for Safari support
             ease: "power1.out",
             duration: 0.3,
           },
@@ -226,7 +217,7 @@ const Navbar = ({ openBag, setOpenBag }) => {
           </Link>
         </div>
         <div id="nav-btns">
-          <button onClick={openModal}>
+          <button onClick={openCart}>
             <svg
               class="icon-cart"
               width="15"
@@ -274,13 +265,6 @@ const Navbar = ({ openBag, setOpenBag }) => {
           </Link>
         </div>
       </div>
-      <Modal
-        closeModal={closeModal}
-        modalIsOpen={modalIsOpen}
-        setOpenBag={setOpenBag}
-        openBag={openBag}
-        setModalIsOpen={setModalIsOpen}
-      />
     </>
   );
 };

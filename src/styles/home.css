@@ -927,14 +927,16 @@
   border: none;
 }
 .ReactModalPortal_img_cntr_grid_cover {
+  position: relative;
+  width: 100%;
+  height: auto;
   display: grid;
   border: none;
 }
 .ReactModalPortal_img_cntr_grid_cover img {
-  object-fit: cover;
+  object-fit: contain;
   width: 100%;
   height: 100%;
-  max-width: 100%;
 }
 .ReactModalPortal_img_cross {
   position: fixed;
