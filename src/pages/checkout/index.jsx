@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineTag } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { Const } from "../../../utils/Constants";
 import { MdOutlineErrorOutline } from "react-icons/md";
 import { countrys } from "../../helpers/country";
-import { Savecards } from "../../../api_fetch/admin/User";
+// import { Savecards } from "../../../api_fetch/admin/User";
 import { useRouter } from "next/router";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { FaRegArrowAltCircleLeft } from "react-icons/fa";
 import { IoBagHandleOutline } from "react-icons/io5";
-import {
-  Checkoutitem,
-  Saveorders,
-  CheckAddress,
-  Getcart,
-} from "../../../api_fetch/admin/Checkout";
-import { FinalPrice } from "../../../api_fetch/admin/Cart";
+// import {
+//   Checkoutitem,
+//   Saveorders,
+//   CheckAddress,
+//   Getcart,
+// } from "../../../api_fetch/admin/Checkout";
+// import { FinalPrice } from "../../../api_fetch/admin/Cart";
 import Link from "next/link";
 import SeoHeader from "@/components/seo/SeoHeader";
 
 const Checkout2 = ({meta}) => {
   const router = useRouter();
-  const cartdata = useSelector((state) => state.cart);
+  // const cartdata = useSelector((state) => state.cart);
   const [user, setUser] = useState(null);
   const [cart, setCart] = useState(null);
   const [isUpdated, setIsUpdated] = useState(false);
@@ -311,7 +310,7 @@ const Checkout2 = ({meta}) => {
     };
 
     func();
-    getdata();
+    // getdata();
   }, []);
   const fetchaddress = async () => {
     const token = localStorage.getItem("token");

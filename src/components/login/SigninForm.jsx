@@ -2,13 +2,13 @@
 import React, { useState } from "react";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { useLazyQuery } from "@apollo/client";
-import { updateCartFromBackend } from "../../features/cart/CartSlice";
-import { useDispatch, useSelector } from "react-redux";
+// import { updateCartFromBackend } from "../../features/cart/CartSlice";
+// import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { setUserData } from "../../features/user/UserSlice";
-import { Const } from "../../../utils/Constants";
+// import { setUserData } from "../../features/user/UserSlice";
 import { LOGIN_USER } from "@/graphql/users.gql";
 import toast from "react-hot-toast";
+import { Const } from "@/utils/Constant";
 
 // Functional component for the login form
 const LoginForm = ({ setLogin }) => {
@@ -21,7 +21,7 @@ const LoginForm = ({ setLogin }) => {
 	const [emailError, setEmailError] = useState("");
 	const [passwordError, setPasswordError] = useState("");
 	const [error, setError] = useState("");
-	const dispatch = useDispatch();
+	// const dispatch = useDispatch();
 	const [load, setLoad] = useState(false);
 
 	// GraphQL lazy query for login
@@ -37,7 +37,7 @@ const LoginForm = ({ setLogin }) => {
 				localStorage.setItem("token", userToken);
 
 				// Dispatch user data to Redux store
-				dispatch(setUserData(user));
+				// dispatch(setUserData(user));
 
 				// Show success message
 				toast.success("Login successful! Welcome back! 🎉");
@@ -101,7 +101,7 @@ const LoginForm = ({ setLogin }) => {
 
 			const dataFromBackend = await response.json();
 			console.log("data from backend", dataFromBackend);
-			dispatch(updateCartFromBackend(dataFromBackend));
+			// dispatch(updateCartFromBackend(dataFromBackend));
 			// Parse response as JSON
 		} catch (error) {
 			console.error("Error fetching data from backend:", error);

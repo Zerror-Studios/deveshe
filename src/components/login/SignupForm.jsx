@@ -4,15 +4,15 @@ import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 // import toast, { Toaster } from "react-hot-toast";
-import {useDispatch} from 'react-redux'
-import {setUserTrue} from "../../features/user/UserSlice"
+// import {useDispatch} from 'react-redux'
+// import {setUserTrue} from "../../features/user/UserSlice"
 import { useRouter } from 'next/router';
-import {Const} from "../../../utils/Constants"
+import { Const } from "@/utils/Constant";
 
 
 const Signup = ({ setLogin }) => {
   const router = useRouter();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [load, setLoad] = useState(false);
   const [user, setUser] = useState({
     firstname: "",
@@ -100,7 +100,7 @@ const Signup = ({ setLogin }) => {
         const data = await response.json();
         if(data){
           localStorage.setItem('token',data.token)
-          dispatch(setUserTrue());
+          // dispatch(setUserTrue());
         }
         if (response.ok) {
           setError("");

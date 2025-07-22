@@ -1,3 +1,3 @@
 export const Const = {
-    ClientLink:"https://www.deveshedreams.com"
+    Link:"https://www.deveshedreams.com"
 }
