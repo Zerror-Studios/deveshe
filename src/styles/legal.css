@@ -5,18 +5,18 @@
   flex-direction: column;
   width: 100%;
   margin: 0 auto;
-   background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
-   background-image: url(/svg_homepage_bg.svg);
+  background-color: #fadcde;
+  background-image: url(/grainy-lg-bg.svg);
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: bottom;
   position: relative;
-
 }
 
 #legal-page h2 {
   font-size: 2vw;
   font-family: font3;
-  letter-spacing: .5px;
+  letter-spacing: 0.5px;
   line-height: 0.8;
   font-weight: 500;
   white-space: nowrap;
@@ -27,14 +27,14 @@
 }
 
 .legal-container h3 {
-  font-family:  var(--primary-font-Hel);
+  font-family: var(--primary-font-Hel);
   font-weight: 600;
   line-height: 160%;
-  font-size:  1.5vw;
-  margin-bottom: .8vw;
+  font-size: 1.5vw;
+  margin-bottom: 0.8vw;
 }
-.subheading-legal{
-  margin-bottom: .8vw !important;
+.subheading-legal {
+  margin-bottom: 0.8vw !important;
 }
 
 .legal-container p {
@@ -48,7 +48,6 @@
 .legal-container ul {
   list-style-type: disc !important;
   padding-left: 1.5rem !important;
-  
 }
 
 .legal-container li {
@@ -60,42 +59,41 @@
   margin-bottom: 1vw;
 }
 
-
 @media (max-width: 576px) {
-    #legal-page {
-        width: 100%;
-        padding: 150px 20px 80px;
-    }
-    
-#legal-page h2 {
-  font-size: calc(25.8px + 1.33333vw);
-  font-family: font3;
-  line-height: 0.8;
-  font-weight: 100;
-  /* text-transform: uppercase; */
-  white-space: nowrap;
-}
+  #legal-page {
+    width: 100%;
+    padding: 150px 20px 80px;
+  }
 
-.legal-container {
-  margin-top: 8vw;
-}
+  #legal-page h2 {
+    font-size: calc(25.8px + 1.33333vw);
+    font-family: font3;
+    line-height: 0.8;
+    font-weight: 100;
+    /* text-transform: uppercase; */
+    white-space: nowrap;
+  }
 
-.legal-container h3 {
-  font-size: 5vw;
-  margin-bottom: 4.5vw;
-}
-.legal-container h4 {
-  font-size: 4vw;
-  margin-bottom: 3vw;
-}
+  .legal-container {
+    margin-top: 8vw;
+  }
 
-.legal-container p {
-  font-size: calc(14.81px - 0.22vw);
-  margin-bottom: 3vw;
-}
+  .legal-container h3 {
+    font-size: 5vw;
+    margin-bottom: 4.5vw;
+  }
+  .legal-container h4 {
+    font-size: 4vw;
+    margin-bottom: 3vw;
+  }
 
-.legal-container li {
- font-size: calc(14.81px - 0.22vw);
-  margin-bottom: 3vw;
-}
+  .legal-container p {
+    font-size: calc(14.81px - 0.22vw);
+    margin-bottom: 3vw;
+  }
+
+  .legal-container li {
+    font-size: calc(14.81px - 0.22vw);
+    margin-bottom: 3vw;
+  }
 }

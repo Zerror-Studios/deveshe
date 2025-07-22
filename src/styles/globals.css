@@ -29,7 +29,7 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: linear-gradient(4.66deg, #fd8d6c -8%, #fde5d8 14%);
+  background: linear-gradient(4.66deg, #ffa9af -8%, #FADCDE 14%);
   position: relative;
   border-top: 0.5px solid rgba(128, 128, 128, 0.307);
 }
@@ -355,14 +355,11 @@ li {
   position: relative;
   overflow: hidden;
   color: black;
-  background: linear-gradient(
-    180deg,
-    rgba(252, 230, 222, 1) 0%,
-    rgba(244, 240, 235, 1) 100%
-  );
-  background-image: url(/svg_homepage_bg.svg);
+  background-color: #FADCDE;
+  background-image: url(/grainy-bg.svg);
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: bottom;
   position: relative;
 }
 #form {

@@ -130,8 +130,8 @@
   width: 100%;
   position: relative;
   padding-top: 16.4705882353vw;
-  background-color: #FDE5D8;
-  background-image: url(/svg_homepage_bg.svg);
+  background-color: #fadcde;
+  background-image: url(/grainy-lg-bg.svg);
   background-repeat: no-repeat;
   background-size: 100%;
   position: relative;
@@ -1321,10 +1321,11 @@ button {
   padding-top: 24px;
   padding-bottom: 40px;
   position: relative;
-    background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
-   background-image: url(/svg_homepage_bg.svg);
+  background-color: #fadcde;
+  background-image: url(/grainy-bg.svg);
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: top;
 }
 
 /* .ProductDets_text_cntr {
@@ -1986,7 +1987,7 @@ button {
 .Similar_prd_wrap {
   position: relative;
   height: 100%;
-  background-color: #FDE5D8;
+  background-color: #fde5d8;
   padding-top: 16px;
 }
 
@@ -2023,7 +2024,7 @@ button {
 }
 
 .Similar_prd_card_cntr {
-  background-color: #FDE5D8;
+  background-color: #fde5d8;
 }
 
 .shop-card-w-full {
@@ -2165,8 +2166,7 @@ button {
     padding-bottom: 0;
     max-width: 50vw;
     position: sticky;
-    top: 30px;
-    height: calc(100dvh - 30px);
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
