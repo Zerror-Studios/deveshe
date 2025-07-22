@@ -6,14 +6,14 @@ import { RiVisaLine } from "react-icons/ri";
 import { GoDotFill } from "react-icons/go";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
-import { Const } from "../../../utils/Constants";
+// import { Const } from "../../../utils/Constants";
 import { GoPlus } from "react-icons/go";
 // import toast, { Toaster } from "react-hot-toast";
 import { FaPlus } from "react-icons/fa6";
 import Addpay from "./PopUpCard";
 // import Profilebtn from "../common/Profilebtn2"
 import { IoIosArrowDown } from "react-icons/io";
-import { Getcards } from "../../../api_fetch/admin/User";
+// import { Getcards } from "../../../api_fetch/admin/User";
 
 const Layout = ({ email }) => {
   // const navigate = useNavigate();
@@ -55,7 +55,7 @@ const Layout = ({ email }) => {
   };
 
   useEffect(() => {
-    fetchUserData();
+    // fetchUserData();
   }, []);
 
   return (

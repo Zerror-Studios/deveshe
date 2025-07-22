@@ -403,10 +403,9 @@
 .title_inner-nail h2 {
   font-family: font2;
   font-size: 9vw;
-  line-height: 0.8;
+  line-height: 0.9;
   text-transform: uppercase;
   white-space: nowrap;
-  letter-spacing: -2px;
   position: relative;
   text-align: center;
 }

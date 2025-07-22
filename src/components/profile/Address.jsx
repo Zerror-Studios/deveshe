@@ -10,7 +10,7 @@ import { IoLocationOutline } from "react-icons/io5";
 // import "../../styles/address.css";
 // import Profilebtn from "../common/Profilebtn2"
 import Addaddress from "./PopUpAddress";
-import { Checkaddress } from "../../../api_fetch/admin/User";
+// import { Checkaddress } from "../../../api_fetch/admin/User";
 
 const General = ({ email }) => {
   const [open, Setopen] = useState(false);
@@ -138,7 +138,7 @@ const General = ({ email }) => {
 
   useEffect(() => {
     // fetchUserData();
-    fetchaddress();
+    // fetchaddress();
   }, []);
 
   return (

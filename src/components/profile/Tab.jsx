@@ -16,7 +16,7 @@ import { MdOutlineDone } from "react-icons/md";
 import Address from "./Address";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
-import {Getone, Updateuser} from "../../../api_fetch/admin/User"
+// import {Getone, Updateuser} from "../../../api_fetch/admin/User"
 
 const AntTabs = styled(Tabs)({
   borderBottom: "1px solid #e8e8e8",
@@ -101,7 +101,7 @@ function CustomTabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 4 }}>
-          <Typography>{children}</Typography>
+          <Typography component="div">{children}</Typography>
         </Box>
       )}
     </div>
@@ -222,7 +222,7 @@ export default function BasicTabs() {
   };
 
   useEffect(() => {
-    fetchUserData();
+    // fetchUserData();
   }, []);
 
   const Updatefun = async (userData) => {
@@ -287,7 +287,7 @@ export default function BasicTabs() {
                 <div
                 id="edit_profile"
                   className="_btn_wrapper _btn_height _w-full"
-                  onClick={()=>{Updatefun(userData)}}
+                  // onClick={()=>{Updatefun(userData)}}
                   style={{ position: "relative", left: "93%", width:'40px', height:"40px", top:'15px', borderRadius:'50%', padding:'0' }}
                 >
                   {textbtn=='Edit' ? <FaUserEdit className="status-btnpro"/>:<MdOutlineDone className="status-btnpro"/>}

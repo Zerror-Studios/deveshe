@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Table from "./Table_order";
-import { Getorders } from "../../../api_fetch/admin/User";
+// import { Getorders } from "../../../api_fetch/admin/User";
 const General = () => {
   const [userData, setUserData] = useState({
     firstname: "",
@@ -77,7 +77,7 @@ const General = () => {
         console.error("Error fetching data:", error);
       }
     };
-    func();
+    // func();
   }, []);
 
   const editItem = (id) => {

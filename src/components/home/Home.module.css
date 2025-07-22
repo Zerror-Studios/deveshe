@@ -129,10 +129,9 @@
   color: rgb(246, 178, 183);
   font-family: font2;
   font-size: 8vw;
-  line-height: 0.8;
+  line-height: 0.9;
   text-transform: uppercase;
   white-space: nowrap;
-  letter-spacing: -2px;
 }
 .shopSection3 .overlay3 h2 span {
   display: inline-block;
@@ -215,10 +214,10 @@
   padding: 160px 80px;
   overflow: hidden;
   /* background-color: #fff; */
-  background-image: url(/svg_homepage_bg.svg);
+  background-image: url(/grainy-lg-bg.svg);
   background-repeat: no-repeat;
   background-size: 100%;
-  background-color: #fde5d8;
+  background-color: #fadcde;
 }
 .shopSection2Top {
   width: 100%;
@@ -242,10 +241,9 @@
   z-index: 2;
   font-family: font2;
   font-size: 8vw;
-  line-height: 0.8;
+  line-height: 0.9;
   text-transform: uppercase;
   white-space: nowrap;
-  letter-spacing: -2px;
 }
 .shopSection2Top h2:nth-child(2) span:nth-child(-n + 7) {
   color: rgb(246, 178, 183);
@@ -279,7 +277,7 @@
   font-size: 5.5vw;
   font-family: font3;
   font-weight: 500;
-  line-height: 1;
+  line-height: 1.2;
   margin-bottom: 15vw;
 }
 .shopSection2BottomBtn {
@@ -484,8 +482,9 @@
     rgba(252, 230, 222, 1) 0%,
     rgba(244, 240, 235, 1) 100%
   );
+  background-color: #fadcde;
   padding-top: 150px;
-  background-image: url(/svg_homepage_bg.svg);
+  background-image: url(/grainy-bg.svg);
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -495,7 +494,6 @@
   line-height: 0.9;
   text-transform: uppercase;
   white-space: nowrap;
-  letter-spacing: -2px;
 }
 
 .shopSection4 .topCont {
@@ -565,11 +563,10 @@
   display: flex;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
-  background: linear-gradient(
-    180deg,
-    rgba(253, 230, 221, 1) 0%,
-    rgba(253, 229, 216, 1) 100%
-  );
+  background-image: url(/grainy-op-bg.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
 }
 .proDets {
   width: 100%;
