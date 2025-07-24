@@ -14,10 +14,10 @@ export default function About({ meta }) {
       <SeoHeader meta={meta} />
       <main>
         <HomeSlider />
-        <Nails_Cntr />
-        <Section5 />
         <Section6 />
         <Section7 />
+        <Nails_Cntr />
+        <Section5 />
       </main>
     </>
   );

@@ -239,13 +239,7 @@ const HomeSlider = () => {
               src="/images/im6.webp"
               alt="image"
             />
-            <Image
-              id="sl2-ig7"
-              width={1000}
-              height={1000}
-              src="/images/im7.webp"
-              alt="image"
-            />
+        
             <Image
               id="sl2-ig8"
               width={1000}

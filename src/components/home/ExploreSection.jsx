@@ -158,14 +158,6 @@ const ExploreSection = () => {
   return (
     <div className={styles.shopSection2} id="section2-shop">
       <div className={styles.shopSection2Top}>
-        <div className={styles.crossImg}>
-          <Image
-            height={1000}
-            width={1000}
-            src="https://emmpo.com/assets/51deafe99e147c5239b2.png"
-            alt="cross-img"
-          />
-        </div>
         <div id="title-main-wrap3">
           <h2 className={styles.explore}>Explore</h2>
           <h2>styles that</h2>

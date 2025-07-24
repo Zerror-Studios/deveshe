@@ -131,9 +131,9 @@
   position: relative;
   padding-top: 16.4705882353vw;
   background-color: #fadcde;
-  background-image: url(/grainy-lg-bg.svg);
+  background-image: url(/grainy-lg-bg-op.svg);
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-size: cover;
   position: relative;
 }
 
@@ -420,7 +420,7 @@
   height: 40px;
   top: 0%;
   left: 0%;
-  background-image: url(/star.svg);
+  background-image: url(/star.png);
   background-repeat: no-repeat;
   z-index: 1;
 }
@@ -431,7 +431,7 @@
   height: 40px;
   top: 50%;
   left: 95%;
-  background-image: url(/start2.svg);
+  background-image: url(/star2.png);
   background-repeat: no-repeat;
   z-index: 1;
 }
@@ -444,7 +444,7 @@
 .title_inner-nail h2 span:nth-last-child(5),
 .title_inner-nail h2 span:nth-last-child(6),
 .title_inner-nail h2 span:nth-last-child(7) {
-  color: rgb(246, 178, 183) !important;
+  color: red !important;
 }
 
 .title_inner-nail h2 .serif-italic {
