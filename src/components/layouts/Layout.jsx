@@ -1,16 +1,20 @@
 import React, { useEffect, useRef } from "react";
+import Image from "next/image";
+import gsap from "gsap";
 import { useRouter } from "next/router";
+import { useCartStore } from "@/store/CartStore";
+import { useVisitor } from "@/hooks/useVisitor";
 import Navbar from "@/components/common/Navbar";
 import NavbarMobile from "@/components/common/NavbarMobile";
 import Footer from "@/components/common/Footer";
 import CartDrawer from "@/components/cart/CartDrawer";
-import Image from "next/image";
-import gsap from "gsap";
 
 const Layout = ({ children }) => {
   const router = useRouter();
   const loaderRef = useRef(null);
   const counterRef = useRef(null);
+  const { visitorId, visitorExpire } = useVisitor();
+  const { isCartOpen, openCart, closeCart } = useCartStore();
   useEffect(() => {
     if (router.pathname === "/") {
       const tl = gsap.timeline({ defaults: { delay: 1 } });
@@ -194,11 +198,11 @@ const Layout = ({ children }) => {
             </div>
           </div>
         )}
-        <Navbar />
-        <NavbarMobile />
+        <Navbar openCart={openCart} />
+        <NavbarMobile openCart={openCart} />
         {children}
         <Footer />
-        <CartDrawer />
+        <CartDrawer isOpen={isCartOpen} closeCart={closeCart} />
       </div>
     </>
   );

@@ -26,7 +26,7 @@ const ProductSection = ({ data }) => {
 
           <div className={styles.productOverlay}>
             <div className={styles.bagCont}>
-              <button>
+              {/* <button>
                 <svg
                   class="icon-cart"
                   width="15"
@@ -46,7 +46,7 @@ const ProductSection = ({ data }) => {
                     stroke-linecap="round"
                   ></path>
                 </svg>
-              </button>
+              </button> */}
             </div>
             <div className={styles.proDets}>
               <h4> {data[0]?.name || ""}</h4>
@@ -74,7 +74,7 @@ const ProductSection = ({ data }) => {
                 </Link>
                 <div className={styles.productOverlay}>
                   <div className={styles.bagCont}>
-                    <button>
+                    {/* <button>
                       <svg
                         class="icon-cart"
                         width="15"
@@ -94,7 +94,7 @@ const ProductSection = ({ data }) => {
                           stroke-linecap="round"
                         ></path>
                       </svg>
-                    </button>
+                    </button> */}
                   </div>
                   <div className={styles.proDets}>
                     <h4>{item?.name || ""}</h4>

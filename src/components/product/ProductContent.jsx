@@ -1,116 +1,132 @@
-import React, { useEffect, useState } from "react";
-import { useCartStore } from "@/store/cartStore";
+import React, { useEffect, useState, useMemo } from "react";
+import toast from "react-hot-toast";
+import { useMutation } from "@apollo/client";
+import { ADD_ITEM_TO_CART } from "@/graphql";
+import { useAuthStore } from "@/store/AuthStore";
+import { useVisitor } from "@/hooks/useVisitor";
 import { htmlParser } from "@/utils/Util";
+import { useRouter } from "next/router";
 
 const ProductContent = ({ data = {} }) => {
-  const [finalPrice, setFinalPrice] = useState(0);
+  const router = useRouter();
+  const { token, isLoggedIn } = useAuthStore();
+  const { visitorId } = useVisitor();
+
+  const basePrice = useMemo(
+    () => (data?.discountedPrice > 0 ? data.discountedPrice : data?.price || 0),
+    [data]
+  );
+
+  const colorOption = useMemo(
+    () =>
+      data?.productOptions?.find((opt) => opt.showInProductPageAs === "Color"),
+    [data]
+  );
+
+  const listOptions = useMemo(
+    () =>
+      data?.productOptions?.filter(
+        (opt) => opt.showInProductPageAs === "List"
+      ) || [],
+    [data]
+  );
+
+  const [finalPrice, setFinalPrice] = useState(basePrice);
   const [selectedVariants, setSelectedVariants] = useState({});
+  const [variantMatched, setVariantMatched] = useState(null);
   const [variantSelect, setVariantSelect] = useState({});
-  const [colorSelect, setColorSelect] = useState(null);
-  const [isBtnLoading, setIsBtnLoading] = useState(false);
+  const [colorSelect, setColorSelect] = useState(0);
   const [cartBtn, setCartBtn] = useState(false);
-  const addToCart = useCartStore((state) => state.addToCart);
-  const basePrice =
-    data?.discountedPrice > 0 ? data.discountedPrice : data.price;
+  const [addItemToCart, { loading }] = useMutation(ADD_ITEM_TO_CART);
 
+  // Initialize default variants and color
   useEffect(() => {
-    if (data) {
-      setFinalPrice(basePrice);
+    if (!data?.productOptions?.length) return;
 
-      // Default variant selection
-      const defaults = {};
-      data.productOptions?.forEach((option) => {
-        if (option.choices?.length > 0) {
-          defaults[option.optionName] = option.choices[0].name;
-        }
-      });
-      setSelectedVariants(defaults);
-
-      // Default color selection index
-      const colorOption = data.productOptions?.find(
-        (option) => option.showInProductPageAs === "Color"
-      );
-      if (colorOption?.choices?.length > 0) {
-        setColorSelect(0);
+    const defaults = {};
+    data.productOptions.forEach((option) => {
+      if (option.choices?.length) {
+        defaults[option.optionName] = option.choices[0].name;
       }
+    });
 
-      // Enable cart button if default selections cover all options
-      setCartBtn(Object.keys(defaults).length === data.productOptions?.length);
-    }
-  }, [data]);
+    setSelectedVariants(defaults);
+    setColorSelect(0);
+    setCartBtn(Object.keys(defaults).length === data.productOptions.length);
+    setFinalPrice(basePrice);
+  }, [data, basePrice]);
 
   const updatePriceBasedOnVariant = (updatedVariants) => {
-    const matchingVariant = data?.variants?.find((variant) =>
-      variant.selectedOptions?.every((option) =>
-        Object.entries(option).every(
-          ([key, val]) => updatedVariants[key] === val
-        )
-      )
-    );
+    const selectedValues = Object.values(updatedVariants).sort();
+
+    const matchingVariant = data?.variants?.find((variant) => {
+      const options = variant.selectedOptions?.sort();
+      return (
+        options?.length === selectedValues.length &&
+        options.every((val, i) => val === selectedValues[i])
+      );
+    });
 
     if (matchingVariant) {
       const diff = matchingVariant.priceDifference || 0;
+      const { __typename, _id, ...variantWithoutTypename } = matchingVariant;
+      setVariantMatched({variantDetailId: _id, ...variantWithoutTypename});
       setFinalPrice(basePrice + diff);
     }
   };
 
   const handleVariants = (name, value) => {
-    const updatedVariants = { ...selectedVariants, [name]: value };
-    setSelectedVariants(updatedVariants);
-
-    // Update UI state
-    setCartBtn(
-      Object.keys(updatedVariants).length === data.productOptions?.length
-    );
-    updatePriceBasedOnVariant(updatedVariants);
+    const updated = { ...selectedVariants, [name]: value };
+    setSelectedVariants(updated);
+    setCartBtn(Object.keys(updated).length === data.productOptions?.length);
+    updatePriceBasedOnVariant(updated);
   };
 
-  const handleVariantSelection = (variantTitle, option, index) => {
-    setVariantSelect((prev) => ({
-      ...prev,
-      [variantTitle]: `${variantTitle}-${index}`,
-    }));
-  };
-
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!cartBtn) return;
 
-    setIsBtnLoading(true);
-    setTimeout(() => {
-      setIsBtnLoading(false);
-    }, 500);
+    try {
+      const productId = router?.query?.slug;
+      if (!productId) throw new Error("Product ID not found");
 
-    addToCart({
-      name: data.name,
-      img: data.assets?.[0]?.path || "",
-      productid: data._id,
-      qty: 1,
-      variants: selectedVariants,
-    });
+      const payload = {
+        input: {
+          productId,
+          variantDetail: variantMatched,
+          ...(isLoggedIn && token ? { token } : {}),
+        },
+        ...(!isLoggedIn && visitorId ? { guestId: visitorId } : {}),
+      };
+
+      const { data: response } = await addItemToCart({ variables: payload });
+      console.log(response);
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message || "Failed to add item to cart");
+    }
   };
+
+  if (!data) return null;
 
   return (
     <div className="ProductDets_text_wrapper">
       <div className="ProductDets_blank-div">
         <div className="ProductDets_text-container">
           <div className="ProductDets_text_container_resp">
-            <div>
-              <h1 className="ProductDets_text_container_resp_productName ProductDets_common_style">
-                {data?.name ?? ""}
-              </h1>
-            </div>
-            <div className="ProductDets_text_container_price_resp ProductDets_common_style">
-              <div className="ProductDets_text_container_price_resp_flex">
-                <span>{finalPrice}</span>
-                <span>&nbsp;INR</span>
-              </div>
+            <h1 className="ProductDets_text_container_resp_productName ProductDets_common_style">
+              {data.name}
+            </h1>
+            <div className="ProductDets_text_container_price_resp_flex ProductDets_common_style">
+              <span>{finalPrice} INR</span>
             </div>
           </div>
+
           <div className="ProductDets_title_wrap">
             <h1 className="ProductDets_text_container_productName ProductDets_common_style">
-              {data?.name || ""}
+              {data.name}
             </h1>
           </div>
+
           <div className="ProductDets_reverse_content_wrapper">
             <div className="ProductDets_description_wrap">
               <div className="ProductDets_text-container_prdt_Desc">
@@ -121,173 +137,118 @@ const ProductContent = ({ data = {} }) => {
                 </div>
               </div>
             </div>
-            <div className="ProductDets_Variants">
-              <div className="ProductDets_collection-wrap">
-                <fieldset className="ProfuctDets_fieldset">
-                  {data &&
-                    data.productOptions &&
-                    data.productOptions.length > 0 &&
-                    data.productOptions
-                      .filter(
-                        (option) => option.showInProductPageAs === "Color"
-                      )
-                      .map((colorOption) =>
-                        colorOption.choices.map((choice, i) => (
+
+            {/* Color Selector */}
+            {colorOption?.choices?.length > 0 && (
+              <fieldset className="ProfuctDets_fieldset">
+                {colorOption.choices.map((choice, i) => (
+                  <div
+                    key={i}
+                    aria-label={choice.name}
+                    onClick={() => {
+                      setColorSelect(i);
+                      handleVariants(colorOption.optionName, choice.name);
+                    }}
+                    className={`shop-card_grid collection_grid ${
+                      colorSelect === i ? "Product_active_color" : ""
+                    }`}
+                  >
+                    <div className="ProductDets_collection_imgs_grid_cntr">
+                      <div className="ProductDets_imgs_grid_cntr ProductDets_imgs_grid_cntr2">
+                        <div className="ProductDets_collection_img_cntr">
                           <div
-                            aria-label={choice.name}
-                            onClick={() => {
-                              setColorSelect(i);
-                              handleVariants(
-                                colorOption.optionName,
-                                choice.name
-                              );
-                            }}
-                            className={
-                              colorSelect == i
-                                ? "shop-card_grid collection_grid Product_active_color"
-                                : "shop-card_grid collection_grid"
-                            }
-                            key={i}
-                          >
-                            <div className="ProductDets_collection_imgs_grid_cntr">
-                              <div className="ProductDets_imgs_grid_cntr ProductDets_imgs_grid_cntr2">
-                                <div className="ProductDets_collection_img_cntr">
-                                  <div
-                                    className="Product_color"
-                                    style={{
-                                      backgroundColor: choice.name,
-                                    }}
-                                  ></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ))
-                      )}
-                </fieldset>
-              </div>
-              <div className="ProductDets-size_assist_cntr">
-                <div id="easysize_button" className="easysize_button">
-                  {data &&
-                    data.productOptions &&
-                    data.productOptions.length > 0 &&
-                    data.productOptions
-                      .filter(
-                        (option) => option.showInProductPageAs === "Color"
-                      )
-                      .map(
-                        (colorOption) =>
-                          colorOption.choices[colorSelect]?.name ||
-                          colorOption.choices[0]?.name
-                      )}
-                </div>
-              </div>
-            </div>
-            <div className="ProductDets_size_Mainwrap">
-              {data &&
-                data.productOptions &&
-                data.productOptions.length > 0 &&
-                data.productOptions
-                  .filter((option) => option.showInProductPageAs === "List")
-                  .map((productOption, i) => (
-                    <div
-                      className="ProductDets_size_wrap"
-                      key={`productOption-${i}`}
-                    >
-                      <div className="ProductDets-size_numbers_cntr">
-                        <div
-                          className="ProductDets-size_numbers_inner"
-                          id="easysize-size-selector"
-                        >
-                          {productOption.choices &&
-                            productOption.choices.map((choice, j) => (
-                              <div
-                                key={`choice-${j}`}
-                                onClick={() => {
-                                  handleVariants(
-                                    productOption.optionName,
-                                    choice.name
-                                  );
-                                  handleVariantSelection(
-                                    productOption.optionName,
-                                    choice.name,
-                                    j
-                                  );
-                                }}
-                                aria-current="page"
-                                className={
-                                  variantSelect[productOption.optionName] ==
-                                  `${productOption.optionName}-${j}`
-                                    ? "ProductDets-size_numbers acitve"
-                                    : "ProductDets-size_numbers"
-                                }
-                              >
-                                {choice.name}
-                              </div>
-                            ))}
-                        </div>
-                      </div>
-                      <div className="ProductDets-size_assist_cntr">
-                        <div
-                          id="easysize_button"
-                          className="easysize_button"
-                          style={{ textTransform: "capitalize" }}
-                        >
-                          {productOption.optionName} Assistance
+                            className="Product_color"
+                            style={{ backgroundColor: choice.name }}
+                          ></div>
                         </div>
                       </div>
                     </div>
-                  ))}
-            </div>
+                  </div>
+                ))}
+              </fieldset>
+            )}
+
+            {/* Size Selector */}
+            {listOptions.map((productOption, i) => (
+              <div className="ProductDets_size_wrap" key={`opt-${i}`}>
+                <div className="ProductDets-size_numbers_cntr">
+                  <div
+                    className="ProductDets-size_numbers_inner"
+                    id="easysize-size-selector"
+                  >
+                    {productOption.choices?.map((choice, j) => {
+                      const selected =
+                        variantSelect[productOption.optionName] ===
+                        `${productOption.optionName}-${j}`;
+                      return (
+                        <div
+                          key={j}
+                          onClick={() => {
+                            handleVariants(
+                              productOption.optionName,
+                              choice.name
+                            );
+                            setVariantSelect((prev) => ({
+                              ...prev,
+                              [productOption.optionName]: `${productOption.optionName}-${j}`,
+                            }));
+                          }}
+                          className={`ProductDets-size_numbers ${
+                            selected ? "acitve" : ""
+                          }`}
+                        >
+                          {choice.name}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div className="ProductDets-size_assist_cntr">
+                  <div
+                    className="easysize_button"
+                    style={{ textTransform: "capitalize" }}
+                  >
+                    {productOption.optionName} Assistance
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
 
           <div className="ProductDets_Notify_wrap">
             <button
               className="ProductDets_ntfy_btn ProductDets_ntfy_btn_grid"
               id="easysize-cart-button"
-              style={isBtnLoading ? { backgroundColor: "black" } : {}}
+              style={loading ? { backgroundColor: "black" } : {}}
               onClick={handleAddToCart}
             >
-              {isBtnLoading ? (
-                <>
-                  <div className="ani-wrap">
-                    <div className="ani-main"></div>
-                  </div>
-                </>
+              {loading ? (
+                <div className="ani-wrap">
+                  <div className="ani-main" />
+                </div>
               ) : (
                 <>
-                  {!cartBtn ? (
-                    <span className="ProductDets_ntfy_btn_slect_size">
-                      Select a Size
-                    </span>
-                  ) : (
-                    <span className="ProductDets_ntfy_btn_slect_size">
-                      Add to Bag
-                    </span>
-                  )}
+                  <span className="ProductDets_ntfy_btn_slect_size">
+                    {!cartBtn ? "Select a Size" : "Add to Bag"}
+                  </span>
                   <span className="ProductDets_ntfy_btn_AddtoBeg">
                     Add to Bag
                   </span>
-
                   <div className="ProductDets_ntfy_btn_price">
-                    <div className="">
-                      <span>{finalPrice}</span>
-                      <span>&nbsp;INR</span>
-                    </div>
+                    <span>{finalPrice} INR</span>
                   </div>
                 </>
               )}
             </button>
-
-            {/* <AnimBtn btnLoading={btnLoading} /> */}
           </div>
 
           <div className="ProductDets_bottom_links_wrap">
             <div className="ProductDets_info_links">
-              <button className="ProductDets_info-btn">Details</button>
-              <button className="ProductDets_info-btn">Care</button>
-              <button className="ProductDets_info-btn">Shipping</button>
-              <button className="ProductDets_info-btn">Help</button>
+              {["Details", "Care", "Shipping", "Help"].map((label) => (
+                <button className="ProductDets_info-btn" key={label}>
+                  {label}
+                </button>
+              ))}
             </div>
             <div className="ProductDets_info_help">
               <p className="ProductDets_info_text sql38zc _1l9nr81o">

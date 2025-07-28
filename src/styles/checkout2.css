@@ -3,7 +3,11 @@
   padding: 200px 0px 50px;
   justify-content: center;
   /* background-color: white; */
-  background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(252, 230, 222, 1) 0%,
+    rgba(244, 240, 235, 1) 100%
+  );
 }
 /* new-left-code */
 
@@ -170,13 +174,13 @@ a {
   display: grid;
   column-gap: 2.2rem;
   row-gap: 0.6rem;
+  margin: 0.6rem 0 0 0;
 }
 .Delivery_input_cntr label {
   position: relative;
   padding-block: 1.5rem;
   padding-inline: 1rem;
   font-size: 1rem;
-  margin: 0.6rem 0 0 0;
   border: 1px solid #dedede;
   width: 100%;
   display: block;
@@ -272,7 +276,7 @@ a {
   border: 1px solid #dedede;
   padding-inline: 1rem;
   font-size: 0.75rem;
-background-color: rgb(245 243 243 / 60%);
+  background-color: rgb(245 243 243 / 60%);
   width: 100%;
 }
 .Phone_input_cntr {
@@ -1030,11 +1034,29 @@ input:focus {
   height: 35px;
 }
 
+.delivery__input__phone {
+  font-family: unset !important;
+  height: 100% !important;
+  position: relative;
+  padding: 1rem !important;
+  border: 1px solid #dedede !important;
+  font-size: 0.75rem !important;
+  background-color: rgb(245 243 243 / 60%) !important;
+  width: 100% !important;
+}
+.react-international-phone-input-container
+  .react-international-phone-input.delivery__input__phone {
+  border: 1px solid #dedede !important;
+}
+.delivery__phone_btn .react-international-phone-country-selector-button {
+  border: 1px solid #dedede !important;
+  background-color: rgb(245 243 243 / 60%) !important;
+  height: 100%;
+}
 
-
-@media (max-width: 576px){
-  .checkout-cont{
-    flex-direction:column-reverse;
+@media (max-width: 576px) {
+  .checkout-cont {
+    flex-direction: column-reverse;
     padding: 100px 0px 50px;
   }
   .checkout-left {
@@ -1045,12 +1067,12 @@ input:focus {
     width: 100%;
     margin: 0px 0px;
     padding: 20px;
-}
-.summary-cont{
-  gap: 20px;
-}
-.checkout_header .checkout_header_titile h1 {
-  font-size: 1.8rem;
-  white-space: nowrap;
-}
+  }
+  .summary-cont {
+    gap: 20px;
+  }
+  .checkout_header .checkout_header_titile h1 {
+    font-size: 1.8rem;
+    white-space: nowrap;
+  }
 }

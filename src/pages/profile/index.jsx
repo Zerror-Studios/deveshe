@@ -1,20 +1,30 @@
-import Tab from "@/components/profile/Tab";
+import React, { useState } from "react";
+import Box from "@mui/material/Box";
 import SeoHeader from "@/components/seo/SeoHeader";
+import TabList from "@/components/profile/TabList";
+import TabPanel from "@/components/profile/TabPanel";
+import withAuth from "@/lib/withAuth";
 
-const General = ({meta}) => {
+const Profile = ({ meta }) => {
+  const [tab, setTab] = useState(0);
   return (
     <>
-    <SeoHeader meta={meta} />
+      <SeoHeader meta={meta} />
       <div className="parent-div">
         <div className="outerdiv-pro">
-          <Tab />
+          <div className="div-tab">
+            <Box sx={{ width: "100%" }}>
+              <TabList tab={tab} setTab={setTab} />
+              <TabPanel tab={tab} />
+            </Box>
+          </div>
         </div>
       </div>
     </>
   );
 };
 
-export default General;
+export default withAuth(Profile);
 
 export async function getStaticProps() {
   const meta = {
@@ -24,7 +34,7 @@ export async function getStaticProps() {
     keywords:
       "DeVeSheDreams profile, user account, fashion wishlist, order history, saved items",
     author: "DeVeSheDreams",
-    robots: "noindex,follow", // Optional: hide profile page from search engines
+    robots: "noindex,follow",
   };
   return { props: { meta } };
 }

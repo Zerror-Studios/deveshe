@@ -258,7 +258,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 97%;
+  width: 100%;
   margin-bottom: 10px;
 }
 
@@ -747,8 +747,8 @@
 
 .error {
   color: red;
-  font-size: 13px;
-  margin-top: -6px;
+  font-size: 12px;
+  margin-top: 0px;
 }
 
 .sm-body-profile, .sm-top-profile {

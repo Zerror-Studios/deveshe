@@ -1,6 +1,7 @@
 import React from "react";
 import { ApolloProvider } from "@apollo/client";
 import { createApolloClient } from "@/lib/apolloClient";
+import { Toaster } from "react-hot-toast";
 import Layout from "@/components/layouts/Layout";
 import SmoothScroller from "@/components/common/SmoothScroll";
 import "@/styles/globals.css";
@@ -27,6 +28,7 @@ export default function App({ Component, pageProps }) {
           <SmoothScroller />
           <Component {...pageProps} />
         </Layout>
+        <Toaster position="top-right" reverseOrder={false} />
       </ApolloProvider>
     </>
   );

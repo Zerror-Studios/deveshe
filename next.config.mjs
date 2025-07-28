@@ -12,6 +12,7 @@ const nextConfig = {
       "ark8.net",
       "localhost",
       "cdn.deveshedreams.com",
+      "avatar.iran.liara.run"
     ],
   },
 };

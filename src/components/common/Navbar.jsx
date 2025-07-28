@@ -4,12 +4,13 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
-import { useCartStore } from "@/store/cartStore";
+import { useAuthStore } from "@/store/AuthStore";
 gsap.registerPlugin(ScrollTrigger);
 
-const Navbar = () => {
+const Navbar = ({openCart}) => {
   const router = useRouter();
-  const { openCart } = useCartStore();
+  const { isLoggedIn } = useAuthStore();
+
   useEffect(() => {
     if (window.innerWidth < 576) return;
 
@@ -239,7 +240,7 @@ const Navbar = () => {
             </svg>
           </button>
           <div id="nav-line"></div>
-          <Link href="/profile">
+          <Link href={isLoggedIn ? "/profile" : "/login"}>
             <svg
               class="icon-account"
               width="16"

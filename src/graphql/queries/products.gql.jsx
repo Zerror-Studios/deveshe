@@ -83,12 +83,18 @@ export const GET_PRODUCT_BY_ID = gql`
       saleValue
       status
       variants {
-        priceDifference
-        shippingWeight
+        _id
         selectedOptions
-        status
+        priceDifference
         variantPrice
+        sku
         variantCostOfGoods
+        shippingWeight
+        trackInventory
+        stockQuantity
+        status
+        stockStatus
+        visibility
       }
       ribbon {
         name

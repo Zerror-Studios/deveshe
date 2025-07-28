@@ -34,7 +34,7 @@ export async function getServerSideProps() {
       query: GET_LOOKBOOKS,
       variables: {
         offset: 0,
-        limit: 3,
+        limit: 10,
       },
     });
     

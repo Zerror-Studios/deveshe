@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { FiArrowUpRight } from "react-icons/fi";
 import styles from "@/components/lookbook/Lookbook.module.css";
+import { htmlParser } from "@/utils/Util";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -96,8 +97,10 @@ const ChapterList = ({ data = [] }) => {
             <div className={styles.overlay3a}>
               <div className={styles.textContainer} id={`textc${index + 1}`}>
                 <h3>{item?.subName || ""}</h3>
-                <h4>{item?.title || ""}</h4>
-                <p>{item?.description || ""}</p>
+                <h4>{item?.name || ""}</h4>
+                {item?.description && (
+                  <>{htmlParser(item?.description || "")}</>
+                )}
                 <span className={styles.exploreBtn}>
                   Explore <FiArrowUpRight />
                 </span>

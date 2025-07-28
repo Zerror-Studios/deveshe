@@ -7,10 +7,11 @@ import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Button from "./Button";
 import { useCartStore } from "@/store/cartStore";
+import { useAuthStore } from "@/store/AuthStore";
 gsap.registerPlugin(ScrollTrigger);
 
-const NavbarMobile = () => {
-  const { openCart } = useCartStore();
+const NavbarMobile = ({openCart}) => {
+  const { isLoggedIn } = useAuthStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuTL = useRef(null);
 
@@ -99,7 +100,7 @@ const NavbarMobile = () => {
           <Image width={1000} height={1000} src="/logo/m.png" alt="M" />
         </Link>
         <div className="menu-icons">
-          <Link href="/profile">
+          <Link href={isLoggedIn ? "/profile" : "/login"}>
             <Image
               className="account-logo"
               width={23}

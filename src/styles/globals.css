@@ -21,7 +21,12 @@ body {
 a {
   text-decoration: none;
 }
-
+.overflow-hidden {
+  overflow: hidden !important;
+}
+.w-100 {
+  width: 100%!important;
+}
 /* Footer */
 .Footer_wrapper {
   padding: 26px;
@@ -65,6 +70,9 @@ li {
 .footer_nav_ul_list p {
   margin: 7px 4px;
   color: #767676;
+}
+.relative {
+  position: relative !important;
 }
 ._list-links {
   font-family: var(--primary-font-Hel);
@@ -865,13 +873,13 @@ li {
 }
 
 #sl2-ig33 {
-    position: absolute;
-    width: 35%;
-    height: auto;
-    object-fit: cover;
-    bottom: 11%;
-    right: -34%;
-    transform: translate(-50%, 0);
+  position: absolute;
+  width: 35%;
+  height: auto;
+  object-fit: cover;
+  bottom: 11%;
+  right: -34%;
+  transform: translate(-50%, 0);
 }
 #sl2-ig4 {
   position: absolute;
@@ -1004,18 +1012,18 @@ li {
 }
 
 #sl2-ig12 {
-    position: absolute;
-    width: 9%;
-    height: auto;
-    left: 55%;
-    bottom: 22%;
-    transform-origin: bottom;
-    animation-name: img7;
-    animation-duration: 3s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate-reverse;
-    animation-fill-mode: forwards;
+  position: absolute;
+  width: 9%;
+  height: auto;
+  left: 55%;
+  bottom: 22%;
+  transform-origin: bottom;
+  animation-name: img7;
+  animation-duration: 3s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate-reverse;
+  animation-fill-mode: forwards;
 }
 
 #sl2-ig13 {

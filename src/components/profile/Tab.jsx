@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-// import toast, { Toaster } from "react-hot-toast";
 import Orders from "./Order";
 import Payment from "./Payment";
 import Security from "./Security";
@@ -16,7 +15,7 @@ import { MdOutlineDone } from "react-icons/md";
 import Address from "./Address";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
-import {Getone, Updateuser} from "../../../api_fetch/admin/User"
+import { Getone, Updateuser } from "../../../api_fetch/admin/User";
 
 const AntTabs = styled(Tabs)({
   borderBottom: "1px solid #e8e8e8",
@@ -35,10 +34,8 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(
     fontWeight: theme.typography.fontWeightRegular,
     marginRight: theme.spacing(1),
     color: "rgba(0, 0, 0, 0.85)",
-    fontSize:'12px',
-    fontFamily: [
-      "Helvetica, sans-serif"
-    ].join(","),
+    fontSize: "12px",
+    fontFamily: ["Helvetica, sans-serif"].join(","),
     "&:hover": {
       color: "#000",
       opacity: 1,
@@ -96,7 +93,7 @@ function CustomTabPanel(props) {
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
-      style={{minHeight:'calc(100vh - 180px)'}}
+      style={{ minHeight: "calc(100vh - 180px)" }}
       {...other}
     >
       {value === index && (
@@ -131,135 +128,12 @@ export default function BasicTabs() {
     setValue(newValue);
   };
 
-  const [userData, setUserData] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    phoneno: "",
-    dob: "",
-    gender: "",
-    country: "",
-  });
-  const [errors, setErrors] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    phoneno: "",
-    dob: "",
-    gender: "",
-    country: "",
-  });
-
-  const handleData = (e) => {
-    let name = e.target.name;
-    let value = e.target.value;
-    setUserData({ ...userData, [name]: value });
-  };
-  const [textbtn, Settextbtn] = useState("Edit");
-
-  let validate = () => {
-    let formErrors = {};
-    let regex = userData.email
-      .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      );
-    if (!userData.name) {
-      formErrors.name = "Full Name is Required";
-    }
-
-    if (!userData.email) {
-      formErrors.email = "Email is Required";
-    } else if (!regex) {
-      formErrors.email = "This is not a valid email format";
-    }
-    if (!userData.phoneno) {
-      formErrors.phoneno = "Phone is Required";
-    }
-    if (!userData.gender) {
-      formErrors.gender = "Gender is Required";
-    }
-    if (!userData.dob) {
-      formErrors.dob = "Date of Birth is Required";
-    }
-    if (!userData.country) {
-      formErrors.country = "Country is Required";
-    }
-
-    return formErrors;
-  };
-  const fetchUserData = async () => {
-    try {
-      // Extract JWT token from localStorage
-      const token = localStorage.getItem("token");
-
-      // const response = await fetch(
-      //   `https://backend.mamoshfashion.com/api/user/getone`,
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({ token }),
-      //   }
-      // );
-
-      const userData = await Getone(token)
-
-      if (!userData) {
-        console.log("error");
-        throw new Error("Failed to fetch user data");
-      }
-
-      // const userData = await response.json();
-      console.log("Data :", userData);
-      setUserData(userData);
-      let s = userData.phoneno.toString();
-      setPhone(s);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserData();
-  }, []);
-
-  const Updatefun = async (userData) => {
-    if (!dis) {
-      Setdis(true);
-      Settextbtn("Save");
-    } else {
-      try {
-        setLoad(true);
-
-        const data = await Updateuser(userData)
-
-        if (!data) {
-          throw new Error("Failed to update user");
-        }
-        Setdis(false)
-        Settextbtn("Edit")
-
-        setLoad(false);
-        // Handle success, e.g., show a success message
-      } catch (error) {
-        console.log(userData, "userData from tab")
-        console.error("Error updating user:", error.message);
-        // toast.error(error.message);
-        // Handle error, e.g., show an error message
-      }
-    }
-  };
-
-  const [phone, setPhone] = useState("");
   return (
     <>
-      {/* <Toaster /> */}
       <div className="div-tab">
         <Box sx={{ width: "100%" }}>
           <AntTabs
-          id="ant-tabs"
+            id="ant-tabs"
             value={value}
             onChange={handleChange}
             aria-label="ant example"
@@ -285,12 +159,26 @@ export default function BasicTabs() {
               </div>
               <div style={{ width: "50%" }}>
                 <div
-                id="edit_profile"
+                  id="edit_profile"
                   className="_btn_wrapper _btn_height _w-full"
-                  onClick={()=>{Updatefun(userData)}}
-                  style={{ position: "relative", left: "93%", width:'40px', height:"40px", top:'15px', borderRadius:'50%', padding:'0' }}
+                  onClick={() => {
+                    Updatefun(userData);
+                  }}
+                  style={{
+                    position: "relative",
+                    left: "93%",
+                    width: "40px",
+                    height: "40px",
+                    top: "15px",
+                    borderRadius: "50%",
+                    padding: "0",
+                  }}
                 >
-                  {textbtn=='Edit' ? <FaUserEdit className="status-btnpro"/>:<MdOutlineDone className="status-btnpro"/>}
+                  {textbtn == "Edit" ? (
+                    <FaUserEdit className="status-btnpro" />
+                  ) : (
+                    <MdOutlineDone className="status-btnpro" />
+                  )}
                 </div>
 
                 <div className="general-container">
@@ -303,12 +191,17 @@ export default function BasicTabs() {
                       class="fixed-right"
                       style={{ marginTop: "2vh", justifyContent: "center" }}
                     >
-                      <div className="_btn_wrapper3 _btn_height _w-full" style={{width:'170px'}}>Upload Avatar</div>
+                      <div
+                        className="_btn_wrapper3 _btn_height _w-full"
+                        style={{ width: "170px" }}
+                      >
+                        Upload Avatar
+                      </div>
                     </div>
                   </div>
 
-                  <div style={{width:'100%'}}>
-                    <div style={{marginBottom:'15px'}}>
+                  <div style={{ width: "100%" }}>
+                    <div style={{ marginBottom: "15px" }}>
                       <div className="input-fields">
                         <div className="div-name">
                           {/* <label className="label-text text-sm font-bold">
@@ -367,7 +260,7 @@ export default function BasicTabs() {
                             disabled={!dis}
                             value={phone}
                             className="phone-con2"
-                            style={{borderBottom:'none'}}
+                            style={{ borderBottom: "none" }}
                             inputClassName="general__input__phone"
                             onChange={(phone) =>
                               setUserData({ ...userData, phoneno: phone })

@@ -1,3 +1,4 @@
+import { htmlParser } from "@/utils/Util";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
@@ -5,7 +6,7 @@ import Image from "next/image";
 import React, { useEffect, useRef } from "react";
 gsap.registerPlugin(ScrollTrigger);
 
-const Section2 = ({ text }) => {
+const Section2 = ({ data }) => {
   const bannerRef = useRef(null);
   const overlayRef = useRef(null);
   const textRef = useRef(null);
@@ -42,10 +43,17 @@ const Section2 = ({ text }) => {
   return (
     <div ref={bannerRef} id="lb-banner2">
       <div id="main-banner-container">
-        <Image width={1000} height={1000} src="/lb-banner.webp" alt="image" />
-        <div ref={textRef} id="main-banner-text">
-          <p>{text}</p>
-        </div>
+        <Image
+          width={1000}
+          height={1000}
+          src={data?.imageUrl || ""}
+          alt="image"
+        />
+        {data?.paragraph && (
+          <div ref={textRef} id="main-banner-text">
+            <p>{htmlParser(data?.paragraph || "")}</p>
+          </div>
+        )}
         <div ref={overlayRef} id="overlay-lb2"></div>
       </div>
     </div>

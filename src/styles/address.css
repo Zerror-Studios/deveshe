@@ -31,7 +31,7 @@
     width: 10vw;
 }
 .add-detail{
-    width: 45vw;
+    width: 100%;
 }
 .logowithadd{
     display: flex;
@@ -91,3 +91,10 @@
 .itempro{
     margin-left: 15px;
 }
+
+/* .address-icon-group {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+} */
