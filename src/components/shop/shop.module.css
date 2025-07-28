@@ -660,7 +660,7 @@
   transform-origin: top;
 }
 .shopSection6 h2:nth-child(2) span{
-  color: rgb(246,178,183);
+  color: red;
 }
 .shopSection6 h2:nth-child(2) span:nth-last-child(-n+2),
 .shopSection6 h2:nth-child(2) span:nth-child(-n+2) {
@@ -700,7 +700,7 @@
   font-family: font2;
   font-size: 2vw;
   line-height: 0.9;
-  color: rgb(246,178,183);
+  color: red;
   margin-bottom: 1vw;
 }
 
