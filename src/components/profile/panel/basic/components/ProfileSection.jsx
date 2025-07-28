@@ -8,7 +8,7 @@ import { MdOutlineDone } from "react-icons/md";
 import { PhoneInput } from "react-international-phone";
 import { useMutation } from "@apollo/client";
 import { UPDATE_USER_PROFILE } from "@/graphql";
-import { useAuthStore } from "@/store/AuthStore";
+import { useAuthStore } from "@/store/auth-store";
 import { toast } from "react-hot-toast";
 import "react-international-phone/style.css";
 
@@ -23,7 +23,7 @@ const SignupSchema = z.object({
 const ProfileSection = () => {
   const [isEditable, setIsEditable] = useState(true);
   const [updateUser, { loading }] = useMutation(UPDATE_USER_PROFILE);
-  const { user, setUser } = useAuthStore();
+  const { user, setUser } = useAuthStore((state) => state);
 
   const {
     register,

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useRouter } from "next/router";
-import { useCartStore } from "@/store/CartStore";
+import { useCartStore } from "@/store/cart-store";
 import { useVisitor } from "@/hooks/useVisitor";
 import Navbar from "@/components/common/Navbar";
 import NavbarMobile from "@/components/common/NavbarMobile";
@@ -14,7 +14,7 @@ const Layout = ({ children }) => {
   const loaderRef = useRef(null);
   const counterRef = useRef(null);
   const { visitorId, visitorExpire } = useVisitor();
-  const { isCartOpen, openCart, closeCart } = useCartStore();
+  const { isCartOpen, openCart, closeCart } = useCartStore((state) => state);
   useEffect(() => {
     if (router.pathname === "/") {
       const tl = gsap.timeline({ defaults: { delay: 1 } });

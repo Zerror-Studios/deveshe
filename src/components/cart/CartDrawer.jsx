@@ -6,12 +6,12 @@ import { RxCross2 } from "react-icons/rx";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { useMutation, useQuery } from "@apollo/client";
 import { ADD_ITEM_TO_CART, CART_LIST, REMOVE_ITEM_FROM_CART } from "@/graphql";
-import { useAuthStore } from "@/store/AuthStore";
+import { useAuthStore } from "@/store/auth-store";
 import { useVisitor } from "@/hooks/useVisitor";
 const CartDrawer = ({ isOpen, closeCart }) => {
   const router = useRouter();
   const { visitorId } = useVisitor();
-  const { token, user, isLoggedIn } = useAuthStore();
+  const { token, user, isLoggedIn } = useAuthStore((state) => state);
   const [isBtnLoading, setIsBtnLoading] = useState(false);
   const [addCartItem, { loading: itemAddLoader }] =
     useMutation(ADD_ITEM_TO_CART);

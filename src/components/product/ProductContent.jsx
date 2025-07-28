@@ -2,14 +2,14 @@ import React, { useEffect, useState, useMemo } from "react";
 import toast from "react-hot-toast";
 import { useMutation } from "@apollo/client";
 import { ADD_ITEM_TO_CART } from "@/graphql";
-import { useAuthStore } from "@/store/AuthStore";
+import { useAuthStore } from "@/store/auth-store";
 import { useVisitor } from "@/hooks/useVisitor";
 import { htmlParser } from "@/utils/Util";
 import { useRouter } from "next/router";
 
 const ProductContent = ({ data = {} }) => {
   const router = useRouter();
-  const { token, isLoggedIn } = useAuthStore();
+  const { token, isLoggedIn } = useAuthStore((state) => state);
   const { visitorId } = useVisitor();
 
   const basePrice = useMemo(

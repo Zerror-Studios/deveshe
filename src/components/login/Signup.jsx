@@ -7,7 +7,7 @@ import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { PhoneInput } from "react-international-phone";
 import { useMutation } from "@apollo/client";
 import { SIGN_UP_USER } from "@/graphql";
-import { useAuthStore } from "@/store/authStore";
+import { useAuthStore } from "@/store/auth-store";
 import { UserStatus } from "@/utils/Constant";
 import toast from "react-hot-toast";
 import "react-international-phone/style.css";
@@ -29,7 +29,7 @@ const Signup = ({ setToggle }) => {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
   const [signupUser, { loading }] = useMutation(SIGN_UP_USER);
-  const { setToken, setUser, setIsLoggedIn } = useAuthStore();
+  const { setToken, setUser, setIsLoggedIn } = useAuthStore((state) => state);
 
   const {
     register,

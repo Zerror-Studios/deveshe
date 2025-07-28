@@ -8,7 +8,7 @@ import { IoLocationOutline } from "react-icons/io5";
 import { PhoneInput } from "react-international-phone";
 import { useMutation } from "@apollo/client";
 import { USER_ADDRESS_SAVE_OR_UPDATE } from "@/graphql";
-import { useAuthStore } from "@/store/AuthStore";
+import { useAuthStore } from "@/store/auth-store";
 import { addressType } from "@/helpers/Data";
 import "react-international-phone/style.css";
 
@@ -30,7 +30,7 @@ const addressSchema = z.object({
 const AddressModal = ({ addressId, listPayload, setOpen, refetch }) => {
   const {
     user: { _id },
-  } = useAuthStore();
+  } = useAuthStore((state) => state);
   const [saveUpdateAddress, { loading }] = useMutation(
     USER_ADDRESS_SAVE_OR_UPDATE
   );

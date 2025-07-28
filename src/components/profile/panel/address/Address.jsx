@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client";
 import { USER_ADDRESS_LIST } from "@/graphql";
 import AddressList from "@/components/profile/panel/address/components/AddressList";
 import AddressModal from "@/components/profile/panel/address/components/AddressModal";
-import { useAuthStore } from "@/store/AuthStore";
+import { useAuthStore } from "@/store/auth-store";
 import { Sort } from "@/utils/Constant";
 
 const Address = () => {
@@ -13,7 +13,7 @@ const Address = () => {
   const [offset, setOffset] = useState(0);
   const {
     user: { _id },
-  } = useAuthStore();
+  } = useAuthStore((state) => state);
 
   const payload = {
     filter: { userId: _id },

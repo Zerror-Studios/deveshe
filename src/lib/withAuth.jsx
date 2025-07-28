@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useAuthStore } from "@/store/AuthStore";
+import { useAuthStore } from "@/store/auth-store";
 
 const withAuth = (WrappedComponent) => {
   return function AuthenticatedComponent(props) {
     const router = useRouter();
-    const { token, isLoggedIn } = useAuthStore();
+    const { token, isLoggedIn } = useAuthStore((state) => state);
     const [isHydrated, setIsHydrated] = useState(false);
 
     useEffect(() => {

@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useMutation } from "@apollo/client";
 import { UPDATE_USER_PASSWORD } from "@/graphql";
-import { useAuthStore } from "@/store/AuthStore";
+import { useAuthStore } from "@/store/auth-store";
 import { toast } from "react-hot-toast";
 
 const passwordSchema = z
@@ -32,7 +32,7 @@ const PasswordSection = () => {
     renewPassword: false,
   });
   const [updatePassword, { loading }] = useMutation(UPDATE_USER_PASSWORD);
-  const { user, setToken } = useAuthStore();
+  const { user, setToken } = useAuthStore((state) => state);
 
   const {
     register,

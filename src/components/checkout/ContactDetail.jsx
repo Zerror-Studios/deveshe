@@ -1,9 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import { useAuthStore } from "@/store/AuthStore";
+import { useAuthStore } from "@/store/auth-store";
 
 const ContactDetail = ({ register, errors }) => {
-  const { isLoggedIn } = useAuthStore();
+  const { isLoggedIn } = useAuthStore((state) => state);
   return (
     <div className="contact_container">
       <div className="contact_text_cntr">

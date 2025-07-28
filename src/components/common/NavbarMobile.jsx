@@ -6,12 +6,11 @@ import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Button from "./Button";
-import { useCartStore } from "@/store/cartStore";
-import { useAuthStore } from "@/store/AuthStore";
+import { useAuthStore } from "@/store/auth-store";
 gsap.registerPlugin(ScrollTrigger);
 
 const NavbarMobile = ({openCart}) => {
-  const { isLoggedIn } = useAuthStore();
+  const { isLoggedIn } = useAuthStore((state) => state);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuTL = useRef(null);
 

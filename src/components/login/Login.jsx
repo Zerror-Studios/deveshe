@@ -7,7 +7,7 @@ import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { useLazyQuery } from "@apollo/client";
 import { LOGIN_USER } from "@/graphql";
 import toast from "react-hot-toast";
-import { useAuthStore } from "@/store/AuthStore";
+import { useAuthStore } from "@/store/auth-store";
 
 // Schema validation
 const LoginSchema = z.object({
@@ -18,7 +18,7 @@ const LoginSchema = z.object({
 const Login = ({ setToggle }) => {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
-  const { setToken, setUser, setIsLoggedIn } = useAuthStore();
+  const { setToken, setUser, setIsLoggedIn } = useAuthStore((state) => state);
 
   const {
     register,

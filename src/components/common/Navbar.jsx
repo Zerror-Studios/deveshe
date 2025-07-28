@@ -4,12 +4,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
-import { useAuthStore } from "@/store/AuthStore";
+import { useAuthStore } from "@/store/auth-store";
 gsap.registerPlugin(ScrollTrigger);
 
 const Navbar = ({openCart}) => {
   const router = useRouter();
-  const { isLoggedIn } = useAuthStore();
+  const { isLoggedIn } = useAuthStore((state) => state);
 
   useEffect(() => {
     if (window.innerWidth < 576) return;
