@@ -6,7 +6,7 @@ import { RxCross2 } from "react-icons/rx";
 // import toast, { Toaster } from "react-hot-toast";
 import { LiaCcVisa } from "react-icons/lia";
 import { IoIosArrowBack } from "react-icons/io";
-import { Savecards } from "../../../api_fetch/admin/User";
+// import { Savecards } from "../../../api_fetch/admin/User";
 
 const popupcard = ({
   email,

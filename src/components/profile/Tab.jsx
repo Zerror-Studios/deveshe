@@ -15,7 +15,11 @@ import { MdOutlineDone } from "react-icons/md";
 import Address from "./Address";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
+<<<<<<< HEAD
 import { Getone, Updateuser } from "../../../api_fetch/admin/User";
+=======
+// import {Getone, Updateuser} from "../../../api_fetch/admin/User"
+>>>>>>> 6df8208e9b7daaba7c9464b66eb729d711784e3a
 
 const AntTabs = styled(Tabs)({
   borderBottom: "1px solid #e8e8e8",
@@ -98,7 +102,7 @@ function CustomTabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 4 }}>
-          <Typography>{children}</Typography>
+          <Typography component="div">{children}</Typography>
         </Box>
       )}
     </div>
@@ -128,6 +132,131 @@ export default function BasicTabs() {
     setValue(newValue);
   };
 
+<<<<<<< HEAD
+=======
+  const [userData, setUserData] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    phoneno: "",
+    dob: "",
+    gender: "",
+    country: "",
+  });
+  const [errors, setErrors] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    phoneno: "",
+    dob: "",
+    gender: "",
+    country: "",
+  });
+
+  const handleData = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    setUserData({ ...userData, [name]: value });
+  };
+  const [textbtn, Settextbtn] = useState("Edit");
+
+  let validate = () => {
+    let formErrors = {};
+    let regex = userData.email
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+    if (!userData.name) {
+      formErrors.name = "Full Name is Required";
+    }
+
+    if (!userData.email) {
+      formErrors.email = "Email is Required";
+    } else if (!regex) {
+      formErrors.email = "This is not a valid email format";
+    }
+    if (!userData.phoneno) {
+      formErrors.phoneno = "Phone is Required";
+    }
+    if (!userData.gender) {
+      formErrors.gender = "Gender is Required";
+    }
+    if (!userData.dob) {
+      formErrors.dob = "Date of Birth is Required";
+    }
+    if (!userData.country) {
+      formErrors.country = "Country is Required";
+    }
+
+    return formErrors;
+  };
+  const fetchUserData = async () => {
+    try {
+      // Extract JWT token from localStorage
+      const token = localStorage.getItem("token");
+
+      // const response = await fetch(
+      //   `https://backend.mamoshfashion.com/api/user/getone`,
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify({ token }),
+      //   }
+      // );
+
+      const userData = await Getone(token)
+
+      if (!userData) {
+        console.log("error");
+        throw new Error("Failed to fetch user data");
+      }
+
+      // const userData = await response.json();
+      console.log("Data :", userData);
+      setUserData(userData);
+      let s = userData.phoneno.toString();
+      setPhone(s);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  useEffect(() => {
+    // fetchUserData();
+  }, []);
+
+  const Updatefun = async (userData) => {
+    if (!dis) {
+      Setdis(true);
+      Settextbtn("Save");
+    } else {
+      try {
+        setLoad(true);
+
+        const data = await Updateuser(userData)
+
+        if (!data) {
+          throw new Error("Failed to update user");
+        }
+        Setdis(false)
+        Settextbtn("Edit")
+
+        setLoad(false);
+        // Handle success, e.g., show a success message
+      } catch (error) {
+        console.log(userData, "userData from tab")
+        console.error("Error updating user:", error.message);
+        // toast.error(error.message);
+        // Handle error, e.g., show an error message
+      }
+    }
+  };
+
+  const [phone, setPhone] = useState("");
+>>>>>>> 6df8208e9b7daaba7c9464b66eb729d711784e3a
   return (
     <>
       <div className="div-tab">
@@ -161,6 +290,7 @@ export default function BasicTabs() {
                 <div
                   id="edit_profile"
                   className="_btn_wrapper _btn_height _w-full"
+<<<<<<< HEAD
                   onClick={() => {
                     Updatefun(userData);
                   }}
@@ -173,6 +303,10 @@ export default function BasicTabs() {
                     borderRadius: "50%",
                     padding: "0",
                   }}
+=======
+                  // onClick={()=>{Updatefun(userData)}}
+                  style={{ position: "relative", left: "93%", width:'40px', height:"40px", top:'15px', borderRadius:'50%', padding:'0' }}
+>>>>>>> 6df8208e9b7daaba7c9464b66eb729d711784e3a
                 >
                   {textbtn == "Edit" ? (
                     <FaUserEdit className="status-btnpro" />

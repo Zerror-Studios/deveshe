@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai';
 // import toast, { Toaster } from "react-hot-toast";
-import {Changepassword} from "../../../api_fetch/admin/User"
+// import {Changepassword} from "../../../api_fetch/admin/User"
 
 const General = ({email}) => {
 
@@ -111,7 +111,7 @@ const General = ({email}) => {
               />
             </div>
           <div className="secure-btn">
-            <div class="_btn_wrapper3 _btn_height _w-full" style={{width:'170px'}} onClick={handleChangePassword}>
+            <div class="_btn_wrapper3 _btn_height _w-full" style={{width:'170px'}}>
               {load ? <div className="login-load"></div> : "Change Password"}
             </div>
           </div>

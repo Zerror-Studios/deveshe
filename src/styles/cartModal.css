@@ -47,12 +47,11 @@
   text-transform: capitalize;
 }
 .ReactModal__Content {
-  /* background: #ffff; */
-   background: linear-gradient(180deg, rgba(252, 230, 222, 1) 0%, rgba(244, 240, 235, 1) 100%);
-   background-image: url(/svg_homepage_bg.svg);
+  background-color: #fadcde;
+  background-image: url(/grainy-bg.svg);
   background-repeat: no-repeat;
   background-size: cover;
-  position: relative;
+  background-position: top;
   position: relative;
   animation-timing-function: linear;
   animation-duration: 0.6s;
@@ -128,7 +127,7 @@
   padding: 28px;
   font-size: 16px;
 }
-.Modal_cancel_btn svg path{
+.Modal_cancel_btn svg path {
   fill: black !important;
 }
 .ReactModal_Drawer_center {
@@ -136,7 +135,6 @@
   grid-template-columns: 130px 1fr;
   border-top: 1px solid lightgray;
   transition: opacity 0.3s;
-  background-color: #ffff;
 }
 .Modal_Drawer_img_cntr {
   display: block;
@@ -164,7 +162,6 @@
   padding: 28px;
   display: grid;
   grid-template-columns: 1fr auto;
-  background-color: #fff;
 }
 .Modal_Drawer_center_content_lft {
   display: grid;
@@ -283,17 +280,17 @@
   color: #767676;
 }
 
-@media (max-width:576px) {
+@media (max-width: 576px) {
   .Modal_bgClr {
-  transition: all  0.8s cubic-bezier(0.18, 0.71, 0.11, 1);
+    transition: all 0.8s cubic-bezier(0.18, 0.71, 0.11, 1);
 
-  /* display: none; */
-}
+    /* display: none; */
+  }
   .ReactModal__Content {
-  animation-timing-function: cubic-bezier(0.18, 0.71, 0.11, 1);
-  animation-duration: 0.8s;
-  transition: all  0.8s cubic-bezier(0.18, 0.71, 0.11, 1);
-}
+    animation-timing-function: cubic-bezier(0.18, 0.71, 0.11, 1);
+    animation-duration: 0.8s;
+    transition: all 0.8s cubic-bezier(0.18, 0.71, 0.11, 1);
+  }
 }
 
 @media only screen and (min-width: 375px) {
@@ -320,4 +317,3 @@
     justify-content: flex-start;
   }
 }
-

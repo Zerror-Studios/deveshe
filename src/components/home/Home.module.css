@@ -29,7 +29,7 @@
   height: 100%;
   top: 35%;
   left: -30%;
-  background-image: url(/star.svg);
+  background-image: url(/star.png);
   background-repeat: no-repeat;
   z-index: 1;
 }
@@ -40,7 +40,7 @@
   height: 100%;
   top: 0;
   left: 120%;
-  background-image: url(/start2.svg);
+  background-image: url(/star2.png);
   background-repeat: no-repeat;
   z-index: 1;
 }
@@ -55,7 +55,7 @@
   height: 100%;
   top: -100%;
   left: -150%;
-  background-image: url(/start2.svg);
+  background-image: url(/star2.png);
   background-repeat: no-repeat;
   z-index: 1;
 }
@@ -66,7 +66,7 @@
   height: 100%;
   top: 100%;
   left: 200%;
-  background-image: url(/start2.svg);
+  background-image: url(/star2.png);
   background-repeat: no-repeat;
   z-index: 1;
 }
@@ -129,10 +129,9 @@
   color: rgb(246, 178, 183);
   font-family: font2;
   font-size: 8vw;
-  line-height: 0.8;
+  line-height: 0.9;
   text-transform: uppercase;
   white-space: nowrap;
-  letter-spacing: -2px;
 }
 .shopSection3 .overlay3 h2 span {
   display: inline-block;
@@ -205,7 +204,7 @@
 }
 
 .imageContainer2 .imgCardSec3 p span {
-  color: rgb(246, 178, 183);
+  color: red;
 }
 
 .shopSection2 {
@@ -215,10 +214,10 @@
   padding: 160px 80px;
   overflow: hidden;
   /* background-color: #fff; */
-  background-image: url(/svg_homepage_bg.svg);
+  background-image: url(/grainy-lg-bg.svg);
   background-repeat: no-repeat;
   background-size: 100%;
-  background-color: #fde5d8;
+  background-color: #fadcde;
 }
 .shopSection2Top {
   width: 100%;
@@ -242,13 +241,13 @@
   z-index: 2;
   font-family: font2;
   font-size: 8vw;
-  line-height: 0.8;
+  line-height: 0.9;
   text-transform: uppercase;
   white-space: nowrap;
-  letter-spacing: -2px;
 }
 .shopSection2Top h2:nth-child(2) span:nth-child(-n + 7) {
-  color: rgb(246, 178, 183);
+  /* color: rgb(246, 178, 183); */
+  color: red;
 }
 .shopSection2Top h2 span {
   color: black;
@@ -279,7 +278,7 @@
   font-size: 5.5vw;
   font-family: font3;
   font-weight: 500;
-  line-height: 1;
+  line-height: 1.2;
   margin-bottom: 15vw;
 }
 .shopSection2BottomBtn {
@@ -288,7 +287,8 @@
   justify-content: center;
   align-items: center;
   gap: 0.5vw;
-  color: rgb(246, 178, 183);
+  color: red;
+  /* color: rgb(246, 178, 183); */
   font-family: font2;
   font-size: 3.5vw;
   line-height: 0.8;
@@ -320,7 +320,8 @@
   line-height: 1;
   text-transform: uppercase;
   white-space: nowrap;
-  color: rgb(246, 178, 183);
+  /* color: rgb(246, 178, 183); */
+  color: red;
 }
 
 .leftCard {
@@ -340,7 +341,7 @@
   height: 40px;
   top: -5%;
   left: -6%;
-  background-image: url("/svg_border_corner_coral2 (1).svg");
+  background-image: url("/corner.png");
   background-repeat: no-repeat;
   z-index: 1;
 }
@@ -351,7 +352,7 @@
   height: 40px;
   top: 95%;
   left: 94%;
-  background-image: url("/svg_border_corner_coral2 (2).svg");
+  background-image: url("/corner2.png");
   background-repeat: no-repeat;
   z-index: 1;
   transform: rotate(180deg);
@@ -404,7 +405,7 @@
   height: 40px;
   top: -5%;
   left: -6%;
-  background-image: url("/svg_border_corner_coral2 (1).svg");
+  background-image: url("/corner.png");
   background-repeat: no-repeat;
   z-index: 1;
 }
@@ -415,7 +416,7 @@
   height: 40px;
   top: 95%;
   left: 94%;
-  background-image: url("/svg_border_corner_coral2 (2).svg");
+  background-image: url("/corner2.png");
   background-repeat: no-repeat;
   z-index: 1;
   transform: rotate(180deg);
@@ -484,8 +485,9 @@
     rgba(252, 230, 222, 1) 0%,
     rgba(244, 240, 235, 1) 100%
   );
+  background-color: #fadcde;
   padding-top: 150px;
-  background-image: url(/svg_homepage_bg.svg);
+  background-image: url(/grainy-bg.svg);
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -495,7 +497,6 @@
   line-height: 0.9;
   text-transform: uppercase;
   white-space: nowrap;
-  letter-spacing: -2px;
 }
 
 .shopSection4 .topCont {
@@ -515,7 +516,8 @@
   align-items: center;
 }
 .topContHeader span {
-  color: rgb(246, 178, 183);
+  /* color: rgb(246, 178, 183); */
+  color: red;
   display: inline-block;
   transform-origin: top;
 }
@@ -546,7 +548,8 @@
   font-family: font2;
   font-size: 2vw;
   line-height: 0.9;
-  color: rgb(246, 178, 183);
+  /* color: rgb(246, 178, 183); */
+  color: red;
   margin-bottom: 1vw;
 }
 
@@ -565,11 +568,10 @@
   display: flex;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
-  background: linear-gradient(
-    180deg,
-    rgba(253, 230, 221, 1) 0%,
-    rgba(253, 229, 216, 1) 100%
-  );
+  background-image: url(/grainy-op-bg.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
 }
 .proDets {
   width: 100%;

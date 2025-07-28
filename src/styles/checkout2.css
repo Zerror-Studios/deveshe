@@ -3,11 +3,11 @@
   padding: 200px 0px 50px;
   justify-content: center;
   /* background-color: white; */
-  background: linear-gradient(
-    180deg,
-    rgba(252, 230, 222, 1) 0%,
-    rgba(244, 240, 235, 1) 100%
-  );
+  background-color: #FADCDE;
+    background-image: url(/grainy-lg-bg.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom;
 }
 /* new-left-code */
 

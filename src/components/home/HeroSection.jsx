@@ -82,12 +82,12 @@ const HeroSection = () => {
       <Image
         width={1000}
         height={1000}
-        src="/shop/shop-banner.jpg"
+        src="/home/home_banner.webp"
         alt="image"
       />
       <div className={styles.overlay3}>
         <div id="title-main-wrap">
-          <h2>Check out the </h2>
+          <h2>Check our</h2>
           <h2>new collection</h2>
         </div>
         <div className={styles.Section33Btm}>
@@ -107,7 +107,6 @@ const HeroSection = () => {
           </div>
 
           <div className={styles.Section33Btmright}>
-            <h2 className={styles.titleh2}>you will get:</h2>
             <div className={styles.imageContainer2} id="imageContainer2">
               <div className={styles.imgCardSec3} id="imgCardSec31">
                 <Image
@@ -116,7 +115,7 @@ const HeroSection = () => {
                   src="/newproduct/BI06.jpg"
                   alt="image"
                 />
-                <p>From office to OOO</p>
+                <p>From office to <span>OOO</span></p>
               </div>
               <div className={styles.imgCardSec3} id="imgCardSec32">
                 <Image
@@ -130,12 +129,6 @@ const HeroSection = () => {
                   dreamers, worn by you.
                 </p>
               </div>
-              <Image
-                width={1000}
-                height={1000}
-                src="/shop/arrow.png"
-                alt="image"
-              />
             </div>
           </div>
         </div>

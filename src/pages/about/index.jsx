@@ -3,8 +3,8 @@ import Section5 from "@/components/about/Section5";
 import Section6 from "@/components/about/Section6";
 import Section7 from "@/components/about/Section7";
 import Nails_Cntr from "@/components/about/Nails_Cntr";
-import HomeSlider from "@/components/HomeSlider/HomeSlider";
 import SeoHeader from "@/components/seo/SeoHeader";
+import AboutHeroSection from "@/components/about/AboutHeroSection";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,11 +13,11 @@ export default function About({ meta }) {
     <>
       <SeoHeader meta={meta} />
       <main>
-        <HomeSlider />
-        <Nails_Cntr />
-        <Section5 />
+        <AboutHeroSection />
         <Section6 />
         <Section7 />
+        <Nails_Cntr />
+        <Section5 />
       </main>
     </>
   );
