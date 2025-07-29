@@ -57,7 +57,7 @@ const ProductDetail = ({ meta, data, productList }) => {
       start: "top 0%",
       end: "top -350%",
       scrub: true,
-      markers: true,
+      markers: false,
       onUpdate: (self) => {
         if (self.progress === 1) {
           gsap.to(".ProductDets_grid", { filter: "blur(10px)", duration: 0.5 });
