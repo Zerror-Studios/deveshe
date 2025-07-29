@@ -13,6 +13,7 @@ const ChapterList = ({ data = [] }) => {
   if (!data || data.length === 0) return null;
 
   useEffect(() => {
+    if(data.length === 1 ) return;
     const ctx = gsap.context(() => {
       const timeline = gsap.timeline({
         scrollTrigger: {
@@ -33,11 +34,25 @@ const ChapterList = ({ data = [] }) => {
           timeline.to(
             `#elem${index}`,
             {
-              clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
+              clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
               duration: 1.5,
               ease: "none",
             },
             `step${index}`
+          );
+          timeline.fromTo(
+            textSelector,
+            {
+              y: 50,
+              opacity: 0,
+            },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.5,
+              ease: "none",
+            },
+            `step${index}+=1.2`
           );
         }
 
@@ -45,7 +60,7 @@ const ChapterList = ({ data = [] }) => {
         timeline.to(
           elemSelector,
           {
-            clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+            clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
             duration: 1.5,
             ease: "none",
           },
@@ -53,20 +68,6 @@ const ChapterList = ({ data = [] }) => {
         );
 
         // Fade in corresponding text
-        timeline.fromTo(
-          textSelector,
-          {
-            y: 50,
-            opacity: 0,
-          },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.5,
-            ease: "none",
-          },
-          `step${index}+=1.2`
-        );
       });
 
       setTimeout(() => ScrollTrigger.refresh(), 200);
@@ -84,7 +85,7 @@ const ChapterList = ({ data = [] }) => {
         {data.map((item, index) => (
           <Link
             href={`/lookbook/${item._id}`}
-            className={`${styles.elem}`}
+            className={`${styles.elem} ${styles.elem1}`}
             id={`elem${index + 1}`}
             key={item._id}
           >
