@@ -6,6 +6,9 @@
   --primary-font-Hel: Helvetica, sans-serif;
   --secondary-font-Hen: Henry-Italic, sans-serif;
 }
+::-webkit-scrollbar{
+  display: none;
+}
 * {
   margin: 0;
   padding: 0;

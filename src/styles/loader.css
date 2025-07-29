@@ -1,90 +1,117 @@
-#loader-main{
+#loader_main {
+  width: 100%;
+  height: 100vh;
+  background-color: black;
+  z-index: 9;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: font2;
+  overflow: hidden;
+}
+
+#loader_content {
+  width: 80%;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#loader_content .content {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-transform: uppercase;
+  line-height: 1;
+  font-size: 1.2vw;
+  font-weight: 500;
+  overflow: hidden;
+}
+#loader_content .content p {
+  width: fit-content;
+  transform: translateY(100%);
+}
+#loader_counter {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 9vw;
+  overflow: hidden;
+}
+
+.counter_strip {
+  display: flex;
+  flex-direction: column;
+  font-size: 9vw;
+  line-height: 1;
+  transform: translateY(50%);
+}
+
+#loader_logo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 9vw;
+  overflow: hidden;
+}
+
+#loader_logo h2 {
+  font-size: 9vw;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: translateY(100%);
+}
+
+#loader_logo h2 span{
+    display: inline-block;
+    transform: translateY(0%);
+}
+
+
+.loader_ig{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%,0) scale(1);
+    clip-path: polygon(20% 100%, 80% 100%, 80% 100%, 20% 100%);
+    background-position: 50% -10%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+.home-wrapper{
     width: 100%;
     height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
+    overflow: hidden;
+    position: relative;
+    clip-path: polygon(20% 100%, 80% 100%, 80% 100%, 20% 100%);
     z-index: 999;
 }
-.loader-left{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 50%;
-    height: 100%;
-    background-color: black;
-}
-.line-top-l{
-    /* width: calc(100% - 60px); */
-    width: 0;
-    z-index: 9;
-    left: 30px;
-    height: .1vw;
-    background-color: white;
-    position: absolute;
-    top: 30px;
-}
-.line-bottom-l{
-    /* width: calc(100% - 60px); */
-    width: 0;
-    right: 30px;
-    height: .1vw;
-    background-color: white;
-    position: absolute;
-    bottom: 30px;
-}
-.line-side-r{
-    /* height: calc(100% - 60px); */
-    height: 0;
-    z-index: 9;
-    right: 30px;
-    width: .1vw;
-    background-color: white;
-    position: absolute;
-    top: 30px;
-}
 
-.line-side-l{
-    /* height: calc(100% - 60px); */
-    height: 0;
-    left: 30px;
-    width:.1vw;
-    background-color: white;
-    position: absolute;
-    top: 30px;
+#loader_ig1{
+    background-image: url("https://a.storyblok.com/f/277682/3000x4000/a298a4665e/otto-van-den-toorn-coiffure-award-raoul-van-delden-header.jpg/m/1440x0/filters:quality(60)");
 }
-.loader-right{
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 50%;
-    height: 100%;
-    background-color: black;
+#loader_ig2{
+    background-image: url("https://a.storyblok.com/f/277682/3000x4000/f66e87e3a2/otto-van-den-toorn-flowers-for-zoe-header.jpg/m/1440x0/filters:quality(60)");
 }
-
-
-.logo-loader{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    filter: blur(5px);
-}
-.logo-l{
-    height: 30px;
-    width: fit-content !important;
-    filter: invert(1);
-}
-
-#counter{
-    font-size: 3vw;
-    font-family: font2 !important;
-    position: absolute;
-    bottom: 60px;
-    left: 60px;
-    z-index: 9;
-    font-weight: 500;
-    color: white;
+#loader_ig3{
+    background-image: url("https://a.storyblok.com/f/277682/3000x4000/071d002868/otto-van-den-toorn-wired-header.jpg/m/1440x0/filters:quality(60)");
 }

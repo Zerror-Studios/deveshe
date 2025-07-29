@@ -34,7 +34,7 @@ const HeroSection = () => {
           duration: 0.8,
           stagger: 0.05,
           ease: "bounce.out",
-          delay: 0.8,
+          delay: 9,
         }
       );
 
@@ -78,7 +78,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <div className={styles.shopSection3}>
+    <div className={styles.shopSection3} id="home_banner">
       <Image
         width={1000}
         height={1000}

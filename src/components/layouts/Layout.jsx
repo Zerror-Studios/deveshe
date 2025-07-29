@@ -3,7 +3,6 @@ import Image from "next/image";
 import gsap from "gsap";
 import { useRouter } from "next/router";
 import { useCartStore } from "@/store/cart-store";
-import { useVisitor } from "@/hooks/useVisitor";
 import Navbar from "@/components/common/Navbar";
 import NavbarMobile from "@/components/common/NavbarMobile";
 import Footer from "@/components/common/Footer";
@@ -12,192 +11,215 @@ import CartDrawer from "@/components/cart/CartDrawer";
 const Layout = ({ children }) => {
   const router = useRouter();
   const loaderRef = useRef(null);
-  const counterRef = useRef(null);
-  const { visitorId, visitorExpire } = useVisitor();
   const { isCartOpen, openCart, closeCart } = useCartStore((state) => state);
+
   useEffect(() => {
-    if (router.pathname === "/") {
-      const tl = gsap.timeline({ defaults: { delay: 1 } });
+    // Initial states
+    if(router.pathname !== "/") {
+      gsap.set(".home-wrapper", {
+      overflow: "visible",
+      height: "100%",
+      clipPath:"none"
+    });
+    return;
+    };
+    gsap.set(".home-wrapper", {
+      overflow: "hidden",
+      height: "100vh",
+      clipPath:"polygon(20% 100%, 80% 100%, 80% 100%, 20% 100%)"
+    });
 
-      // Animate counter from 0 to 100
-      let counterObj = { val: 0 };
-      gsap.to(counterObj, {
-        val: 100,
-        duration: 3, // made slightly slower
-        ease: "power2.out",
-        onUpdate: () => {
-          if (counterRef.current) {
-            counterRef.current.innerText = `${Math.floor(counterObj.val)}%`;
-          }
+    gsap.set(loaderRef.current, {
+      display: "flex",
+    });
+
+    gsap.set("#loader_content p", {
+      transform: "translateY(100%)",
+    });
+    gsap.set(".counter_strip", {
+      transform: "translateY(50%)",
+    });
+    gsap.set("#loader_logo h2 span", {
+      transform: "translateY(0%)",
+    });
+      gsap.set(
+        ".home-wrapper #home_banner img",
+        {
+          scale: .9,
+        }
+      )
+
+    const tl = gsap.timeline();
+
+    tl.to("#loader_content p", {
+      y: 0,
+      stagger: {
+        amount: 0.3,
+      },
+      delay: 1,
+      ease: "power3.out",
+    })
+      .to(".counter_strip", {
+        y: 0,
+        stagger: {
+          amount: 0.2,
         },
-      });
+        ease: "power3.out",
+      })
+      .to(".counter_strip", {
+        y: "-50%",
+        stagger: {
+          amount: 0.2,
+        },
+        delay: 0.1,
+        ease: "power2.inOut",
+      })
+      .to("#loader_content p,.counter_strip ,#loader_logo h2 span", {
+        y: "-100%",
+        stagger: {
+          amount: 0.3,
+        },
+        duration: 0.8,
+        ease: "power4.inOut",
+      })
+      .to(
+        "#loader_logo",
+        {
+          top: "-20%",
+          duration: .8,
+          ease: "power1.in",
+        },
+        "a"
+      )
+      .to(
+        "#loader_ig1",
+        {
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+          backgroundPosition: "50% 50%",
+          ease: "power1.inOut",
+          duration: 1,
+        },
+        "a"
+      )
+      .to(
+        "#loader_ig2",
+        {
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+          backgroundPosition: "50% 50%",
+          ease: "power1.inOut",
+          duration: 1,
+        },
+        "b"
+      )
+      .to(
+        "#loader_ig1",
+        {
+          scale: 1.1,
+          duration: 1,
+          ease: "power2.inOut",
+        },
+        "b"
+      )
+      .to(
+        "#loader_ig3",
+        {
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+          backgroundPosition: "50% 50%",
+          ease: "power1.inOut",
+          duration: 1,
+        },
+        "c"
+      )
+      .to(
+        "#loader_ig2",
+        {
+          scale: 1.1,
+          duration: 1,
+          ease: "power2.inOut",
+        },
+        "c"
+      )
+      .to(
+        ".home-wrapper",
+        {
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+          ease: "power1.inOut",
+          duration: 1,
+        },
+        "d"
+      )
+        .to(
+        ".home-wrapper #home_banner img",
+        {
+          scale: 1,
+          duration: 1,
+          ease: "power2.inOut",
+        },
+        "d"
+      )
+      .to(
+        "#loader_ig3",
+        {
+          scale: 1.1,
+          duration: 1,
+          ease: "power2.inOut",
+        },
+        "d"
+      )
+      .set(
+        ".home-wrapper",
+        {
+          overflow: "visible",
+          height: "100%",
+        },
+        "s"
+      )
+      .set(
+        loaderRef.current,
+        {
+          display: "none",
+        },
+        "s"
+      );
+  }, [router.asPath]);
 
-      tl
-        // Phase A: Lines + logo fade in
-        .to(
-          ".logo-loader",
-          {
-            filter: "blur(0px)",
-            duration: 0.8,
-          },
-          "a"
-        )
-        .to(
-          ".line-top-l",
-          {
-            width: "calc(100% - 60px)",
-            duration: 0.8,
-            ease: "power1.in",
-          },
-          "a"
-        )
-        .to(
-          ".line-bottom-l",
-          {
-            width: "calc(100% - 60px)",
-            duration: 0.8,
-            ease: "power1.in",
-          },
-          "a"
-        )
-        .to(
-          ".line-side-l",
-          {
-            height: "calc(100% - 60px)",
-            duration: 0.8,
-            ease: "power1.in",
-          },
-          "a"
-        )
-        .to(
-          ".line-side-r",
-          {
-            height: "calc(100% - 60px)",
-            duration: 0.8,
-            ease: "power1.in",
-          },
-          "a"
-        )
-
-        // Phase B: Lines and logo fade out
-        .to(
-          ".logo-loader",
-          {
-            filter: "blur(8px)",
-            opacity: 0,
-            duration: 0.8,
-          },
-          "b"
-        )
-        .to(
-          ".line-top-l",
-          {
-            width: "0",
-            duration: 0.8,
-            ease: "power1.in",
-          },
-          "b"
-        )
-        .to(
-          ".line-bottom-l",
-          {
-            width: "0",
-            duration: 0.8,
-            ease: "power1.in",
-          },
-          "b"
-        )
-        .to(
-          ".line-side-l",
-          {
-            height: "0",
-            duration: 0.8,
-            ease: "power1.in",
-          },
-          "b"
-        )
-        .to(
-          ".line-side-r",
-          {
-            height: "0",
-            duration: 0.8,
-            ease: "power1.in",
-          },
-          "b"
-        )
-        .to(
-          "#counter",
-          {
-            opacity: 0,
-            duration: 0.8,
-          },
-          "b"
-        )
-
-        // Phase C: Fade out loader-main
-        .to(
-          loaderRef.current,
-          {
-            opacity: 0,
-            duration: 0.8, // smooth fade-out
-            delay: -0.1,
-            ease: "power1.out",
-            onComplete: () => {
-              if (loaderRef.current) {
-                loaderRef.current.style.display = "none";
-              }
-            },
-          },
-          "c"
-        );
-    }
-  }, [router.pathname]);
   return (
     <>
-      <div className="home-wrapper">
-        {router.pathname === "/" && (
-          <div ref={loaderRef} id="loader-main">
-            <div className="loader-left"></div>
-            <div className="loader-right"></div>
-            <div className="line-top-l"></div>
-            <div className="line-side-l"></div>
-            <div className="line-side-r"></div>
-            <div className="line-bottom-l"></div>
-            <h2 id="counter" ref={counterRef}>
-              0%
-            </h2>
-            <div className="logo-loader">
-              <Image
-                width={1000}
-                height={1000}
-                src="/logo/d.png"
-                alt="D"
-                className="logo-l"
-              />
-              <Image
-                width={1000}
-                height={1000}
-                src="/logo/v.png"
-                alt="V"
-                className="logo-l"
-              />
-              <Image
-                width={1000}
-                height={1000}
-                src="/logo/s.png"
-                alt="S"
-                className="logo-l"
-              />
-              <Image
-                width={1000}
-                height={1000}
-                src="/logo/m.png"
-                alt="M"
-                className="logo-l"
-              />
+      {router.pathname === "/" && (
+        <div ref={loaderRef} id="loader_main">
+          <div id="loader_content">
+            <div className="content">
+              <p>campaigns</p>
+              <p>editorial</p>
+            </div>
+            <div className="content">
+              <p>celebrities</p>
+              <p>beauty</p>
             </div>
           </div>
-        )}
+          <div id="loader_counter">
+            <div className="counter_strip counter_strip1">
+              <span>0</span>
+              <span>9</span>
+            </div>
+            <div className="counter_strip counter_strip2">
+              <span>0</span>
+              <span>9</span>
+            </div>
+          </div>
+          <div id="loader_logo">
+            <h2>
+              {"De ve she dreams".split("").map((char, index) => (
+                <span key={index}>{char === " " ? "\u00A0" : char}</span>
+              ))}
+            </h2>
+          </div>
+          <div id="loader_ig1" className="loader_ig"></div>
+          <div id="loader_ig2" className="loader_ig"></div>
+          <div id="loader_ig3" className="loader_ig"></div>
+        </div>
+      )}
+      <div className="home-wrapper">
         <Navbar openCart={openCart} />
         <NavbarMobile openCart={openCart} />
         {children}
