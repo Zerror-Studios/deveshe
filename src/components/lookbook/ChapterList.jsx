@@ -10,65 +10,64 @@ import { htmlParser } from "@/utils/Util";
 gsap.registerPlugin(ScrollTrigger);
 
 const ChapterList = ({ data = [] }) => {
-  if (!data || data.length === 0) return null;
-
   useEffect(() => {
-    if(data.length === 1 ) return;
+    if (!data || data.length <= 1) return;
+
     const ctx = gsap.context(() => {
       const timeline = gsap.timeline({
         scrollTrigger: {
           trigger: "#archiveSection3",
-          end: `+=${data.length * 100}%`,
+          start: "top top",
+          end: `+=${(data.length - 1) * 100}%`,
           pin: true,
           scrub: 1,
           invalidateOnRefresh: true,
         },
       });
 
-      data.forEach((_, index) => {
-        const elemSelector = `#elem${index + 1}`;
-        const textSelector = `#textc${index + 1}`;
+      for (let index = 1; index < data.length; index++) {
+        const currentElem = `#elem${index + 1}`;
+        const currentText = `#textc${index + 1}`;
+        const previousElem = `#elem${index}`;
 
-        // Animate out previous element
-        if (index !== 0) {
-          timeline.to(
-            `#elem${index}`,
-            {
-              clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-              duration: 1.5,
-              ease: "none",
-            },
-            `step${index}`
-          );
-          timeline.fromTo(
-            textSelector,
-            {
-              y: 50,
-              opacity: 0,
-            },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.5,
-              ease: "none",
-            },
-            `step${index}+=1.2`
-          );
-        }
-
-        // Animate in current element
+        // Reveal current element
         timeline.to(
-          elemSelector,
+          currentElem,
+          {
+            clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+            duration: 1.5,
+            ease: "none",
+          },
+          `${index}`
+        );
+
+        // Animate current text
+        timeline.fromTo(
+          currentText,
+          {
+            y: 50,
+            opacity: 0,
+          },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.5,
+            ease: "none",
+          },
+          `${index}`
+        );
+
+        // Hide previous element **after**
+        timeline.to(
+          previousElem,
           {
             clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
             duration: 1.5,
             ease: "none",
           },
-          `step${index}`
+          `${index + 0.01}` // small delay to run after reveal
         );
-
-        // Fade in corresponding text
-      });
+      }
 
       setTimeout(() => ScrollTrigger.refresh(), 200);
     });
