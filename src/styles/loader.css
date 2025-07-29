@@ -1,7 +1,7 @@
 #loader_main {
   width: 100%;
   height: 100vh;
-  background-color: black;
+  background-color: #fadcde;
   z-index: 9;
   position: fixed;
   top: 0;
@@ -9,7 +9,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: #000;
   font-family: font2;
   overflow: hidden;
 }
@@ -67,6 +67,7 @@
   transform: translate(-50%, -50%);
   height: 9vw;
   overflow: hidden;
+  will-change: transform;
 }
 
 #loader_logo h2 {
@@ -107,11 +108,8 @@
 }
 
 #loader_ig1{
-    background-image: url("https://a.storyblok.com/f/277682/3000x4000/a298a4665e/otto-van-den-toorn-coiffure-award-raoul-van-delden-header.jpg/m/1440x0/filters:quality(60)");
+    background-image: url("/loader/DSC07424.jpg");
 }
 #loader_ig2{
-    background-image: url("https://a.storyblok.com/f/277682/3000x4000/f66e87e3a2/otto-van-den-toorn-flowers-for-zoe-header.jpg/m/1440x0/filters:quality(60)");
-}
-#loader_ig3{
-    background-image: url("https://a.storyblok.com/f/277682/3000x4000/071d002868/otto-van-den-toorn-wired-header.jpg/m/1440x0/filters:quality(60)");
+    background-image: url("/loader/DSC07349.jpg");
 }

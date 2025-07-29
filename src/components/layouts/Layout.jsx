@@ -15,18 +15,18 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     // Initial states
-    if(router.pathname !== "/") {
+    if (router.pathname !== "/") {
       gsap.set(".home-wrapper", {
-      overflow: "visible",
-      height: "100%",
-      clipPath:"none"
-    });
-    return;
-    };
+        overflow: "visible",
+        height: "100%",
+        clipPath: "none",
+      });
+      return;
+    }
     gsap.set(".home-wrapper", {
       overflow: "hidden",
       height: "100vh",
-      clipPath:"polygon(20% 100%, 80% 100%, 80% 100%, 20% 100%)"
+      clipPath: "polygon(20% 100%, 80% 100%, 80% 100%, 20% 100%)",
     });
 
     gsap.set(loaderRef.current, {
@@ -42,12 +42,9 @@ const Layout = ({ children }) => {
     gsap.set("#loader_logo h2 span", {
       transform: "translateY(0%)",
     });
-      gsap.set(
-        ".home-wrapper #home_banner img",
-        {
-          scale: .9,
-        }
-      )
+    gsap.set(".home-wrapper #home_banner img", {
+      scale: 0.9,
+    });
 
     const tl = gsap.timeline();
 
@@ -85,9 +82,9 @@ const Layout = ({ children }) => {
       .to(
         "#loader_logo",
         {
-          top: "-20%",
-          duration: .8,
-          ease: "power1.in",
+          top: "0%",
+          duration: 1,
+          ease: "expo.inOut",
         },
         "a"
       )
@@ -95,8 +92,9 @@ const Layout = ({ children }) => {
         "#loader_ig1",
         {
           clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-          backgroundPosition: "50% 50%",
-          ease: "power1.inOut",
+          backgroundPosition: "50% 10%",
+          scale:1.1,
+          ease: "expo.inOut",
           duration: 1,
         },
         "a"
@@ -105,8 +103,9 @@ const Layout = ({ children }) => {
         "#loader_ig2",
         {
           clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-          backgroundPosition: "50% 50%",
-          ease: "power1.inOut",
+          backgroundPosition: "50% 10%",
+          scale:1.1,
+          ease: "expo.inOut",
           duration: 1,
         },
         "b"
@@ -114,55 +113,45 @@ const Layout = ({ children }) => {
       .to(
         "#loader_ig1",
         {
-          scale: 1.1,
+          scale: 1.2,
           duration: 1,
           ease: "power2.inOut",
         },
         "b"
       )
-      .to(
-        "#loader_ig3",
-        {
-          clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-          backgroundPosition: "50% 50%",
-          ease: "power1.inOut",
-          duration: 1,
-        },
-        "c"
-      )
-      .to(
+       .to(
         "#loader_ig2",
         {
-          scale: 1.1,
+          scale: 1.2,
           duration: 1,
-          ease: "power2.inOut",
+          ease: "none",
         },
-        "c"
+        "d"
       )
       .to(
         ".home-wrapper",
         {
           clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-          ease: "power1.inOut",
+          ease: "expo.inOut",
           duration: 1,
         },
         "d"
       )
-        .to(
+      .to(
         ".home-wrapper #home_banner img",
         {
           scale: 1,
           duration: 1,
-          ease: "power2.inOut",
+          ease: "none",
         },
         "d"
       )
       .to(
         "#loader_ig3",
         {
-          scale: 1.1,
-          duration: 1,
-          ease: "power2.inOut",
+          scale: 1.2,
+          duration: 0.8,
+          ease: "none",
         },
         "d"
       )
