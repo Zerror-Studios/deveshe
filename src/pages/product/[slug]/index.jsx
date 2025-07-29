@@ -47,28 +47,6 @@ const ProductDetail = ({ meta, data, productList }) => {
           'Element with className "ProductDets_Big_img_wrap" not found.'
         );
       }
-      // gsap.to(document.querySelector(".ProductDets_grid"), {
-      //   // onComplete:()=>{
-      //   //   gsap.to(document.querySelector(".ProductDets_grid"), {filter: "blur(10px)",duration:.5})
-      //   // },
-      //   onUpdate: function(self) {
-      //     if (self.progress === 1) {
-      //       gsap.to(".ProductDets_grid", { filter: "blur(10px)", duration: 0.5 });
-      //     } else if (self.progress < 1) {
-      //       gsap.to(".ProductDets_grid", { filter: "blur(0px)", duration: 0.5 });
-      //     }
-      //   },
-      //   scrollTrigger: {
-      //     trigger: ".Similar_prd_wrap",
-      //     scroller:"body",
-      //     start: "top 0%",
-      //     end: "top -350%",
-      //     scrub: true,
-      //     markers: true,
-      //   },
-      //   filter: "blur(10px)",
-      //   transform: "translateZ(0)",
-      // });
     }
   }, []);
 
@@ -79,7 +57,7 @@ const ProductDetail = ({ meta, data, productList }) => {
       start: "top 0%",
       end: "top -350%",
       scrub: true,
-      markers: false,
+      markers: true,
       onUpdate: (self) => {
         if (self.progress === 1) {
           gsap.to(".ProductDets_grid", { filter: "blur(10px)", duration: 0.5 });

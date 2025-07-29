@@ -933,9 +933,10 @@
   border: none;
 }
 .ReactModalPortal_img_cntr_grid_cover img {
-  object-fit: contain;
+  object-fit: cover !important;
   width: 100%;
-  height: 100%;
+  object-position: top;
+  height: auto !important;
 }
 .ReactModalPortal_img_cross {
   position: fixed;
@@ -1327,6 +1328,7 @@ button {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: top;
+  top: 0;
 }
 
 /* .ProductDets_text_cntr {
@@ -1816,6 +1818,7 @@ button {
   display: none;
   position: relative;
   /* margin-left: 234px; */
+  margin-top: 25px;
 }
 .btnAbsoulte {
   position: absolute;
@@ -2021,12 +2024,9 @@ button {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   padding-bottom: 40px;
-  /* white-space: nowrap; */
+  background-color: #fadcde;
 }
 
-.Similar_prd_card_cntr {
-  background-color: #fde5d8;
-}
 
 .shop-card-w-full {
   width: 100%;
