@@ -98,7 +98,7 @@ const Section1 = () => {
         <div className="elem">
           <div className="add">
             <h6>Business enquiries</h6>
-            <h5>Deveshij@gmail.com</h5>
+            <h5>deveshedreams@gmail.com</h5>
             <h5>+919833983775</h5>
           </div>
           <div className="add">
