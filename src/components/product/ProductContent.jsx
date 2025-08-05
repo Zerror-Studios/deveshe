@@ -6,10 +6,14 @@ import { useAuthStore } from "@/store/auth-store";
 import { useVisitor } from "@/hooks/useVisitor";
 import { htmlParser } from "@/utils/Util";
 import { useRouter } from "next/router";
+import { useCartStore } from "@/store/cart-store";
 
 const ProductContent = ({ data = {} }) => {
   const router = useRouter();
+
   const { token, isLoggedIn } = useAuthStore((state) => state);
+  const { openCart} = useCartStore((state) => state);
+
   const { visitorId } = useVisitor();
 
   const basePrice = useMemo(
@@ -70,7 +74,7 @@ const ProductContent = ({ data = {} }) => {
     if (matchingVariant) {
       const diff = matchingVariant.priceDifference || 0;
       const { __typename, _id, ...variantWithoutTypename } = matchingVariant;
-      setVariantMatched({variantDetailId: _id, ...variantWithoutTypename});
+      setVariantMatched({ variantDetailId: _id, ...variantWithoutTypename });
       setFinalPrice(basePrice + diff);
     }
   };
@@ -99,6 +103,7 @@ const ProductContent = ({ data = {} }) => {
       };
 
       const { data: response } = await addItemToCart({ variables: payload });
+      openCart()
       console.log(response);
     } catch (err) {
       console.error(err);

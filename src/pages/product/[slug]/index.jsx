@@ -9,64 +9,41 @@ import ProductImageGrid from "@/components/product/ProductImageGrid";
 import { createApolloClient } from "@/lib/apolloClient";
 import { GET_PRODUCT_BY_ID, GET_PRODUCTS } from "@/graphql";
 import ProductContent from "@/components/product/ProductContent";
+import { useRouter } from "next/router";
 gsap.registerPlugin(ScrollTrigger);
 const ProductDetail = ({ meta, data, productList }) => {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState({});
+  const router = useRouter()
 
   useEffect(() => {
-    if (window.innerWidth >= 1000) {
-      const container = document.querySelector(".ProductDets_Big_img_wrap");
-      const BlurContainer = document.querySelector(".ProductDets_grid");
-      if (container) {
-        const innerHeight = container.clientHeight;
-        let sidebarHeight = "12.6117%";
-        if (window.innerWidth >= 1300) {
-          sidebarHeight = "12.6117%";
-        } else if (window.innerWidth >= 1000) {
-          sidebarHeight = "24.2424%";
-        }
+    if (window.innerWidth < 576) return;
 
-        gsap.fromTo(
-          ".ProductDets_img_slider_bar",
-          { height: sidebarHeight },
-          {
-            scrollTrigger: {
-              trigger: container,
-              start: "top top",
-              end: `+=${innerHeight}`,
-              scrub: true,
-              markers: false,
-            },
-            top: "100%",
-            transform: `translateY(-100%)`,
-          }
-        );
-      } else {
-        console.error(
-          'Element with className "ProductDets_Big_img_wrap" not found.'
-        );
-      }
-    }
-  }, []);
+    let ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".Similar_prd_wrap",
+          scroller: "body",
+          start: "top 100%",
+          end: "top 70%",
+          scrub: true,
+        },
+      });
 
-  useEffect(() => {
-    ScrollTrigger.create({
-      trigger: ".Similar_prd_wrap",
-      scroller: "body",
-      start: "top 0%",
-      end: "top -350%",
-      scrub: true,
-      markers: false,
-      onUpdate: (self) => {
-        if (self.progress === 1) {
-          gsap.to(".ProductDets_grid", { filter: "blur(10px)", duration: 0.5 });
-        } else {
-          gsap.to(".ProductDets_grid", { filter: "blur(0px)", duration: 0.5 });
-        }
-      },
+      tl.to(".ProductDets_grid", { filter: "blur(10px)", duration: 0.5 });
     });
-  }, []);
+
+    // Important: Refresh ScrollTrigger after init
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 500);
+
+    return () => {
+      // Clean up on unmount or route change
+      ctx.revert();
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, [router.asPath]);
 
   return (
     <>
