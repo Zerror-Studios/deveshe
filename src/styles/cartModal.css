@@ -148,6 +148,9 @@
   border: none;
   height: 100%;
 }
+#cart_center_wrap{
+  padding: 0 28px;
+}
 .Modal_Drawer_img_grid_cover {
   display: grid;
   border: none;

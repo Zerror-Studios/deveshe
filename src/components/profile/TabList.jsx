@@ -37,7 +37,7 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(
 );
 const TabList = ({ tab, setTab }) => {
   return (
-    <>
+    <div id="tab_list">
       <AntTabs
         id="ant-tabs"
         value={tab}
@@ -49,8 +49,12 @@ const TabList = ({ tab, setTab }) => {
         <AntTab id="tab" label="Order History" />
         <AntTab id="tab" label="Payment Method" />
         <AntTab id="tab" label="Saved Addresses" />
+        
       </AntTabs>
-    </>
+       <div id="logout_btn" className="_btn_wrapper _btn_height _w-full de-btn">
+          Logout
+        </div>
+    </div>
   );
 };
 

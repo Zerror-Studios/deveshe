@@ -7,7 +7,8 @@ import Navbar from "@/components/common/Navbar";
 import NavbarMobile from "@/components/common/NavbarMobile";
 import Footer from "@/components/common/Footer";
 import CartDrawer from "@/components/cart/CartDrawer";
-
+import ScrollTrigger from "gsap/dist/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 const Layout = ({ children }) => {
   const router = useRouter();
   const loaderRef = useRef(null);
@@ -93,7 +94,7 @@ const Layout = ({ children }) => {
         {
           clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
           backgroundPosition: "50% 10%",
-          scale:1.1,
+          scale: 1.1,
           ease: "expo.inOut",
           duration: 1,
         },
@@ -104,7 +105,7 @@ const Layout = ({ children }) => {
         {
           clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
           backgroundPosition: "50% 10%",
-          scale:1.1,
+          scale: 1.1,
           ease: "expo.inOut",
           duration: 1,
         },
@@ -119,7 +120,7 @@ const Layout = ({ children }) => {
         },
         "b"
       )
-       .to(
+      .to(
         "#loader_ig2",
         {
           scale: 1.2,
@@ -160,7 +161,11 @@ const Layout = ({ children }) => {
         {
           overflow: "visible",
           height: "100%",
+          onComplete: () => {
+            setTimeout(() => ScrollTrigger.refresh(), 500); // 💡 allow a short delay
+          },
         },
+
         "s"
       )
       .set(

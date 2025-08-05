@@ -15,11 +15,7 @@ import { MdOutlineDone } from "react-icons/md";
 import Address from "./Address";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
-<<<<<<< HEAD
 import { Getone, Updateuser } from "../../../api_fetch/admin/User";
-=======
-// import {Getone, Updateuser} from "../../../api_fetch/admin/User"
->>>>>>> 6df8208e9b7daaba7c9464b66eb729d711784e3a
 
 const AntTabs = styled(Tabs)({
   borderBottom: "1px solid #e8e8e8",
@@ -132,8 +128,6 @@ export default function BasicTabs() {
     setValue(newValue);
   };
 
-<<<<<<< HEAD
-=======
   const [userData, setUserData] = useState({
     firstname: "",
     lastname: "",
@@ -256,7 +250,6 @@ export default function BasicTabs() {
   };
 
   const [phone, setPhone] = useState("");
->>>>>>> 6df8208e9b7daaba7c9464b66eb729d711784e3a
   return (
     <>
       <div className="div-tab">
@@ -290,23 +283,8 @@ export default function BasicTabs() {
                 <div
                   id="edit_profile"
                   className="_btn_wrapper _btn_height _w-full"
-<<<<<<< HEAD
-                  onClick={() => {
-                    Updatefun(userData);
-                  }}
-                  style={{
-                    position: "relative",
-                    left: "93%",
-                    width: "40px",
-                    height: "40px",
-                    top: "15px",
-                    borderRadius: "50%",
-                    padding: "0",
-                  }}
-=======
                   // onClick={()=>{Updatefun(userData)}}
                   style={{ position: "relative", left: "93%", width:'40px', height:"40px", top:'15px', borderRadius:'50%', padding:'0' }}
->>>>>>> 6df8208e9b7daaba7c9464b66eb729d711784e3a
                 >
                   {textbtn == "Edit" ? (
                     <FaUserEdit className="status-btnpro" />

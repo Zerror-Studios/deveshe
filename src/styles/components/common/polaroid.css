@@ -1,0 +1,28 @@
+.polaroid_card {
+  width: 20vw;
+  height: auto;
+  background-color: #fff;
+  padding: 1vw;
+}
+.polaroid_img {
+  width: 100%;
+  height: 15vw;
+  background-color: red;
+}
+.polaroid_img img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.polaroid_card p {
+  font-family: heading;
+  font-size: 1.3vw;
+  text-align: center;
+  line-height: 1.2;
+  color: black;
+  margin-top: 1vw;
+}
+.polaroid_card p span {
+  color: red;
+}
+

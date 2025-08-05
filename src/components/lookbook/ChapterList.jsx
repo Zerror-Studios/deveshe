@@ -63,23 +63,6 @@ const ChapterList = ({ data = [] }) => {
   };
 }, [data]);
 
-
-  // // Animate current text
-  // timeline.fromTo(
-  //   currentText,
-  //   {
-  //     y: 50,
-  //     opacity: 0,
-  //   },
-  //   {
-  //     y: 0,
-  //     opacity: 1,
-  //     duration: 0.5,
-  //     ease: "none",
-  //   },
-  //   `${index}`
-  // );
-
   return (
     <div className={styles.archiveWrapper}>
       <div id="archiveSection3" className={styles.archiveSection3}>

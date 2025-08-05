@@ -140,7 +140,7 @@ const CartDrawer = ({ isOpen, closeCart }) => {
                         <RxCross2 />
                       </button>
                     </div>
-                    <div style={{ overflow: "auto" }} data-lenis-prevent>
+                    <div id="cart_center_wrap" style={{ overflow: "auto" }} data-lenis-prevent>
                       {cart && cart.length > 0 ? (
                         <>
                           {cart.map((item, i) => {
