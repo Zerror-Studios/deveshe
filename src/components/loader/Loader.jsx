@@ -2,11 +2,14 @@ import React, { useLayoutEffect, useMemo, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
+import { useRouter } from "next/router";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Loader = ({ triggerAnimation = true, homeRef }) => {
   const loaderRef = useRef(null);
+    const router = useRouter();
+  
 
   const logoText = useMemo(
     () =>
@@ -19,26 +22,38 @@ const Loader = ({ triggerAnimation = true, homeRef }) => {
   );
 
   useLayoutEffect(() => {
+    const isHomePage = router.pathname === "/";
+
+    // If not on home page or animation is disabled, just reset styles
     if (!triggerAnimation || !homeRef?.current) return;
 
-    const ctx = gsap.context(() => {
-      // Initial styles
-      gsap.set(".loader_ig", {
-        clipPath: "polygon(20% 100%, 80% 100%, 80% 100%, 20% 100%)",
-      });
+    if (!isHomePage) {
       gsap.set(homeRef.current, {
-        overflow: "hidden",
-        height: "100vh",
-        clipPath: "polygon(20% 100%, 80% 100%, 80% 100%, 20% 100%)",
+        overflow: "visible",
+        height: "100%",
+        clipPath: "none",
       });
-      gsap.set(loaderRef.current, { display: "flex" });
-      gsap.set("#loader_content p", { y: "100%" });
-      gsap.set(".counter_strip", { y: "25%" });
-      gsap.set("#loader_logo h2 span", { y: "0%" });
-      gsap.set(homeRef.current.querySelector("#home_banner img"), {
-        scale: 0.9,
-      });
+      return;
+    }
 
+    // ✨ Reset loader styles BEFORE animation starts
+    gsap.set(".loader_ig", {
+      clipPath: "polygon(20% 100%, 80% 100%, 80% 100%, 20% 100%)",
+    });
+    gsap.set(homeRef.current, {
+      overflow: "hidden",
+      height: "100vh",
+      clipPath: "polygon(20% 100%, 80% 100%, 80% 100%, 20% 100%)",
+    });
+    gsap.set(loaderRef.current, { display: "flex" });
+    gsap.set("#loader_content p", { y: "100%" });
+    gsap.set(".counter_strip", { y: "25%" });
+    gsap.set("#loader_logo h2 span", { y: "0%" });
+    gsap.set(homeRef.current.querySelector("#home_banner img"), {
+      scale: 0.9,
+    });
+
+    const ctx = gsap.context(() => {
       const tl = gsap.timeline();
       const easeExpo = "expo.inOut";
       const easePower = "power2.inOut";
@@ -160,7 +175,7 @@ const Loader = ({ triggerAnimation = true, homeRef }) => {
     }, loaderRef);
 
     return () => ctx.revert();
-  }, [triggerAnimation, homeRef]);
+  }, [triggerAnimation, homeRef, router.pathname]); // ✅ Use pathname instead of `asPath`
 
   return (
     <div ref={loaderRef} id="loader_main">
