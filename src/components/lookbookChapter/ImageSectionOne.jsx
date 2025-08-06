@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Section3 = () => {
+const ImageSectionOne = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -44,4 +44,4 @@ const Section3 = () => {
   );
 };
 
-export default Section3;
+export default ImageSectionOne;

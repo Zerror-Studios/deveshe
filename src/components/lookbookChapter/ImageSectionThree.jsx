@@ -1,10 +1,9 @@
-import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
 import React, { useEffect } from "react";
 gsap.registerPlugin(ScrollTrigger);
-const Section5 = () => {
+const ImageSectionThree = () => {
 
 useEffect(() => {
   if (window.innerWidth < 576) return;
@@ -68,4 +67,4 @@ useEffect(() => {
   );
 };
 
-export default Section5;
+export default ImageSectionThree;

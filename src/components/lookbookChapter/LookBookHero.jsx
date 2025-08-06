@@ -5,7 +5,7 @@ import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
 import React from "react";
 gsap.registerPlugin(ScrollTrigger);
-const Section1 = ({ title, subheading, description, asset }) => {
+const LookBookHero = ({ title, subheading, description, asset }) => {
   useGSAP(() => {
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -39,12 +39,10 @@ const Section1 = ({ title, subheading, description, asset }) => {
         </div>
       </div>
       {description && (
-        <div id="lb-text-container">
-          {htmlParser(description || "")}
-        </div>
+        <div id="lb-text-container">{htmlParser(description || "")}</div>
       )}
     </>
   );
 };
 
-export default Section1;
+export default LookBookHero;

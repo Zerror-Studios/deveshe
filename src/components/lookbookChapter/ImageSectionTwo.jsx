@@ -4,8 +4,7 @@ import Image from 'next/image'
 import React, { useEffect } from 'react'
 gsap.registerPlugin(ScrollTrigger)
 
-const Section4 = () => {
-
+const ImageSectionTwo = () => {
     useEffect(() => {
       const ctx = gsap
       .context(() => {
@@ -42,4 +41,4 @@ const Section4 = () => {
   )
 }
 
-export default Section4
+export default ImageSectionTwo;

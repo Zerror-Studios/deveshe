@@ -6,7 +6,7 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
-const Section6 = () => {
+const JourneySection = () => {
   useEffect(() => {
     function splitText(selector) {
       document.querySelectorAll(selector).forEach((el) => {
@@ -67,4 +67,4 @@ const Section6 = () => {
   );
 };
 
-export default Section6;
+export default JourneySection;

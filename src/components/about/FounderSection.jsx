@@ -4,7 +4,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
-const Section5 = () => {
+const FounderSection = () => {
 
 useEffect(() => {
   function splitText(selector) {
@@ -26,8 +26,6 @@ useEffect(() => {
         trigger: "#title-main-wrap5",
         start: "top 70%",
         end: "top 50%",
-        // scrub: true,
-        // markers: true,
       },
     });
 
@@ -78,4 +76,4 @@ useEffect(() => {
   );
 };
 
-export default Section5;
+export default FounderSection;

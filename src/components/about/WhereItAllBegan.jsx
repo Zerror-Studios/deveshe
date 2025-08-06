@@ -2,7 +2,7 @@ import React from "react";
 import styles from "../shop/shop.module.css";
 import Image from "next/image";
 
-const Section7 = () => {
+const WhereItAllBegan = () => {
   return (
     <div className={styles.shopSection7}>
       <div className={styles.secPara7}>
@@ -51,4 +51,4 @@ const Section7 = () => {
   );
 };
 
-export default Section7;
+export default WhereItAllBegan;

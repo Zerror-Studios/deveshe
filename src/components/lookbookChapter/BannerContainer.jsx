@@ -5,7 +5,7 @@ import Image from "next/image";
 import React, { useEffect, useRef } from "react";
 gsap.registerPlugin(ScrollTrigger);
 
-const Section2 = ({ data }) => {
+const BannerContainer = ({ data }) => {
   const bannerRef = useRef(null);
   const overlayRef = useRef(null);
   const textRef = useRef(null);
@@ -59,4 +59,4 @@ const Section2 = ({ data }) => {
   );
 };
 
-export default Section2;
+export default BannerContainer;

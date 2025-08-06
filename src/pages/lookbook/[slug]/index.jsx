@@ -1,20 +1,20 @@
 import React from "react";
+import SeoHeader from "@/components/seo/SeoHeader";
+import LookBookHero from "@/components/lookbookChapter/LookBookHero";
 import ProductContainer from "@/components/lookbookChapter/ProductContainer";
-import Section1 from "@/components/lookbookChapter/Section1";
-import Section2 from "@/components/lookbookChapter/Section2";
-import Section3 from "@/components/lookbookChapter/Section3";
-import Section4 from "@/components/lookbookChapter/Section4";
-import Section5 from "@/components/lookbookChapter/Section5";
 import VideoContainer from "@/components/lookbookChapter/VideoContainer";
+import BannerContainer from "@/components/lookbookChapter/BannerContainer";
+import ImageSectionOne from "@/components/lookbookChapter/ImageSectionOne";
+import ImageSectionTwo from "@/components/lookbookChapter/ImageSectionTwo";
+import ImageSectionThree from "@/components/lookbookChapter/ImageSectionThree";
 import { GET_LOOKBOOK_BY_ID } from "@/graphql";
 import { createApolloClient } from "@/lib/apolloClient";
-import SeoHeader from "@/components/seo/SeoHeader";
 
 const LookbookDetail = ({ meta, data }) => {
   return (
     <>
       <SeoHeader meta={meta} />
-      <Section1
+      <LookBookHero
         title={data?.name || ""}
         subheading={data?.subName || ""}
         description={data?.description || ""}
@@ -22,10 +22,10 @@ const LookbookDetail = ({ meta, data }) => {
       />
       <ProductContainer data={data?.products || []} />
       <VideoContainer data={data?.sections?.[0] || {}} />
-      <Section2 data={data?.sections?.[1] || {}} />
-      <Section3 />
-      <Section4 />
-      <Section5 />
+      <BannerContainer data={data?.sections?.[1] || {}} />
+      <ImageSectionOne />
+      <ImageSectionTwo />
+      <ImageSectionThree />
     </>
   );
 };

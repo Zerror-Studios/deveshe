@@ -1,12 +1,9 @@
-import { Inter } from "next/font/google";
-import Section5 from "@/components/about/Section5";
-import Section6 from "@/components/about/Section6";
-import Section7 from "@/components/about/Section7";
-import Nails_Cntr from "@/components/about/Nails_Cntr";
 import SeoHeader from "@/components/seo/SeoHeader";
 import AboutHeroSection from "@/components/about/AboutHeroSection";
-
-const inter = Inter({ subsets: ["latin"] });
+import JourneySection from "@/components/about/JourneySection";
+import WhereItAllBegan from "@/components/about/WhereItAllBegan";
+import Nails_Cntr from "@/components/about/Nails_Cntr";
+import FounderSection from "@/components/about/FounderSection";
 
 export default function About({ meta }) {
   return (
@@ -14,10 +11,10 @@ export default function About({ meta }) {
       <SeoHeader meta={meta} />
       <main>
         <AboutHeroSection />
-        <Section6 />
-        <Section7 />
+        <JourneySection />
+        <WhereItAllBegan />
         <Nails_Cntr />
-        <Section5 />
+        <FounderSection />
       </main>
     </>
   );
