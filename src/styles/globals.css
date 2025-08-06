@@ -606,19 +606,34 @@ li {
   left: 0;
 }
 
-#paper-top {
-  height: auto;
-  width: 85%;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
+
 #slide1-bg {
   height: auto;
   width: 110%;
   position: absolute;
   bottom: 0%;
-  left: 0;
+  left: 0%;
+}
+#building1{
+  height: auto;
+  width: 45%;
+  position: absolute;
+  bottom: 8%;
+  left: -8%;
+}
+#girl1{
+  height: auto;
+  width: 28%;
+  position: absolute;
+  bottom: 6%;
+  left: 22.2%;
+}
+#ground1-over{
+  height: auto;
+  width: 100%;
+  position: absolute;
+  bottom: 0%;
+  left: -10%;
 }
 
 #slide2-bg {
@@ -627,13 +642,6 @@ li {
   position: absolute;
   bottom: 0%;
   right: 0;
-}
-#paper-top2 {
-  height: auto;
-  width: 90%;
-  position: absolute;
-  top: 0;
-  right: 5%;
 }
 
 #flower1 {
@@ -670,6 +678,7 @@ li {
   animation-iteration-count: infinite;
   animation-direction: alternate-reverse;
   animation-fill-mode: forwards;
+  display: none;
 }
 #girl {
   position: absolute;
@@ -684,12 +693,13 @@ li {
   animation-iteration-count: infinite;
   animation-direction: alternate;
   animation-fill-mode: forwards;
+  display: none;
 }
 #flower3 {
   position: absolute;
   height: auto;
   width: 15%;
-  left: 35%;
+  left: 15%;
   bottom: -10%;
   transform-origin: bottom;
   animation-name: img7;
@@ -703,7 +713,7 @@ li {
   position: absolute;
   height: auto;
   width: 22%;
-  left: 35%;
+  left: 50%;
   top: 7%;
   transform-origin: bottom;
   animation-name: img7;

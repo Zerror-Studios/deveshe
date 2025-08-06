@@ -73,15 +73,29 @@ const AboutHeroSection = () => {
             <Image
               width={1000}
               height={1000}
-              id="paper-top"
-              src="/scrapbook/paper-top.png"
+              id="slide1-bg"
+              src="/scrapbook/ground1.png"
               alt=""
             />
-            <Image
+             <Image
               width={1000}
               height={1000}
-              id="slide1-bg"
-              src="/scrapbook/slide1-bg.png"
+              id="building1"
+              src="/scrapbook/building1.png"
+              alt=""
+            />
+              <Image
+              width={1000}
+              height={1000}
+              id="girl1"
+              src="/scrapbook/girl1.png"
+              alt=""
+            />
+             <Image
+              width={1000}
+              height={1000}
+              id="ground1-over"
+              src="/scrapbook/ground1-over.png"
               alt=""
             />
             <Image
@@ -178,13 +192,6 @@ const AboutHeroSection = () => {
             alt="background"
           />
           <div class="slide1-container">
-            <Image
-              width={1000}
-              height={1000}
-              id="paper-top2"
-              src="/scrapbook/paper-top2.png"
-              alt=""
-            />
             <Image
               width={1000}
               height={1000}
