@@ -55,13 +55,13 @@
   gap: 5vw;
 }
 .polaroid_container .polaroid_card:nth-child(1) {
-  transform: translateY(-700px) scale(0.8) rotate(-8deg);
+  transform: translateX(100px) scale(0.8) rotate(-8deg);
   transform-origin: center;
   opacity: 0;
 }
 
 .polaroid_container .polaroid_card:nth-child(2) {
-  transform: translateY(-250px) scale(0.8) rotate(8deg);
+  transform: translateX(60px) scale(0.8) rotate(8deg);
   transform-origin: center;
   opacity: 0;
 }

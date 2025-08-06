@@ -24,7 +24,7 @@ const HeroSection = () => {
       });
 
       tl.to(".polaroid_card", {
-        y: 0,
+        x: 0,
         scale: 1,
         opacity: 1,
         duration: 1,
