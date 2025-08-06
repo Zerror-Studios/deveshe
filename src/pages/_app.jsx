@@ -3,7 +3,7 @@ import { ApolloProvider } from "@apollo/client";
 import { createApolloClient } from "@/lib/apolloClient";
 import { Toaster } from "react-hot-toast";
 import Layout from "@/components/layouts/Layout";
-import SmoothScroller from "@/components/common/SmoothScroll";
+import SmoothScroller from "@/components/common/SmoothScroller";
 import "@/styles/globals.css";
 import "@/styles/home.css";
 import "@/styles/login.css";
@@ -17,10 +17,10 @@ import "@/styles/profile.css";
 import "@/styles/productLoader.css";
 import "@/styles/collectionLoader.css";
 import "@/styles/lookBook.css";
-import "@/styles/legal.css";
-import "@/styles/loader.css";
 
 import "@/styles/components/home.css";
+import "@/styles/components/loader.css";
+import "@/styles/components/legal.css";
 import "@/styles/components/common/polaroid.css";
 
 export default function App({ Component, pageProps }) {

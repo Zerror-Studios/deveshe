@@ -2,9 +2,9 @@ import React from "react";
 import ProductContainer from "@/components/lookbookChapter/ProductContainer";
 import Section1 from "@/components/lookbookChapter/Section1";
 import Section2 from "@/components/lookbookChapter/Section2";
-// import Section3 from "@/components/lookbookChapter/Section3";
-// import Section4 from "@/components/lookbookChapter/Section4";
-// import Section5 from "@/components/lookbookChapter/Section5";
+import Section3 from "@/components/lookbookChapter/Section3";
+import Section4 from "@/components/lookbookChapter/Section4";
+import Section5 from "@/components/lookbookChapter/Section5";
 import VideoContainer from "@/components/lookbookChapter/VideoContainer";
 import { GET_LOOKBOOK_BY_ID } from "@/graphql";
 import { createApolloClient } from "@/lib/apolloClient";
@@ -23,9 +23,9 @@ const LookbookDetail = ({ meta, data }) => {
       <ProductContainer data={data?.products || []} />
       <VideoContainer data={data?.sections?.[0] || {}} />
       <Section2 data={data?.sections?.[1] || {}} />
-      {/* <Section3 />
+      <Section3 />
       <Section4 />
-      <Section5 /> */}
+      <Section5 />
     </>
   );
 };

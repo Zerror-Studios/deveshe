@@ -17,11 +17,6 @@ const ProductContainer = ({ data }) => {
             <Image width={1000} height={1000} src={path} alt={altText} />
             <div className="product-info">
               <p>{item?.name || ""}</p>
-              <p>
-                {item?.price
-                  ? `${Number(item.price).toLocaleString()} INR`
-                  : "Price not available"}
-              </p>
             </div>
           </Link>
         );

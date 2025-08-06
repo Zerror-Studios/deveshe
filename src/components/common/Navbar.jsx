@@ -173,28 +173,28 @@ const Navbar = ({openCart}) => {
           <Image
             width={1000}
             height={1000}
-            src="/logo/d.png"
+            src="/assets/images/logo/d.webp"
             alt="D"
             class="logo"
           />
           <Image
             width={1000}
             height={1000}
-            src="/logo/v.png"
+            src="/assets/images/logo/v.webp"
             alt="V"
             class="logo"
           />
           <Image
             width={1000}
             height={1000}
-            src="/logo/s.png"
+            src="/assets/images/logo/s.webp"
             alt="S"
             class="logo"
           />
           <Image
             width={1000}
             height={1000}
-            src="/logo/m.png"
+            src="/assets/images/logo/m.webp"
             alt="M"
             class="logo"
           />
