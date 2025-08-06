@@ -16,11 +16,11 @@ import "@/styles/navbar.css";
 import "@/styles/profile.css";
 import "@/styles/productLoader.css";
 import "@/styles/collectionLoader.css";
-import "@/styles/lookBook.css";
 
 import "@/styles/components/home.css";
 import "@/styles/components/loader.css";
 import "@/styles/components/legal.css";
+import "@/styles/components/lookBook.css";
 import "@/styles/components/common/polaroid.css";
 
 export default function App({ Component, pageProps }) {
