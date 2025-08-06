@@ -43,8 +43,8 @@ const Layout = ({ children }) => {
     gsap.set("#loader_logo h2 span", {
       transform: "translateY(0%)",
     });
-    gsap.set(".home-wrapper #home_banner img", {
-      scale: 0.9,
+    gsap.set(".home-wrapper #home_hero >img ", {
+      scale: 1,
     });
 
     const tl = gsap.timeline();
@@ -65,13 +65,30 @@ const Layout = ({ children }) => {
         ease: "power3.out",
       })
       .to(".counter_strip", {
-        y: "-50%",
-        stagger: {
-          amount: 0.2,
-        },
+        y: "0%",
+        stagger: { amount: 0.2 },
         delay: 0.1,
         ease: "power2.inOut",
       })
+      .to(".counter_strip", {
+        y: "-25%",
+        stagger: { amount: 0.2 },
+        delay: 0.1,
+        ease: "power2.inOut",
+      })
+      .to(".counter_strip", {
+        y: "-50%",
+        stagger: { amount: 0.2 },
+        delay: 0.1,
+        ease: "power2.inOut",
+      })
+      .to(".counter_strip", {
+        y: "-75%",
+        stagger: { amount: 0.2 },
+        delay: 0.1,
+        ease: "power2.inOut",
+      })
+
       .to("#loader_content p,.counter_strip ,#loader_logo h2 span", {
         y: "-100%",
         stagger: {
@@ -93,7 +110,6 @@ const Layout = ({ children }) => {
         "#loader_ig1",
         {
           clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-          backgroundPosition: "50% 10%",
           scale: 1.1,
           ease: "expo.inOut",
           duration: 1,
@@ -101,10 +117,15 @@ const Layout = ({ children }) => {
         "a"
       )
       .to(
+        "#loader_ig1 img",
+        { objectPosition: "50% 10%", ease: "expo.inOut", duration: 1 },
+        "a"
+      )
+
+      .to(
         "#loader_ig2",
         {
           clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-          backgroundPosition: "50% 10%",
           scale: 1.1,
           ease: "expo.inOut",
           duration: 1,
@@ -112,21 +133,18 @@ const Layout = ({ children }) => {
         "b"
       )
       .to(
+        "#loader_ig2 img",
+        { objectPosition: "50% 10%", ease: "expo.inOut", duration: 1 },
+        "b"
+      )
+      .to(
         "#loader_ig1",
-        {
-          scale: 1.2,
-          duration: 1,
-          ease: "power2.inOut",
-        },
+        { scale: 1.2, duration: 1, delay: -0.5, ease: "none" },
         "b"
       )
       .to(
         "#loader_ig2",
-        {
-          scale: 1.2,
-          duration: 1,
-          ease: "none",
-        },
+        { scale: 1.2, duration: 1, delay: -0.5, ease: "none" },
         "d"
       )
       .to(
@@ -139,19 +157,11 @@ const Layout = ({ children }) => {
         "d"
       )
       .to(
-        ".home-wrapper #home_banner img",
+        ".home-wrapper #home_hero >img ",
         {
-          scale: 1,
+          scale: 1.1,
           duration: 1,
-          ease: "none",
-        },
-        "d"
-      )
-      .to(
-        "#loader_ig3",
-        {
-          scale: 1.2,
-          duration: 0.8,
+          delay: 0.3,
           ease: "none",
         },
         "d"
@@ -162,7 +172,7 @@ const Layout = ({ children }) => {
           overflow: "visible",
           height: "100%",
           onComplete: () => {
-            setTimeout(() => ScrollTrigger.refresh(), 500); // 💡 allow a short delay
+            setTimeout(() => ScrollTrigger.refresh(), 500);
           },
         },
 
@@ -194,13 +204,18 @@ const Layout = ({ children }) => {
           <div id="loader_counter">
             <div className="counter_strip counter_strip1">
               <span>0</span>
+              <span>1</span>
+              <span>4</span>
               <span>9</span>
             </div>
             <div className="counter_strip counter_strip2">
               <span>0</span>
+              <span>2</span>
+              <span>6</span>
               <span>9</span>
             </div>
           </div>
+
           <div id="loader_logo">
             <h2>
               {"De ve she dreams".split("").map((char, index) => (
@@ -208,9 +223,22 @@ const Layout = ({ children }) => {
               ))}
             </h2>
           </div>
-          <div id="loader_ig1" className="loader_ig"></div>
-          <div id="loader_ig2" className="loader_ig"></div>
-          <div id="loader_ig3" className="loader_ig"></div>
+          <div id="loader_ig1" className="loader_ig">
+            <Image
+              width={1000}
+              height={1000}
+              src="/assets/images/loader/slide1.webp"
+              alt="loader_image"
+            />
+          </div>
+          <div id="loader_ig2" className="loader_ig">
+            <Image
+              width={1000}
+              height={1000}
+              src="/assets/images/loader/slide2.webp"
+              alt="loader_image"
+            />
+          </div>
         </div>
       )}
       <div className="home-wrapper">
