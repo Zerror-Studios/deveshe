@@ -14,7 +14,7 @@ gsap.registerPlugin(ScrollTrigger);
 const ProductDetail = ({ meta, data, productList }) => {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState({});
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     if (window.innerWidth < 576) return;
@@ -22,24 +22,25 @@ const ProductDetail = ({ meta, data, productList }) => {
     let ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: ".Similar_prd_wrap",
-          scroller: "body",
-          start: "top 100%",
-          end: "top 70%",
+          trigger: ".ProductDets_grid",
+          start: "bottom bottom", // when the top hits the top of the viewport
+          end: "bottom center", // when the bottom hits the top of the viewport (i.e., scrolls out)
           scrub: true,
         },
       });
 
-      tl.to(".ProductDets_grid", { filter: "blur(10px)", duration: 0.5 });
+      tl.fromTo(
+        ".ProductDets_grid",
+        { filter: "blur(0px)" },
+        { filter: "blur(10px)", ease: "none" }
+      );
     });
 
-    // Important: Refresh ScrollTrigger after init
     setTimeout(() => {
       ScrollTrigger.refresh();
     }, 500);
 
     return () => {
-      // Clean up on unmount or route change
       ctx.revert();
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
