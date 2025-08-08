@@ -8,6 +8,12 @@ export const UserStatus = {
   BLOCKED: "BLOCKED",
 };
 
+export const EmailSubscribedStatus = {
+  SUBSCRIBED: "SUBSCRIBED",
+  UNSUBSCRIBED: "UNSUBSCRIBED",
+  NEVER_SUBSCRIBED: "NEVER_SUBSCRIBED",
+};
+
 export const Sort = {
   ASC: "ASC",
   DESC: "DESC",

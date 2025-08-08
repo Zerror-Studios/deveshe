@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
+
 const Basic = dynamic(() => import("@/components/profile/panel").then(mod => mod.Basic), {
   ssr: false,
 });

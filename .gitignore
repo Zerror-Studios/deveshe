@@ -7,13 +7,14 @@
 .yarn/install-state.gz
 /npmrc
 
-#env
-.env.local
-.env
-.env.development.local
-.env.development
-.env.production.local
-.env.production
+# env files (can opt-in for committing if needed)
+# local env files
+.env*.local
+*.env
+*.env.example
+*.env.local
+*.env.staging
+
 # testing
 /coverage
 

@@ -1,8 +1,9 @@
 import React from "react";
 import Link from "next/link";
 import { useAuthStore } from "@/store/auth-store";
+import { EmailSubscribedStatus } from "@/utils/Constant";
 
-const ContactDetail = ({ register, errors }) => {
+const ContactDetail = ({ register, setValue, watch, errors }) => {
   const { isLoggedIn } = useAuthStore((state) => state);
   return (
     <div className="contact_container">
@@ -18,10 +19,26 @@ const ContactDetail = ({ register, errors }) => {
         />
       </div>
       {errors?.email && (
-        <span className="error" style={{marginBottom: "10px"}}>{errors?.email?.message || ""}</span>
+        <span className="error" style={{ marginBottom: "10px" }}>
+          {errors?.email?.message || ""}
+        </span>
       )}
       <label class="checkbox-container">
-        <input type="checkbox" {...register("emailSubscribedStatus")} />
+        <input
+          type="checkbox"
+          checked={
+            watch("emailSubscribedStatus") === EmailSubscribedStatus.SUBSCRIBED
+          }
+          onChange={(e) =>
+            setValue(
+              "emailSubscribedStatus",
+              e.target.checked
+                ? EmailSubscribedStatus.SUBSCRIBED
+                : EmailSubscribedStatus.UNSUBSCRIBED
+            )
+          }
+        />
+
         <span class="checkmark">
           <svg
             xmlns="http://www.w3.org/2000/svg"

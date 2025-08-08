@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { addressType } from "@/helpers/Data";
+import { EmailSubscribedStatus } from "@/utils/Constant";
 
 const addressEnum = addressType.map((item) => item.value);
 
@@ -30,7 +31,9 @@ export const AddressSchema = z.object({
 export const CheckoutSchema = z
   .object({
     email: z.string().email("Invalid email"),
-    emailSubscribedStatus: z.boolean().default(true),
+    emailSubscribedStatus: z.enum(Object.values(EmailSubscribedStatus), {
+      required_error: "Email subscribed is required"
+    }).default(EmailSubscribedStatus.SUBSCRIBED),
     password: z
       .string()
       .min(6, "Password must be at least 6 characters")

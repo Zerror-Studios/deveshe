@@ -4,7 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckoutSchema } from "@/validations/CheckoutValidation";
 import { createApolloClient } from "@/lib/apolloClient";
-import { CART_LIST } from "@/graphql";
+import { useMutation } from "@apollo/client";
+import { CART_LIST, CHECKOUT_ORDER } from "@/graphql";
 import SeoHeader from "@/components/seo/SeoHeader";
 import BackSection from "@/components/checkout/BackSection";
 import Heading from "@/components/checkout/Heading";
@@ -14,18 +15,22 @@ import Shipping from "@/components/checkout/Shipping";
 import Payment from "@/components/checkout/Payment";
 import BillingAddress from "@/components/checkout/BillingAddress";
 import OrderSummery from "@/components/checkout/OrderSummery";
+import { EmailSubscribedStatus } from "@/utils/Constant";
 const Checkout = ({ meta, initialCartData }) => {
   const [cartData, setCartData] = useState(initialCartData);
+  const [isLoading, setIsLoading] = useState(false);
+  const [checkoutOrder] = useMutation(CHECKOUT_ORDER);
   const {
     register,
     handleSubmit,
     setValue,
+    watch,
     control,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(CheckoutSchema),
     defaultValues: {
-      paymentMethod: "credit-card",
+      paymentMethod: "debit_card",
       shippingAddress: {
         addressType: "SHIPPING",
         countryCode: "+91",
@@ -38,16 +43,82 @@ const Checkout = ({ meta, initialCartData }) => {
         country: "India",
         primary: false,
       },
-      emailSubscribedStatus: true,
+      emailSubscribedStatus: EmailSubscribedStatus.SUBSCRIBED,
       useShippingAsBilling: true,
     },
   });
   const onSubmit = async (data) => {
+    setIsLoading(true);
     try {
-      console.log(data, "Form Data");
+      const {
+        email,
+        emailSubscribedStatus,
+        shippingAddress,
+        billingAddress,
+        paymentMethod,
+        cardDetails,
+      } = data;
+
+      const payload = {
+        userData: {
+          firstName: shippingAddress.firstname,
+          lastName: shippingAddress.lastname,
+          email,
+          phone: shippingAddress.phone,
+          countryCode: shippingAddress.countryCode,
+          emailSubscribedStatus,
+        },
+        cartId: cartData?._id,
+        shippingAddress,
+        billingAddress,
+      };
+
+      const { data: response } = await checkoutOrder({
+        variables: { input: payload },
+      });
+      const { token, order_id } = response?.clientCheckout?.nimbblData || {};
+      const nimbblOrderPayload = {
+        order_id: order_id,
+        callback_url: `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/handle-order-payment`,
+        payment_mode_code: paymentMethod,
+        card_no: cardDetails?.cardNumber || "",
+        expiry: cardDetails?.cardExpire || "",
+        card_holder_name: cardDetails?.cardHolderName || "",
+        cvv: cardDetails?.cardCvv || "",
+        transaction_currency: "INR",
+      };
+      const initiatePayment = await fetch(
+        `${process.env.NEXT_PUBLIC_NIMBBL_BASE_URL}/api/v3/initiate-payment`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(nimbblOrderPayload),
+        }
+      );
+
+      if (!initiatePayment.ok) {
+        toast.error(`Initiate payment failed: ${initiatePayment.statusText}`);
+      }
+
+      const paymentResponse = await initiatePayment.json();
+      const redirectAction = paymentResponse?.next?.find(
+        (item) => item.action === "redirect"
+      );
+
+      if (redirectAction?.url) {
+        window.location.href = redirectAction.url;
+      } else {
+        toast.error("No redirect action found in payment response");
+      }
     } catch (err) {
       console.error(err);
       toast.error(err.message || "Failed");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -59,7 +130,12 @@ const Checkout = ({ meta, initialCartData }) => {
         <div className="checkout-left">
           <Heading />
           <form onSubmit={handleSubmit(onSubmit)} className="checkout-main">
-            <ContactDetail register={register} errors={errors} />
+            <ContactDetail
+              register={register}
+              watch={watch}
+              setValue={setValue}
+              errors={errors}
+            />
             <Delivery
               control={control}
               errors={errors}
@@ -74,8 +150,12 @@ const Checkout = ({ meta, initialCartData }) => {
               control={control}
               errors={errors}
             />
-            <button type="submit" style={{ marginTop: "30px" }}>
-              Pay now
+            <button
+              disabled={isLoading}
+              type="submit"
+              style={{ marginTop: "30px" }}
+            >
+              {isLoading ? "Loading..." : "Pay now"}
             </button>
           </form>
         </div>

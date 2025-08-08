@@ -18,12 +18,12 @@ const Payment = ({ register, errors }) => {
                   <input
                     type="radio"
                     id="basic-creditCards"
-                    value="credit-card"
+                    value="debit_card"
                     {...register("paymentMethod")}
                   />
                 </div>
                 <div className="credit_card_cntr">
-                  <span>Credit card</span>
+                  <span>Debit card</span>
                   <div className="cards_cntr">
                     <div className="cards_img_cntr">
                       <img src="/0169695890db3db16bfe.svg" alt="card1" />
