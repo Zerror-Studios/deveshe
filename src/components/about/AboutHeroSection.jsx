@@ -196,7 +196,7 @@ const AboutHeroSection = () => {
               width={1000}
               height={1000}
               id="slide2-bg"
-              src="/scrapbook/slide2-bg.png"
+              src="/scrapbook/slide2-bg2.png"
               alt=""
             />
             <Image

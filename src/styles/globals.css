@@ -639,10 +639,10 @@ li {
 
 #slide2-bg {
   height: auto;
-  width: 99%;
+  width: 100%;
   position: absolute;
-  bottom: 0%;
-  right: 0;
+  bottom: -1%;
+  right: -1%;
 }
 
 #flower1 {
@@ -849,7 +849,7 @@ li {
   height: auto;
   width: 3%;
   right: 0.5%;
-  bottom: 10%;
+  bottom: 0%;
   transform-origin: bottom;
   animation-name: img7;
   animation-duration: 5s;
@@ -861,9 +861,9 @@ li {
 #flower7 {
   position: absolute;
   height: auto;
-  width: 6%;
+  width: 5%;
   right: 2%;
-  bottom: 12%;
+  bottom: 2%;
   transform-origin: bottom;
   animation-name: img7;
   animation-duration: 5s;
