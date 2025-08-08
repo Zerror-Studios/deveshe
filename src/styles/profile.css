@@ -285,8 +285,6 @@
   position: relative;
   flex-direction: column;
   align-items: center;
-  /* border: 0.5px solid rgba(0,0,0,0.2); */
-  background-color: white;
   padding-bottom: 20px;
   width: 40%;
   border-radius: 5px;
@@ -489,7 +487,6 @@
   flex-direction: column;
   align-items: center;
   border-radius: 5px;
-  background-color: white;
 }
 .phone-con {
   /* border: 0.5px solid rgba(0, 0, 0, 0.2); */
@@ -515,7 +512,6 @@
   flex-direction: column;
   width: 100%;
   border-radius: 5px;
-  background-color: white;
   padding-top: 28px;
   /* border: 0.5px solid rgba(0,0,0,0.2); */
 }
@@ -526,9 +522,6 @@
   border: 1px solid rgba(0, 0, 0, 0.2);
   margin-inline: 9vw;
   border-radius: 5px;
-  background-color: white;
-  /* height: 615px;
-    overflow: auto; */
 }
 
 .general__input {
@@ -1048,6 +1041,11 @@
 }
 
 @media screen and (max-width: 900px) {
+  #tab_list{
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 20px;
+  }
   .profile-container {
     flex-direction: column;
   }
@@ -1123,7 +1121,6 @@
   }
   .parent-div {
     padding-top: 100px;
-    background-color: #fff;
     background-image: none;
     padding-bottom: 50px;
   }

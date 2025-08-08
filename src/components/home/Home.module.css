@@ -699,6 +699,31 @@
   transition: all ease 0.5s;
 }
 @media (max-width: 576px) {
+  .explore::before {
+    width: 20px;
+    left: -20%;
+    top: -60%;
+    height: 20px;
+    z-index: 2;
+    background-size:contain;
+  }
+  .explore::after {
+    width: 20px;
+    left: 100%;
+    top: -80%;
+    height: 20px;
+    z-index: 2;
+    background-size:contain;
+}
+.inspo::before {
+  left: -100%;
+  background-size: contain;
+}
+.inspo::after {
+  background-size: contain;
+  top: 100%;
+  left: 170%;
+}
   .shopSection3 {
     position: relative;
     width: 100%;
@@ -903,6 +928,8 @@
   .shopSection4 {
     padding-top: 100px;
     overflow: hidden;
+    background-image: none !important;
+    background: none;
   }
   .bottomContPara {
     width: 100%;

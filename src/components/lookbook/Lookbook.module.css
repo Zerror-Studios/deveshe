@@ -117,7 +117,7 @@
     font-size: 8vw;
   }
   .elem1 .overlay3a {
-    justify-content: flex-start;
+    justify-content: flex-start !important;
   }
   .exploreBtn {
     font-size: 8vw;
