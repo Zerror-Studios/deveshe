@@ -23,9 +23,9 @@ const LookbookDetail = ({ meta, data }) => {
       <ProductContainer data={data?.products || []} />
       <VideoContainer data={data?.sections?.[0] || {}} />
       <BannerContainer data={data?.sections?.[1] || {}} />
-      <ImageSectionOne />
-      <ImageSectionTwo />
-      <ImageSectionThree />
+      <ImageSectionOne data={data?.sections?.[2] || {}}/>
+      <ImageSectionTwo leftData={data?.sections?.[3] || {}} rightData={data?.sections?.[4] || {}} />
+      <ImageSectionThree leftData={data?.sections?.[5] || {}} rightData={data?.sections?.[6] || {}}/>
     </>
   );
 };

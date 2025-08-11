@@ -4,7 +4,7 @@ import Image from 'next/image'
 import React, { useEffect } from 'react'
 gsap.registerPlugin(ScrollTrigger)
 
-const ImageSectionTwo = () => {
+const ImageSectionTwo = ({ leftData, rightData }) => {
     useEffect(() => {
       const ctx = gsap
       .context(() => {
@@ -31,12 +31,16 @@ const ImageSectionTwo = () => {
     }, []);
   return (
     <div id='lb-section4'>
+      {leftData && (
         <div className='lb-sec4-img'>
-            <Image width={1000} height={1000} src="https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F2796x1573%2F45490dc7df%2Fdt-cu-2.jpg&w=1920&q=90" alt="" />
+            <Image width={1000} height={1000} src={leftData?.imageUrl || ""} alt="" />
         </div>
+      )}
+      {rightData && (
         <div className='lb-sec4-img'>
-            <Image width={1000} height={1000} src="https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F1500x844%2Fa6c583fb3c%2Fdogtag1-2.jpg&w=1920&q=90" alt="" />
+            <Image width={1000} height={1000} src={rightData?.imageUrl || ""} alt="" />
         </div>
+      )}
     </div>
   )
 }

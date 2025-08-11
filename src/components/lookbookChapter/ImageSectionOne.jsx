@@ -1,20 +1,20 @@
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/dist/ScrollTrigger';
-import Image from 'next/image';
-import React, { useEffect } from 'react';
+import gsap from "gsap";
+import ScrollTrigger from "gsap/dist/ScrollTrigger";
+import Image from "next/image";
+import React, { useEffect } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ImageSectionOne = () => {
+const ImageSectionOne = ({ data }) => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: "#lb-section3",
-          start: "top bottom",     // element top hits bottom of viewport
-          end: "bottom top",          // element top reaches top of viewport
+          start: "top bottom", // element top hits bottom of viewport
+          end: "bottom top", // element top reaches top of viewport
           scrub: 1,
-          markers: false,    
+          markers: false,
         },
       });
 
@@ -36,7 +36,7 @@ const ImageSectionOne = () => {
         <Image
           width={1000}
           height={1000}
-          src="https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F1786x2500%2F0e206cacea%2Fcod-socks-2_1-colcorr.jpg&w=1080&q=90"
+          src={data?.imageUrl || ""}
           alt="image"
         />
       </div>
