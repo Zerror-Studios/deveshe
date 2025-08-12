@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { formatePrice } from "@/utils/Util";
 
 const ProductListGrid = ({ title = "You may also like", data }) => {
   if (!data && data.length === 0) return;
@@ -12,6 +13,9 @@ const ProductListGrid = ({ title = "You may also like", data }) => {
       </h2>
       <div className="Similar_prd_cntr">
         {data?.map((item, idx) => {
+          const minVariant = item?.variants.reduce((min, item) =>
+            item.variantPrice < min.variantPrice ? item : min
+          );
           return (
             <div key={`product-list-${idx}`} className="Similar_prd_card_cntr">
               <Link
@@ -64,8 +68,13 @@ const ProductListGrid = ({ title = "You may also like", data }) => {
                         color: "#000",
                       }}
                     >
-                      <span>{item?.price || ""}</span>
-                      <span>&nbsp;INR</span>
+                      <span>
+                        {`Starts from ${formatePrice(
+                          minVariant?.variantPrice ||
+                            item?.discountedPrice ||
+                            ""
+                        )}`}
+                      </span>
                     </div>
                   </div>
                 </div>

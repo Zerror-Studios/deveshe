@@ -12,7 +12,7 @@ const ProductContent = ({ data = {} }) => {
   const router = useRouter();
 
   const { token, isLoggedIn } = useAuthStore((state) => state);
-  const { openCart} = useCartStore((state) => state);
+  const { openCart } = useCartStore((state) => state);
 
   const { visitorId } = useVisitor();
 
@@ -38,8 +38,6 @@ const ProductContent = ({ data = {} }) => {
   const [finalPrice, setFinalPrice] = useState(basePrice);
   const [selectedVariants, setSelectedVariants] = useState({});
   const [variantMatched, setVariantMatched] = useState(null);
-  const [variantSelect, setVariantSelect] = useState({});
-  const [colorSelect, setColorSelect] = useState(0);
   const [cartBtn, setCartBtn] = useState(false);
   const [addItemToCart, { loading }] = useMutation(ADD_ITEM_TO_CART);
 
@@ -55,10 +53,9 @@ const ProductContent = ({ data = {} }) => {
     });
 
     setSelectedVariants(defaults);
-    setColorSelect(0);
     setCartBtn(Object.keys(defaults).length === data.productOptions.length);
-    setFinalPrice(basePrice);
-  }, [data, basePrice]);
+    updatePriceBasedOnVariant(defaults);
+  }, [data]);
 
   const updatePriceBasedOnVariant = (updatedVariants) => {
     const selectedValues = Object.values(updatedVariants).sort();
@@ -72,10 +69,10 @@ const ProductContent = ({ data = {} }) => {
     });
 
     if (matchingVariant) {
-      const diff = matchingVariant.priceDifference || 0;
+      const variantPrice = matchingVariant.variantPrice || 0;
       const { __typename, _id, ...variantWithoutTypename } = matchingVariant;
       setVariantMatched({ variantDetailId: _id, ...variantWithoutTypename });
-      setFinalPrice(basePrice + diff);
+      setFinalPrice(variantPrice);
     }
   };
 
@@ -103,7 +100,7 @@ const ProductContent = ({ data = {} }) => {
       };
 
       const { data: response } = await addItemToCart({ variables: payload });
-      openCart()
+      openCart();
       console.log(response);
     } catch (err) {
       console.error(err);
@@ -146,30 +143,33 @@ const ProductContent = ({ data = {} }) => {
             {/* Color Selector */}
             {colorOption?.choices?.length > 0 && (
               <fieldset className="ProfuctDets_fieldset">
-                {colorOption.choices.map((choice, i) => (
-                  <div
-                    key={i}
-                    aria-label={choice.name}
-                    onClick={() => {
-                      setColorSelect(i);
-                      handleVariants(colorOption.optionName, choice.name);
-                    }}
-                    className={`shop-card_grid collection_grid ${
-                      colorSelect === i ? "Product_active_color" : ""
-                    }`}
-                  >
-                    <div className="ProductDets_collection_imgs_grid_cntr">
-                      <div className="ProductDets_imgs_grid_cntr ProductDets_imgs_grid_cntr2">
-                        <div className="ProductDets_collection_img_cntr">
-                          <div
-                            className="Product_color"
-                            style={{ backgroundColor: choice.name }}
-                          ></div>
+                {colorOption.choices.map((choice, i) => {
+                  const selected =
+                    selectedVariants[colorOption.optionName] === choice.name;
+                  return (
+                    <div
+                      key={i}
+                      aria-label={choice.name}
+                      onClick={() => {
+                        handleVariants(colorOption.optionName, choice.name);
+                      }}
+                      className={`shop-card_grid collection_grid ${
+                        selected ? "Product_active_color" : ""
+                      }`}
+                    >
+                      <div className="ProductDets_collection_imgs_grid_cntr">
+                        <div className="ProductDets_imgs_grid_cntr ProductDets_imgs_grid_cntr2">
+                          <div className="ProductDets_collection_img_cntr">
+                            <div
+                              className="Product_color"
+                              style={{ backgroundColor: choice.name }}
+                            ></div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </fieldset>
             )}
 
@@ -183,8 +183,8 @@ const ProductContent = ({ data = {} }) => {
                   >
                     {productOption.choices?.map((choice, j) => {
                       const selected =
-                        variantSelect[productOption.optionName] ===
-                        `${productOption.optionName}-${j}`;
+                        selectedVariants[productOption.optionName] ===
+                        `${choice.name}`;
                       return (
                         <div
                           key={j}
@@ -193,10 +193,6 @@ const ProductContent = ({ data = {} }) => {
                               productOption.optionName,
                               choice.name
                             );
-                            setVariantSelect((prev) => ({
-                              ...prev,
-                              [productOption.optionName]: `${productOption.optionName}-${j}`,
-                            }));
                           }}
                           className={`ProductDets-size_numbers ${
                             selected ? "acitve" : ""

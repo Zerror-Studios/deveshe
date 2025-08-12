@@ -4,10 +4,14 @@ import Image from "next/image";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import styles from "@/components/home/Home.module.css";
+import { formatePrice } from "@/utils/Util";
 gsap.registerPlugin(ScrollTrigger);
 
 const ProductSection = ({ data }) => {
   if (!data && data.length === 0) return;
+  const leftSideMinVariant = data[0]?.variants.reduce((min, item) =>
+    item.variantPrice < min.variantPrice ? item : min
+  );
   return (
     <>
       <div className={styles.productListing} id="productListing">
@@ -51,30 +55,39 @@ const ProductSection = ({ data }) => {
             <div className={styles.proDets}>
               <h4> {data[0]?.name || ""}</h4>
               <div>
-                <span>{data[0]?.price || ""}</span>
-                <span>&nbsp;INR</span>
+                <span>
+                  {`Starts from ${formatePrice(
+                    leftSideMinVariant?.variantPrice ||
+                      data[0]?.discountedPrice ||
+                      ""
+                  )}`}
+                </span>
               </div>
             </div>
           </div>
         </div>
         <div className={styles.rightProCon} id="productCont">
           <div className={styles.rightProConWrap}>
-            {data?.slice(1, 11)?.map((item, index) => (
-              <div key={`product-${index}`} className={styles.productCard}>
-                <Link
-                  href={"/product/" + item?._id || ""}
-                  style={{ cursor: "pointer" }}
-                >
-                  <Image
-                    width={1000}
-                    height={1000}
-                    alt={item?.assets[0]?.altText || ""}
-                    src={item?.assets[0]?.path || ""}
-                  />
-                </Link>
-                <div className={styles.productOverlay}>
-                  <div className={styles.bagCont}>
-                    {/* <button>
+            {data?.slice(1, 11)?.map((item, index) => {
+              const minVariant = item?.variants.reduce((min, item) =>
+                item.variantPrice < min.variantPrice ? item : min
+              );
+              return (
+                <div key={`product-${index}`} className={styles.productCard}>
+                  <Link
+                    href={"/product/" + item?._id || ""}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Image
+                      width={1000}
+                      height={1000}
+                      alt={item?.assets[0]?.altText || ""}
+                      src={item?.assets[0]?.path || ""}
+                    />
+                  </Link>
+                  <div className={styles.productOverlay}>
+                    <div className={styles.bagCont}>
+                      {/* <button>
                       <svg
                         class="icon-cart"
                         width="15"
@@ -95,22 +108,31 @@ const ProductSection = ({ data }) => {
                         ></path>
                       </svg>
                     </button> */}
-                  </div>
-                  <div className={styles.proDets}>
-                    <h4>{item?.name || ""}</h4>
-                    <div>
-                      <span>{item?.price || ""}</span>
-                      <span>&nbsp;INR</span>
+                    </div>
+                    <div className={styles.proDets}>
+                      <h4>{item?.name || ""}</h4>
+                      <div>
+                        <span>
+                          {`Starts from ${formatePrice(
+                            minVariant?.variantPrice ||
+                              item?.discountedPrice ||
+                              ""
+                          )}`}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
       <div id="prodcut-container" className="prodcut-container-mobile">
         {data?.map((item, index) => {
+          const minVariant = item?.variants.reduce((min, item) =>
+            item.variantPrice < min.variantPrice ? item : min
+          );
           return (
             <Link
               href={"/product/" + item?._id || ""}
@@ -125,7 +147,11 @@ const ProductSection = ({ data }) => {
               />
               <div className="product-info">
                 <p>{item?.name || ""}</p>
-                <p>{item?.price || ""} INR</p>
+                <p>
+                  {`Starts from ${formatePrice(
+                    minVariant?.variantPrice || item?.discountedPrice || ""
+                  )}`}
+                </p>
               </div>
             </Link>
           );

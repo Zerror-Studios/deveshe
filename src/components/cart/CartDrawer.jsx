@@ -8,6 +8,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { ADD_ITEM_TO_CART, CART_LIST, REMOVE_ITEM_FROM_CART } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
 import { useVisitor } from "@/hooks/useVisitor";
+import { formatePrice } from "@/utils/Util";
 const CartDrawer = ({ isOpen, closeCart }) => {
   const router = useRouter();
   const { visitorId } = useVisitor();
@@ -140,7 +141,11 @@ const CartDrawer = ({ isOpen, closeCart }) => {
                         <RxCross2 />
                       </button>
                     </div>
-                    <div id="cart_center_wrap" style={{ overflow: "auto" }} data-lenis-prevent>
+                    <div
+                      id="cart_center_wrap"
+                      style={{ overflow: "auto" }}
+                      data-lenis-prevent
+                    >
                       {cart && cart.length > 0 ? (
                         <>
                           {cart.map((item, i) => {
@@ -229,9 +234,14 @@ const CartDrawer = ({ isOpen, closeCart }) => {
                                     <div className="cmn_style Modal_Drawer_center_content_ryt_price">
                                       <div className="Modal_Drawer_center_content_ryt_price_cntr"></div>
                                       <span>
-                                        {item?.variantDetail?.variantPrice || 0}
+                                        {`
+                                          ${
+                                            item.qty > 1 ? `${item?.qty} x` : ""
+                                          } ${formatePrice(
+                                          item?.variantDetail?.variantPrice || 0
+                                        )}
+                                        `}
                                       </span>
-                                      <span>&nbsp;INR</span>
                                     </div>
                                   </div>
                                 </div>
@@ -254,11 +264,11 @@ const CartDrawer = ({ isOpen, closeCart }) => {
                         <div>Total</div>
                         {totalprice !== discountedPrice && (
                           <div className="Modal_drawer_cross_price">
-                            <span>{totalprice}</span>
+                            <span>{formatePrice(totalprice || "")}</span>
                           </div>
                         )}
                         <div className="Modal_drawer_main_price">
-                          <div>{discountedPrice} INR</div>
+                          <div>{formatePrice(discountedPrice || "")}</div>
                         </div>
                       </div>
                       <div className="cmn_style Modal_drawer_checkout_wrap_btm">
