@@ -84,17 +84,15 @@ const OurJourney = () => {
   }, []);
 
   useEffect(() => {
-    const pathsRight = document.querySelectorAll(".rainbow-sides__right path");
-    const pathsLeft = document.querySelectorAll(".rainbow-sides__left path");
+    function animateSide(sideSelector, offsetMultiplier) {
+      const blackPaths = document.querySelectorAll(
+        `${sideSelector} .path-black-j`
+      );
+      const colorPaths = document.querySelectorAll(
+        `${sideSelector} .path-color-j`
+      );
 
-    pathsRight.forEach((path) => {
-      const length = path.getTotalLength();
-      path.style.strokeDasharray = length;
-      path.style.strokeDashoffset = 0;
-
-      gsap.to(path, {
-        strokeDashoffset: length, // erase top → bottom
-        ease: "none",
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: "#our_journey",
           scroller: "body",
@@ -103,25 +101,28 @@ const OurJourney = () => {
           scrub: true,
         },
       });
-    });
 
-    pathsLeft.forEach((path) => {
-      const length = path.getTotalLength();
-      path.style.strokeDasharray = length;
-      path.style.strokeDashoffset = 0;
+      blackPaths.forEach((black, i) => {
+        const length = black.getTotalLength();
+        const color = colorPaths[i];
+        black.style.strokeDasharray = length;
+        black.style.strokeDashoffset = 0;
+        color.style.strokeDasharray = length;
+        color.style.strokeDashoffset = 0;
 
-      gsap.to(path, {
-        strokeDashoffset: -length, // erase bottom → top
-        ease: "none",
-        scrollTrigger: {
-          trigger: "#our_journey",
-          scroller: "body",
-          start: "top 0%",
-          end: "top -80%",
-          scrub: true,
-        },
+        tl.to(
+          [black, color],
+          {
+            strokeDashoffset: offsetMultiplier * length,
+            ease: "none",
+          },
+          "-=0.4"
+        );
       });
-    });
+    }
+
+    animateSide(".rainbow-sides__right", -1);
+    animateSide(".rainbow-sides__left", 1);
 
     return () => {
       ScrollTrigger.getAll().forEach((st) => st.kill());
@@ -142,48 +143,56 @@ const OurJourney = () => {
             d="M26 0V400C26 510.457 115.543 600 226 600H321"
             stroke="#121212"
             strokeWidth="52"
+            className="path-black-j"
             style={{ strokeDashoffset: 0, strokeDasharray: "809.204px, 0.1px" }}
           />
           <path
             d="M76 0V400C76 482.843 143.157 550 226 550H321"
             stroke="#121212"
             strokeWidth="52"
+            className="path-black-j"
             style={{ strokeDashoffset: 0, strokeDasharray: "730.653px, 0.1px" }}
           />
           <path
             d="M126 0V400C126 455.228 170.772 500 226 500H321"
             stroke="#121212"
             strokeWidth="52"
+            className="path-black-j"
             style={{ strokeDashoffset: 0, strokeDasharray: "652.102px, 0.1px" }}
           />
           <path
             d="M176 0V400C176 427.614 198.386 450 226 450H321"
             stroke="#121212"
             strokeWidth="52"
+            className="path-black-j"
             style={{ strokeDashoffset: 0, strokeDasharray: "573.551px, 0.1px" }}
           />
           <path
             d="M26 0V400C26 510.457 115.543 600 226 600H321"
             stroke="#FEE8D9"
             strokeWidth="48"
+            className="path-color-j"
             style={{ strokeDashoffset: 0, strokeDasharray: "809.204px, 0.1px" }}
           />
           <path
             d="M76 0V400C76 482.843 143.157 550 226 550H321"
             stroke="#F7B1B9"
             strokeWidth="48"
+            className="path-color-j"
             style={{ strokeDashoffset: 0, strokeDasharray: "730.653px, 0.1px" }}
           />
           <path
             d="M126 0V400C126 455.228 170.772 500 226 500H321"
             stroke="#F489A3"
             strokeWidth="48"
+            className="path-color-j"
             style={{ strokeDashoffset: 0, strokeDasharray: "652.102px, 0.1px" }}
           />
           <path
             d="M176 0V400C176 427.614 198.386 450 226 450H321"
             stroke="#FE0000"
             strokeWidth="48"
+            className="path-color-j"
             style={{ strokeDashoffset: 0, strokeDasharray: "573.551px, 0.1px" }}
           />
         </svg>
@@ -199,48 +208,56 @@ const OurJourney = () => {
             d="M26 0V400C26 510.457 115.543 600 226 600H321"
             stroke="#121212"
             strokeWidth="52"
+            className="path-black-j"
             style={{ strokeDashoffset: 0, strokeDasharray: "809.204px, 0.1px" }}
           />
           <path
             d="M76 0V400C76 482.843 143.157 550 226 550H321"
             stroke="#121212"
             strokeWidth="52"
+            className="path-black-j"
             style={{ strokeDashoffset: 0, strokeDasharray: "730.653px, 0.1px" }}
           />
           <path
             d="M126 0V400C126 455.228 170.772 500 226 500H321"
             stroke="#121212"
             strokeWidth="52"
+            className="path-black-j"
             style={{ strokeDashoffset: 0, strokeDasharray: "652.102px, 0.1px" }}
           />
           <path
             d="M176 0V400C176 427.614 198.386 450 226 450H321"
             stroke="#121212"
             strokeWidth="52"
+            className="path-black-j"
             style={{ strokeDashoffset: 0, strokeDasharray: "573.551px, 0.1px" }}
           />
           <path
             d="M26 0V400C26 510.457 115.543 600 226 600H321"
             stroke="#FEE8D9"
             strokeWidth="48"
+            className="path-color-j"
             style={{ strokeDashoffset: 0, strokeDasharray: "809.204px, 0.1px" }}
           />
           <path
             d="M76 0V400C76 482.843 143.157 550 226 550H321"
             stroke="#F7B1B9"
             strokeWidth="48"
+            className="path-color-j"
             style={{ strokeDashoffset: 0, strokeDasharray: "730.653px, 0.1px" }}
           />
           <path
             d="M126 0V400C126 455.228 170.772 500 226 500H321"
             stroke="#F489A3"
             strokeWidth="48"
+            className="path-color-j"
             style={{ strokeDashoffset: 0, strokeDasharray: "652.102px, 0.1px" }}
           />
           <path
             d="M176 0V400C176 427.614 198.386 450 226 450H321"
             stroke="#FE0000"
             strokeWidth="48"
+            className="path-color-j"
             style={{ strokeDashoffset: 0, strokeDasharray: "573.551px, 0.1px" }}
           />
         </svg>
@@ -333,8 +350,10 @@ const OurJourney = () => {
             <div className="text_container">
               <h4>Where it all began</h4>
               <p>
-                Raised in Mumbai, shaped by Parsons — I turned daydreams into
-                fabric, and <strong>fashion became my language.</strong>
+                Raised in Mumbai and trained at Parsons, I turn daydreams into
+                fabric. <strong>Fashion is my language</strong>, where I
+                collaborate, explore details, and find joy in
+                <strong> telling stories through style.</strong>
               </p>
             </div>
             <div className="img_container">
@@ -352,15 +371,6 @@ const OurJourney = () => {
                 src="/assets/images/about/frame2.webp"
                 alt="frame"
               />
-            </div>
-          </div>
-          <div className="joruney_wrap">
-            <div className="text_container">
-              <h4>Over the years</h4>
-              <p>
-                I've collaborated with artists, explored print and detail, and
-                found joy in <strong>creating stories through style.</strong>
-              </p>
             </div>
           </div>
         </div>

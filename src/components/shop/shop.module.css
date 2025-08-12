@@ -587,6 +587,7 @@
   padding-bottom: 150px;
   text-align: center;
   color: #fff;
+  overflow: hidden;
 }
 
 .bigCardContainer {

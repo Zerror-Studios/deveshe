@@ -20,6 +20,7 @@ import "@/styles/components/home.css";
 import "@/styles/components/about.css";
 import "@/styles/components/legal.css";
 import "@/styles/components/lookBook.css";
+import "@/styles/components/contact.css";
 import "@/styles/components/common/polaroid.css";
 
 export default function App({ Component, pageProps }) {

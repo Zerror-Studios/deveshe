@@ -22,7 +22,7 @@ const OurProcess = () => {
       scrollTrigger: {
         trigger: ".ranbow-vertical__1-svg",
         start: "top 110%",
-        end: "bottom 50%",
+        end: "bottom 40%",
         scrub: true,
       },
     });
@@ -41,6 +41,7 @@ const OurProcess = () => {
       ); // small gap before next strip starts
     });
   }, []);
+  
 
   return (
     <div id="our_process">
@@ -51,20 +52,6 @@ const OurProcess = () => {
             <p>
               We’re committed to a seamless process that balances innovation,
               communication, and execution.
-            </p>
-          </div>
-          <div className="process_card">
-            <div className="process_img">
-              <Image
-                width={1000}
-                height={1000}
-                src="/assets/images/about/img1.webp"
-                alt="process image 1"
-              />
-            </div>
-            <p>
-              Devs want Steph; <span>designers</span> want to be her. She’s{" "}
-              <span>rocking</span> web work and sharing freelancer tips.
             </p>
           </div>
         </div>
@@ -79,8 +66,8 @@ const OurProcess = () => {
               />
             </div>
             <p>
-              Devs want Steph; <span>designers</span> want to be her. She’s{" "}
-              <span>rocking</span> web work and sharing freelancer tips.
+              Sketch <span>endlessly</span>. Shortlist the pieces that{" "}
+              <span>speak the loudest</span>.
             </p>
           </div>
           <div className="process_card">
@@ -93,8 +80,8 @@ const OurProcess = () => {
               />
             </div>
             <p>
-              Devs want Steph; <span>designers</span> want to be her. She’s{" "}
-              <span>rocking</span> web work and sharing freelancer tips.
+              Make prototypes. Test them. <span>Tweak</span> until it feels
+              right.
             </p>
           </div>
         </div>
@@ -109,8 +96,8 @@ const OurProcess = () => {
               />
             </div>
             <p>
-              Devs want Steph; <span>designers</span> want to be her. She’s{" "}
-              <span>rocking</span> web work and sharing freelancer tips.
+              Find fabrics with <span>feeling</span>. Build in{" "}
+              <span>handmade details</span>.
             </p>
           </div>
           <div className="process_card">
@@ -123,8 +110,8 @@ const OurProcess = () => {
               />
             </div>
             <p>
-              Devs want Steph; <span>designers</span> want to be her. She’s{" "}
-              <span>rocking</span> web work and sharing freelancer tips.
+              Produce in <span>small batches</span>. Send them out into the
+              world.
             </p>
           </div>
         </div>
