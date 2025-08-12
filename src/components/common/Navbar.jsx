@@ -7,7 +7,7 @@ import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { useAuthStore } from "@/store/auth-store";
 gsap.registerPlugin(ScrollTrigger);
 
-const Navbar = ({openCart}) => {
+const Navbar = ({ openCart }) => {
   const router = useRouter();
   const { isLoggedIn } = useAuthStore((state) => state);
 
@@ -50,25 +50,104 @@ const Navbar = ({openCart}) => {
           backgroundColor: "rgba(255, 255, 255, 0.1)", // semi-transparent white
           backdropFilter: "blur(8px)",
           WebkitBackdropFilter: "blur(8px)", // for Safari support
+          pointerEvents: "all",
         });
         gsap.set("#nav-btns svg", { stroke: "#000" });
         gsap.set("#nav-line", { backgroundColor: "#000" });
         gsap.set(".logo", { position: "static" });
         gsap.set("#logo-container", { gap: "13px" });
         gsap.set(".hoverline", { backgroundColor: "#000" });
+
+        gsap.set(".nav-link", {
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%) scale(1)",
+        });
+        gsap.set("#logo-container", { left: "2%" });
+        gsap.set("#nav-btns", { right: "2%" });
+        gsap.set("#loader_slider", { opacity: "0", display: "none" });
         return;
       }
+      logos.forEach((logo, i) => {
+        gsap.set(logo, { x: xPositions[i], top: 0 });
+      });
 
       gsap.set("#logo-container img", { filter: "invert(1)" });
       gsap.set(".nav-link a", { color: "#fff" });
-      gsap.set("#nav", { backgroundColor: "transparent" });
+      gsap.set("#nav", {
+        backgroundColor: "transparent",
+        pointerEvents: "none",
+      });
       gsap.set("#nav-btns svg", { stroke: "#fff" });
       gsap.set("#nav-line", { backgroundColor: "#fff" });
       gsap.set(".logo", { position: "absolute" });
       gsap.set(".hoverline", { backgroundColor: "#fff" });
+      gsap.set(".nav-link", {
+        top: "550%",
+        left: "50%",
+        transform: "translate(-50%, 0%) scale(1.5)",
+      });
+      gsap.set("#logo-container", { left: "79%" });
+      gsap.set("#nav-btns", { right: "92%" });
+      gsap.set("#loader_slider", { opacity: "1", display: "block" });
 
       const finalWidth = currentX;
       logoContainer.style.width = `${xPositions[3] || finalWidth}px`;
+
+      var tl = gsap.timeline();
+
+      // Move logo and nav buttons smoothly at the same time
+      tl.to(
+        "#logo-container",
+        {
+          left: "2%",
+          duration: 1,
+          delay: 0.3,
+          ease: "power2.inOut",
+        },
+        "start"
+      )
+        .to(
+          "#nav-btns",
+          {
+            right: "2%",
+            duration: 1,
+            delay: 0.3,
+            ease: "power2.inOut",
+          },
+          "start"
+        )
+
+        // Move nav links in a fluid way
+        .to(
+          ".nav-link",
+          {
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%) scale(1)",
+            duration: 0.8,
+            ease: "power2.inOut",
+          },
+          "-=0.5"
+        ) // start slightly before previous animations end
+
+        .to(".logo", {
+          top: (i) => i * 30, // 0px for first, 30px for second, 60px for third...
+          x: 0,
+          duration: 0.8,
+          ease: "power2.inOut",
+          stagger: 0.1, // small delay between each logo
+        })
+        // Fade out loader, then hide it completely
+        .to("#loader_slider", {
+          opacity: 0,
+          duration: 0.8,
+          ease: "power2.inOut",
+          onComplete: () => {
+            gsap.set("#nav", { pointerEvents: "all" });
+            gsap.set("#loader_slider", { display: "none" });
+          },
+        },"-=1.5");
 
       // GSAP Timeline
       gsap
@@ -168,7 +247,8 @@ const Navbar = ({openCart}) => {
 
   return (
     <>
-      <div id="nav" className="nav1">
+      <div id="nav">
+        <div id="loader_slider"></div>
         <Link href="/" id="logo-container">
           <Image
             width={1000}

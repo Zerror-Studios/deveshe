@@ -18,7 +18,6 @@ import "@/styles/productLoader.css";
 
 import "@/styles/components/home.css";
 import "@/styles/components/about.css";
-import "@/styles/components/loader.css";
 import "@/styles/components/legal.css";
 import "@/styles/components/lookBook.css";
 import "@/styles/components/common/polaroid.css";
