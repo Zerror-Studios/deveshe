@@ -21,10 +21,19 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  position: relative;
 }
 #contact_form #left {
   width: 50%;
   height: 100%;
+}
+.phone_container{
+  position: absolute;
+  left: 0;
+  top: 5%;
+  width: 30%;
+  height: 100%;
+  z-index: 3;
 }
 #contact_form #left h2 {
   font-size: 6vw;

@@ -1,5 +1,6 @@
 import gsap from "gsap";
 import React, { useEffect } from "react";
+import Phone from "./Phone";
 
 const ContactForm = () => {
   useEffect(() => {
@@ -55,8 +56,14 @@ const ContactForm = () => {
 
   return (
     <section id="contact_form">
+      <div className="phone_container">
+          <Phone/>
+          </div>
       <div id="form">
-        <div id="left"></div>
+        <div id="left">
+          
+
+        </div>
         <div id="right">
           <form>
             <div className="input lineanime">
