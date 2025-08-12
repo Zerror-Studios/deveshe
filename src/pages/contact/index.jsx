@@ -1,4 +1,4 @@
-import Section1 from "@/components/contact/Section1";
+import ContactForm from "@/components/contact/ContactForm";
 import SeoHeader from "@/components/seo/SeoHeader";
 import React from "react";
 
@@ -6,7 +6,7 @@ const Contact = ({ meta }) => {
   return (
     <>
       <SeoHeader meta={meta} />
-      <Section1 />
+      <ContactForm />
     </>
   );
 };

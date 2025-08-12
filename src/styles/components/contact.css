@@ -1,0 +1,171 @@
+/* contact css */
+#contact_form {
+  height: 100vh;
+  width: 100%;
+  padding: 22vh 3vw;
+  padding-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  color: black;
+  background-color: #fadcde;
+  background-image: url(/grainy-lg-bg.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom;
+  position: relative;
+}
+#contact_form #form {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+#contact_form #left {
+  width: 50%;
+  height: 100%;
+}
+#contact_form #left h2 {
+  font-size: 6vw;
+  line-height: 1;
+  font-family: var(--secondary-font-Hen);
+  font-weight: 500;
+  text-transform: capitalize;
+}
+#contact_form #right {
+  width: 50%;
+  height: 100%;
+}
+
+#contact_form #right form {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+#contact_form #right form .input {
+  width: 49%;
+  margin-bottom: 30px;
+  position: relative;
+}
+#contact_form .linei {
+  width: 100%;
+  height: 0.08vw;
+  background-color: black;
+  position: absolute;
+  bottom: 0%;
+  left: 0;
+  transform-origin: left; /* Scale starts from the left initially */
+  transform: scaleX(0);
+}
+
+#contact_form #right form .input.active h6 {
+  top: 0%;
+  font-size: 0.7vw;
+  opacity: 0.8;
+}
+#contact_form #right form .input h6,
+#contact_form #right form .textarea h6 {
+  font-size: calc(16px - 0.22vw);
+  font-family: var(--primary-font-Hel);
+  line-height: 160%;
+  font-weight: 400;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: black;
+  transition: all ease 0.3s;
+  text-transform: capitalize;
+}
+#contact_form #right form .textarea h6 {
+  top: 15%;
+}
+#contact_form #right form .textarea.active h6 {
+  top: 0%;
+  font-size: 0.7vw;
+  opacity: 0.8;
+}
+#contact_form #right form input {
+  flex-shrink: 0;
+  width: 100%;
+  padding: 1vw 0;
+  background-color: transparent;
+  border: none;
+  color: black;
+  outline: none;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.745);
+}
+#contact_form #right form .textarea {
+  width: 100%;
+  position: relative;
+  height: 20vh;
+}
+#contact_form #right form textarea {
+  padding: 1vw 0;
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+  resize: none;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.745);
+}
+#contact_form #address {
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  justify-content: space-between;
+}
+
+#contact_form #address .elem {
+  width: 50%;
+  height: 50%;
+  display: flex;
+  justify-content: space-between;
+}
+#contact_form .elem-lf h5 {
+  width: 50%;
+  font-family: var(--primary-font-Hel);
+  font-weight: 400;
+  line-height: 160%;
+  font-size: calc(16px - 0.22vw);
+}
+#contact_form .elem .add {
+  width: 49%;
+  height: 100%;
+}
+
+#contact_form .elem .add h6 {
+  font-size: calc(16px - 0.22vw);
+  opacity: 0.8;
+  font-family: var(--primary-font-Hel);
+  line-height: 160%;
+  font-weight: 600;
+}
+#contact_form .elem .add h5 {
+  font-size: calc(16px - 0.22vw);
+  font-family: var(--primary-font-Hel);
+  line-height: 160%;
+  font-weight: 400;
+}
+#contact_form #submit-btn {
+  width: 100%;
+  padding: 10px 20px;
+  background-color: black;
+  color: white !important;
+  transition: all ease 0.3s;
+  font-size: calc(16px - 0.22vw);
+  font-family: var(--primary-font-Hel);
+  text-transform: uppercase;
+  line-height: 160%;
+  border: none;
+  outline: none;
+  border-radius: 50px;
+  margin-top: 30px;
+  cursor: pointer;
+}
+
+/* contact css end */

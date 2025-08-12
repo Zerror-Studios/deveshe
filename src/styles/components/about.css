@@ -409,8 +409,9 @@
 
 #our_journey {
   width: 100%;
-  height: 200vh;
+  height: 180vh;
   position: relative;
+
 }
 
 .rainbox-sides {
@@ -444,8 +445,10 @@
   left: 0%;
   width: 100%;
   height: 100%;
-  display: flex;
+    display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 25vh;
 }
 .journey_top {
   width: 100%;
@@ -457,7 +460,7 @@
 }
 .journey_bottom {
   width: 100%;
-  height: 100vh;
+  height: auto;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -591,12 +594,13 @@
 
 #our_process {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 3vw;
-  padding-bottom: 0;
+  padding-bottom: 6vw;
+  position: relative;
 }
 .process_container {
   width: 100%;
@@ -604,7 +608,6 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  border: 0.125rem solid #00000026;
 }
 .process_strip {
   width: 29%;
@@ -613,16 +616,19 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  z-index: 3;
 }
 .process_strip:nth-child(1) {
-  padding-top: 30vh;
   gap: 35vh;
+  position: sticky;
+  top: 20vh;
 }
 
 .process_strip:nth-child(3) {
   padding-top: 15vh;
 }
 .porcess_content {
+  
   padding-left: 2rem;
 }
 .porcess_content h4 {
@@ -677,9 +683,11 @@
 }
 
 .process_svg {
-  height: 25vh;
+  height: 28vh;
   display: flex;
   justify-content: center;
+  position: absolute;
+  bottom: 8%;
 }
 .process-rainbow {
   perspective: 25em;
@@ -693,7 +701,7 @@
   transform: rotateX(45deg);
 }
 .ranbow-vertical__1-svg {
-    width: 28.25em;
+    width: 26em;
     height: 100%;
 }
 /* Our Process end*/
