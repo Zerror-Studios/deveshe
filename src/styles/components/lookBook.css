@@ -256,6 +256,8 @@
 .lb-section5-ig-wrap img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 .lb-section5-ig-wrap:nth-child(2) img {
   width: 70%;
