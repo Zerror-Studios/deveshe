@@ -28,14 +28,13 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /* font-family: Helvetica, sans-serif; */
 }
 
 html,
 body {
   width: 100%;
   height: 100%;
-  background-color: #FADCDE;
+  background-color: #fadcde;
 }
 a {
   text-decoration: none;
@@ -264,18 +263,17 @@ li {
   cursor: pointer;
 }
 
-#tab_list{
+#tab_list {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-      border-bottom: 1px solid #e8e8e8;
-
+  border-bottom: 1px solid #e8e8e8;
 }
 .css-1cgdl3v-MuiTabs-root {
   border: none !important;
 }
-#logout_btn{
+#logout_btn {
   margin: 0 !important;
 }
 ._btn-width {
@@ -557,414 +555,6 @@ li {
 
 /* contact css end */
 
-.home-slider {
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  /* overflow: hidden; */
-}
-
-.horizontal-scroll {
-  width: fit-content;
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-.slide1-container {
-  position: relative;
-  aspect-ratio: 2250 / 1080;
-  z-index: 2;
-}
-.slide1 {
-  flex-shrink: 0;
-  flex-grow: 1;
-  height: 100%;
-  aspect-ratio: 2250 / 1080;
-  position: relative;
-  z-index: 2;
-}
-.slide1 > img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.slide2 {
-  flex: 0 0 auto;
-  height: 100%;
-  aspect-ratio: 2250 / 1080;
-  position: relative;
-  z-index: 1;
-}
-.slide2 > img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-
-#slide1-bg {
-  height: auto;
-  width: 110%;
-  position: absolute;
-  bottom: 0%;
-  left: 0%;
-}
-#building1{
-  height: auto;
-  width: 45%;
-  position: absolute;
-  bottom: 8%;
-  left: -8%;
-}
-#girl1{
-  height: auto;
-  width: 28%;
-  position: absolute;
-  bottom: 6%;
-  left: 22.2%;
-}
-#ground1-over{
-  height: auto;
-  width: 100%;
-  position: absolute;
-  bottom: 0%;
-  left: -10%;
-}
-
-#slide2-bg {
-  height: auto;
-  width: 100%;
-  position: absolute;
-  bottom: -1%;
-  right: -1%;
-}
-
-#flower1 {
-  position: absolute;
-  bottom: 20%;
-  right:35%;
-  height: auto;
-  width: 15%;
-  transform-origin: bottom;
-  animation-name: img7;
-  animation-duration: 8s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  animation-fill-mode: forwards;
-}
-#car {
-  position: absolute;
-  bottom: -2%;
-  right: -18%;
-  height: auto;
-  width: 68%;
-}
-#flower2 {
-  position: absolute;
-  height: auto;
-  width: 20%;
-  left: -10%;
-  bottom: 5%;
-  transform-origin: bottom;
-  animation-name: img7;
-  animation-duration: 5s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate-reverse;
-  animation-fill-mode: forwards;
-  display: none;
-}
-#girl {
-  position: absolute;
-  height: auto;
-  width: 28%;
-  left: 2%;
-  bottom: 0%;
-  transform-origin: bottom;
-  animation-name: img7;
-  animation-duration: 30s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  animation-fill-mode: forwards;
-  display: none;
-}
-#flower3 {
-  position: absolute;
-  height: auto;
-  width: 15%;
-  left: 15%;
-  bottom: -10%;
-  transform-origin: bottom;
-  animation-name: img7;
-  animation-duration: 5s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  animation-fill-mode: forwards;
-}
-#camera {
-  position: absolute;
-  height: auto;
-  width: 22%;
-  left: 50%;
-  top: 7%;
-  transform-origin: bottom;
-  animation-name: img7;
-  animation-duration: 5s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  animation-fill-mode: forwards;
-}
-#cherry {
-  position: absolute;
-  height: auto;
-  width: 13%;
-  left: 3%;
-  top: 8%;
-  transform-origin: bottom;
-  animation-name: img7;
-  animation-duration: 8s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  animation-fill-mode: forwards;
-}
-#love {
-  position: absolute;
-  height: auto;
-  width: 9%;
-  left: 15%;
-  top: 20%;
-  transform-origin: bottom;
-  animation-name: img7;
-  animation-duration: 5s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  animation-fill-mode: forwards;
-}
-
-#yellow {
-  position: absolute;
-  height: auto;
-  width: 4%;
-  right: 0%;
-  top: 30%;
-}
-#ballon {
-  position: absolute;
-  height: auto;
-  width: 8%;
-  right: -2%;
-  top: 8%;
-  animation-name: ballon;
-  animation-duration: 5s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  animation-fill-mode: forwards;
-}
-
-@keyframes ballon {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(50px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
-
-#heart {
-  position: absolute;
-  right: 20%;
-  top: 8%;
-  height: auto;
-  width: 6%;
-}
-
-#girl2 {
-  position: absolute;
-  right: 10%;
-  bottom: -1%;
-  height: auto;
-  width: 14%;
-}
-
-#plant1 {
-  position: absolute;
-  height: auto;
-  width: 6%;
-  left: 57%;
-  bottom: 0%;
-  transform-origin: bottom;
-  animation-name: img7;
-  animation-duration: 5s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  animation-fill-mode: forwards;
-}
-#plant2 {
-  position: absolute;
-  height: auto;
-  width: 5%;
-  left: 48%;
-  bottom: 5%;
-  transform-origin: bottom;
-  animation-name: img7;
-  animation-duration: 5s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate-reverse;
-  animation-fill-mode: forwards;
-}
-#plant3 {
-  position: absolute;
-  height: auto;
-  width: 4%;
-  left: 40%;
-  bottom: 0%;
-  transform-origin: bottom;
-  animation-name: img7;
-  animation-duration: 5s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  animation-fill-mode: forwards;
-}
-#plant4 {
-  position: absolute;
-  height: auto;
-  width: 3%;
-  right: 0.5%;
-  bottom: 0%;
-  transform-origin: bottom;
-  animation-name: img7;
-  animation-duration: 5s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate-reverse;
-  animation-fill-mode: forwards;
-}
-#flower7 {
-  position: absolute;
-  height: auto;
-  width: 5%;
-  right: 2%;
-  bottom: 2%;
-  transform-origin: bottom;
-  animation-name: img7;
-  animation-duration: 5s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  animation-fill-mode: forwards;
-}
-
-#flower5 {
-  position: absolute;
-  height: auto;
-  width: 15%;
-  right: 18%;
-  bottom: 0%;
-  transform-origin: bottom;
-  animation-name: img7;
-  animation-duration: 5s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate-reverse;
-  animation-fill-mode: forwards;
-}
-#flower4 {
-  position: absolute;
-  height: auto;
-  width: 6%;
-  left: 30%;
-  bottom: 0%;
-  transform-origin: bottom;
-  animation-name: img7;
-  animation-duration: 5s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  animation-fill-mode: forwards;
-}
-
-#heart1 {
-  position: absolute;
-  height: auto;
-  width: 5%;
-  left: 15%;
-  top: 45%;
-}
-#heart2 {
-  position: absolute;
-  height: auto;
-  width: 7%;
-  left: 10%;
-  top: 8%;
-}
-#heart3 {
-  position: absolute;
-  height: auto;
-  width: 5%;
-  right: 30%;
-  top: 10%;
-}
-#coupn {
-  position: absolute;
-  height: auto;
-  width: 12%;
-  right: 15%;
-  top: 10%;
-  animation-name: img7;
-  animation-duration: 5s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  animation-fill-mode: forwards;
-}
-
-#letter {
-  position: absolute;
-  height: auto;
-  width: 5%;
-  right: 5%;
-  top: 35%;
-}
-
-@keyframes img7 {
-  0% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(-3deg);
-  }
-  50% {
-    transform: rotate(0deg);
-  }
-  75% {
-    transform: rotate(3deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
-/* Home slider end */
-
 /* header start */
 
 .navbar-mobile {
@@ -1213,12 +803,6 @@ li {
     width: 22px;
     height: 1.2px;
   }
-  /* .slide1 {
-    width: 385vw;
-  }
-  .slide2 {
-    width: 385vw;
-  } */
   #edit_profile {
     left: 88% !important;
   }
@@ -1231,7 +815,6 @@ li {
 
   #right form .input.active h6 {
     top: 0%;
-    /* font-size: .7vw; */
     opacity: 0.8;
     font-size: calc(13px - 0.22vw);
   }

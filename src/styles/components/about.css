@@ -1,0 +1,699 @@
+.home-slider {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  /* overflow: hidden; */
+}
+
+.horizontal-scroll {
+  width: fit-content;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.slide1-container {
+  position: relative;
+  aspect-ratio: 2250 / 1080;
+  z-index: 2;
+}
+.slide1 {
+  flex-shrink: 0;
+  flex-grow: 1;
+  height: 100%;
+  aspect-ratio: 2250 / 1080;
+  position: relative;
+  z-index: 2;
+}
+.slide1 > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.slide2 {
+  flex: 0 0 auto;
+  height: 100%;
+  aspect-ratio: 2250 / 1080;
+  position: relative;
+  z-index: 1;
+}
+.slide2 > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#slide1-bg {
+  height: auto;
+  width: 110%;
+  position: absolute;
+  bottom: 0%;
+  left: 0%;
+}
+#building1 {
+  height: auto;
+  width: 45%;
+  position: absolute;
+  bottom: 8%;
+  left: -8%;
+}
+#girl1 {
+  height: auto;
+  width: 28%;
+  position: absolute;
+  bottom: 6%;
+  left: 22.2%;
+}
+#ground1-over {
+  height: auto;
+  width: 100%;
+  position: absolute;
+  bottom: 0%;
+  left: -10%;
+}
+
+#slide2-bg {
+  height: auto;
+  width: 100%;
+  position: absolute;
+  bottom: -1%;
+  right: -1%;
+}
+
+#flower1 {
+  position: absolute;
+  bottom: 20%;
+  right: 35%;
+  height: auto;
+  width: 15%;
+  transform-origin: bottom;
+  animation-name: img7;
+  animation-duration: 8s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+}
+#car {
+  position: absolute;
+  bottom: -2%;
+  right: -18%;
+  height: auto;
+  width: 68%;
+}
+#flower2 {
+  position: absolute;
+  height: auto;
+  width: 20%;
+  left: -10%;
+  bottom: 5%;
+  transform-origin: bottom;
+  animation-name: img7;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate-reverse;
+  animation-fill-mode: forwards;
+  display: none;
+}
+#girl {
+  position: absolute;
+  height: auto;
+  width: 28%;
+  left: 2%;
+  bottom: 0%;
+  transform-origin: bottom;
+  animation-name: img7;
+  animation-duration: 30s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+  display: none;
+}
+#flower3 {
+  position: absolute;
+  height: auto;
+  width: 15%;
+  left: 15%;
+  bottom: -10%;
+  transform-origin: bottom;
+  animation-name: img7;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+}
+#camera {
+  position: absolute;
+  height: auto;
+  width: 22%;
+  left: 50%;
+  top: 7%;
+  transform-origin: bottom;
+  animation-name: img7;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+}
+#cherry {
+  position: absolute;
+  height: auto;
+  width: 13%;
+  left: 3%;
+  top: 8%;
+  transform-origin: bottom;
+  animation-name: img7;
+  animation-duration: 8s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+}
+#love {
+  position: absolute;
+  height: auto;
+  width: 9%;
+  left: 15%;
+  top: 20%;
+  transform-origin: bottom;
+  animation-name: img7;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+}
+
+#yellow {
+  position: absolute;
+  height: auto;
+  width: 4%;
+  right: 0%;
+  top: 30%;
+}
+#ballon {
+  position: absolute;
+  height: auto;
+  width: 8%;
+  right: -2%;
+  top: 8%;
+  animation-name: ballon;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+}
+
+@keyframes ballon {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(50px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+#heart {
+  position: absolute;
+  right: 20%;
+  top: 8%;
+  height: auto;
+  width: 6%;
+}
+
+#girl2 {
+  position: absolute;
+  right: 10%;
+  bottom: -1%;
+  height: auto;
+  width: 14%;
+}
+
+#plant1 {
+  position: absolute;
+  height: auto;
+  width: 6%;
+  left: 57%;
+  bottom: 0%;
+  transform-origin: bottom;
+  animation-name: img7;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+}
+#plant2 {
+  position: absolute;
+  height: auto;
+  width: 5%;
+  left: 48%;
+  bottom: 5%;
+  transform-origin: bottom;
+  animation-name: img7;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate-reverse;
+  animation-fill-mode: forwards;
+}
+#plant3 {
+  position: absolute;
+  height: auto;
+  width: 4%;
+  left: 40%;
+  bottom: 0%;
+  transform-origin: bottom;
+  animation-name: img7;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+}
+#plant4 {
+  position: absolute;
+  height: auto;
+  width: 3%;
+  right: 0.5%;
+  bottom: 0%;
+  transform-origin: bottom;
+  animation-name: img7;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate-reverse;
+  animation-fill-mode: forwards;
+}
+#flower7 {
+  position: absolute;
+  height: auto;
+  width: 5%;
+  right: 2%;
+  bottom: 2%;
+  transform-origin: bottom;
+  animation-name: img7;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+}
+
+#flower5 {
+  position: absolute;
+  height: auto;
+  width: 15%;
+  right: 18%;
+  bottom: 0%;
+  transform-origin: bottom;
+  animation-name: img7;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate-reverse;
+  animation-fill-mode: forwards;
+}
+#flower4 {
+  position: absolute;
+  height: auto;
+  width: 6%;
+  left: 30%;
+  bottom: 0%;
+  transform-origin: bottom;
+  animation-name: img7;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+}
+
+#heart1 {
+  position: absolute;
+  height: auto;
+  width: 5%;
+  left: 15%;
+  top: 45%;
+}
+#heart2 {
+  position: absolute;
+  height: auto;
+  width: 7%;
+  left: 10%;
+  top: 8%;
+}
+#heart3 {
+  position: absolute;
+  height: auto;
+  width: 5%;
+  right: 30%;
+  top: 10%;
+}
+#coupn {
+  position: absolute;
+  height: auto;
+  width: 12%;
+  right: 15%;
+  top: 10%;
+  animation-name: img7;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+}
+
+#letter {
+  position: absolute;
+  height: auto;
+  width: 5%;
+  right: 5%;
+  top: 35%;
+}
+
+@keyframes img7 {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(3deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* About hero end */
+
+/* Our journey start */
+
+#our_journey {
+  width: 100%;
+  height: 200vh;
+  position: relative;
+}
+
+.rainbox-sides {
+  pointer-events: none;
+  height: 100vh;
+  width: 100%;
+  min-height: 50em;
+  position: sticky;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+.rainbow-sides__right {
+  width: 20.0625em;
+  position: absolute;
+  top: 0;
+  right: -4.75em;
+  overflow: hidden;
+}
+.rainbow-sides__left {
+  width: 20.0625em;
+  position: absolute;
+  bottom: -10em;
+  left: -4.75em;
+  transform: scale(-1);
+}
+
+.journey_text {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.journey_top {
+  width: 100%;
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.journey_bottom {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.joruney_wrap {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 6rem;
+  gap: 2rem;
+}
+.joruney_wrap h4 {
+  font-family: heading;
+  font-size: 2vw;
+  line-height: 0.9;
+  color: #FE0000;
+  margin-bottom: 1vw;
+}
+.joruney_wrap p {
+  font-family: font3;
+  font-size: 2.2vw;
+  color: #000;
+}
+.joruney_wrap .text_container {
+  width: 50%;
+}
+.joruney_wrap .img_container {
+  width: 23%;
+  height: auto;
+  margin-right: 6rem;
+  position: relative;
+}
+.joruney_wrap .img_container .frame1 {
+  width: 100%;
+  height: auto;
+  position: relative;
+  transform: rotate(20deg);
+  z-index: 2;
+}
+.joruney_wrap .img_container .frame2 {
+  width: 60%;
+  height: auto;
+  position: absolute;
+  left: -60%;
+  bottom: -20%;
+  transform: rotate(-20deg);
+}
+
+.sun-chat-combo {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+.sun {
+  width: 4rem;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: relative;
+}
+.sun__sun-svg {
+  animation: rotate360 20s linear infinite;
+}
+@keyframes rotate360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.sun__face-svg {
+  width: 25%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.chat-cloud {
+  background-color: #FE0000;
+  border: 0.125em solid #fff;
+  border-radius: 0.875em;
+  padding: 0.5em 0.75em;
+  font-size: 1em;
+  position: relative;
+}
+.chat-cloud__point {
+  width: auto;
+  max-width: none;
+  height: 0.8125em;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: translate(-42.5%, 15%);
+}
+
+.chat-cloud p {
+  font-family: paragraph;
+  font-size: 1vw;
+  text-align: center;
+  line-height: 0.9;
+  color: white;
+  font-weight: 100;
+}
+.journey_text h2 {
+  font-size: 6.5vw;
+  font-family: heading;
+  line-height: 0.9;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.journey_text h2 span{
+  transform-origin: top;
+  display: inline-block;
+}
+.journey_text h2:nth-child(3) span {
+  color: #FE0000;
+}
+.journey_text h2:nth-child(3) span:nth-child(2),.journey_text h2:nth-child(3) span:nth-child(1) {
+  color: #000;
+
+}
+
+/* Our journey end */
+
+/* Our Process start */
+
+#our_process {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3vw;
+  padding-bottom: 0;
+}
+.process_container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border: 0.125rem solid #00000026;
+}
+.process_strip {
+  width: 29%;
+  height: 100%;
+  gap: 4rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.process_strip:nth-child(1) {
+  padding-top: 30vh;
+  gap: 35vh;
+}
+
+.process_strip:nth-child(3) {
+  padding-top: 15vh;
+}
+.porcess_content {
+  padding-left: 2rem;
+}
+.porcess_content h4 {
+  font-family: heading;
+  font-size: 2vw;
+  line-height: 0.9;
+  color: #FE0000;
+  margin-bottom: 1vw;
+}
+.porcess_content p {
+  font-family: font3;
+  font-size: 2vw;
+  color: #000;
+}
+
+.process_card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.process_img {
+  width: 100%;
+  height: 59vh;
+  position: relative;
+  border: 2px solid #000;
+  box-shadow: 0.375em 0.375em 0 0 #00000026;
+}
+
+.process_img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.process_card p {
+  background-color: #fff;
+  border: 2px solid #000;
+  border-top: none;
+  width: 90%;
+  padding: 1rem;
+    font-family: heading;
+  font-size: 1.3vw;
+  text-align: center;
+  line-height: 1.2;
+  color: black;
+}
+
+.process_card p span{
+  color: #FE0000;
+}
+
+.process_svg {
+  height: 25vh;
+  display: flex;
+  justify-content: center;
+}
+.process-rainbow {
+  perspective: 25em;
+  position: absolute;
+}
+.rainbow-vertical {
+  transform-origin: top;
+  transform-style: preserve-3d;
+  height: 20em;
+  position: relative;
+  transform: rotateX(45deg);
+}
+.ranbow-vertical__1-svg {
+    width: 28.25em;
+    height: 100%;
+}
+/* Our Process end*/

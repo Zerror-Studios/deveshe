@@ -1,9 +1,8 @@
 import SeoHeader from "@/components/seo/SeoHeader";
 import AboutHeroSection from "@/components/about/AboutHeroSection";
-import JourneySection from "@/components/about/JourneySection";
-import WhereItAllBegan from "@/components/about/WhereItAllBegan";
-import Nails_Cntr from "@/components/about/Nails_Cntr";
 import FounderSection from "@/components/about/FounderSection";
+import OurJourney from "@/components/about/OurJourney";
+import OurProcess from "@/components/about/OurProcess";
 
 export default function About({ meta }) {
   return (
@@ -11,9 +10,8 @@ export default function About({ meta }) {
       <SeoHeader meta={meta} />
       <main>
         <AboutHeroSection />
-        <JourneySection />
-        <WhereItAllBegan />
-        <Nails_Cntr />
+        <OurJourney/>
+        <OurProcess/>
         <FounderSection />
       </main>
     </>

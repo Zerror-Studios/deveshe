@@ -57,33 +57,31 @@ const HeroSection = () => {
         alt="home_banner"
       />
       <div id="hero_container">
-        <div className="description_text">
-          <div className="text_container">
-            <p>Fashion that feels like you. Dopamine dressing for everday.</p>
-            <h3>
-              Dreamy prints, bold collabs each piece is a feeling, stitched into
-              fabric.
-            </h3>
-          </div>
-          <div className="polaroid_container" ref={polaroidRef}>
-            <PolaroidCard
-              image={"/assets/images/home/polaroid1.webp"}
-              content={
-                <p>
-                  From office to <span>OOO</span>
-                </p>
-              }
-            />
-            <PolaroidCard
-              image={"/assets/images/home/polaroid2.webp"}
-              content={
-                <p>
-                  Bold pieces you won’t find <span>twice.</span> Crafted for
-                  dreamers, worn by you.
-                </p>
-              }
-            />
-          </div>
+        <div className="text_container">
+          <p>Fashion that feels like you. Dopamine dressing for everday.</p>
+          <h3>
+            Dreamy prints, bold collabs each piece is a feeling, stitched into
+            fabric.
+          </h3>
+        </div>
+        <div className="polaroid_container" ref={polaroidRef}>
+          <PolaroidCard
+            image={"/assets/images/home/polaroid1.webp"}
+            content={
+              <p>
+                From office to <span>OOO</span>
+              </p>
+            }
+          />
+          <PolaroidCard
+            image={"/assets/images/home/polaroid2.webp"}
+            content={
+              <p>
+                Bold pieces you won’t find <span>twice.</span> Crafted for
+                dreamers, worn by you.
+              </p>
+            }
+          />
         </div>
       </div>
     </div>
