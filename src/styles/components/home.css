@@ -38,6 +38,7 @@
   position: sticky;
   top: 0;
   right: 0;
+  text-align: right;
 }
 #hero_container .text_container p {
   font-family: paragraph;
