@@ -125,11 +125,39 @@
   height: 30px;
   align-items: flex-start;
 }
+#logo-container p {
+  font-size: 14px;
+  font-weight: 100;
+  font-family: var(--primary-font-Hel);
+  color: white;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 100%;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+#nav-btns p {
+  font-size: 14px;
+  font-weight: 100;
+  font-family: var(--primary-font-Hel);
+  color: white;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+.nav_btn_items{
+  opacity: 0;
+}
 
 .logo {
   height: 25px;
   width: auto;
   will-change: transform;
+  opacity: 0;
 }
 
 #nav  .logo{

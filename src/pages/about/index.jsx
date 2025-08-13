@@ -8,7 +8,7 @@ export default function About({ meta }) {
   return (
     <>
       <SeoHeader meta={meta} />
-      <main>
+      <main id="about-page">
         <AboutHeroSection />
         <OurJourney/>
         <OurProcess/>

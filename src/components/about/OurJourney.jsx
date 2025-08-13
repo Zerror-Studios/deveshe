@@ -177,7 +177,8 @@ const OurJourney = () => {
   return (
     <div id="our_journey">
       <div className="rainbox-sides">
-        <svg
+       <div>
+         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="100%"
           viewBox="0 0 321 626"
@@ -241,6 +242,7 @@ const OurJourney = () => {
             style={{ strokeDashoffset: 0, strokeDasharray: "573.551px, 0.1px" }}
           />
         </svg>
+       </div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="100%"
