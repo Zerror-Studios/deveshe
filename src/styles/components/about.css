@@ -1,3 +1,5 @@
+
+
 .home-slider {
   height: 100vh;
   width: 100%;
@@ -448,7 +450,8 @@
     display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding-bottom: 25vh;
+  padding-bottom: 30vh;
+  padding-top: 5vh;
 }
 .journey_top {
   width: 100%;

@@ -66,6 +66,19 @@ const Navbar = ({ openCart }) => {
         gsap.set("#logo-container", { left: "2%" });
         gsap.set("#nav-btns", { right: "2%" });
         gsap.set("#loader_slider", { opacity: "0", display: "none" });
+
+         gsap.set(
+          "#logo-container p,#nav-btns p",
+          {
+            opacity: 0,
+          }
+        )
+        gsap.set(
+          "#logo-container .logo,.nav_btn_items",
+          {
+            opacity: 1,
+          }
+        )
         return;
       }
       logos.forEach((logo, i) => {
@@ -90,6 +103,18 @@ const Navbar = ({ openCart }) => {
       gsap.set("#logo-container", { left: "79%" });
       gsap.set("#nav-btns", { right: "92%" });
       gsap.set("#loader_slider", { opacity: "1", display: "block" });
+      gsap.set(
+          "#logo-container p,#nav-btns p",
+          {
+            opacity: 1,
+          }
+        )
+        gsap.set(
+          "#logo-container .logo,.nav_btn_items",
+          {
+            opacity: 0,
+          }
+        )
 
       const finalWidth = currentX;
       logoContainer.style.width = `${xPositions[3] || finalWidth}px`;
@@ -101,9 +126,9 @@ const Navbar = ({ openCart }) => {
         "#logo-container",
         {
           left: "2%",
-          duration: 1,
+          duration: 0.8,
           delay: 0.3,
-          ease: "power2.inOut",
+          ease: "power3.in",
         },
         "start"
       )
@@ -111,13 +136,32 @@ const Navbar = ({ openCart }) => {
           "#nav-btns",
           {
             right: "2%",
-            duration: 1,
+            duration: 0.8,
             delay: 0.3,
-            ease: "power2.inOut",
+            ease: "power3.in",
           },
           "start"
         )
-
+        .to(
+          "#logo-container p,#nav-btns p",
+          {
+            opacity: 0,
+            duration: 0.2,
+            delay: 0.8,
+            ease: "power3.in",
+          },
+          "start"
+        )
+        .to(
+          "#logo-container .logo,.nav_btn_items",
+          {
+            opacity: 1,
+            duration: 0.2,
+            delay: .9,
+            ease: "power3.in",
+          },
+          "start"
+        )
         // Move nav links in a fluid way
         .to(
           ".nav-link",
@@ -125,8 +169,8 @@ const Navbar = ({ openCart }) => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%) scale(1)",
-            duration: 0.8,
-            ease: "power2.inOut",
+            duration: 0.6,
+            ease: "power2.in",
           },
           "-=0.5"
         ) // start slightly before previous animations end
@@ -139,15 +183,19 @@ const Navbar = ({ openCart }) => {
           stagger: 0.1, // small delay between each logo
         })
         // Fade out loader, then hide it completely
-        .to("#loader_slider", {
-          opacity: 0,
-          duration: 0.8,
-          ease: "power2.inOut",
-          onComplete: () => {
-            gsap.set("#nav", { pointerEvents: "all" });
-            gsap.set("#loader_slider", { display: "none" });
+        .to(
+          "#loader_slider",
+          {
+            opacity: 0,
+            duration: 0.8,
+            ease: "power2.inOut",
+            onComplete: () => {
+              gsap.set("#nav", { pointerEvents: "all" });
+              gsap.set("#loader_slider", { display: "none" });
+            },
           },
-        },"-=1.5");
+          "-=1.8"
+        );
 
       // GSAP Timeline
       gsap
@@ -250,6 +298,7 @@ const Navbar = ({ openCart }) => {
       <div id="nav">
         <div id="loader_slider"></div>
         <Link href="/" id="logo-container">
+          <p>new emotions?</p>
           <Image
             width={1000}
             height={1000}
@@ -298,7 +347,8 @@ const Navbar = ({ openCart }) => {
           </Link>
         </div>
         <div id="nav-btns">
-          <button onClick={openCart}>
+          <p>looking for</p>
+          <button className="nav_btn_items" onClick={openCart}>
             <svg
               class="icon-cart"
               width="15"
@@ -319,8 +369,11 @@ const Navbar = ({ openCart }) => {
               ></path>
             </svg>
           </button>
-          <div id="nav-line"></div>
-          <Link href={isLoggedIn ? "/profile" : "/login"}>
+          <div className="nav_btn_items" id="nav-line"></div>
+          <Link
+            className="nav_btn_items"
+            href={isLoggedIn ? "/profile" : "/login"}
+          >
             <svg
               class="icon-account"
               width="16"
