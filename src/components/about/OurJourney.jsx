@@ -84,7 +84,12 @@ const OurJourney = () => {
   }, []);
 
   useEffect(() => {
-    function animateSide(sideSelector, offsetMultiplier) {
+    function animateSide(
+      sideSelector,
+      offsetMultiplier,
+      triggerStart,
+      triggerEnd
+    ) {
       const blackPaths = document.querySelectorAll(
         `${sideSelector} .path-black-j`
       );
@@ -96,8 +101,8 @@ const OurJourney = () => {
         scrollTrigger: {
           trigger: "#our_journey",
           scroller: "body",
-          start: "top -15%",
-          end: "top -80%",
+          start: triggerStart,
+          end: triggerEnd,
           scrub: true,
         },
       });
@@ -121,8 +126,48 @@ const OurJourney = () => {
       });
     }
 
-    animateSide(".rainbow-sides__right", -1);
-    animateSide(".rainbow-sides__left", 1);
+    animateSide(".rainbow-sides__right", -1, "top 0%", "top -40%");
+    animateSide(".rainbow-sides__left", 1, "top -41%", "top -85%"); // starts later
+
+    return () => {
+      ScrollTrigger.getAll().forEach((st) => st.kill());
+    };
+  }, []);
+  useEffect(() => {
+    const blackPaths = document.querySelectorAll(
+      `.our_journey_vertical .pathblack`
+    );
+    const colorPaths = document.querySelectorAll(
+      `.our_journey_vertical .pathcolor`
+    );
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#our_journey",
+        scroller: "body",
+        start: "bottom 95%",
+        end: "bottom 40%",
+        scrub: true,
+      },
+    });
+
+    blackPaths.forEach((black, i) => {
+      const length = black.getTotalLength();
+      const color = colorPaths[i];
+      black.style.strokeDasharray = length;
+      black.style.strokeDashoffset = length;
+      color.style.strokeDasharray = length;
+      color.style.strokeDashoffset = length;
+
+      tl.to(
+        [black, color],
+        {
+          strokeDashoffset: 0,
+          ease: "none",
+        },
+        "-=0.4"
+      );
+    });
 
     return () => {
       ScrollTrigger.getAll().forEach((st) => st.kill());
@@ -196,7 +241,6 @@ const OurJourney = () => {
             style={{ strokeDashoffset: 0, strokeDasharray: "573.551px, 0.1px" }}
           />
         </svg>
-
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="100%"
@@ -375,6 +419,195 @@ const OurJourney = () => {
           </div>
         </div>
       </div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="100%"
+        viewBox="0 0 452 600"
+        fill="none"
+        preserveAspectRatio="none"
+        className="our_journey_vertical"
+      >
+        <path
+          d="M426 0V600"
+          stroke="black"
+          strokeWidth="52"
+          className="pathblack"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+        <path
+          d="M376 0V600"
+          stroke="black"
+          strokeWidth="52"
+          className="pathblack"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+        <path
+          d="M326 0V600"
+          stroke="black"
+          strokeWidth="52"
+          className="pathblack"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+        <path
+          d="M276 0V600"
+          stroke="black"
+          strokeWidth="52"
+          className="pathblack"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+        <path
+          d="M226 0V600"
+          stroke="black"
+          strokeWidth="52"
+          className="pathblack"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+        <path
+          d="M176 0V600"
+          stroke="black"
+          strokeWidth="52"
+          className="pathblack"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+        <path
+          d="M126 0V600"
+          stroke="black"
+          strokeWidth="52"
+          className="pathblack"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+        <path
+          d="M76 0V600"
+          stroke="black"
+          strokeWidth="52"
+          className="pathblack"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+        <path
+          d="M26 0V600"
+          stroke="black"
+          strokeWidth="52"
+          className="pathblack"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+        <path
+          d="M426 0V600"
+          stroke="#FE0000"
+          strokeWidth="48"
+          className="pathcolor"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+        <path
+          d="M376 0V600"
+          stroke="#FEE8D9"
+          strokeWidth="48"
+          className="pathcolor"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+        <path
+          d="M326 0V600"
+          stroke="#F7B1B9"
+          strokeWidth="48"
+          className="pathcolor"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+        <path
+          d="M276 0V600"
+          stroke="#F489A3"
+          strokeWidth="48"
+          className="pathcolor"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+        <path
+          d="M226 0V600"
+          stroke="#FE0000"
+          strokeWidth="48"
+          className="pathcolor"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+        <path
+          d="M176 0V600"
+          stroke="#FEE8D9"
+          strokeWidth="48"
+          className="pathcolor"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+        <path
+          d="M126 0V600"
+          stroke="#F7B1B9"
+          strokeWidth="48"
+          className="pathcolor"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+        <path
+          d="M76 0V600"
+          stroke="#F489A3"
+          strokeWidth="48"
+          className="pathcolor"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+        <path
+          d="M26 0V600"
+          stroke="#FE0000"
+          strokeWidth="48"
+          className="pathcolor"
+          style={{
+            strokeDashoffset: 0.001,
+            strokeDasharray: "0px, 999999px",
+          }}
+        />
+      </svg>
     </div>
   );
 };

@@ -37,7 +37,7 @@ const OurProcess = () => {
           strokeDashoffset: 0,
           duration: 1,
         },
-        "+=0.2"
+        "-=0.7"
       ); // small gap before next strip starts
     });
   }, []);
@@ -61,7 +61,7 @@ const OurProcess = () => {
               <Image
                 width={1000}
                 height={1000}
-                src="/assets/images/about/img2.webp"
+                src="/assets/images/about/process1.webp"
                 alt="process image 1"
               />
             </div>
@@ -75,7 +75,7 @@ const OurProcess = () => {
               <Image
                 width={1000}
                 height={1000}
-                src="/assets/images/about/img3.webp"
+                src="/assets/images/about/process3.webp"
                 alt="process image 1"
               />
             </div>
@@ -91,7 +91,7 @@ const OurProcess = () => {
               <Image
                 width={1000}
                 height={1000}
-                src="/assets/images/about/img4.webp"
+                src="/assets/images/about/process2.webp"
                 alt="process image 1"
               />
             </div>
@@ -105,7 +105,7 @@ const OurProcess = () => {
               <Image
                 width={1000}
                 height={1000}
-                src="/assets/images/about/img5.webp"
+                src="/assets/images/about/process4.webp"
                 alt="process image 1"
               />
             </div>
@@ -185,7 +185,7 @@ const OurProcess = () => {
               <path
                 d="M426 0V600"
                 className="path-color"
-                stroke="#FEE8D9"
+                stroke="#FE0000"
                 strokeWidth={48}
               />
               <path

@@ -2,8 +2,8 @@ import React, { Suspense } from "react";
 import SeoHeader from "@/components/seo/SeoHeader";
 import HeroSection from "@/components/home/HeroSection";
 import ExploreSection from "@/components/home/ExploreSection";
-import VisionSection from "@/components/home/VisionSection";
 import ProductSection from "@/components/home/ProductSection";
+import VisionSection from "@/components/home/VisionSection";
 import ProductLoader from "@/components/home/loaders/ProductLoader";
 import { createApolloClient } from "@/lib/apolloClient";
 import { GET_PRODUCTS } from "@/graphql";
@@ -13,7 +13,7 @@ const Home = ({ meta, productData }) => {
     <>
       <SeoHeader meta={meta} />
       <HeroSection />
-      <ExploreSection />
+      <ExploreSection/>
       <Suspense fallback={<ProductLoader />}>
         <ProductSection data={productData} />
       </Suspense>

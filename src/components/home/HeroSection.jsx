@@ -3,11 +3,66 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import PolaroidCard from "../common/card/PolaroidCard/PolaroidCard";
+import SplitText from "gsap/dist/SplitText";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const HeroSection = () => {
   const polaroidRef = useRef(null);
+  const sectionRef = useRef(null);
+  const splitInstances = useRef([]);
+  const triggers = useRef([]);
+
+  useEffect(() => {
+  const runSplitAnimation = () => {
+    const lines = sectionRef.current?.querySelectorAll("h3, p") || [];
+
+    lines.forEach((el) => {
+      const split = new SplitText(el, {
+        type: "lines",
+        mask: "lines", // creates overflow hidden mask divs
+        linesClass: "line",
+      });
+
+      splitInstances.current.push(split);
+
+      // Initial state: hidden below
+      gsap.set(split.lines, { yPercent: 100,opacity: 0 });
+
+      // Reveal animation with stagger
+      const trigger = gsap.to(split.lines, {
+        yPercent: 0,
+        opacity: 1,
+        duration: 1,
+        delay:2,
+        ease: "power3.out",
+        stagger: 0.1,
+      });
+
+      triggers.current.push(trigger.scrollTrigger);
+    });
+
+    ScrollTrigger.refresh();
+  };
+
+  const fontReady = document.fonts?.ready || Promise.resolve();
+
+  fontReady.then(() => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (!sectionRef.current) return;
+        runSplitAnimation();
+      });
+    });
+  });
+
+  return () => {
+    triggers.current.forEach((st) => st?.kill());
+    splitInstances.current.forEach((split) => split.revert());
+    ScrollTrigger.refresh();
+  };
+}, []);
+
 
   useEffect(() => {
     let refreshTimeout;
@@ -57,7 +112,7 @@ const HeroSection = () => {
         alt="home_banner"
       />
       <div id="hero_container">
-        <div className="text_container">
+        <div ref={sectionRef} className="text_container">
           <p>Fashion that feels like you. Dopamine dressing for everday.</p>
           <h3>
             Dreamy prints, bold collabs each piece is a feeling, stitched into

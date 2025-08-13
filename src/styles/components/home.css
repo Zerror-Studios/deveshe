@@ -38,6 +38,7 @@
   position: sticky;
   top: 0;
   right: 0;
+  text-align: right;
 }
 #hero_container .text_container p {
   font-family: paragraph;
@@ -77,9 +78,244 @@
 }
 /* home hero section end */
 
+/* explore section start */
+
+#explore_section {
+  width: 100%;
+  min-height: 120vh;
+  background-image: url(/grainy-lg-bg.svg);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-color: #fadcde;
+  padding: 8vw 3vw 10vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.explore_text_container {
+  text-align: center;
+  position: relative;
+}
+.explore_text_container::before {
+  content: "";
+  position: absolute;
+  left: -20%;
+  top: 5%;
+  width: 35px;
+  height: 35px;
+  background-image: url(/star.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 1;
+}
+.explore_text_container::after {
+  content: "";
+  position: absolute;
+  right: -20%;
+  top: 0;
+  width: 35px;
+  height: 35px;
+  background-image: url(/star2.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 1;
+}
+
+.explore_text_container h2 {
+  font-family: heading;
+  font-size: 8vw;
+  line-height: 0.9;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.explore_text_container h2 span {
+  display: inline-block;
+  transform-origin: top;
+}
+.explore_text_container #red span:nth-child(1),
+.explore_text_container #red span:nth-child(2),
+.explore_text_container #red span:nth-child(3),
+.explore_text_container #red span:nth-child(4),
+.explore_text_container #red span:nth-child(5),
+.explore_text_container #red span:nth-child(6) {
+  color: red;
+}
+.explore_polaroid_container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 7vw;
+}
+
+.explore_center_card {
+  width: 27%;
+  height: 100%;
+  background-image: url(/frame.png);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+  padding: 3vw;
+}
+.explore_center_card img {
+  width: 100%;
+  height: 40vh;
+  object-fit: cover;
+  object-position: top;
+}
+.explore_center_card p {
+  font-family: heading;
+  font-size: 1.2vw;
+  margin-top: 1vw;
+  line-height: 0.9;
+  text-align: center;
+}
+
+.explore_side_card {
+  width: 19%;
+  height: 100%;
+  background-color: white;
+  padding: 1vw;
+  position: relative;
+}
+
+.explore_side_card img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+}
+
+.explore_side_card1 {
+  transform: translateX(50px) translateY(-100px) rotate(-16deg);
+  transform-origin: center;
+}
+.explore_side_card2 {
+  width: 18%;
+  transform: translateX(-50px) translateY(-100px) rotate(16deg);
+  transform-origin: center;
+}
+
+.explore_side_card1::before,.explore_side_card2::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  width: 30px;
+  height: 30px;
+  background-image: url(/corner.png);
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+.explore_side_card1::after ,.explore_side_card2::after{
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 30px;
+  height: 30px;
+  background-image: url(/corner.png);
+  background-repeat: no-repeat;
+  z-index: 1;
+  transform: rotate(180deg);
+}
+.explore_inspired_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 14vw;
+  text-align: center;
+  position: relative;
+}
+.explore_inspired_container::before {
+  content: "";
+  position: absolute;
+  left: 23%;
+  top: 5%;
+  width: 35px;
+  height: 35px;
+  background-image: url(/star2.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 1;
+}
+.explore_inspired_container::after {
+  content: "";
+  position: absolute;
+  right: 23%;
+  top: 0;
+  width: 35px;
+  height: 35px;
+  background-image: url(/star2.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 1;
+}
+
+.explore_inspired_container h5 {
+  font-size: 2vw;
+  font-family: font5;
+}
+.explore_inspired_container h3 {
+  font-size: 5.5vw;
+  font-family: font3;
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 2vw 0 10vw;
+}
+.explore_inspired_button {
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5vw;
+  color: red;
+  font-family: heading;
+  font-size: 3.5vw;
+  line-height: 0.8;
+  cursor: pointer;
+}
+.explore_inspired_button span {
+  display: inline-block;
+}
+.inspired_button_wrap {
+  height: 3.5vw;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.inspired_button_wrap h4 {
+  font-family: heading;
+  font-size: 3.5vw;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: red;
+}
+.explore_strip1 {
+  width: 14.5vw;
+  height: auto;
+  object-fit: cover;
+  position: absolute;
+  left: -4%;
+  bottom: -7vw;
+  transform: rotate(-25deg);
+}
+.explore_strip2 {
+  width: 14.5vw;
+  height: auto;
+  object-fit: cover;
+  position: absolute;
+  right: -4%;
+  bottom: -7vw;
+  transform: rotate(25deg);
+}
+
+/* explore section end */
+
 @media (max-width: 576px) {
   #home_hero {
     height: 170vh;
   }
-
 }
