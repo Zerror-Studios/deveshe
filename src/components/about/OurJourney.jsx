@@ -145,8 +145,8 @@ const OurJourney = () => {
       scrollTrigger: {
         trigger: "#our_journey",
         scroller: "body",
-        start: "bottom 95%",
-        end: "bottom 40%",
+        start: "bottom 80%",
+        end: "bottom -20%",
         scrub: true,
       },
     });
@@ -177,7 +177,7 @@ const OurJourney = () => {
   return (
     <div id="our_journey">
       <div className="rainbox-sides">
-       <div>
+       <div id="right_rainbow">
          <svg
           xmlns="http://www.w3.org/2000/svg"
           width="100%"

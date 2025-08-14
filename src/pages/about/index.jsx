@@ -3,6 +3,7 @@ import AboutHeroSection from "@/components/about/AboutHeroSection";
 import FounderSection from "@/components/about/FounderSection";
 import OurJourney from "@/components/about/OurJourney";
 import OurProcess from "@/components/about/OurProcess";
+import FrequentQue from "@/components/about/FrequentQue";
 
 export default function About({ meta }) {
   return (
@@ -12,6 +13,7 @@ export default function About({ meta }) {
         <AboutHeroSection />
         <OurJourney/>
         <OurProcess/>
+        <FrequentQue/>
         <FounderSection />
       </main>
     </>
