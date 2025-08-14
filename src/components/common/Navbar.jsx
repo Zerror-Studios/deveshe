@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -10,6 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 const Navbar = ({ openCart }) => {
   const router = useRouter();
   const { isLoggedIn } = useAuthStore((state) => state);
+  const [percent, setPercent] = useState(0);
 
   useEffect(() => {
     if (window.innerWidth < 576) return;
@@ -50,35 +51,23 @@ const Navbar = ({ openCart }) => {
           backgroundColor: "rgba(255, 255, 255, 0.1)", // semi-transparent white
           backdropFilter: "blur(8px)",
           WebkitBackdropFilter: "blur(8px)", // for Safari support
-          pointerEvents: "all",
         });
         gsap.set("#nav-btns svg", { stroke: "#000" });
         gsap.set("#nav-line", { backgroundColor: "#000" });
         gsap.set(".logo", { position: "static" });
         gsap.set("#logo-container", { gap: "13px" });
         gsap.set(".hoverline", { backgroundColor: "#000" });
-
-        gsap.set(".nav-link", {
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%) scale(1)",
-        });
         gsap.set("#logo-container", { left: "2%" });
         gsap.set("#nav-btns", { right: "2%" });
         gsap.set("#loader_slider", { opacity: "0", display: "none" });
+        gsap.set(".nav-link", { opacity: 1 });
 
-         gsap.set(
-          "#logo-container p,#nav-btns p",
-          {
-            opacity: 0,
-          }
-        )
-        gsap.set(
-          "#logo-container .logo,.nav_btn_items",
-          {
-            opacity: 1,
-          }
-        )
+        gsap.set("#logo-container p,#nav-btns p", {
+          opacity: 0,
+        });
+        gsap.set("#logo-container .logo,.nav_btn_items", {
+          opacity: 1,
+        });
         return;
       }
       logos.forEach((logo, i) => {
@@ -88,47 +77,51 @@ const Navbar = ({ openCart }) => {
       gsap.set("#logo-container img", { filter: "invert(1)" });
       gsap.set(".nav-link a", { color: "#fff" });
       gsap.set("#nav", {
-        backgroundColor: "transparent",
-        pointerEvents: "none",
+        backgroundColor: "rgba(255, 255, 255, 0)",
+          backdropFilter: "blur(0px)",
+          WebkitBackdropFilter: "blur(0px)",
       });
       gsap.set("#nav-btns svg", { stroke: "#fff" });
       gsap.set("#nav-line", { backgroundColor: "#fff" });
       gsap.set(".logo", { position: "absolute" });
       gsap.set(".hoverline", { backgroundColor: "#fff" });
-      gsap.set(".nav-link", {
-        top: "550%",
-        left: "50%",
-        transform: "translate(-50%, 0%) scale(1.5)",
-      });
       gsap.set("#logo-container", { left: "79%" });
       gsap.set("#nav-btns", { right: "92%" });
       gsap.set("#loader_slider", { opacity: "1", display: "block" });
-      gsap.set(
-          "#logo-container p,#nav-btns p",
-          {
-            opacity: 1,
-          }
-        )
-        gsap.set(
-          "#logo-container .logo,.nav_btn_items",
-          {
-            opacity: 0,
-          }
-        )
+      gsap.set(".nav-link", { opacity: 0 });
+        gsap.set("#loader_slider p",{top:"50%",})
+      gsap.set("#logo-container p,#nav-btns p", {
+        opacity: 1,
+      });
+      gsap.set("#logo-container .logo,.nav_btn_items", {
+        opacity: 0,
+      });
 
       const finalWidth = currentX;
       logoContainer.style.width = `${xPositions[3] || finalWidth}px`;
 
+        const startLoader = () => {
+        let current = 0;
+        const interval = setInterval(() => {
+          current++;
+          setPercent(current);
+
+          if (current >= 100) {
+            clearInterval(interval);
+          }
+        }, 10);
+      };
       var tl = gsap.timeline();
 
       // Move logo and nav buttons smoothly at the same time
-      tl.to(
+      tl.call(startLoader)
+      .to(
         "#logo-container",
         {
           left: "2%",
-          duration: 0.8,
-          delay: 0.3,
-          ease: "power3.in",
+          duration: 0.6,
+          delay: 0.8,
+          ease: "power3.inOut",
         },
         "start"
       )
@@ -136,9 +129,9 @@ const Navbar = ({ openCart }) => {
           "#nav-btns",
           {
             right: "2%",
-            duration: 0.8,
-            delay: 0.3,
-            ease: "power3.in",
+            duration: 0.6,
+            delay: 0.8,
+            ease: "power3.inOut",
           },
           "start"
         )
@@ -147,8 +140,18 @@ const Navbar = ({ openCart }) => {
           {
             opacity: 0,
             duration: 0.2,
-            delay: 0.8,
+            delay: 1.2,
             ease: "power3.in",
+          },
+          "start"
+        )
+         .to(
+          "#loader_slider p",
+          {
+            top:"95%",
+            duration: 0.4,
+            delay: 1,
+            ease: "power3.inOut",
           },
           "start"
         )
@@ -157,7 +160,7 @@ const Navbar = ({ openCart }) => {
           {
             opacity: 1,
             duration: 0.2,
-            delay: .9,
+            delay: 1.2,
             ease: "power3.in",
           },
           "start"
@@ -166,14 +169,12 @@ const Navbar = ({ openCart }) => {
         .to(
           ".nav-link",
           {
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%) scale(1)",
+            opacity: 1,
             duration: 0.6,
             ease: "power2.in",
           },
           "-=0.5"
-        ) // start slightly before previous animations end
+        )
 
         .to(".logo", {
           top: (i) => i * 30, // 0px for first, 30px for second, 60px for third...
@@ -187,14 +188,13 @@ const Navbar = ({ openCart }) => {
           "#loader_slider",
           {
             opacity: 0,
-            duration: 0.8,
+            duration: 0.6,
             ease: "power2.inOut",
             onComplete: () => {
-              gsap.set("#nav", { pointerEvents: "all" });
               gsap.set("#loader_slider", { display: "none" });
             },
           },
-          "-=1.8"
+          "-=1.6"
         );
 
       // GSAP Timeline
@@ -296,7 +296,11 @@ const Navbar = ({ openCart }) => {
   return (
     <>
       <div id="nav">
-        <div id="loader_slider"></div>
+        <div id="loader_slider">
+          <p>
+            loading... <span>{percent}%</span>
+          </p>
+        </div>
         <Link href="/" id="logo-container">
           <p>new emotions?</p>
           <Image
