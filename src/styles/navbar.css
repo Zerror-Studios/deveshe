@@ -9,10 +9,9 @@
   left: 0;
   z-index: 9;
   padding: 1vw 3vw;
-   background-color: rgba(255, 255, 255, 0);
-   pointer-events: none;
+  background-color: rgba(255, 255, 255, 0);
+  backdrop-filter: blur(0px);
 }
-
 
 .nav-link {
   display: flex;
@@ -20,15 +19,15 @@
   align-items: center;
   position: absolute;
   left: 50%;
-  top: 550%;
-  transform: translate(-50%, 0%) scale(1.5);
+  top: 50%;
+  transform: translate(-50%, -50%);
   will-change: transform;
+  opacity: 0;
 }
 
-#nav .nav-link a{
+#nav .nav-link a {
   color: #fff;
 }
-
 
 .nav-link a {
   color: #000;
@@ -46,22 +45,21 @@
   letter-spacing: 1px;
 }
 
-
-.nav-link a .hoverline{
+.nav-link a .hoverline {
   position: absolute;
   left: 0;
   bottom: -5%;
   background-color: #000;
   width: 100%;
   height: 0.01vw;
-  transition: all ease .3s;
+  transition: all ease 0.3s;
   transform: scaleX(0);
   transform-origin: left;
 }
 
 .nav-link a:hover .hoverline {
   transform: scaleX(1);
-  transform-origin: left; 
+  transform-origin: left;
   transition: transform 0.3s ease;
 }
 
@@ -88,10 +86,10 @@
   background-color: #000;
 }
 
-#nav .nav-link a::after{
-  background-color: #fff ;
+#nav .nav-link a::after {
+  background-color: #fff;
 }
-#nav #nav-line{
+#nav #nav-line {
   background-color: #fff;
 }
 
@@ -99,20 +97,17 @@
   stroke: #fff;
 }
 
-
-
 #nav-btns svg {
   display: block;
   min-height: 1.1rem;
   min-width: 1.1rem;
   stroke: #000;
-  transition: scale ease .3s;
+  transition: scale ease 0.3s;
 }
 
-#nav-btns svg:hover{
+#nav-btns svg:hover {
   scale: 1.1;
 }
-
 
 #logo-container {
   position: absolute;
@@ -136,6 +131,7 @@
   left: 100%;
   white-space: nowrap;
   text-transform: uppercase;
+  pointer-events: none;
 }
 #nav-btns p {
   font-size: 14px;
@@ -148,8 +144,9 @@
   left: 0;
   white-space: nowrap;
   text-transform: uppercase;
+  pointer-events: none;
 }
-.nav_btn_items{
+.nav_btn_items {
   opacity: 0;
 }
 
@@ -160,7 +157,7 @@
   opacity: 0;
 }
 
-#nav  .logo{
+#nav .logo {
   filter: invert(1);
 }
 
@@ -174,7 +171,7 @@
   top: 90px;
 }
 
-#loader_slider{
+#loader_slider {
   top: 0;
   left: 0;
   width: 100%;
@@ -183,11 +180,20 @@
   position: absolute;
 }
 
-
-
+#loader_slider p {
+  font-size: 14px;
+  font-weight: 100;
+  font-family: var(--primary-font-Hel);
+  color: white;
+  text-transform: uppercase;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
 @media (max-width: 576px) {
-    #nav{
-      display: none;
-    }
+  #nav {
+    display: none;
+  }
 }

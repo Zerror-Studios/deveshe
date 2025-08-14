@@ -1,7 +1,7 @@
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 gsap.registerPlugin(ScrollTrigger);
 const OurJourney = () => {
   useEffect(() => {
@@ -25,8 +25,8 @@ const OurJourney = () => {
       const tl2 = gsap.timeline({
         scrollTrigger: {
           trigger: ".journey_top",
-          start: "top 80%",
-          end: "top 50%",
+          start: "top 50%",
+          end: "top 30%",
         },
       });
 
@@ -145,8 +145,8 @@ const OurJourney = () => {
       scrollTrigger: {
         trigger: "#our_journey",
         scroller: "body",
-        start: "bottom 95%",
-        end: "bottom 40%",
+        start: "bottom 80%",
+        end: "bottom -20%",
         scrub: true,
       },
     });
@@ -173,11 +173,77 @@ const OurJourney = () => {
       ScrollTrigger.getAll().forEach((st) => st.kill());
     };
   }, []);
+    const sentences = [
+    "hi friends!",
+    "...we are back",
+    "From a Dream — To Your Unique Style",
+  ];
+
+  const [text, setText] = useState("");
+  const [sentenceIndex, setSentenceIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [startTyping, setStartTyping] = useState(false);
+
+useEffect(() => {
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: "#our_journey",
+      start: "top 70%",
+      once: true,
+    },
+    onComplete: () => setStartTyping(true), // start typing after animation
+  });
+tl.fromTo(
+  ".sun-chat-combo",
+  { y: 50, opacity: 0 }, // starting values
+  { y: 0, opacity: 1, duration: .8, ease: "power3.in" } // ending values
+);
+}, []);
+
+
+  useEffect(() => {
+    if (!startTyping) return;
+
+    const currentSentence = sentences[sentenceIndex];
+    let typingSpeed = isDeleting ? 15 : 30;
+
+    const handleTyping = () => {
+      if (!isDeleting) {
+        // Typing letters
+        if (charIndex < currentSentence.length) {
+          setText(currentSentence.substring(0, charIndex + 1));
+          setCharIndex(charIndex + 1);
+        } else {
+          // If not last sentence, wait before deleting
+          if (sentenceIndex < sentences.length - 1) {
+            setTimeout(() => setIsDeleting(true), 1000);
+          }
+        }
+      } else {
+        // Deleting letters
+        if (charIndex > 0) {
+          setText(currentSentence.substring(0, charIndex - 1));
+          setCharIndex(charIndex - 1);
+        } else {
+          // Move to next sentence if not last
+          if (sentenceIndex < sentences.length - 1) {
+            setIsDeleting(false);
+            setSentenceIndex((prev) => prev + 1);
+          }
+        }
+      }
+    };
+
+    const timer = setTimeout(handleTyping, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [charIndex, isDeleting, sentenceIndex, startTyping]);
+
 
   return (
     <div id="our_journey">
       <div className="rainbox-sides">
-       <div>
+       <div id="right_rainbow">
          <svg
           xmlns="http://www.w3.org/2000/svg"
           width="100%"
@@ -382,7 +448,7 @@ const OurJourney = () => {
                   stroke-linecap="round"
                 ></path>
               </svg>
-              <p>From a Dream — To Your Unique Style</p>
+              <p>{text}</p>
             </div>
           </div>
           <h2>Great to see you </h2>
