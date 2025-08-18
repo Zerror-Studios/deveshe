@@ -126,8 +126,8 @@ const OurJourney = () => {
       });
     }
 
-    animateSide(".rainbow-sides__right", -1, "top 0%", "top -40%");
-    animateSide(".rainbow-sides__left", 1, "top -41%", "top -85%"); // starts later
+    animateSide(".rainbow-sides__right", -1, "top 0%", "top -45%");
+    animateSide(".rainbow-sides__left", 1, "top -50%", "top -90%"); // starts later
 
     return () => {
       ScrollTrigger.getAll().forEach((st) => st.kill());
@@ -145,7 +145,7 @@ const OurJourney = () => {
       scrollTrigger: {
         trigger: "#our_journey",
         scroller: "body",
-        start: "bottom 80%",
+        start: "bottom 125%",
         end: "bottom -20%",
         scrub: true,
       },
@@ -173,7 +173,7 @@ const OurJourney = () => {
       ScrollTrigger.getAll().forEach((st) => st.kill());
     };
   }, []);
-    const sentences = [
+  const sentences = [
     "hi friends!",
     "...we are back",
     "From a Dream — To Your Unique Style",
@@ -185,22 +185,21 @@ const OurJourney = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [startTyping, setStartTyping] = useState(false);
 
-useEffect(() => {
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: "#our_journey",
-      start: "top 70%",
-      once: true,
-    },
-    onComplete: () => setStartTyping(true), // start typing after animation
-  });
-tl.fromTo(
-  ".sun-chat-combo",
-  { y: 50, opacity: 0 }, // starting values
-  { y: 0, opacity: 1, duration: .8, ease: "power3.in" } // ending values
-);
-}, []);
-
+  useEffect(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#our_journey",
+        start: "top 70%",
+        once: true,
+      },
+      onComplete: () => setStartTyping(true), // start typing after animation
+    });
+    tl.fromTo(
+      ".sun-chat-combo",
+      { y: 50, opacity: 0 }, // starting values
+      { y: 0, opacity: 1, duration: 0.8, ease: "power3.in" } // ending values
+    );
+  }, []);
 
   useEffect(() => {
     if (!startTyping) return;
@@ -239,76 +238,99 @@ tl.fromTo(
     return () => clearTimeout(timer);
   }, [charIndex, isDeleting, sentenceIndex, startTyping]);
 
-
   return (
     <div id="our_journey">
       <div className="rainbox-sides">
-       <div id="right_rainbow">
-         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="100%"
-          viewBox="0 0 321 626"
-          fill="none"
-          className="rainbow-sides__right"
-        >
-          <path
-            d="M26 0V400C26 510.457 115.543 600 226 600H321"
-            stroke="#121212"
-            strokeWidth="52"
-            className="path-black-j"
-            style={{ strokeDashoffset: 0, strokeDasharray: "809.204px, 0.1px" }}
-          />
-          <path
-            d="M76 0V400C76 482.843 143.157 550 226 550H321"
-            stroke="#121212"
-            strokeWidth="52"
-            className="path-black-j"
-            style={{ strokeDashoffset: 0, strokeDasharray: "730.653px, 0.1px" }}
-          />
-          <path
-            d="M126 0V400C126 455.228 170.772 500 226 500H321"
-            stroke="#121212"
-            strokeWidth="52"
-            className="path-black-j"
-            style={{ strokeDashoffset: 0, strokeDasharray: "652.102px, 0.1px" }}
-          />
-          <path
-            d="M176 0V400C176 427.614 198.386 450 226 450H321"
-            stroke="#121212"
-            strokeWidth="52"
-            className="path-black-j"
-            style={{ strokeDashoffset: 0, strokeDasharray: "573.551px, 0.1px" }}
-          />
-          <path
-            d="M26 0V400C26 510.457 115.543 600 226 600H321"
-            stroke="#FEE8D9"
-            strokeWidth="48"
-            className="path-color-j"
-            style={{ strokeDashoffset: 0, strokeDasharray: "809.204px, 0.1px" }}
-          />
-          <path
-            d="M76 0V400C76 482.843 143.157 550 226 550H321"
-            stroke="#F7B1B9"
-            strokeWidth="48"
-            className="path-color-j"
-            style={{ strokeDashoffset: 0, strokeDasharray: "730.653px, 0.1px" }}
-          />
-          <path
-            d="M126 0V400C126 455.228 170.772 500 226 500H321"
-            stroke="#F489A3"
-            strokeWidth="48"
-            className="path-color-j"
-            style={{ strokeDashoffset: 0, strokeDasharray: "652.102px, 0.1px" }}
-          />
-          <path
-            d="M176 0V400C176 427.614 198.386 450 226 450H321"
-            stroke="#FE0000"
-            strokeWidth="48"
-            className="path-color-j"
-            style={{ strokeDashoffset: 0, strokeDasharray: "573.551px, 0.1px" }}
-          />
-        </svg>
-       </div>
+        <div id="right_rainbow">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="100%"
+            viewBox="0 0 321 626"
+            fill="none"
+            className="rainbow-sides__right"
+          >
+            <path
+              d="M26 0V400C26 510.457 115.543 600 226 600H321"
+              stroke="#121212"
+              strokeWidth="52"
+              className="path-black-j"
+              style={{
+                strokeDashoffset: 0,
+                strokeDasharray: "809.204px, 0.1px",
+              }}
+            />
+            <path
+              d="M76 0V400C76 482.843 143.157 550 226 550H321"
+              stroke="#121212"
+              strokeWidth="52"
+              className="path-black-j"
+              style={{
+                strokeDashoffset: 0,
+                strokeDasharray: "730.653px, 0.1px",
+              }}
+            />
+            <path
+              d="M126 0V400C126 455.228 170.772 500 226 500H321"
+              stroke="#121212"
+              strokeWidth="52"
+              className="path-black-j"
+              style={{
+                strokeDashoffset: 0,
+                strokeDasharray: "652.102px, 0.1px",
+              }}
+            />
+            <path
+              d="M176 0V400C176 427.614 198.386 450 226 450H321"
+              stroke="#121212"
+              strokeWidth="52"
+              className="path-black-j"
+              style={{
+                strokeDashoffset: 0,
+                strokeDasharray: "573.551px, 0.1px",
+              }}
+            />
+            <path
+              d="M26 0V400C26 510.457 115.543 600 226 600H321"
+              stroke="#FEE8D9"
+              strokeWidth="48"
+              className="path-color-j"
+              style={{
+                strokeDashoffset: 0,
+                strokeDasharray: "809.204px, 0.1px",
+              }}
+            />
+            <path
+              d="M76 0V400C76 482.843 143.157 550 226 550H321"
+              stroke="#F7B1B9"
+              strokeWidth="48"
+              className="path-color-j"
+              style={{
+                strokeDashoffset: 0,
+                strokeDasharray: "730.653px, 0.1px",
+              }}
+            />
+            <path
+              d="M126 0V400C126 455.228 170.772 500 226 500H321"
+              stroke="#F489A3"
+              strokeWidth="48"
+              className="path-color-j"
+              style={{
+                strokeDashoffset: 0,
+                strokeDasharray: "652.102px, 0.1px",
+              }}
+            />
+            <path
+              d="M176 0V400C176 427.614 198.386 450 226 450H321"
+              stroke="#FE0000"
+              strokeWidth="48"
+              className="path-color-j"
+              style={{
+                strokeDashoffset: 0,
+                strokeDasharray: "573.551px, 0.1px",
+              }}
+            />
+          </svg>
+        </div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="100%"

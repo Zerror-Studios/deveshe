@@ -2,7 +2,7 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-gsap.registerPlugin(ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger);
 const FrequentQue = () => {
   const [activeIndex, setActiveIndex] = useState(null);
 
@@ -46,15 +46,17 @@ const FrequentQue = () => {
     function splitText(selector) {
       document.querySelectorAll(selector).forEach((el) => {
         if (!el.dataset.split) {
-          const letters = el.textContent.split("").map((char) =>
-            char === " " ? `<span>&nbsp;</span>` : `<span>${char}</span>`
-          );
+          const letters = el.textContent
+            .split("")
+            .map((char) =>
+              char === " " ? `<span>&nbsp;</span>` : `<span>${char}</span>`
+            );
           el.innerHTML = letters.join("");
           el.dataset.split = "true"; // prevent re-splitting
         }
       });
     }
-  
+
     splitText("#faq_section h2");
     const ctx = gsap.context(() => {
       const tl1 = gsap.timeline({
@@ -64,7 +66,7 @@ const FrequentQue = () => {
           end: "top 50%",
         },
       });
-  
+
       tl1.fromTo(
         "#faq_section h2 span",
         { rotateX: "90deg" },
@@ -75,10 +77,10 @@ const FrequentQue = () => {
           ease: "bounce.out",
         }
       );
-  
+
       setTimeout(() => ScrollTrigger.refresh(), 50);
     });
-  
+
     return () => ctx.revert(); // clean up on unmount
   }, []);
 
@@ -91,8 +93,7 @@ const FrequentQue = () => {
       <div id="faq_content">
         <div className="faq_content_left">
           <Image
-            width={1000}
-            height={1000}
+            fill
             src="/assets/images/about/img2.webp"
             alt="image"
           />

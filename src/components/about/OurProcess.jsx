@@ -41,7 +41,6 @@ const OurProcess = () => {
       ); // small gap before next strip starts
     });
   }, []);
-  
 
   return (
     <div id="our_process">
