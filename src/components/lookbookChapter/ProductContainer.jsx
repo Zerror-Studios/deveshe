@@ -1,7 +1,6 @@
 import React from "react";
-import Image from "next/image";
-import Link from "next/link";
 import { formatePrice } from "@/utils/Util";
+import ProductCard from "../common/card/ProductCard";
 
 const ProductContainer = ({ data }) => {
   if (!data || data.length === 0) return;
@@ -13,23 +12,16 @@ const ProductContainer = ({ data }) => {
           item.variantPrice < min.variantPrice ? item : min
         );
         return (
-          <Link
-            href={"/product/" + item?._id || ""}
-            className="product-lb"
+          <ProductCard
             key={`product-${index}`}
-          >
-            <div className="product_img_wrap">
-              <Image width={1000} height={1000} src={path} alt={altText} />
-            </div>
-            <div className="product-info" style={{flexDirection: "row", justifyContent: "space-between"}}>
-              <p>{item?.name || ""}</p>
-              <p>
-                {`Starts from ${formatePrice(
-                  minVariant?.variantPrice || item?.discountedPrice || ""
-                )}`}
-              </p>
-            </div>
-          </Link>
+            href={"/product/" + item?._id || ""}
+            src={path || ""}
+            alt={altText}
+            name={item?.name || ""}
+            price={`Starts from ${formatePrice(
+              minVariant?.variantPrice || item?.discountedPrice || ""
+            )}`}
+          />
         );
       })}
     </div>

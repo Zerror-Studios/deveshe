@@ -271,19 +271,19 @@
 #prodcut-container {
   width: 100%;
   padding: 0 40px;
-  display: flex;
-  gap: 2.6%;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); 
   background-color: #fadcde;
+  gap: 2.6%;
 }
+
 
 #prodcut-container.prodcut-container-mobile {
   display: none !important;
 }
 
-#prodcut-container .product-lb {
-  width: 23%;
-  margin-bottom: 2%;
+#prodcut-container .common_product_card {
+  margin-bottom: 5%;
 }
 
 .product_img_wrap {

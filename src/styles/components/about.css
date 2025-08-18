@@ -3,7 +3,7 @@
   width: 100%;
   display: flex;
   background-image: url(/scrapbook/bg1.png);
-  background-size:cover;
+  background-size: cover;
   background-repeat: no-repeat;
   overflow: hidden;
 }
@@ -741,7 +741,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding:6vw 3vw;
+  padding: 6vw 3vw;
   gap: 4vw;
   text-align: center;
 }
@@ -818,7 +818,7 @@
 .accordion-css__item-bottom {
   transition: grid-template-rows 0.5s cubic-bezier(0.625, 0.05, 0, 1);
 }
-.accordion-css__item.active .accordion-css__item-bottom{
+.accordion-css__item.active .accordion-css__item-bottom {
   grid-template-rows: 1fr;
 }
 .accordion-css__item-bottom {
@@ -841,7 +841,7 @@
   padding-left: 1.5em;
   padding-right: 1.5em;
   position: relative;
-  transition: all ease .3s;
+  transition: all ease 0.3s;
 }
 
 .accordion-css__card {
@@ -878,7 +878,7 @@
   grid-column-gap: 1em;
   grid-row-gap: 1em;
   border: 0.125em solid black;
-  background-color: #F489A3;
+  background-color: #f489a3;
   cursor: pointer;
   border-radius: 0.5em;
   justify-content: space-between;
@@ -910,7 +910,7 @@
   height: 2em;
   display: flex;
   transform: rotate(0deg);
-  transition: all ease .2s;
+  transition: all ease 0.2s;
 }
 .accordion-css__item-icon-svg {
   width: 1em;
@@ -918,6 +918,73 @@
 }
 
 .accordion-css__item:hover .accordion-css__item-bottom-content {
-        transform: translateY(-0.875em) rotate(1deg);
-    }
-    
+  transform: translateY(-0.875em) rotate(1deg);
+}
+
+/* founder section start */
+
+#founder_section {
+  width: 100%;
+  height: 270vh;
+  position: relative;
+}
+#founder_section img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+#founder_section .founder_overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 220px;
+  padding-bottom: 150px;
+  text-align: center;
+  color: #fff;
+  overflow: hidden;
+}
+
+#founder_title h2 {
+  font-family: heading;
+  font-size: 8vw;
+  line-height: 0.9;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+#founder_title h2 span {
+  display: inline-block;
+  transform-origin: top;
+}
+.social_card_container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.social_card_container .social_card {
+  width: 38%;
+  padding: 1.5vw;
+  background-color: #fff;
+}
+.social_card_container .social_card video {
+  width: 100%;
+}
+
+.social_card_container .social_card p {
+  font-family: heading;
+  font-size: 1.9vw;
+  text-transform: capitalize;
+  color: rgb(246, 178, 183);
+  margin-top: 1vw;
+}
+
+/* founder section end */
