@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
-import styles from "@/components/home/Home.module.css";
+import React, { useEffect } from "react";
 gsap.registerPlugin(ScrollTrigger);
-
 const VisionSection = () => {
   useEffect(() => {
     // Split text into <span> only once
@@ -21,12 +19,12 @@ const VisionSection = () => {
       });
     }
 
-    splitText("#title-main-wrap2 h2");
+    splitText(".vision_text h2");
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: "#section4-shop",
+          trigger: "#vision_section",
           start: "top 85%",
           end: "top 55%",
           // scrub: true,
@@ -35,7 +33,7 @@ const VisionSection = () => {
       });
 
       tl.fromTo(
-        "#title-main-wrap2 h2 span",
+        ".vision_text h2 span",
         { rotateX: "90deg" },
         {
           duration: 0.8,
@@ -53,33 +51,22 @@ const VisionSection = () => {
 
     return () => ctx.revert();
   }, []);
+
   return (
-    <div className={styles.shopSection4} id="section4-shop">
-      <div className={styles.topCont}>
-        <div className={styles.topContHeader} id="title-main-wrap2">
-          <h2 className={styles.explore}>
-            The <span>vision</span>
-          </h2>
-          <h2>behind the brand</h2>
-        </div>
-        <div className={styles.bottomContPara}>
-          <h6>Built on artistic instinct and expression</h6>
-          <p>
-            Born from a love for daydreaming and storytelling through clothes,
-            DeVeSheDreams turns imagination into{" "}
-            <span>limited-edition pieces made with purpose</span> and
-            personality.
-          </p>
-        </div>
+    <div id="vision_section">
+      <div className="vision_text">
+        <h2 className="red">The vision</h2>
+        <h2>behind the brand</h2>
       </div>
-      {/* <div className={styles.bottomCont}>
-        <Image
-          width={1000}
-          height={1000}
-          src="https://emmpo.com/assets/ce3c8196da068a1ba841.png"
-          alt="image"
-        />
-      </div> */}
+      <div className="vision_text2">
+        <h6>Built on artistic instinct and expression</h6>
+        <p>
+          Born from a love for daydreaming and storytelling through clothes,
+          DeVeSheDreams turns imagination into
+          <strong> limited-edition pieces made with purpose</strong> and
+          personality.
+        </p>
+      </div>
     </div>
   );
 };

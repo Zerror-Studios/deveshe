@@ -3,10 +3,10 @@ import SeoHeader from "@/components/seo/SeoHeader";
 import HeroSection from "@/components/home/HeroSection";
 import ExploreSection from "@/components/home/ExploreSection";
 import ProductSection from "@/components/home/ProductSection";
-import VisionSection from "@/components/home/VisionSection";
 import ProductLoader from "@/components/home/loaders/ProductLoader";
 import { createApolloClient } from "@/lib/apolloClient";
 import { GET_PRODUCTS } from "@/graphql";
+import VisionSection from "@/components/home/VisionSection";
 
 const Home = ({ meta, productData }) => {
   return (
@@ -17,7 +17,7 @@ const Home = ({ meta, productData }) => {
       <Suspense fallback={<ProductLoader />}>
         <ProductSection data={productData} />
       </Suspense>
-      <VisionSection />
+      <VisionSection/>
     </>
   );
 };
