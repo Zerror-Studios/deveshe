@@ -7,6 +7,7 @@ import { useVisitor } from "@/hooks/useVisitor";
 import { htmlParser } from "@/utils/Util";
 import { useRouter } from "next/router";
 import { useCartStore } from "@/store/cart-store";
+import Link from "next/link";
 
 const ProductContent = ({ data = {} }) => {
   const router = useRouter();
@@ -245,15 +246,19 @@ const ProductContent = ({ data = {} }) => {
 
           <div className="ProductDets_bottom_links_wrap">
             <div className="ProductDets_info_links">
-              {["Details", "Care", "Shipping", "Help"].map((label) => (
-                <button className="ProductDets_info-btn" key={label}>
-                  {label}
-                </button>
-              ))}
+             {[
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Shipping & Returns", href: "/shipping-returns" },
+  { label: "Terms Of Service", href: "/terms-of-service" },
+].map(({ label, href }) => (
+  <Link href={href} className="ProductDets_info-btn" key={href}>
+    {label}
+  </Link>
+))}
             </div>
             <div className="ProductDets_info_help">
               <p className="ProductDets_info_text sql38zc _1l9nr81o">
-                Complimentary shipping on orders above 500 EUR.
+                Complimentary shipping on orders above 500 INR.
               </p>
             </div>
           </div>
