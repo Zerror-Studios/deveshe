@@ -1,5 +1,5 @@
 import React from "react";
-const Menu = () => {
+const ProductLoader = () => {
   return (
     <div className="loader-main-div">
       <div className="productloader-container">
@@ -11,4 +11,4 @@ const Menu = () => {
   );
 };
 
-export default Menu;
+export default ProductLoader;

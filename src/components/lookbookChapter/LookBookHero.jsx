@@ -31,7 +31,7 @@ const LookBookHero = ({ title, subheading, description, asset }) => {
     const ctx = gsap.context(() => {
       splitText(h2Ref.current);
 
-      gsap.set(headerImageRef.current, { y: "-55vh" });
+      gsap.set(headerImageRef.current, { y: "-58vh" });
       gsap.set(h2Ref.current.querySelectorAll("span"), { rotateX: "90deg" });
       gsap.set(pRef.current, { opacity: 0 });
 

@@ -91,6 +91,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 }
 .explore_text_container {
   text-align: center;
@@ -196,7 +197,8 @@
   transform-origin: center;
 }
 
-.explore_side_card1::before,.explore_side_card2::before {
+.explore_side_card1::before,
+.explore_side_card2::before {
   content: "";
   position: absolute;
   top: -20px;
@@ -207,7 +209,8 @@
   background-repeat: no-repeat;
   z-index: 1;
 }
-.explore_side_card1::after ,.explore_side_card2::after{
+.explore_side_card1::after,
+.explore_side_card2::after {
   content: "";
   position: absolute;
   bottom: -20px;
@@ -314,8 +317,124 @@
 
 /* explore section end */
 
-@media (max-width: 576px) {
-  #home_hero {
-    height: 170vh;
-  }
+/* product section start */
+#product_section {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
 }
+
+.product_left_section {
+  position: sticky;
+  top: 0;
+  width: 50%;
+  height: 100vh;
+  border-right: 2px solid black;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  overflow: hidden;
+}
+.product_right_section {
+  width: 50%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  border-bottom: 2px solid black;
+}
+.product_right_section .common_product_card{
+  width: 50%;
+  height: auto;
+    border-top: 2px solid black;
+}
+.product_right_section .common_product_card:nth-child(even){
+    border-left: 2px solid black;
+}
+/* product section end */
+
+/* vision section start  */
+#vision_section {
+  width: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(252, 230, 222, 1) 0%,
+    rgba(244, 240, 235, 1) 100%
+  );
+  padding: 80px 3vw;
+  padding-top: 150px;
+  background-image: url(/grainy-bg.svg);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 80px;
+}
+.vision_text {
+  width: 100%;
+  position: relative;
+}
+.vision_text::before {
+  content: "";
+  position: absolute;
+  left: 15%;
+  top: 5%;
+  width: 35px;
+  height: 35px;
+  background-image: url(/star.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 1;
+}
+.vision_text::after {
+  content: "";
+  position: absolute;
+  right: 15%;
+  top: 0;
+  width: 35px;
+  height: 35px;
+  background-image: url(/star2.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 1;
+}
+.vision_text h2 {
+  font-family: heading;
+  font-size: 8vw;
+  line-height: 0.9;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-align: center;
+}
+.vision_text h2 span {
+  display: inline-block;
+  transform-origin: top;
+}
+.vision_text .red {
+  color: red;
+}
+.vision_text .red span:nth-child(1),
+.vision_text .red span:nth-child(2),
+.vision_text .red span:nth-child(3) {
+  color: black !important;
+}
+
+.vision_text2 {
+  width: 50%;
+}
+.vision_text2 h6 {
+  font-family: heading;
+  font-size: 2vw;
+  line-height: 0.9;
+  color: red;
+  margin-bottom: 1vw;
+}
+.vision_text2 p {
+  font-family: paragraphStyleB;
+  font-size: 2.2vw;
+  color: black;
+}
+.vision_text2 p strong {
+  font-style: italic;
+}
+/* vision section end  */
+
