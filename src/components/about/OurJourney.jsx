@@ -53,30 +53,37 @@ const OurJourney = () => {
     const sunFace = document.querySelector(".sun__face-svg");
     if (!sunContainer || !sunFace) return;
 
-    const radius = 20; // circle movement radius in px
+    const movementFactor = 0.35;
+
+    // Persistent quickTo setters for smoother updates
+    const setX = gsap.quickTo(sunFace, "left", {
+      duration: 0.4,
+      ease: "power2.out",
+    });
+    const setY = gsap.quickTo(sunFace, "top", {
+      duration: 0.4,
+      ease: "power2.out",
+    });
 
     function handleMouseMove(e) {
+      const mouseX = e.clientX - window.innerWidth / 2;
+      const mouseY = e.clientY - window.innerHeight / 2;
+
+      const xNorm = mouseX / (window.innerWidth / 2);
+      const yNorm = mouseY / (window.innerHeight / 2);
+
+      const xMapped =
+        ((xNorm + 1) / 2) * movementFactor + (1 - movementFactor) / 2;
+      const yMapped =
+        ((yNorm + 1) / 2) * movementFactor + (1 - movementFactor) / 2;
+
       const rect = sunContainer.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
+      const x = xMapped * rect.width;
+      const y = yMapped * rect.height;
 
-      const angle = Math.atan2(mouseY - centerY, mouseX - centerX);
-
-      // Calculate x,y on the circle boundary, scaled down for less movement
-      const movementFactor = 0.3;
-      const x = radius * Math.cos(angle) * movementFactor;
-      const y = radius * Math.sin(angle) * movementFactor;
-
-      // Animate sun face position smoothly, no rotation
-      gsap.to(sunFace, {
-        duration: 0.4,
-        ease: "none",
-        x: x,
-        y: y,
-        transformOrigin: "50% 50%",
-      });
+      // Use the persistent setters
+      setX(x);
+      setY(y);
     }
 
     window.addEventListener("mousemove", handleMouseMove);
