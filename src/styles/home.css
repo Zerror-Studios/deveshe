@@ -2051,7 +2051,6 @@ button {
 .Similar_prd_cntr {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  padding-bottom: 40px;
   background-color: #fadcde;
 }
 
@@ -2321,7 +2320,6 @@ button {
 
   .Similar_prd_cntr {
     grid-template-columns: repeat(5, 1fr);
-    padding-bottom: 96px;
     height: calc(100% + 20px);
   }
 
