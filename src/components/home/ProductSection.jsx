@@ -27,6 +27,7 @@ const ProductSection = ({ data }) => {
             );
             return (
               <ProductCard
+              key={index}
                 href={"/product/" + item?._id || ""}
                 src={item?.assets[0]?.path || ""}
                 name={item?.name || ""}

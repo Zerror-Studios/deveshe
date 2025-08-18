@@ -105,6 +105,7 @@ const NavbarMobile = ({openCart}) => {
               width={23}
               height={23}
               src="/images/user.png"
+              alt="logo"
             />
           </Link>
           <HiOutlineShoppingBag
@@ -139,7 +140,7 @@ const NavbarMobile = ({openCart}) => {
               <div className="nav-social-icons">
                 <Link href="/" className="nav-s-icon">
                   <svg
-                    class="icon-instagram"
+                    className="icon-instagram"
                     width="19"
                     height="19"
                     viewBox="0 0 19 19"
@@ -155,7 +156,7 @@ const NavbarMobile = ({openCart}) => {
                 </Link>
                 <Link href="/ " className="nav-s-icon">
                   <svg
-                    class="icon-facebook"
+                    className="icon-facebook"
                     width="8"
                     height="13"
                     viewBox="0 0 8 13"

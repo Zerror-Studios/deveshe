@@ -54,7 +54,7 @@
   color: white;
   margin-bottom: 8px;
   font-weight: 400;
-  font-family: var(--secondary-font-Hen);
+  font-family: Henry-Italic;
   font-size: 1.5rem;
 }
 
@@ -80,6 +80,6 @@
   align-items: center;
   gap: 6px;
   font-weight: 400;
-  font-family: var(--secondary-font-Hen);
+  font-family: Henry-Italic;
   font-size: 1.5rem;
 }
