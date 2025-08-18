@@ -674,8 +674,40 @@
   border: 2px solid #000;
   box-shadow: 0.375em 0.375em 0 0 #00000026;
   background-color: white;
+}
+.process_img_wrap{
+  width: 100%;
+  height: 100%;
   overflow: hidden;
 }
+.square{
+  width: 15px;
+  height: 15px;
+  background-color: white;
+  border: 2px solid #000;
+  position: absolute;
+  
+}
+.square1{
+  top: -7.5px;
+  left: -7.5px;
+}
+.square2{
+  top: -7.5px;
+  right: -7.5px;
+}
+
+.square3{
+  bottom: -7.5px;
+  left: -7.5px;
+}
+
+.square4{
+  bottom: -7.5px;
+  right: -7.5px;
+}
+
+
 
 .process_img img {
   width: 100%;
