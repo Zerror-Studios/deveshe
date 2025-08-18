@@ -57,12 +57,19 @@ const OurProcess = () => {
         <div className="process_strip">
           <div className="process_card">
             <div className="process_img">
-              <Image
+              <div className="process_img_wrap">
+                <Image
                 width={1000}
                 height={1000}
                 src="/assets/images/about/process1.webp"
                 alt="process image 1"
               />
+              </div>
+                 <div className="square square1"></div>
+              <div className="square square2"></div>
+              <div className="square square3"></div>
+              <div className="square square4"></div>
+              
             </div>
             <p>
               Sketch <span>endlessly</span>. Shortlist the pieces that{" "}
@@ -71,12 +78,19 @@ const OurProcess = () => {
           </div>
           <div className="process_card">
             <div className="process_img">
-              <Image
+              <div className="process_img_wrap">
+                  <Image
                 width={1000}
                 height={1000}
                 src="/assets/images/about/process3.webp"
                 alt="process image 1"
               />
+              </div>
+                 <div className="square square1"></div>
+              <div className="square square2"></div>
+              <div className="square square3"></div>
+              <div className="square square4"></div>
+            
             </div>
             <p>
               Make prototypes. Test them. <span>Tweak</span> until it feels
@@ -87,12 +101,18 @@ const OurProcess = () => {
         <div className="process_strip">
           <div className="process_card">
             <div className="process_img">
-              <Image
-                width={1000}
-                height={1000}
-                src="/assets/images/about/process2.webp"
-                alt="process image 1"
-              />
+              <div className="process_img_wrap">
+                <Image
+                  width={1000}
+                  height={1000}
+                  src="/assets/images/about/process2.webp"
+                  alt="process image 1"
+                />
+              </div>
+                 <div className="square square1"></div>
+              <div className="square square2"></div>
+              <div className="square square3"></div>
+              <div className="square square4"></div>
             </div>
             <p>
               Find fabrics with <span>feeling</span>. Build in{" "}
@@ -101,12 +121,18 @@ const OurProcess = () => {
           </div>
           <div className="process_card">
             <div className="process_img">
-              <Image
-                width={1000}
-                height={1000}
-                src="/assets/images/about/process4.webp"
-                alt="process image 1"
-              />
+              <div className="process_img_wrap">
+                <Image
+                  width={1000}
+                  height={1000}
+                  src="/assets/images/about/process4.webp"
+                  alt="process image 1"
+                />
+              </div>
+              <div className="square square1"></div>
+              <div className="square square2"></div>
+              <div className="square square3"></div>
+              <div className="square square4"></div>
             </div>
             <p>
               Produce in <span>small batches</span>. Send them out into the
