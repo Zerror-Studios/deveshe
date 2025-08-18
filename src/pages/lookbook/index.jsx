@@ -37,7 +37,7 @@ export async function getServerSideProps() {
         limit: 10,
       },
     });
-    
+
     return {
       props: {
         meta,

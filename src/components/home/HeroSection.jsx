@@ -2,8 +2,8 @@ import Image from "next/image";
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
-import PolaroidCard from "../common/card/PolaroidCard/PolaroidCard";
 import SplitText from "gsap/dist/SplitText";
+import PolaroidCard from "../common/card/PolaroidCard";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
