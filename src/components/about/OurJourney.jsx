@@ -4,49 +4,19 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 gsap.registerPlugin(ScrollTrigger);
 const OurJourney = () => {
-  useEffect(() => {
-    function splitText(selector) {
-      document.querySelectorAll(selector).forEach((el) => {
-        if (!el.dataset.split) {
-          const letters = el.textContent
-            .split("")
-            .map((char) =>
-              char === " " ? `<span>&nbsp;</span>` : `<span>${char}</span>`
-            );
-          el.innerHTML = letters.join("");
-          el.dataset.split = "true";
-        }
-      });
-    }
-
-    splitText(".journey_top h2");
-
-    const ctx = gsap.context(() => {
-      const tl2 = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".journey_top",
-          start: "top 50%",
-          end: "top 30%",
-        },
-      });
-
-      tl2.fromTo(
-        ".journey_top span",
-        { rotateX: "90deg" },
-        {
-          duration: 0.8,
-          rotateX: "0deg",
-          stagger: 0.05,
-          ease: "bounce.out",
-        }
-      );
-
-      // Refresh ScrollTrigger to ensure accuracy
-      setTimeout(() => ScrollTrigger.refresh(), 50);
+  function splitText(selector) {
+    document.querySelectorAll(selector).forEach((el) => {
+      if (!el.dataset.split) {
+        const letters = el.textContent
+          .split("")
+          .map((char) =>
+            char === " " ? `<span>&nbsp;</span>` : `<span>${char}</span>`
+          );
+        el.innerHTML = letters.join("");
+        el.dataset.split = "true";
+      }
     });
-
-    return () => ctx.revert();
-  }, []);
+  }
 
   useEffect(() => {
     const sunContainer = document.querySelector(".sun");
@@ -90,8 +60,80 @@ const OurJourney = () => {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
+  const sentences = [
+    "...",
+    "hi friends!",
+    "...we are back",
+    "From a Dream — To Your Unique Style",
+  ];
+
+  const [text, setText] = useState("");
+  const [sentenceIndex, setSentenceIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [startTyping, setStartTyping] = useState(false);
+
   useEffect(() => {
-    function animateSide(
+    splitText(".journey_top h2");
+
+    // ✨ Intro timeline (plays once)
+    const introTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#our_journey",
+        start: "top 50%",
+        end: "top 10%",
+        once: true,
+      },
+      onComplete: () => {
+        setTimeout(() => {
+          animateErase(".rainbow-sides__right", -1, "top -10%", "top -50%");
+          animateErase(".rainbow-sides__left", 1, "top -50%", "top -90%");
+        }, 300);
+      },
+      onStart: () => setStartTyping(true),
+    });
+
+    // 1️⃣ fade in sun
+    introTl.fromTo(
+      ".sun-chat-combo",
+      { y: 50, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.6, ease: "power2.in" }
+    );
+
+    // 2️⃣ text bounce
+    introTl.fromTo(
+      ".journey_top span",
+      { rotateX: "90deg" },
+      { duration: 0.8, rotateX: "0deg", stagger: 0.05, ease: "bounce.out" }
+    );
+
+    // 3️⃣ line draw (intro)
+    function preparePaths(selector, reverse = false) {
+      const blacks = document.querySelectorAll(`${selector} .path-black-j`);
+      const colors = document.querySelectorAll(`${selector} .path-color-j`);
+      const paths = [...blacks, ...colors];
+
+      paths.forEach((path) => {
+        const length = path.getTotalLength();
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = reverse ? -length : length; // set initial only
+      });
+
+      // animate intro
+      paths.forEach((path) => {
+        introTl.to(
+          path,
+          { strokeDashoffset: 0, ease: "none", duration: 1.2 },
+          "<"
+        );
+      });
+    }
+
+    preparePaths(".rainbow-sides__right", false);
+    preparePaths(".rainbow-sides__left", true);
+
+    // ✨ Scroll-based erase (separate timeline)
+    function animateErase(
       sideSelector,
       offsetMultiplier,
       triggerStart,
@@ -104,7 +146,7 @@ const OurJourney = () => {
         `${sideSelector} .path-color-j`
       );
 
-      const tl = gsap.timeline({
+      const eraseTl = gsap.timeline({
         scrollTrigger: {
           trigger: "#our_journey",
           scroller: "body",
@@ -117,30 +159,24 @@ const OurJourney = () => {
       blackPaths.forEach((black, i) => {
         const length = black.getTotalLength();
         const color = colorPaths[i];
-        black.style.strokeDasharray = length;
-        black.style.strokeDashoffset = 0;
-        color.style.strokeDasharray = length;
-        color.style.strokeDashoffset = 0;
 
-        tl.to(
+        eraseTl.to(
           [black, color],
           {
             strokeDashoffset: offsetMultiplier * length,
             ease: "none",
+            immediateRender: false, // prevents resetting to start value
           },
           "-=0.4"
         );
       });
     }
 
-    animateSide(".rainbow-sides__right", -1, "top 0%", "top -45%");
-    animateSide(".rainbow-sides__left", 1, "top -50%", "top -90%"); // starts later
-
     return () => {
       ScrollTrigger.getAll().forEach((st) => st.kill());
     };
   }, []);
-  useEffect(() => {
+   useEffect(() => {
     const blackPaths = document.querySelectorAll(
       `.our_journey_vertical .pathblack`
     );
@@ -179,33 +215,6 @@ const OurJourney = () => {
     return () => {
       ScrollTrigger.getAll().forEach((st) => st.kill());
     };
-  }, []);
-  const sentences = [
-    "hi friends!",
-    "...we are back",
-    "From a Dream — To Your Unique Style",
-  ];
-
-  const [text, setText] = useState("");
-  const [sentenceIndex, setSentenceIndex] = useState(0);
-  const [charIndex, setCharIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [startTyping, setStartTyping] = useState(false);
-
-  useEffect(() => {
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: "#our_journey",
-        start: "top 70%",
-        once: true,
-      },
-      onComplete: () => setStartTyping(true), // start typing after animation
-    });
-    tl.fromTo(
-      ".sun-chat-combo",
-      { y: 50, opacity: 0 }, // starting values
-      { y: 0, opacity: 1, duration: 0.8, ease: "power3.in" } // ending values
-    );
   }, []);
 
   useEffect(() => {
@@ -477,7 +486,7 @@ const OurJourney = () => {
                   stroke-linecap="round"
                 ></path>
               </svg>
-              <p>{text}</p>
+              <p>{text || "..."}</p>
             </div>
           </div>
           <h2>Great to see you </h2>
