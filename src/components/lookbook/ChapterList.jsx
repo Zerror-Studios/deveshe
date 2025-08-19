@@ -1,16 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Link from "next/link";
 import Image from "next/image";
 import { FiArrowUpRight } from "react-icons/fi";
 import { htmlParser } from "@/utils/Util";
-import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const ChapterList = ({ data = [] }) => {
-  useGSAP(() => {
+  useLayoutEffect(() => {
     if (!data || data.length <= 1) return;
 
     const ctx = gsap.context(() => {
@@ -21,6 +20,7 @@ const ChapterList = ({ data = [] }) => {
           end: `+=${(data.length - 1) * 100}%`, // matches transitions
           pin: true,
           scrub: 1,
+          anticipatePin: 1,
           invalidateOnRefresh: true,
         },
       });
@@ -79,6 +79,7 @@ const ChapterList = ({ data = [] }) => {
             height={1000}
             src={item?.assets?.[0]?.path || "/archive/lookbook1.jpg"}
             alt={item?.assets?.[0]?.altText || ""}
+            onLoad={() => ScrollTrigger.refresh()}
           />
           <div className="chapter_overlay">
             <div className="chapter_details" id={`textc${index + 1}`}>
