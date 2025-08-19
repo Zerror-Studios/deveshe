@@ -538,6 +538,7 @@
 }
 .sun {
   width: 4rem;
+  height: 4rem;
   flex-shrink: 0;
   justify-content: center;
   align-items: center;
@@ -557,10 +558,11 @@
 }
 .sun__face-svg {
   width: 25%;
+  height: 25%;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) !important;
 }
 
 .chat-cloud {

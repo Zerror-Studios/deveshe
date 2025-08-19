@@ -78,8 +78,8 @@ const Navbar = ({ openCart }) => {
       gsap.set(".nav-link a", { color: "#fff" });
       gsap.set("#nav", {
         backgroundColor: "rgba(255, 255, 255, 0)",
-          backdropFilter: "blur(0px)",
-          WebkitBackdropFilter: "blur(0px)",
+        backdropFilter: "blur(0px)",
+        WebkitBackdropFilter: "blur(0px)",
       });
       gsap.set("#nav-btns svg", { stroke: "#fff" });
       gsap.set("#nav-line", { backgroundColor: "#fff" });
@@ -89,7 +89,7 @@ const Navbar = ({ openCart }) => {
       gsap.set("#nav-btns", { right: "92%" });
       gsap.set("#loader_slider", { opacity: "1", display: "block" });
       gsap.set(".nav-link", { opacity: 0 });
-        gsap.set("#loader_slider p",{top:"50%",})
+      gsap.set("#loader_slider p", { top: "50%" });
       gsap.set("#logo-container p,#nav-btns p", {
         opacity: 1,
       });
@@ -100,7 +100,7 @@ const Navbar = ({ openCart }) => {
       const finalWidth = currentX;
       logoContainer.style.width = `${xPositions[3] || finalWidth}px`;
 
-        const startLoader = () => {
+      const startLoader = () => {
         let current = 0;
         const interval = setInterval(() => {
           current++;
@@ -115,23 +115,27 @@ const Navbar = ({ openCart }) => {
 
       // Move logo and nav buttons smoothly at the same time
       tl.call(startLoader)
-      .to(
-        "#logo-container",
-        {
-          left: "2%",
-          duration: 0.6,
-          delay: 0.8,
-          ease: "power3.inOut",
-        },
-        "start"
-      )
+        .to("#loader_slider p", {
+          top: "95%",
+          duration: .6,
+          delay: 1,
+           ease: "power3.inOut",
+        })
+        .to(
+          "#logo-container",
+          {
+            left: "2%",
+            duration: 0.7,
+            ease: "power1.in",
+          },
+          "start"
+        )
         .to(
           "#nav-btns",
           {
             right: "2%",
-            duration: 0.6,
-            delay: 0.8,
-            ease: "power3.inOut",
+            duration: 0.7,
+            ease: "power1.in",
           },
           "start"
         )
@@ -140,27 +144,18 @@ const Navbar = ({ openCart }) => {
           {
             opacity: 0,
             duration: 0.2,
-            delay: 1.2,
+            delay: .4,
             ease: "power3.in",
           },
           "start"
         )
-         .to(
-          "#loader_slider p",
-          {
-            top:"95%",
-            duration: 0.4,
-            delay: 1,
-            ease: "power3.inOut",
-          },
-          "start"
-        )
+
         .to(
           "#logo-container .logo,.nav_btn_items",
           {
             opacity: 1,
             duration: 0.2,
-            delay: 1.2,
+            delay: .4,
             ease: "power3.in",
           },
           "start"
@@ -188,8 +183,8 @@ const Navbar = ({ openCart }) => {
           "#loader_slider",
           {
             opacity: 0,
-            duration: 0.6,
-            ease: "power2.inOut",
+            duration: 0.3,
+              ease: "power1.out",
             onComplete: () => {
               gsap.set("#loader_slider", { display: "none" });
             },
