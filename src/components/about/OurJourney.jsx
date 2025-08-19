@@ -23,7 +23,7 @@ const OurJourney = () => {
     const sunFace = document.querySelector(".sun__face-svg");
     if (!sunContainer || !sunFace) return;
 
-    const movementFactor = 0.35;
+    const movementFactor = 0.6;
 
     // Persistent quickTo setters for smoother updates
     const setX = gsap.quickTo(sunFace, "left", {
