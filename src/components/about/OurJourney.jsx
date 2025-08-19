@@ -176,7 +176,7 @@ const OurJourney = () => {
       ScrollTrigger.getAll().forEach((st) => st.kill());
     };
   }, []);
-   useEffect(() => {
+  useEffect(() => {
     const blackPaths = document.querySelectorAll(
       `.our_journey_vertical .pathblack`
     );
