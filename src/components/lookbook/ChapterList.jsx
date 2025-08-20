@@ -29,20 +29,18 @@ const ChapterList = ({ data = [] }) => {
       for (let i = 0; i < data.length; i++) {
         const elemId = `#chapter_cover${i + 1}`;
 
-        if (i === 0) {
-          // Skip "animate in" for the first one, since it's already visible
-        } else {
-          timeline.to(
-            elemId,
-            {
-              clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-              duration: 1.5,
-              ease: "none",
-            },
-            `label${i}`
-          );
-        }
+        // Animate in
+        timeline.to(
+          elemId,
+          {
+            clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+            duration: 1.5,
+            ease: "none",
+          },
+          `label${i}`
+        );
 
+        // Animate out if not the last one
         if (i < data.length - 1) {
           timeline.to(
             elemId,
@@ -67,7 +65,7 @@ const ChapterList = ({ data = [] }) => {
   }, [data]);
 
   return (
-    <div id="lookbook_list" className="chapters">
+    <div id="lookbook_list">
       {data.map((item, index) => (
         <Link
           href={`/lookbook/${item._id}`}
