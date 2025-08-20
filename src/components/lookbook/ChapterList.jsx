@@ -28,16 +28,18 @@ const ChapterList = ({ data = [] }) => {
       for (let i = 0; i < data.length; i++) {
         const elemId = `#elem${i + 1}`;
 
-        // Animate in
-        timeline.to(
-          elemId,
-          {
-            clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-            duration: 1.5,
-            ease: "none",
-          },
-          `label${i}`
-        );
+        // Animate in (skip for the first one since it's already visible)
+        if (i > 0) {
+          timeline.to(
+            elemId,
+            {
+              clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+              duration: 1.5,
+              ease: "none",
+            },
+            `label${i}`
+          );
+        }
 
         // Animate out if not the last one
         if (i < data.length - 1) {
@@ -53,7 +55,7 @@ const ChapterList = ({ data = [] }) => {
         }
       }
 
-      // Refresh after short delay to ensure layout is updated
+      // Refresh after short delay
       setTimeout(() => ScrollTrigger.refresh(), 200);
     });
 
