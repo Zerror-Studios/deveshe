@@ -1,6 +1,5 @@
 import React, { Suspense, useEffect, useState } from "react";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/dist/ScrollTrigger";
+
 import ProductLoader from "@/components/loaders/ProductLoader";
 import SeoHeader from "@/components/seo/SeoHeader";
 import ProductListGrid from "@/components/product/ProductListGrid";
@@ -10,41 +9,11 @@ import { createApolloClient } from "@/lib/apolloClient";
 import { GET_PRODUCT_BY_ID, GET_PRODUCTS } from "@/graphql";
 import ProductContent from "@/components/product/ProductContent";
 import { useRouter } from "next/router";
-gsap.registerPlugin(ScrollTrigger);
+
 const ProductDetail = ({ meta, data, productList }) => {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState({});
   const router = useRouter();
-
-  useEffect(() => {
-    if (window.innerWidth < 576) return;
-
-    let ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".ProductDets_grid",
-          start: "bottom bottom", // when the top hits the top of the viewport
-          end: "bottom center", // when the bottom hits the top of the viewport (i.e., scrolls out)
-          scrub: true,
-        },
-      });
-
-      tl.fromTo(
-        ".ProductDets_grid",
-        { filter: "blur(0px)" },
-        { filter: "blur(10px)", ease: "none" }
-      );
-    });
-
-    setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 500);
-
-    return () => {
-      ctx.revert();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
-  }, [router.asPath]);
 
   return (
     <>
@@ -60,7 +29,7 @@ const ProductDetail = ({ meta, data, productList }) => {
               />
               <ProductContent data={data || {}} />
             </div>
-            <ProductListGrid data={productList} />
+            <ProductListGrid key={router.asPath} data={productList} />
           </div>
         </div>
       </Suspense>

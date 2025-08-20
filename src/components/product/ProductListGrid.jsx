@@ -1,9 +1,47 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { formatePrice } from "@/utils/Util";
 import ProductCard from "../common/card/ProductCard";
+import { useRouter } from "next/router";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/dist/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 
 const ProductListGrid = ({ title = "You may also like", data }) => {
   if (!data && data.length === 0) return;
+  const router = useRouter();
+
+  useLayoutEffect(() => {
+    if (window.innerWidth < 576) return;
+
+    let ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".Similar_prd_wrap",
+          scroller: "body",
+          start: "top bottom",
+          end: "top 60%",
+          scrub: true,
+          invalidateOnRefresh: false,
+        },
+      });
+
+      tl.fromTo(
+        ".ProductDets_grid",
+        { filter: "blur(0px)" },
+        { filter: "blur(10px)", ease: "none" }
+      );
+    });
+
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 280);
+
+    return () => {
+      ctx.revert();
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, [router.asPath, data]);
   return (
     <div className="Similar_prd_wrap">
       <h2 className="Similar_prd_head">
