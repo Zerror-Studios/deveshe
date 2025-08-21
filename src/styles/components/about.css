@@ -1073,7 +1073,7 @@
   }
   .our_journey_vertical {
     width: 84%;
-    bottom: -205vh;
+    bottom: -220vh;
   }
   .journey_text {
     position: static;
@@ -1133,7 +1133,7 @@
     bottom: -35%;
   }
   #our_process {
-    padding: 3vw;
+    padding: 20px;
     padding-bottom: 20vh;
     position: relative;
     overflow: hidden;

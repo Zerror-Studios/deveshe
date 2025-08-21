@@ -217,7 +217,7 @@ const ProductContent = ({ data = {} }) => {
             ))}
           </div>
 
-          <div className="ProductDets_Notify_wrap">
+          <div className="ProductDets_Notify_wrap desktop_add_btn">
             <button
               className="ProductDets_ntfy_btn ProductDets_ntfy_btn_grid"
               id="easysize-cart-button"
@@ -246,15 +246,15 @@ const ProductContent = ({ data = {} }) => {
 
           <div className="ProductDets_bottom_links_wrap">
             <div className="ProductDets_info_links">
-             {[
-  { label: "Privacy Policy", href: "/privacy-policy" },
-  { label: "Shipping & Returns", href: "/shipping-returns" },
-  { label: "Terms Of Service", href: "/terms-of-service" },
-].map(({ label, href }) => (
-  <Link href={href} className="ProductDets_info-btn" key={href}>
-    {label}
-  </Link>
-))}
+              {[
+                { label: "Privacy Policy", href: "/privacy-policy" },
+                { label: "Shipping & Returns", href: "/shipping-returns" },
+                { label: "Terms Of Service", href: "/terms-of-service" },
+              ].map(({ label, href }) => (
+                <Link href={href} className="ProductDets_info-btn" key={href}>
+                  {label}
+                </Link>
+              ))}
             </div>
             <div className="ProductDets_info_help">
               <p className="ProductDets_info_text sql38zc _1l9nr81o">
@@ -262,6 +262,32 @@ const ProductContent = ({ data = {} }) => {
               </p>
             </div>
           </div>
+        </div>
+        <div className="ProductDets_Notify_wrap mobile_add_btn">
+          <button
+            className="ProductDets_ntfy_btn ProductDets_ntfy_btn_grid"
+            id="easysize-cart-button"
+            style={loading ? { backgroundColor: "black" } : {}}
+            onClick={handleAddToCart}
+          >
+            {loading ? (
+              <div className="ani-wrap">
+                <div className="ani-main" />
+              </div>
+            ) : (
+              <>
+                <span className="ProductDets_ntfy_btn_slect_size">
+                  {!cartBtn ? "Select a Size" : "Add to Bag"}
+                </span>
+                <span className="ProductDets_ntfy_btn_AddtoBeg">
+                  Add to Bag
+                </span>
+                <div className="ProductDets_ntfy_btn_price">
+                  <span>{finalPrice} INR</span>
+                </div>
+              </>
+            )}
+          </button>
         </div>
       </div>
     </div>
