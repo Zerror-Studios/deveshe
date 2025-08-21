@@ -588,6 +588,8 @@
 
   #vision_section {
     padding: 20vw 3vw;
+    background: none;
+    background-image: none;
   }
   .vision_text h2 {
     font-size: 8.5vw;
