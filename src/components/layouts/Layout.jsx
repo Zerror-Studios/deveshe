@@ -3,7 +3,7 @@ import { useCartStore } from "@/store/cart-store";
 import Navbar from "@/components/common/Navbar";
 import NavbarMobile from "@/components/common/NavbarMobile";
 import Footer from "@/components/common/Footer";
-import CartDrawer from "@/components/cart/CartDrawer";
+import CartDrawer from "../cart/CartDrawer";
 const Layout = ({ children }) => {
   const { isCartOpen, openCart, closeCart } = useCartStore((state) => state);
 

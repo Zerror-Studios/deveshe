@@ -7,7 +7,6 @@ import { createApolloClient } from "@/lib/apolloClient";
 import { useMutation } from "@apollo/client";
 import { CART_LIST, CHECKOUT_ORDER } from "@/graphql";
 import SeoHeader from "@/components/seo/SeoHeader";
-import BackSection from "@/components/checkout/BackSection";
 import Heading from "@/components/checkout/Heading";
 import ContactDetail from "@/components/checkout/ContactDetail";
 import Delivery from "@/components/checkout/Delivery";
@@ -125,7 +124,6 @@ const Checkout = ({ meta, initialCartData }) => {
   return (
     <>
       <SeoHeader meta={meta} />
-      <BackSection />
       <div className="checkout-cont">
         <div className="checkout-left">
           <Heading />
