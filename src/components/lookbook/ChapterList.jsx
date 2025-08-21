@@ -16,7 +16,7 @@ const ChapterList = ({ data = [] }) => {
     const ctx = gsap.context(() => {
       const timeline = gsap.timeline({
         scrollTrigger: {
-          trigger: "#archiveSection3",
+          trigger: "#lookbookList",
           start: "top top",
           end: `+=${(data.length - 1) * 100}%`,
           pin: true,
@@ -66,8 +66,8 @@ const ChapterList = ({ data = [] }) => {
   }, [data]);
 
   return (
-    <div className={styles.archiveWrapper}>
-      <div id="archiveSection3" className={styles.archiveSection3}>
+    <div className={styles.lookbookWrapper}>
+      <div id="lookbookList" className={styles.lookbookList}>
         {data.map((item, index) => (
           <Link
             href={`/lookbook/${item._id}`}

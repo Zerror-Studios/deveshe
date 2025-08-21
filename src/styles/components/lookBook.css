@@ -272,11 +272,10 @@
   width: 100%;
   padding: 0 40px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr); 
+  grid-template-columns: repeat(4, 1fr);
   background-color: #fadcde;
   gap: 2.6%;
 }
-
 
 #prodcut-container.prodcut-container-mobile {
   display: none !important;
@@ -315,10 +314,11 @@
 }
 @media (max-width: 576px) {
   .lb-header-text h2 {
-    font-size: 6vw;
-    letter-spacing: 1.5px;
-    line-height: 1;
+    font-size:8.5vw;
   }
+  .lb-header-wrapper {
+    height: 45vh;
+}
   .lb-header-text p {
     font-size: 5vw;
     margin-top: 5vw;
@@ -333,7 +333,10 @@
   }
   #prodcut-container {
     width: 100%;
-    padding: 0px 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    background-color: #fadcde;
     gap: 0;
   }
   #prodcut-container .product-lb {

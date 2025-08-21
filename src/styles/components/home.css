@@ -343,13 +343,13 @@
   justify-content: space-between;
   border-bottom: 2px solid black;
 }
-.product_right_section .common_product_card{
+.product_right_section .common_product_card {
   width: 50%;
   height: auto;
-    border-top: 2px solid black;
+  border-top: 2px solid black;
 }
-.product_right_section .common_product_card:nth-child(even){
-    border-left: 2px solid black;
+.product_right_section .common_product_card:nth-child(even) {
+  border-left: 2px solid black;
 }
 /* product section end */
 
@@ -440,3 +440,181 @@
 }
 /* vision section end  */
 
+@media (max-width: 576px) {
+  #home_hero {
+    height: 175vh;
+  }
+  #hero_container {
+    padding: 0 3vw 15vw;
+    background-color: rgba(0, 0, 0, 0.17);
+  }
+  #hero_container .text_container {
+    width: 100%;
+    position: static;
+    text-align: center;
+    height: 90vh;
+  }
+  #hero_container .text_container p {
+    font-size: 5vw;
+    line-height: 1.4;
+  }
+  #hero_container .text_container h3 {
+    font-size: 7vw;
+    line-height: 1.4;
+  }
+  .polaroid_container {
+    width: 100%;
+    align-items: center;
+    gap: 20vw;
+  }
+  .polaroid_container .polaroid_card {
+    width: 55vw;
+    padding: 2vw;
+  }
+  .polaroid_container .polaroid_img {
+    height: 45vw;
+  }
+  .polaroid_container .polaroid_card p {
+    font-size: 3.5vw;
+    margin-top: 2vw;
+  }
+
+  #explore_section {
+    min-height: 100vh;
+    padding: 20vw 3vw;
+  }
+
+  .explore_text_container h2 {
+    font-size: 10.5vw;
+  }
+  .explore_text_container::before {
+    left: -10%;
+    top: 5%;
+    width: 20px;
+    height: 20px;
+  }
+  .explore_text_container::after {
+    right: -10%;
+    top: 0;
+    width: 20px;
+    height: 20px;
+  }
+  .explore_polaroid_container {
+    justify-content: center;
+    margin-top: 15vw;
+  }
+  .explore_side_card {
+    display: none;
+  }
+  .explore_center_card {
+    width: 58%;
+    padding: 6vw;
+    transform: rotate(13deg);
+  }
+  .explore_center_card img {
+    height: 45vw;
+  }
+  .explore_center_card p {
+    font-size: 3.5vw;
+    margin-top: 2vw;
+  }
+
+  .explore_inspired_container {
+    margin-top: 20vw;
+  }
+  .explore_inspired_container h5 {
+    font-size: 5vw;
+  }
+
+  .explore_inspired_container h3 {
+    font-size: 10vw;
+    margin: 7vw 0 25vw;
+  }
+  .explore_inspired_container::before {
+    left: 15%;
+    top: 5%;
+    width: 20px;
+    height: 20px;
+  }
+  .explore_inspired_container::after {
+    right: 15%;
+    top: 0;
+    width: 20px;
+    height: 20px;
+  }
+  .explore_inspired_button {
+    font-size: 5vw;
+  }
+  .inspired_button_wrap {
+    height: 5vw;
+  }
+  .inspired_button_wrap h4 {
+    font-size: 5vw;
+  }
+
+  #product_section {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .product_left_section {
+    position: static;
+    width: 50%;
+    height: auto;
+    overflow: hidden;
+    border: none;
+  }
+  .product_right_section {
+    width: 100%;
+    border: none;
+  }
+  
+  .common_product_card{
+    border: none !important;
+    display: flex;
+    flex-direction: column;
+  }
+  .common_product_card img{
+    height: auto !important;
+  }
+  .common_product_card .product_card_details{
+    position: static;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 4vw;
+    padding-top: 3vw;
+  }
+
+  #vision_section {
+    padding: 20vw 3vw;
+  }
+  .vision_text h2 {
+    font-size: 8.5vw;
+    text-align: center;
+  }
+  .vision_text::before {
+    left: 15%;
+    top: 5%;
+    width: 20px;
+    height: 20px;
+  }
+  .vision_text::after {
+    right: 15%;
+    top: 0;
+    width: 20px;
+    height: 20px;
+  }
+  #vision_section {
+    gap: 45px;
+  }
+  .vision_text2 {
+    width: 100%;
+  }
+  .vision_text2 h6 {
+    font-size: 7vw;
+  }
+  .vision_text2 p {
+    font-size: 5vw;
+  }
+}
