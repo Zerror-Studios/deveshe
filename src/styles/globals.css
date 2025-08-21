@@ -383,7 +383,6 @@ li {
   animation: slide-animation 1s ease-in-out infinite;
 }
 
-
 /* header start */
 
 .navbar-mobile {
@@ -635,25 +634,6 @@ li {
   #edit_profile {
     left: 88% !important;
   }
-  #page1 {
-    height: auto;
-    min-height: 100vh;
-    padding: 150px 20px 80px;
-    width: 100% !important;
-  }
-
-  #right form .input.active h6 {
-    top: 0%;
-    opacity: 0.8;
-    font-size: calc(13px - 0.22vw);
-  }
-  #right form .textarea.active h6 {
-    top: 0%;
-    font-size: 0.7vw;
-    font-size: calc(13px - 0.22vw);
-    opacity: 0.8;
-  }
-
   .navbar-mobile {
     display: flex;
   }
@@ -680,86 +660,5 @@ li {
   }
   .footer_nav_ul_list p {
     margin: 7px 0;
-  }
-  #logo-h {
-    top: 35px;
-    font-size: 25px;
-    white-space: nowrap;
-    display: none;
-  }
-  .header-links {
-    gap: 20px;
-    padding: 0 15px;
-  }
-  #header-logo {
-    font-family: font2;
-    font-size: 25px;
-    white-space: nowrap;
-  }
-  #page1 #form {
-    width: 100% !important;
-    flex-direction: column;
-    gap: 35px;
-  }
-  #left {
-    width: 100%;
-  }
-  #right {
-    width: 100%;
-  }
-  .ani-wrap {
-    width: 100%;
-    margin: 0 20px;
-    max-width: 100%;
-    display: grid;
-    height: 0.5px;
-    overflow: hidden;
-  }
-  #11 {
-    height: auto;
-    width: 100%;
-    padding: 150px 20px 80px;
-  }
-  #address {
-    height: auto;
-    flex-direction: column;
-  }
-  #address .elem {
-    width: 100%;
-    height: auto;
-    margin-top: 35px;
-  }
-  .elem-lf h5 {
-    width: 100%;
-  }
-
-  .shop_shopSection5__F_s2Y {
-    width: 100%;
-    height: 100vh !important;
-    position: relative;
-  }
-
-  .archive_archiveSection2__1iUZs h3 {
-    width: 90% !important;
-    font-size: 22px !important;
-  }
-  .archive_overlay3a__R6Fpe .archive_textContainer__xiQiu {
-    width: 100% !important;
-  }
-  .archive_overlay3a__R6Fpe .archive_textContainer__xiQiu h4 {
-    font-size: 5vw !important;
-  }
-  .archive_overlay3a__R6Fpe {
-    padding: 30px !important;
-  }
-  .shop_shopWrapper__YbkUf h2 {
-    letter-spacing: 0px !important;
-  }
-
-  .header-links {
-    display: none;
-  }
-  #header-logo {
-    display: none;
   }
 }

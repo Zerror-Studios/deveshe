@@ -27,7 +27,7 @@
   width: 50%;
   height: 100%;
 }
-.phone_container{
+.phone_container {
   position: absolute;
   left: 0;
   top: 5%;
@@ -175,6 +175,60 @@
   border-radius: 50px;
   margin-top: 30px;
   cursor: pointer;
+}
+#contact_heading{
+  display: none;
+}
+
+@media (max-width: 576px) {
+  #contact_form {
+    height: auto;
+    min-height: 100vh;
+    padding: 150px 20px 80px;
+    gap: 10vw;
+  }
+  #contact_form #left {
+    display: none;
+  }
+  #contact_form #right {
+    width: 100%;
+  }
+  .phone_container {
+    display: none;
+  }
+  #contact_form #address {
+    flex-direction: column;
+    height: auto;
+    gap: 7vw;
+  }
+  #contact_form #address .elem {
+    width: 100%;
+  }
+  #contact_form .elem-lf h5 {
+    width: 100%;
+  }
+  #contact_form .elem .add {
+    width: 50%;
+    font-size: 12px;
+  }
+
+  #contact_form #right form .textarea.active h6 {
+    font-size: 12px;
+  }
+  #contact_form #right form .input.active h6 {
+    font-size: 12px;
+  }
+  #contact_form #right form input {
+    padding: 3vw 0;
+  }
+  #contact_heading {
+    font-size: 2.5rem;
+    line-height: 1;
+    font-family: paragraphStyle;
+    font-weight: 500;
+    text-transform: capitalize;
+    display: block;
+  }
 }
 
 /* contact css end */
