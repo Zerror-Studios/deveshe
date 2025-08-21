@@ -162,7 +162,7 @@ const CartDrawer = ({ isOpen, closeCart }) => {
               })}
             </>
           ) : (
-            <span>There are currently no items in your bag.</span>
+            <span id="no_item">There are currently no items in your bag.</span>
           )}
         </div>
         <div id="drawer_bottom">
