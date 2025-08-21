@@ -230,7 +230,7 @@ li {
   .Footer_SocialLinks_bottom {
     column-gap: 28px;
     margin-top: 28px;
-    justify-content: end;
+    justify-content: flex-end;
   }
   .Footer_SocialLinks_bottom li {
     margin: 4px;
@@ -475,7 +475,7 @@ li {
   margin-top: 3vh;
   width: 100%;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-end;
 }
 .login-nav {
   display: flex;

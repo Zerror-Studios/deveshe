@@ -184,15 +184,17 @@ const OurJourney = () => {
       `.our_journey_vertical .pathcolor`
     );
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: "#our_journey",
-        scroller: "body",
-        start: "bottom 125%",
-        end: "bottom -20%",
-        scrub: true,
-      },
-    });
+ const isMobile = window.innerWidth <= 576; // adjust breakpoint as needed
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: "#our_journey",
+      scroller: "body",
+      start: isMobile ? "bottom 30%" : "bottom 125%", 
+      end: isMobile ? "bottom -100%" : "bottom -20%",
+      scrub: true,
+    },
+  });
 
     blackPaths.forEach((black, i) => {
       const length = black.getTotalLength();
