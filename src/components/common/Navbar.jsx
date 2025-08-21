@@ -117,16 +117,16 @@ const Navbar = ({ openCart }) => {
       tl.call(startLoader)
         .to("#loader_slider p", {
           top: "95%",
-          duration: .6,
+          duration: .8,
           delay: 1,
-           ease: "power3.inOut",
+           ease: "power4.Out",
         })
         .to(
           "#logo-container",
           {
             left: "2%",
-            duration: 0.7,
-            ease: "power1.in",
+            duration: 0.5,
+            ease: "power2.in",
           },
           "start"
         )
@@ -134,8 +134,8 @@ const Navbar = ({ openCart }) => {
           "#nav-btns",
           {
             right: "2%",
-            duration: 0.7,
-            ease: "power1.in",
+            duration: 0.5,
+            ease: "power2.in",
           },
           "start"
         )
@@ -165,10 +165,9 @@ const Navbar = ({ openCart }) => {
           ".nav-link",
           {
             opacity: 1,
-            duration: 0.6,
+            duration: 0.3,
             ease: "power2.in",
-          },
-          "-=0.5"
+          }
         )
 
         .to(".logo", {
