@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import OutsideClickHandler from "react-outside-click-handler";
 import { useRouter } from "next/router";
 import { RxCross2 } from "react-icons/rx";
-import { FiMinus, FiPlus } from "react-icons/fi";
 import { useMutation, useQuery } from "@apollo/client";
 import { ADD_ITEM_TO_CART, CART_LIST, REMOVE_ITEM_FROM_CART } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
 import { useVisitor } from "@/hooks/useVisitor";
 import { formatePrice } from "@/utils/Util";
+import gsap from "gsap";
+import CartProduct from "./CartProduct";
 const CartDrawer = ({ isOpen, closeCart }) => {
   const router = useRouter();
   const { visitorId } = useVisitor();
@@ -104,206 +104,98 @@ const CartDrawer = ({ isOpen, closeCart }) => {
     }, 1000);
     setIsBtnLoading(false);
   };
+  const drawerRef = useRef(null);
+  const backdropRef = useRef(null);
+  useEffect(() => {
+    if (isOpen) {
+      var tl = gsap.timeline();
 
-  if (loading) return;
+      tl.to(backdropRef.current, {
+        opacity: 1,
+        pointerEvents: "auto",
+        duration: 0.2,
+      }).to(drawerRef.current, {
+        x: 0,
+        duration: 0.5,
+        ease: "power3.out",
+      });
+    } else {
+      var tl = gsap.timeline();
+      tl.to(drawerRef.current, {
+        x: "100%",
+        duration: 0.4,
+        ease: "power3.in",
+      }).to(backdropRef.current, {
+        opacity: 0,
+        pointerEvents: "none",
+        duration: 0.3,
+      });
+    }
+  }, [isOpen]);
+
   return (
-    <>
-      <div
-        className={
-          isOpen
-            ? "Modal_wrapper pointEventall"
-            : "Modal_wrapper pointEventnone"
-        }
-      >
-        <div
-          className={
-            isOpen
-              ? "Modal_Overlay Modal_bgClr Modal_content"
-              : "Modal_Overlay Modal_content"
-          }
-        >
-          <OutsideClickHandler onOutsideClick={closeCart}>
-            <div
-              className={
-                isOpen
-                  ? "ReactModal__Content translateCart"
-                  : "ReactModal__Content"
+    <div id="card_drawer" onClick={closeCart} ref={backdropRef}>
+      <div id="drawer" onClick={(e) => e.stopPropagation()} ref={drawerRef}>
+        <div id="drawer_header">
+          <span>
+            Bag <sup>({itemcount})</sup>
+          </span>
+          <button id="close" onClick={closeCart}>
+            <RxCross2 />
+          </button>
+        </div>
+        <div id="drawer_products" data-lenis-prevent>
+          {cart && cart.length > 0 ? (
+            <>
+              {cart.map((item, i) => {
+                return (
+                  <CartProduct
+                    key={`item-${i}`}
+                    item={item}
+                    renderVariants={renderVariants}
+                    handleAddItem={handleAddItem}
+                    handleRemoveItem={handleRemoveItem}
+                    itemAddLoader={itemAddLoader}
+                    itemRemoveLoader={itemRemoveLoader}
+                  />
+                );
+              })}
+            </>
+          ) : (
+            <span>There are currently no items in your bag.</span>
+          )}
+        </div>
+        <div id="drawer_bottom">
+          <div className="total_price">
+            <span>Total</span>
+            {totalprice !== discountedPrice && (
+              <span>{formatePrice(totalprice || "")}</span>
+            )}
+            <span>{formatePrice(discountedPrice || "")}</span>
+          </div>
+          <div className="checkout_btn_container">
+            <span>Free worldwide shipping on orders over 500 INR</span>
+            <button
+              className="_btn_wrapper"
+              style={
+                isBtnLoading
+                  ? { backgroundColor: "black", width: "100%" }
+                  : { width: "100%" }
               }
+              onClick={navigateCheckout}
             >
-              <div className="ReactModal__Content_cntr">
-                <div className="ReactModal__Content_Drawer">
-                  <div className="ReactModal_Drawer_inner">
-                    <div className="ReactModal_Drawer_inner_top">
-                      <h1>
-                        Bag <sup>({itemcount})</sup>
-                      </h1>
-                      <button className="Modal_cancel_btn" onClick={closeCart}>
-                        <RxCross2 />
-                      </button>
-                    </div>
-                    <div
-                      id="cart_center_wrap"
-                      style={{ overflow: "auto" }}
-                      data-lenis-prevent
-                    >
-                      {cart && cart.length > 0 ? (
-                        <>
-                          {cart.map((item, i) => {
-                            return (
-                              <div
-                                className="ReactModal_Drawer_center"
-                                key={`item-${i}`}
-                              >
-                                <div
-                                  className="Modal_Drawer_img_cntr"
-                                  aria-current="page"
-                                >
-                                  <div className="Modal_drawer_img_wrap">
-                                    <div className="Modal_drawer_img_wrap_grid">
-                                      <div className="Modal_Drawer_img_grid_cover">
-                                        <img
-                                          src={item?.asset?.path || ""}
-                                          alt={item?.asset?.altText || ""}
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="ReactModal_Drawer_center_content">
-                                  <div className="Modal_Drawer_center_content_lft">
-                                    <div className="Modal_center_lft_top">
-                                      <h2 className="Modal_item_name">
-                                        {item?.name || ""}
-                                      </h2>
-                                      <div>
-                                        {renderVariants(
-                                          item?.variantDetail
-                                            ?.selectedOptions || []
-                                        )}
-                                      </div>
-                                    </div>
-                                    <div className="Modal_center_lft_Qunty">
-                                      <span>Quantity</span>
-                                      <button
-                                        disabled={itemRemoveLoader}
-                                        className="cart_Quantity_btn"
-                                        onClick={() =>
-                                          handleRemoveItem(
-                                            item?.productId || null,
-                                            item?.variantDetail
-                                              ?.variantDetailId || null,
-                                            false
-                                          )
-                                        }
-                                      >
-                                        <FiMinus />
-                                      </button>
-                                      <span className="cart_Quantity_number">
-                                        {item.qty}
-                                      </span>
-                                      <button
-                                        disabled={itemAddLoader}
-                                        className="cart_Quantity_btn"
-                                        onClick={() =>
-                                          handleAddItem(
-                                            item?.productId || null,
-                                            item?.variantDetail || {}
-                                          )
-                                        }
-                                      >
-                                        <FiPlus />
-                                      </button>
-                                    </div>
-                                    <button
-                                      disabled={itemRemoveLoader}
-                                      className="Modal_remove_btn"
-                                      onClick={() =>
-                                        handleRemoveItem(
-                                          item?.productId || null,
-                                          item?.variantDetail
-                                            ?.variantDetailId || null
-                                        )
-                                      }
-                                    >
-                                      {itemRemoveLoader
-                                        ? "Removing..."
-                                        : "Remove"}
-                                    </button>
-                                  </div>
-                                  <div className="Modal_Drawer_center_content_ryt">
-                                    <div className="cmn_style Modal_Drawer_center_content_ryt_price">
-                                      <div className="Modal_Drawer_center_content_ryt_price_cntr"></div>
-                                      <span>
-                                        {`
-                                          ${
-                                            item.qty > 1 ? `${item?.qty} x` : ""
-                                          } ${formatePrice(
-                                          item?.variantDetail?.variantPrice || 0
-                                        )}
-                                        `}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </>
-                      ) : (
-                        <>
-                          <div>
-                            <h1 className="no-item">
-                              There are currently no items in your bag.
-                            </h1>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                    <div className="Modal_drawer_checkout_wrap">
-                      <div className="cmn_style Modal_drawer_checkout_wrap_top">
-                        <div>Total</div>
-                        {totalprice !== discountedPrice && (
-                          <div className="Modal_drawer_cross_price">
-                            <span>{formatePrice(totalprice || "")}</span>
-                          </div>
-                        )}
-                        <div className="Modal_drawer_main_price">
-                          <div>{formatePrice(discountedPrice || "")}</div>
-                        </div>
-                      </div>
-                      <div className="cmn_style Modal_drawer_checkout_wrap_btm">
-                        <span>
-                          Free worldwide shipping on orders over 500 INR
-                        </span>
-                        <div style={{ position: "relative" }}>
-                          <button
-                            className="_btn_wrapper"
-                            style={
-                              isBtnLoading
-                                ? { backgroundColor: "black", width: "100%" }
-                                : { width: "100%" }
-                            }
-                            onClick={navigateCheckout}
-                          >
-                            {isBtnLoading ? (
-                              <div className="ani-wrap">
-                                <div className="ani-main"></div>
-                              </div>
-                            ) : (
-                              <>Checkout</>
-                            )}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+              {isBtnLoading ? (
+                <div className="ani-wrap">
+                  <div className="ani-main"></div>
                 </div>
-              </div>
-            </div>
-          </OutsideClickHandler>
+              ) : (
+                <>Checkout</>
+              )}
+            </button>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -108,10 +108,8 @@ const Signup = ({ setToggle }) => {
                   const countryCode = `+${metadata?.country?.dialCode || 91}`;
                   const numberOnly = value?.replace(countryCode, "").trim();
 
-                  setValue("countryCode", countryCode, {
-                    shouldValidate: true,
-                  });
-                  setValue("phoneNumber", numberOnly, { shouldValidate: true });
+                  setValue("countryCode", countryCode);
+                  setValue("phoneNumber", numberOnly);
                 }}
               />
               <input type="hidden" {...register("countryCode")} />
@@ -162,7 +160,8 @@ const Signup = ({ setToggle }) => {
           </form>
 
           <div className="not-up">
-            Already a member? <span onClick={() => setToggle(false)}>Login</span>
+            Already a member?{" "}
+            <span onClick={() => setToggle(false)}>Login</span>
           </div>
         </div>
       </div>

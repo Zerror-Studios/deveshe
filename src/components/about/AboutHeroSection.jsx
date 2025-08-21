@@ -62,14 +62,14 @@ const AboutHeroSection = () => {
           scrollBehavior: "auto",
         }}
       >
-        <div class="slide1">
+        <div className="slide1">
           <Image
             width={1000}
             height={1000}
             src="/scrapbook/bg1.png"
             alt="background"
           />
-          <div class="slide1-container">
+          <div className="slide1-container">
             <Image
               width={1000}
               height={1000}
@@ -184,14 +184,14 @@ const AboutHeroSection = () => {
             />
           </div>
         </div>
-        <div class="slide2">
+        <div className="slide2">
           <Image
             width={1000}
             height={1000}
             src="/scrapbook/bg1.png"
             alt="background"
           />
-          <div class="slide1-container">
+          <div className="slide1-container">
             <Image
               width={1000}
               height={1000}

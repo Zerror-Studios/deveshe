@@ -421,7 +421,7 @@ const OurJourney = () => {
                 width="100%"
                 viewBox="0 0 63 63"
                 fill="none"
-                class="sun__sun-svg"
+                className="sun__sun-svg"
               >
                 <path
                   d="M4 32C4 47.464 16.536 60 32 60C47.464 60 60 47.464 60 32C60 16.536 47.464 4 32 4C16.536 4 4 16.536 4 32Z"
@@ -439,7 +439,7 @@ const OurJourney = () => {
                   d="M31.7666 7.90735C18.6034 7.90737 7.93262 18.5781 7.93262 31.7413C7.93264 44.9045 18.6034 55.5753 31.7666 55.5753C44.9298 55.5753 55.6006 44.9045 55.6006 31.7413C55.6006 18.5781 44.9298 7.90735 31.7666 7.90735Z"
                   fill="#F489A3"
                   stroke="#121212"
-                  stroke-width="0.744409"
+                  strokeWidth="0.744409"
                 ></path>
               </svg>
               <svg
@@ -472,7 +472,7 @@ const OurJourney = () => {
                 width="100%"
                 viewBox="0 0 22 13"
                 fill="none"
-                class="chat-cloud__point"
+                className="chat-cloud__point"
               >
                 <path
                   d="M13.2965 8.70441C15.5695 10.5858 18.4864 11.7165 21.6675 11.7165L21.67 1H8.70396C8.87681 7.22251 4.20993 10.3338 3 10.8523C7.39294 11.651 11.029 10.2151 13.2965 8.70441Z"
@@ -481,9 +481,9 @@ const OurJourney = () => {
                 <path
                   d="M21.6675 11.7165C18.4864 11.7165 15.5695 10.5858 13.2965 8.70441C11.029 10.2151 7.39294 11.651 3 10.8523C4.20993 10.3338 8.87681 7.22251 8.70396 1"
                   stroke="#fff"
-                  stroke-width="0.1em"
-                  vector-effect="non-scaling-stroke"
-                  stroke-linecap="round"
+                  strokeWidth="0.1em"
+                  vectorEffect="non-scaling-stroke"
+                  strokeLinecap="round"
                 ></path>
               </svg>
               <p>{text || "..."}</p>

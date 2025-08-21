@@ -11,16 +11,16 @@ import "@/styles/checkout.css";
 import "@/styles/checkout2.css";
 import "@/styles/success.css";
 import "@/styles/address.css";
-import "@/styles/cartModal.css";
-import "@/styles/navbar.css";
 import "@/styles/profile.css";
 import "@/styles/productLoader.css";
 
+import "@/styles/navbar.css";
 import "@/styles/components/home.css";
 import "@/styles/components/about.css";
 import "@/styles/components/legal.css";
 import "@/styles/components/lookBook.css";
 import "@/styles/components/contact.css";
+import "@/styles/components/cart.css";
 import "@/styles/components/common/polaroid.css";
 import "@/styles/components/common/productCard.css";
 
