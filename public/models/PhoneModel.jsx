@@ -23,8 +23,8 @@ export default function PhoneModel(props) {
 
   const handleHover = () => {
     gsap.to(meshRef.current.position, {
-      x: -6,
-      y: 23,
+      x: isMobile ? -4 : -6,
+      y:  isMobile ? 18 : 23,
       z: -10.402,
       duration: 0.5,
     });
