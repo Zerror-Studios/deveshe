@@ -7,6 +7,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 const ImageSectionOne = ({ data }) => {
   useEffect(() => {
+    if (window.innerWidth < 576) return;
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
