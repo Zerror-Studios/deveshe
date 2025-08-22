@@ -5,8 +5,6 @@
   height: 100vh;
   margin: auto auto;
   display: flex;
-  /* background-color: black;
-	/* background-color: black; */
 }
 .goback {
   position: absolute;
@@ -24,12 +22,10 @@
 }
 .react-international-phone-input-container
   .react-international-phone-input:focus {
-  /* border: none !important; */
   border-bottom: 3px solid rgba(0, 0, 0, 0.3) !important;
 }
 .react-international-phone-input-container
   .react-international-phone-input:hover {
-  /* border: none !important; */
   border-bottom: 1px solid rgba(0, 0, 0, 0.3) !important;
 }
 .react-international-phone-country-selector-button {
@@ -51,7 +47,9 @@
   height: 200%;
   transform: translateX(-50%);
 }
-
+.login-form{
+  margin-bottom: 10px;
+}
 .login-right-cont {
   width: 40%;
   transition: all 0.5s ease;
@@ -90,7 +88,6 @@
 .login-t {
   text-align: center;
   font-family: var(--secondary-font-Hen);
-  /* padding: 30px 0px 20px 0px; */
   margin-bottom: 20px;
   font-size: 40px;
   line-height: 0.8;
@@ -128,19 +125,15 @@
 
 .eye-cont {
   position: absolute;
-  /* top: 50%;
-  transform: translateY(-50%); */
   right: 0px;
   top: 0;
   width: 37px;
   height: 69px;
-  /* background-color: aqua; */
   z-index: 5;
 }
 
 .eye-cont svg {
   font-size: 20px;
-  /* transition: all .3s ease; */
   cursor: pointer;
 }
 
@@ -218,7 +211,6 @@
 .gender-cont {
   width: 30px;
   height: 30px;
-  /* border: 1px solid #3b82f6; */
   border-radius: 50%;
   cursor: pointer;
   margin: 0px 5px;
@@ -284,11 +276,9 @@
 
 .react-tel-input .form-control {
   border: none !important;
-  /* border-bottom: 1px solid rgba(0, 0, 0, .3) !important; */
 }
 
 .react-tel-input {
-  /* overflow-x: hidden!important; */
   margin-top: 5px;
 }
 
@@ -358,9 +348,7 @@
   height: 40px;
   border: none;
   outline: none;
-  /* padding: 0 5px; */
   font-size: 15px;
-  /* border-bottom: rgba(0, 0, 0, .3); */
 }
 
 .login-load {

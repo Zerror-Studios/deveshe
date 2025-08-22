@@ -2316,7 +2316,7 @@ button {
 
   .ProductDets_bottom_links_wrap {
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     position: absolute;
     bottom: 0;
     left: 0;

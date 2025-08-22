@@ -15,10 +15,20 @@ const UserLogin = ({ meta }) => {
           style={{ transform: toggle ? "translateY(0%)" : "translateY(-50%)" }}
         >
           <div className="left-one">
-            <Image width={1000} height={1000} src="/shop/shop2.jpg" alt="" />
+            <Image
+              width={1000}
+              height={1000}
+              src="/assets/images/login/img1.webp"
+              alt="image"
+            />
           </div>
           <div className="left-one">
-            <Image width={1000} height={1000} src="/shop/shop2.jpg" alt="" />
+            <Image
+              width={1000}
+              height={1000}
+              src="/assets/images/login/img2.webp"
+              alt="image"
+            />
           </div>
         </div>
         <div

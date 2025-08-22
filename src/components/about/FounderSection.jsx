@@ -66,9 +66,9 @@ const FounderSection = () => {
               muted
               loop
               playsInline
-              src="https://emmpo.com/assets/395808beb2e10735b70b.mp4"
+              src="/assets/images/about/social_gif.mp4"
             ></video>
-            <p>follow my instagram</p>
+            <a href="https://www.instagram.com/de_ve_she_dreams" target="_blank">follow my instagram</a>
           </div>
         </div>
       </div>

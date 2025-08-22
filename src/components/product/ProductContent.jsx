@@ -245,20 +245,9 @@ const ProductContent = ({ data = {} }) => {
           </div>
 
           <div className="ProductDets_bottom_links_wrap">
-            <div className="ProductDets_info_links">
-              {[
-                { label: "Privacy Policy", href: "/privacy-policy" },
-                { label: "Shipping & Returns", href: "/shipping-returns" },
-                { label: "Terms Of Service", href: "/terms-of-service" },
-              ].map(({ label, href }) => (
-                <Link href={href} className="ProductDets_info-btn" key={href}>
-                  {label}
-                </Link>
-              ))}
-            </div>
             <div className="ProductDets_info_help">
               <p className="ProductDets_info_text sql38zc _1l9nr81o">
-                Complimentary shipping on orders above 500 INR.
+                Complimentary shipping on orders above 5000 INR.
               </p>
             </div>
           </div>

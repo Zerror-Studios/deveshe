@@ -58,7 +58,7 @@ const Login = ({ setToggle }) => {
       <div className="login-inner">
         <div className="login-t">Login</div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
           <div className="inp-rel">
             <input
               className="login-inp"

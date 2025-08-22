@@ -43,17 +43,18 @@ const LookBookHero = ({ title, subheading, description, asset }) => {
           delay: 1,
           ease: "power4.out",
         })
+        .to(pRef.current, {
+          opacity: 1,
+          duration: 0.3,
+          ease: "power1.out",
+        })
         .to(h2Ref.current.querySelectorAll("span"), {
           rotateX: "0deg",
           duration: 0.8,
           stagger: 0.05,
           ease: "bounce.out",
         })
-        .to(pRef.current, {
-          opacity: 1,
-          duration: 0.6,
-          ease: "power1.out",
-        });
+        
 
       gsap.timeline({
         scrollTrigger: {
@@ -78,8 +79,8 @@ const LookBookHero = ({ title, subheading, description, asset }) => {
         <div className="lb-header-wrapper">
           <div className="lb-header">
             <div className="lb-header-text">
-              <h2 ref={h2Ref}>{title || ""}</h2>
               <p ref={pRef}>{subheading || ""}</p>
+              <h2 ref={h2Ref}>{title || ""}</h2>
             </div>
           </div>
         </div>

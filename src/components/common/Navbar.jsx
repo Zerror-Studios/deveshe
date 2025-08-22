@@ -45,6 +45,7 @@ const Navbar = ({ openCart }) => {
       });
 
       if (router.pathname !== "/") {
+        gsap.set("html,body", { overflow: "visible" });
         gsap.set("#logo-container img", { filter: "invert(0)" });
         gsap.set(".nav-link a", { color: "#000" });
         gsap.set("#nav", {
@@ -73,6 +74,8 @@ const Navbar = ({ openCart }) => {
       logos.forEach((logo, i) => {
         gsap.set(logo, { x: xPositions[i], top: 0 });
       });
+
+      gsap.set("html,body", { overflow: "hidden" });
 
       gsap.set("#logo-container img", { filter: "invert(1)" });
       gsap.set(".nav-link a", { color: "#fff" });
@@ -117,9 +120,9 @@ const Navbar = ({ openCart }) => {
       tl.call(startLoader)
         .to("#loader_slider p", {
           top: "95%",
-          duration: .8,
+          duration: 0.8,
           delay: 1,
-           ease: "power4.Out",
+          ease: "power4.Out",
         })
         .to(
           "#logo-container",
@@ -144,7 +147,7 @@ const Navbar = ({ openCart }) => {
           {
             opacity: 0,
             duration: 0.2,
-            delay: .4,
+            delay: 0.4,
             ease: "power3.in",
           },
           "start"
@@ -155,20 +158,17 @@ const Navbar = ({ openCart }) => {
           {
             opacity: 1,
             duration: 0.2,
-            delay: .4,
+            delay: 0.4,
             ease: "power3.in",
           },
           "start"
         )
         // Move nav links in a fluid way
-        .to(
-          ".nav-link",
-          {
-            opacity: 1,
-            duration: 0.3,
-            ease: "power2.in",
-          }
-        )
+        .to(".nav-link", {
+          opacity: 1,
+          duration: 0.3,
+          ease: "power2.in",
+        })
 
         .to(".logo", {
           top: (i) => i * 30, // 0px for first, 30px for second, 60px for third...
@@ -183,9 +183,12 @@ const Navbar = ({ openCart }) => {
           {
             opacity: 0,
             duration: 0.3,
-              ease: "power1.out",
+            ease: "power1.out",
             onComplete: () => {
-              gsap.set("#loader_slider", { display: "none" });
+              setTimeout(() => {
+                gsap.set("#loader_slider", { display: "none" });
+                gsap.set("html,body", { overflow: "visible" });
+              }, 1600);
             },
           },
           "-=1.6"
@@ -290,11 +293,13 @@ const Navbar = ({ openCart }) => {
   return (
     <>
       <div id="nav">
-        <div id="loader_slider">
-          <p>
-            loading... <span>{percent}%</span>
-          </p>
-        </div>
+        {router.pathname === "/" && (
+          <div id="loader_slider">
+            <p>
+              loading... <span>{percent}%</span>
+            </p>
+          </div>
+        )}
         <Link href="/" id="logo-container">
           <p>new emotions?</p>
           <Image

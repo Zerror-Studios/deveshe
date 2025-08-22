@@ -63,6 +63,7 @@
   font-family: var(--secondary-font-Hen);
   font-size: 1.5rem;
   opacity: 0;
+  margin-bottom: 1vw;
 }
 .lb-header-image {
   width: 100%;
@@ -321,7 +322,7 @@
 }
   .lb-header-text p {
     font-size: 5vw;
-    margin-top: 5vw;
+    margin-bottom: 5vw;
   }
   #lb-text-container {
     width: 100%;
