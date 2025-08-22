@@ -14,55 +14,54 @@ const HeroSection = () => {
   const triggers = useRef([]);
 
   useEffect(() => {
-  const runSplitAnimation = () => {
-    const lines = sectionRef.current?.querySelectorAll("h3, p") || [];
+    const runSplitAnimation = () => {
+      const lines = sectionRef.current?.querySelectorAll("h3, p") || [];
 
-    lines.forEach((el) => {
-      const split = new SplitText(el, {
-        type: "lines",
-        mask: "lines", // creates overflow hidden mask divs
-        linesClass: "line",
+      lines.forEach((el) => {
+        const split = new SplitText(el, {
+          type: "lines",
+          mask: "lines", // creates overflow hidden mask divs
+          linesClass: "line",
+        });
+
+        splitInstances.current.push(split);
+
+        // Initial state: hidden below
+        gsap.set(split.lines, { yPercent: 100, opacity: 0 });
+
+        // Reveal animation with stagger
+        const trigger = gsap.to(split.lines, {
+          yPercent: 0,
+          opacity: 1,
+          duration: 1,
+          delay: 2,
+          ease: "power3.out",
+          stagger: 0.1,
+        });
+
+        triggers.current.push(trigger.scrollTrigger);
       });
 
-      splitInstances.current.push(split);
+      ScrollTrigger.refresh();
+    };
 
-      // Initial state: hidden below
-      gsap.set(split.lines, { yPercent: 100,opacity: 0 });
+    const fontReady = document.fonts?.ready || Promise.resolve();
 
-      // Reveal animation with stagger
-      const trigger = gsap.to(split.lines, {
-        yPercent: 0,
-        opacity: 1,
-        duration: 1,
-        delay:2,
-        ease: "power3.out",
-        stagger: 0.1,
-      });
-
-      triggers.current.push(trigger.scrollTrigger);
-    });
-
-    ScrollTrigger.refresh();
-  };
-
-  const fontReady = document.fonts?.ready || Promise.resolve();
-
-  fontReady.then(() => {
-    requestAnimationFrame(() => {
+    fontReady.then(() => {
       requestAnimationFrame(() => {
-        if (!sectionRef.current) return;
-        runSplitAnimation();
+        requestAnimationFrame(() => {
+          if (!sectionRef.current) return;
+          runSplitAnimation();
+        });
       });
     });
-  });
 
-  return () => {
-    triggers.current.forEach((st) => st?.kill());
-    splitInstances.current.forEach((split) => split.revert());
-    ScrollTrigger.refresh();
-  };
-}, []);
-
+    return () => {
+      triggers.current.forEach((st) => st?.kill());
+      splitInstances.current.forEach((split) => split.revert());
+      ScrollTrigger.refresh();
+    };
+  }, []);
 
   useEffect(() => {
     let refreshTimeout;
@@ -113,11 +112,13 @@ const HeroSection = () => {
       />
       <div id="hero_container">
         <div ref={sectionRef} className="text_container">
-          <p>Fashion that feels like you. Dopamine dressing for everday.</p>
-          <h3>
-            Dreamy prints, bold collabs each piece is a feeling, stitched into
-            fabric.
-          </h3>
+          <div className="text_container_wrap">
+            <p>Fashion that feels like you. Dopamine dressing for everday.</p>
+            <h3>
+              Dreamy prints, bold collabs each piece is a feeling, stitched into
+              fabric.
+            </h3>
+          </div>
         </div>
         <div className="polaroid_container" ref={polaroidRef}>
           <PolaroidCard

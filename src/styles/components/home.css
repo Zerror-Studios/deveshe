@@ -442,17 +442,27 @@
 
 @media (max-width: 576px) {
   #home_hero {
-    height: 175vh;
+    height: 145vh;
   }
   #hero_container {
     padding: 0 3vw 15vw;
     background-color: rgba(0, 0, 0, 0.17);
+    gap: 5vw;
   }
   #hero_container .text_container {
     width: 100%;
     position: static;
     text-align: center;
-    height: 90vh;
+    height: 110vh;
+    flex-shrink: 0;
+  }
+  .text_container_wrap{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: sticky;
+    bottom: 10px;
   }
   #hero_container .text_container p {
     font-size: 5vw;
@@ -465,14 +475,14 @@
   .polaroid_container {
     width: 100%;
     align-items: center;
-    gap: 20vw;
+    gap: 10vw;
   }
   .polaroid_container .polaroid_card {
-    width: 55vw;
+    width: 45vw;
     padding: 2vw;
   }
   .polaroid_container .polaroid_img {
-    height: 45vw;
+    height: 35vw;
   }
   .polaroid_container .polaroid_card p {
     font-size: 3.5vw;
@@ -482,6 +492,7 @@
   #explore_section {
     min-height: 100vh;
     padding: 20vw 3vw;
+    padding-top: 50vw;
   }
 
   .explore_text_container h2 {
