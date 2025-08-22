@@ -15,8 +15,8 @@
   src: url(/fonts/bd8de66be4175fed48a7.woff);
 }
 @font-face {
-  font-family: Henry-Italic;
-  src: url(https://cdn.shopify.com/oxygen-v2/24187/8316/16871/768954/build/_assets/Henry-Italic-XZWGQLUJ.woff2);
+  font-family: HenryItalic;
+  src: url(/fonts/Henry-Italic-XZWGQLUJ.woff2);
 }
 :root {
   --primary-font-Hel: Helvetica, sans-serif;

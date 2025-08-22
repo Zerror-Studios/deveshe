@@ -174,7 +174,7 @@ const CartDrawer = ({ isOpen, closeCart }) => {
             <span>{formatePrice(discountedPrice || "")}</span>
           </div>
           <div className="checkout_btn_container">
-            <span>Free worldwide shipping on orders over 500 INR</span>
+            <span>Free worldwide shipping on orders over 5000 INR</span>
             <button
               className="_btn_wrapper"
               style={

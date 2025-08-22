@@ -99,7 +99,6 @@
 }
 
 .tiles_inner_text a {
-  /* text-decoration: underline; */
   color: #fff;
 }
 
@@ -124,522 +123,8 @@
   text-decoration: none;
 }
 
-/* How_to_Nail_it_Cntr */
-#How_to_Nail_it_Cntr {
-  /* background-color: #fff; */
-  width: 100%;
-  position: relative;
-  padding-top: 16.4705882353vw;
-  background-color: #fadcde;
-  background-image: url(/grainy-lg-bg-op.svg);
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-}
 
-#How_to_Nail_it_Cntr .row {
-  display: flex;
-  flex-flow: row wrap;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 106.25rem;
-  padding-left: 5.8823529412vw;
-  padding-right: 5.8823529412vw;
-}
 
-#How_to_Nail_it_Cntr .row.how_we_picture {
-  align-items: center;
-  justify-content: center;
-}
-
-#How_to_Nail_it_Cntr .how_we_picture_inner {
-  flex: 0 0 37.5%;
-  max-width: 37.5%;
-}
-
-#How_to_Nail_it_Cntr .how-we-image {
-  position: relative;
-  text-align: center;
-}
-
-#How_to_Nail_it_Cntr .mask-memoji-wrapper {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#How_to_Nail_it_Cntr .mask-memoji-wrapper .curved-text {
-  left: 50%;
-  position: absolute;
-  top: -115px;
-  transform: translateX(-50%);
-}
-
-.mask-memoji-wrapper .mask {
-  border-radius: 190px;
-  bottom: 0;
-  clip-path: url(#mask-curve);
-  -webkit-clip-path: url(#mask-curve);
-  left: 0;
-  overflow: hidden;
-  position: absolute;
-  right: 0;
-  top: 0;
-}
-
-.block-bg-cover {
-  height: 100%;
-  left: 0;
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 0;
-}
-
-.block-bg-cover .element-cover {
-  display: block;
-  height: 100%;
-  -o-object-fit: cover;
-  object-fit: cover;
-  -o-object-position: 50% 50%;
-  object-position: 50% 50%;
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-}
-
-.block-bg-cover img {
-  display: block;
-  height: 100%;
-  -o-object-fit: cover;
-  object-fit: cover;
-  -o-object-position: 50% 50%;
-  object-position: 50% 50%;
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-}
-
-.mask-memoji-wrapper .mask img {
-  -o-object-position: 85% 50%;
-  object-position: 85% 50%;
-}
-
-.mask-memoji-wrapper .memoji {
-  position: absolute;
-  top: -180px;
-  transform: scale(0.58) scaleX(-1);
-}
-
-.mask-memoji-wrapper .memoji img {
-  /* width: 16vw; */
-  transform: rotateZ(14.6035deg);
-}
-
-#How_to_Nail_it_Cntr .nail_para_text_cntr {
-  align-items: center;
-  justify-content: center;
-}
-
-#How_to_Nail_it_Cntr .nail_para_text {
-  flex: 0 0 25%;
-  max-width: 25%;
-}
-
-#How_to_Nail_it_Cntr .nail_para_text .p-normal.text-top {
-  color: #222;
-  /* font-size: calc(1.2875rem + 0.2vw); */
-  font-size: 0.75rem;
-  letter-spacing: -0.01em;
-  line-height: 1.5em;
-  margin-top: 2.6470588235vw;
-  position: relative;
-  text-align: center;
-  text-transform: uppercase;
-  font-family: var(--primary-font-Hel);
-}
-
-#How_to_Nail_it_Cntr .divider {
-  background-color: #222;
-  height: 100px;
-  margin: 35px auto;
-  position: relative;
-  width: 1px;
-}
-
-#How_to_Nail_it_Cntr .nail_para_text-bottom {
-  flex: 0 0 50%;
-  max-width: 50%;
-}
-
-#How_to_Nail_it_Cntr .p-normal.text {
-  color: #222;
-  /* font-size: calc(1.325rem + 0.4vw); */
-  font-size: 1rem;
-  letter-spacing: -0.02em;
-  line-height: 1.3em;
-  margin-bottom: 7.0588235294vw;
-  position: relative;
-  text-align: center;
-  font-family: var(--primary-font-Hel);
-}
-
-#How_to_Nail_it_Cntr .pictos-wrapper {
-  margin-bottom: 19.4117647059vw;
-  position: relative;
-}
-
-#How_to_Nail_it_Cntr .line-wrapper,
-#How_to_Nail_it_Cntr .pictos-label {
-  height: 100%;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
-}
-
-#How_to_Nail_it_Cntr .st0 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 2;
-  stroke-miterlimit: 10;
-}
-
-#How_to_Nail_it_Cntr .st1 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10;
-}
-
-#How_to_Nail_it_Cntr .p-normal {
-  color: #fff;
-  font-size: calc(1.475rem + 1.2vw);
-  letter-spacing: -0.01em;
-  line-height: 1.2em;
-}
-
-#How_to_Nail_it_Cntr .anime-container {
-  margin-top: 1px;
-}
-
-#How_to_Nail_it_Cntr .anime-container svg {
-  width: 100%;
-  height: 100%;
-  transform: translate3d(0px, 0px, 0px);
-  /* contentvisibility: visible; */
-}
-
-#How_to_Nail_it_Cntr .pictos-label .picto-one {
-  left: 35.2941176471vw;
-  position: absolute;
-  text-align: center;
-  top: 29.4117647059vw;
-  width: 14.7058823529vw;
-}
-
-#How_to_Nail_it_Cntr .pictos-label .p-normal {
-  color: #222;
-  font-size: 14px;
-  letter-spacing: 1px;
-  line-height: 1;
-  font-family: font1;
-  font-weight: 500;
-}
-
-#How_to_Nail_it_Cntr .pictos-label .picto-two {
-  left: 5.8823529412vw;
-  position: absolute;
-  text-align: center;
-  top: 64.7058823529vw;
-  width: 14.7058823529vw;
-}
-
-#How_to_Nail_it_Cntr .pictos-label .picto-three {
-  bottom: 29.4117647059vw;
-  left: 55.8823529412vw;
-  position: absolute;
-  text-align: center;
-  width: 14.7058823529vw;
-}
-
-#How_to_Nail_it_Cntr .pictos-label .picto-four {
-  bottom: -2.9411764706vw;
-  left: 17.6470588235vw;
-  position: absolute;
-  text-align: center;
-  width: 14.7058823529vw;
-}
-
-#How_to_Nail_it_Cntr .line-wrapper svg path {
-  stroke-dasharray: 8945.95;
-  stroke-dashoffset: -8945.95;
-}
-
-#How_to_Nail_it_Cntr .st0 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 2;
-  stroke-miterlimit: 10;
-}
-
-.title_inner-nail {
-  flex: 0 0 100%;
-  max-width: 100%;
-}
-
-.title_inner-nail.columns {
-  flex: 1 1 0;
-  min-width: 0;
-  min-width: auto;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-}
-
-.title_inner-nail h2 {
-  font-family: font2;
-  font-size: 9vw;
-  line-height: 0.9;
-  text-transform: uppercase;
-  white-space: nowrap;
-  position: relative;
-  text-align: center;
-}
-
-.title_inner-nail h2 {
-  position: relative;
-}
-.title_inner-nail h2::before {
-  content: "";
-  position: absolute;
-  width: 36px;
-  height: 40px;
-  top: 0%;
-  left: 0%;
-  background-image: url(/star.png);
-  background-repeat: no-repeat;
-  z-index: 1;
-}
-.title_inner-nail h2::after {
-  content: "";
-  position: absolute;
-  width: 36px;
-  height: 40px;
-  top: 50%;
-  left: 95%;
-  background-image: url(/star2.png);
-  background-repeat: no-repeat;
-  z-index: 1;
-}
-
-.title_inner-nail h2 span {
-  display: inline-block;
-  transform-origin: top;
-}
-.title_inner-nail h2 span:nth-last-child(4),
-.title_inner-nail h2 span:nth-last-child(5),
-.title_inner-nail h2 span:nth-last-child(6),
-.title_inner-nail h2 span:nth-last-child(7) {
-  color: red !important;
-}
-
-.title_inner-nail h2 .serif-italic {
-  font-style: italic;
-}
-
-.title_inner-nail .arrow {
-  transform: translateY(-50%) scaleY(0.5);
-  transform-origin: top;
-  text-align: center;
-  margin-top: 80px;
-  margin-bottom: 30px;
-  opacity: 0;
-}
-
-@media screen and (max-width: 1100px) {
-  #How_to_Nail_it_Cntr .how_we_picture_inner {
-    flex: 0 0 75%;
-    max-width: 75%;
-  }
-
-  #How_to_Nail_it_Cntr .how-we-image {
-    height: 300px;
-    transform: scale(0.5);
-    transform-origin: top;
-  }
-
-  #How_to_Nail_it_Cntr .nail_para_text .p-normal.text-top {
-    font-size: 0.75rem;
-    line-height: 1.2rem;
-  }
-
-  #How_to_Nail_it_Cntr .nail_para_text {
-    flex: 0 0 87.5%;
-    max-width: 87.5%;
-  }
-
-  #How_to_Nail_it_Cntr .nail_para_text-bottom {
-    flex: 0 0 87.5%;
-    max-width: 87.5%;
-  }
-
-  #How_to_Nail_it_Cntr .p-normal.text {
-    font-size: 1rem;
-    line-height: 1.2em;
-  }
-
-  .title_inner-nail h2 {
-    text-align: center;
-  }
-
-  .title_inner-nail .arrow {
-    margin-top: 40px;
-  }
-
-  #How_to_Nail_it_Cntr .arrow svg {
-    width: 64px;
-  }
-}
-
-@media only screen and (max-width: 960px) {
-  #How_to_Nail_it_Cntr {
-    padding-top: calc(4.5rem + 17.33333vw);
-  }
-
-  #How_to_Nail_it_Cntr .row {
-    padding-left: calc(2.25rem + 5.33333vw);
-  }
-
-  #How_to_Nail_it_Cntr .nail_para_text .p-normal.text-top {
-    margin-top: calc(1.5625rem + 1.66667vw);
-  }
-
-  #How_to_Nail_it_Cntr .nail_para_text {
-    flex: 0 0 87.5%;
-    max-width: 87.5%;
-  }
-
-  #How_to_Nail_it_Cntr .p-normal.text {
-    margin-bottom: calc(2.5rem + 6.66667vw);
-  }
-
-  .title_inner-nail h2 {
-    font-size: calc(3.625rem + 12.66667vw);
-  }
-}
-
-@media screen and (max-width: 835px) {
-  #How_to_Nail_it_Cntr .how-we-image {
-    height: 450px;
-    transform: scale(0.8);
-    transform-origin: top;
-  }
-
-  .title_inner-nail h2 {
-    transform: scale(0.85);
-  }
-}
-
-@media screen and (max-width: 767px) {
-  #How_to_Nail_it_Cntr .row {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  #How_to_Nail_it_Cntr .how-we-image {
-    height: 300px;
-    margin-left: -20px;
-    transform: scale(0.5);
-    transform-origin: top;
-  }
-}
-
-@media only screen and (min-width: 1200px) {
-  #How_to_Nail_it_Cntr .p-normal {
-    font-size: 2.375rem;
-  }
-
-  .title_inner-nail h2 {
-    font-size: 8vw;
-  }
-
-  #How_to_Nail_it_Cntr .pictos-label .p-normal {
-    font-size: 14px;
-  }
-
-  #How_to_Nail_it_Cntr .p-normal.text-top {
-    font-size: 0.75rem;
-    line-height: 1;
-  }
-
-  #How_to_Nail_it_Cntr .p-normal.text {
-    font-size: 1rem;
-  }
-}
-
-@media only screen and (min-width: 1700px) {
-  #How_to_Nail_it_Cntr {
-    padding-top: 280px;
-  }
-
-  /* #How_to_Nail_it_Cntr {
-    padding-bottom: 350px;
-  } */
-  #How_to_Nail_it_Cntr .row {
-    padding-right: 100px;
-    padding-left: 100px;
-  }
-
-  #How_to_Nail_it_Cntr .pictos-wrapper {
-    margin-bottom: 330px;
-  }
-
-  #How_to_Nail_it_Cntr .pictos-label .picto-one {
-    width: 250px;
-  }
-
-  #How_to_Nail_it_Cntr .pictos-label .picto-one {
-    left: 600px;
-  }
-
-  #How_to_Nail_it_Cntr .pictos-label .picto-one {
-    top: 500px;
-  }
-
-  #How_to_Nail_it_Cntr .pictos-label .picto-two {
-    width: 250px;
-  }
-
-  #How_to_Nail_it_Cntr .pictos-label .picto-two {
-    left: 100px;
-  }
-
-  #How_to_Nail_it_Cntr .pictos-label .picto-two {
-    top: 1100px;
-  }
-
-  #How_to_Nail_it_Cntr .pictos-label .picto-three {
-    left: 950px;
-  }
-
-  #How_to_Nail_it_Cntr .pictos-label .picto-three {
-    bottom: 500px;
-  }
-
-  #How_to_Nail_it_Cntr .pictos-label .picto-four {
-    left: 300px;
-  }
-
-  #How_to_Nail_it_Cntr .pictos-label .picto-four {
-    bottom: -50px;
-  }
-}
-
-/* How_to_Nail_it_Cntr */
 
 /* ShopCards_section */
 .ShopCards_section {
@@ -650,7 +135,6 @@
 .ShopCards_container {
   position: relative;
   width: 100%;
-  /* height: 100vh; */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   padding-bottom: 40px;
@@ -664,7 +148,6 @@
   white-space: nowrap;
   cursor: pointer;
   color: currentcolor;
-  /* font-family: inherit; */
   font-size: inherit;
   font-weight: inherit;
   letter-spacing: inherit;
@@ -696,7 +179,6 @@
 .shop_card_img_wrapper {
   height: 100%;
   width: 100%;
-  /* position: absolute; */
   top: 0px;
   left: 0px;
 }
@@ -765,20 +247,7 @@
   transition: opacity 0.2s;
 }
 
-/* shop_card_text_cntr */
-/* .shop_card_text_cntr {
-  display: grid;
-  padding: 26px;
-  column-gap: 12px;
-  grid-template-columns: 1fr;
-  grid-template-areas:
-    "sizes"
-    "title"
-    "description"
-    "price";
-  align-items: flex-start;
-  overflow: hidden;
-} */
+
 .shop_card_text_cntr_inner {
   display: flex;
   flex-direction: column;
@@ -789,7 +258,6 @@
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  /* padding: 26px; */
   overflow: hidden;
 }
 
@@ -812,12 +280,10 @@
 
 .shop_card_brandwrap {
   display: flex;
-  /* justify-content: space-between; */
   margin-top: 10px;
 }
 
 .shop_card_tag {
-  /* font-family: Henry Italic, Helvetica, sans-serif; */
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -825,22 +291,18 @@
   line-height: 1.2;
   color: #767676;
   grid-area: sizes;
-  /* width: 100%; */
   display: flex;
-  /* margin-bottom: 4px; */
   height: 18px;
   font-family: var(--secondary-font-Hen);
   text-transform: capitalize;
 }
 
 .shop_card_item_Name {
-  /* font-family: Helvetica, sans-serif; */
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 12px;
   line-height: 1;
-  /* margin-bottom: 4px; */
   grid-area: description;
   max-width: calc(50vw - 48px);
   white-space: nowrap;
@@ -852,7 +314,6 @@
 }
 
 .shop_card_price_wrap {
-  /* font-family: Helvetica, sans-serif; */
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -868,7 +329,6 @@
   font-family: var(--primary-font-Hel);
 }
 
-/* shop_card_text_cntr */
 
 /* respcard */
 .respo-shop_card-img_wrap {
@@ -898,7 +358,6 @@
 /* respcard */
 .ReactModalPortal_img_cntr {
   position: relative;
-  /* display: none; */
 }
 .ReactModalPortal_img_cntr_overlay {
   position: fixed;
@@ -923,8 +382,6 @@
   overflow: scroll;
   scrollbar-width: none;
   position: relative;
-  cursor: url(https://cdn.shopify.com/oxygen-v2/24187/8316/16871/844913/build/_assets/closeIcon-VRI5R4EX.svg),
-    auto;
 }
 .ReactModalPortal_img_cntr_grid {
   position: relative;
@@ -1062,65 +519,7 @@
     overflow: hidden;
   }
 
-  #How_to_Nail_it_Cntr .pictos-label .picto-one {
-    width: 20vw;
-  }
-  #How_to_Nail_it_Cntr .pictos-label .picto-one {
-    left: 53.294118vw;
-    top: 33.411765vw;
-  }
 
-  #How_to_Nail_it_Cntr .pictos-label .p-normal {
-    color: #222;
-    font-size: 11px;
-    letter-spacing: 1px;
-    line-height: 1;
-    font-family: font1;
-    font-weight: 500;
-  }
-
-  #How_to_Nail_it_Cntr .pictos-label .picto-two {
-    width: 24vw;
-  }
-  #How_to_Nail_it_Cntr .pictos-label .picto-two {
-    top: 75.705882vw;
-  }
-
-  #How_to_Nail_it_Cntr .pictos-label .picto-three {
-    width: 23vw;
-  }
-  #How_to_Nail_it_Cntr .pictos-label .picto-three {
-    bottom: 21.411765vw;
-    left: 66.882353vw;
-  }
-
-  #How_to_Nail_it_Cntr .pictos-label .picto-four {
-    width: 22vw;
-  }
-  #How_to_Nail_it_Cntr .pictos-label .picto-four {
-    bottom: -11.941176vw;
-    left: 18.647059vw;
-  }
-  .line-wrapper svg path {
-    stroke-dasharray: 0 !important; /* Set to a large enough value */
-    stroke-dashoffset: 0 !important; /* Hide the path initially */
-  }
-  .number svg {
-    width: 20px;
-    height: 20px;
-  }
-  .title_inner-nail .arrow {
-    margin-top: 20px;
-  }
-  #How_to_Nail_it_Cntr .arrow svg {
-    width: 50px;
-  }
-  #How_to_Nail_it_Cntr {
-    padding: 20vw 0;
-  }
-  #How_to_Nail_it_Cntr .row {
-    padding: 0;
-  }
 }
 @media only screen and (min-width: 1120px) {
   .shop_card_brandwrap {
@@ -1225,7 +624,6 @@
 
 .ProductDets_img_slider_cntr {
   height: calc(100vh - 180px - 32px);
-  /* overflow: auto; */
   overflow: hidden;
   position: sticky;
   top: calc(180px + 32px);
@@ -1256,7 +654,6 @@
   white-space: nowrap;
   cursor: pointer;
   color: currentcolor;
-  /* font-family: inherit; */
   font-size: inherit;
   font-weight: inherit;
   letter-spacing: inherit;
@@ -1319,9 +716,7 @@ button {
   max-height: 150vw;
   height: 100%;
   scroll-snap-type: x mandatory;
-  /* margin-top: 45px; */
   position: relative;
-  /* grid: none; */
 }
 .title_size_color {
   display: none;
@@ -1342,15 +737,12 @@ button {
   white-space: nowrap;
   cursor: pointer;
   color: currentcolor;
-  /* font-family: inherit; */
   font-size: inherit;
   font-weight: inherit;
   letter-spacing: inherit;
   line-height: inherit;
   display: grid;
   scroll-snap-align: flex-start;
-  cursor: url(https://cdn.shopify.com/oxygen-v2/24187/8316/16871/768954/build/_assets/zoomIcon-ISPXVSEQ.svg),
-    auto;
 }
 
 .ProductDets_Big_img_wrap::-webkit-scrollbar {
@@ -1389,60 +781,27 @@ button {
   top: 0;
 }
 
-/* .ProductDets_text_cntr {
-  position: sticky;
-  bottom: 0;
-  display: grid;
-  gap: 6px;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  grid-template-areas:
-    "mobileTitleContainer mobileTitleContainer"
-    "selectedColorWrap colorPicker"
-    "descriptionTitle descriptionTitle"
-    "description description"
-    "additionalInfoButtons additionalInfoButtons"
-    "mobileBadge mobileBadge"
-    "needHelpButtonWrap needHelpButtonWrap";
-  margin-left: 26px;
-  margin-right: 26px;
-} */
+
 .ProductDets_text-container {
-  /* position: sticky;
-  bottom: 0;
-  background-color: red;
-  padding: 26px; */
   display: flex;
   flex-direction: column;
-  /* gap: 32px; */
 }
 
-/* .ProductDets_text_cntr_resp {
-  font-family: var(--primary-font-Hel);
-  grid-area: mobileTitleContainer;
-  display: grid;
-  align-content: center;
-  align-items: center;
-  gap: 8px;
-  padding-bottom: 32px;
-} */
+
 .ProductDets_text_container_resp {
   display: grid;
   justify-content: flex-start;
   font-family: var(--primary-font-Hel);
-  /* padding-bottom: 32px; */
   gap: 12px;
-  /* grid-auto-flow: column; */
 }
 .ProductDets_text_container_resp_productName {
-  font-family: var(--secondary-font-Hen);
+  font-family: HenryItalic;
   font-size: 20px;
 }
 .ProductDets_text_container_price_resp {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  /* grid-auto-flow: column; */
   font-family: var(--primary-font-Hel);
   font-size: 14px;
 }
@@ -1500,14 +859,9 @@ button {
   margin-left: 16px;
 }
 
-/* .ProductDets_text_brandName {
-  grid-area: title;
-  font-size: 20px;
-  display: none;
-  font-family: var(--primary-font-Hel);
-} */
+
 .ProductDets_text_container_productName {
-  font-family: var(--secondary-font-Hen);
+  font-family: HenryItalic;
   font-size: 24px;
   display: none;
 }
@@ -1538,17 +892,6 @@ button {
   font-size: 12px;
 }
 
-/* .ProductDets_text_prdt_Desc-title {
-  grid-area: descriptionTitle;
-  font-family: var(--primary-font-Hel);
-  font-weight: 400;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-size: 12px;
-  letter-spacing: 0.02em;
-  line-height: 1.35;
-  margin-top: 36px;
-} */
 .ProductDets_text-container_prdt_Desc {
   max-width: 350px;
   font-family: var(--primary-font-Hel);
@@ -1558,24 +901,10 @@ button {
   gap: 10px;
 }
 
-/* .ProductDets_text_prdt_Desc {
-  grid-area: description;
-  display: grid;
-  gap: 20px;
-  max-width: 350px;
-  font-family: var(--primary-font-Hel);
 
-  font-weight: 400;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-size: 14px;
-  letter-spacing: 0.02em;
-  line-height: 1.35;
-} */
 
 .ProductDets_Variants {
   position: relative;
-  /* background-color: rgb(255, 255, 255); */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1676,10 +1005,8 @@ button {
 }
 .ProductDets_size_wrap {
   position: relative;
-  /* background-color: blue; */
   display: flex;
   margin: 1rem 0;
-  /* justify-content: space-between; */
 }
 .Product_detail {
   display: flex;
@@ -1782,9 +1109,7 @@ button {
 }
 
 .ProductDets-size_numbers.acitve {
-  /* text-decoration: underline; */
   text-underline-offset: 3px;
-  /* for active size we use this code in js */
 }
 
 /* ProductDets_weight_wrap */
@@ -1793,7 +1118,6 @@ button {
   display: flex;
   gap: 91px;
   margin: 1rem 0;
-  /* background-color: green; */
 }
 
 .ProductDets-weight_assist_cntr {
@@ -1866,9 +1190,7 @@ button {
 }
 
 .ProductDets-weight_numbers.acitve {
-  /* text-decoration: underline; */
   text-underline-offset: 3px;
-  /* for active size we use this code in js */
 }
 
 /* ProductDets_weight_wrap */
@@ -1994,13 +1316,10 @@ button {
   grid-auto-flow: row;
   justify-content: flex-start;
   justify-items: flex-start;
-  /* margin-top: 36px; */
   flex-direction: column;
   align-items: flex-start;
 }
-/* .ProductDets_info_links:hover .ProductDets_info-btn {
-  color: #000000;
-} */
+
 .ProductDets_info-btn:hover {
   color: #767676;
 }
@@ -2016,7 +1335,6 @@ button {
   letter-spacing: 0.02em;
   line-height: 1.35;
   color: #000000;
-  /* text-decoration: underline; */
   text-underline-offset: 3px;
   font-family: var(--primary-font-Hel);
   padding: 6px 0;
@@ -2040,9 +1358,6 @@ button {
   font-family: var(--primary-font-Hel);
 }
 
-/* .ProductDets_info_text:hover {
-  color: #000000;
-} */
 
 /* ProductDets_text_wrapper */
 
@@ -2069,7 +1384,7 @@ button {
 }
 
 .Similar_prd_like-this {
-  font-family: var(--secondary-font-Hen);
+  font-family: HenryItalic;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -2429,6 +1744,31 @@ button {
 /* product card details */
 
 @media (max-width: 576px) {
+  .ProductDets_text_container_resp {
+    gap: 8px;
+  }
+  .ProductDets_common_style{
+    line-height: .9;
+  }
+  .ProductDets_size_wrap {
+    margin: 32px 0 20px;
+  }
+  .ProfuctDets_fieldset{
+    margin: 0;
+  }
+  .ProductDets_description_wrap{
+    margin-block: 0;
+    margin: 20px 0 0;
+  }
+  .ProductDets_info_help{
+    margin-top: 32px;
+  }
+  .Similar_prd_pieces{
+    font-size: 18px;
+  }
+  .Similar_prd_like-this{
+    padding-left: 4px;
+  }
   .title_inner-nail h2 {
     font-family: font2;
     font-size: 8.4vw;

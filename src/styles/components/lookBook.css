@@ -60,7 +60,7 @@
 }
 .lb-header-text p {
   font-weight: 400;
-  font-family: var(--secondary-font-Hen);
+  font-family: HenryItalic;
   font-size: 1.5rem;
   opacity: 0;
   margin-bottom: 1vw;
@@ -314,11 +314,17 @@
   padding-top: 5px;
 }
 @media (max-width: 576px) {
+  #lb-banner2 {
+    height: 100vh;
+  }
+  #main-banner-container{
+    height: 100vh;
+  }
   .lb-header-text h2 {
     font-size:8.5vw;
   }
   .lb-header-wrapper {
-    height: 45vh;
+    height: 38vh;
 }
   .lb-header-text p {
     font-size: 5vw;

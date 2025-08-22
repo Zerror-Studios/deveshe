@@ -56,10 +56,6 @@ const ContactForm = () => {
 
   return (
     <section id="contact_form">
-      <div className="phone_container">
-        <Phone />
-      </div>
-      <h2 id="contact_heading">contact</h2>
       <div id="form">
         <div id="left"></div>
         <div id="right">
@@ -94,6 +90,9 @@ const ContactForm = () => {
             </button>
           </form>
         </div>
+      </div>
+      <div className="phone_container">
+        <Phone />
       </div>
       <div id="address">
         <div className="elem elem-lf">

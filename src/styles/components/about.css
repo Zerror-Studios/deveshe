@@ -1073,10 +1073,10 @@
     height: auto;
     position: relative;
   }
-  .our_journey_vertical {
-    width: 84%;
-    bottom: -220vh;
-  }
+      .our_journey_vertical {
+        width: 67%;
+        bottom: -200vh;
+    }
   .journey_text {
     position: static;
     width: 100%;
@@ -1146,7 +1146,7 @@
     /* display: none; */
   }
   .ranbow-vertical__1-svg {
-    width: 18em;
+    width: 16em;
     height: 100%;
   }
 
@@ -1160,6 +1160,7 @@
   .process_strip {
     width: 100%;
     padding-top: 0 !important;
+    align-items: center;
   }
   .porcess_content h4 {
     font-size: 7vw;
@@ -1167,6 +1168,9 @@
   }
   .porcess_content p {
     font-size: 5vw;
+  }
+  .process_card{
+    width: 80%;
   }
   .process_card p {
     font-size: 3.5vw;

@@ -133,12 +133,12 @@ const NavbarMobile = ({openCart}) => {
               <div className="nav-contact">
                 <p>contact us</p>
                 <p>
-                  info@deveshe.com <br />
-                  +91893990000
+                  deveshedreams@gmail.com <br />
+                  +919833983775
                 </p>
               </div>
               <div className="nav-social-icons">
-                <Link href="/" className="nav-s-icon">
+                 <a href="https://www.instagram.com/de_ve_she_dreams" className="nav-s-icon" target="_blank">
                   <svg
                     className="icon-instagram"
                     width="19"
@@ -153,7 +153,7 @@ const NavbarMobile = ({openCart}) => {
                       fill="white"
                     ></path>
                   </svg>
-                </Link>
+                </a>
                 <Link href="/ " className="nav-s-icon">
                   <svg
                     className="icon-facebook"

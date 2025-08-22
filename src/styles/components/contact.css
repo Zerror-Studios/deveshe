@@ -176,9 +176,7 @@
   margin-top: 30px;
   cursor: pointer;
 }
-#contact_heading{
-  display: none;
-}
+
 
 @media (max-width: 576px) {
   #contact_form {
@@ -194,8 +192,10 @@
     width: 100%;
   }
   .phone_container {
-    display: none;
-  }
+    position: static;
+    width: 100%;
+    height: 30vh;
+}
   #contact_form #address {
     flex-direction: column;
     height: auto;
@@ -203,12 +203,15 @@
   }
   #contact_form #address .elem {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
   #contact_form .elem-lf h5 {
     width: 100%;
   }
   #contact_form .elem .add {
-    width: 50%;
+    width: 100%;
     font-size: 12px;
   }
 
@@ -221,14 +224,7 @@
   #contact_form #right form input {
     padding: 3vw 0;
   }
-  #contact_heading {
-    font-size: 2.5rem;
-    line-height: 1;
-    font-family: paragraphStyle;
-    font-weight: 500;
-    text-transform: capitalize;
-    display: block;
-  }
+
 }
 
 /* contact css end */
