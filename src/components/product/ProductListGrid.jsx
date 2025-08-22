@@ -2,7 +2,6 @@ import React, { useLayoutEffect } from "react";
 import { formatePrice } from "@/utils/Util";
 import ProductCard from "../common/card/ProductCard";
 import { useRouter } from "next/router";
-import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
@@ -45,11 +44,10 @@ const ProductListGrid = ({ title = "You may also like", data }) => {
   return (
     <div className="Similar_prd_wrap">
       <h2 className="Similar_prd_head">
-        <span className="Similar_prd_pieces">Pieces</span>
         <span className="Similar_prd_like-this">{title || ""}</span>
       </h2>
       <div className="Similar_prd_cntr">
-        {data?.map((item, idx) => {
+        {data?.slice(0, 4).map((item, idx) => {
           const minVariant = item?.variants.reduce((min, item) =>
             item.variantPrice < min.variantPrice ? item : min
           );

@@ -21,7 +21,7 @@
 :root {
   --primary-font-Hel: Helvetica, sans-serif;
 }
-::-webkit-scrollbar {
+body::-webkit-scrollbar {
   display: none;
 }
 * {

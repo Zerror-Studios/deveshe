@@ -61,14 +61,18 @@ const FounderSection = () => {
         </div>
         <div className="social_card_container">
           <div className="social_card">
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              src="/assets/images/about/social_gif.mp4"
-            ></video>
-            <a href="https://www.instagram.com/de_ve_she_dreams" target="_blank">follow my instagram</a>
+            <Image
+              width={1000}
+              height={1000}
+              alt="gif"
+              src="/assets/images/about/social_gif.gif"
+            />
+            <a
+              href="https://www.instagram.com/de_ve_she_dreams"
+              target="_blank"
+            >
+              follow my instagram
+            </a>
           </div>
         </div>
       </div>

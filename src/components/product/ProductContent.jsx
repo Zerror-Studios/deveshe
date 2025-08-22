@@ -21,6 +21,14 @@ const ProductContent = ({ data = {} }) => {
   const handleOpen = () => setShowSizeAssist(true);
   const handleClose = () => setShowSizeAssist(false);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreen = () => setIsMobile(window.innerWidth <= 576);
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
   const basePrice = useMemo(
     () => (data?.discountedPrice > 0 ? data.discountedPrice : data?.price || 0),
     [data]
@@ -213,7 +221,7 @@ const ProductContent = ({ data = {} }) => {
                   <div
                     onClick={handleOpen}
                     className="easysize_button"
-                    style={{ textTransform: "capitalize",cursor:"pointer" }}
+                    style={{ textTransform: "capitalize", cursor: "pointer" }}
                   >
                     {productOption.optionName} Assistance
                   </div>
@@ -249,13 +257,15 @@ const ProductContent = ({ data = {} }) => {
             </button>
           </div>
 
-          <div className="ProductDets_bottom_links_wrap">
-            <div className="ProductDets_info_help">
-              <p className="ProductDets_info_text sql38zc _1l9nr81o">
-                Complimentary shipping on orders above 5000 INR.
-              </p>
+          {!isMobile && (
+            <div className="ProductDets_bottom_links_wrap">
+              <div className="ProductDets_info_help">
+                <p className="ProductDets_info_text sql38zc _1l9nr81o">
+                  Complimentary shipping on orders above 5000 INR.
+                </p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <div className="ProductDets_Notify_wrap mobile_add_btn">
           <button
@@ -283,8 +293,17 @@ const ProductContent = ({ data = {} }) => {
             )}
           </button>
         </div>
+        {isMobile && (
+          <div className="ProductDets_bottom_links_wrap">
+            <div className="ProductDets_info_help">
+              <p className="ProductDets_info_text sql38zc _1l9nr81o">
+                Complimentary shipping on orders above 5000 INR.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
-       {showSizeAssist && <SizeAssistance onClose={handleClose} />}
+      {showSizeAssist && <SizeAssistance onClose={handleClose} />}
     </div>
   );
 };

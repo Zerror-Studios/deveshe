@@ -8,7 +8,7 @@ const ReviewSection = () => {
         <div key={i} className="review_slide">
           {i === 0 && (
             <h2 className="review_title">
-              flowfest <span>love</span>
+              Happy <span>customers</span>
             </h2>
           )}
 

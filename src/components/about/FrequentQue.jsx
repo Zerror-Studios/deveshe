@@ -1,7 +1,7 @@
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 gsap.registerPlugin(ScrollTrigger);
 const FrequentQue = () => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -11,34 +11,68 @@ const FrequentQue = () => {
   };
   const accordionData = [
     {
-      title: "Can I have a discount?",
+      title: `Are your collections sustainable/ethical?`,
       content: [
-        `This is a non-profit event, and our goal is to make FlowFest as affordable as we possibly can whilst delivering a quality day that you’ll never forget. Due to last year’s feedback we are investing more in comfort and quality this year.`,
-        `To keep ticket prices as low as we can for everyone, we are unable to offer discounts and appreciate your support for this community event.`,
+        <p className="accordion-css__item-p">
+          Yes. All our fabrics and labour are sourced ethically, and we work
+          with a small team that truly cares about what they create. We release
+          capsule collections and make them only to order—no endless stock, no
+          excess waste. Our pieces are designed to be kept, cherished, and lived
+          in for years.
+        </p>,
       ],
     },
     {
-      title: "Is food included?",
+      title: `How do I know my size?`,
       content: [
-        `Food is not included in the ticket price, but there will be a variety of stalls on-site with affordable options.`,
+        <p className="accordion-css__item-p">
+          You can check our size guide for all the details, or just reach
+          out—we’re happy to help. Email us at{" "}
+          <strong>deveshedreams@gmail.com</strong> or slide into our DMs at{" "}
+          <strong>@DeVeSheDreams</strong> and we’ll guide you to your perfect
+          fit.
+        </p>,
       ],
     },
     {
-      title: "Is parking available?",
+      title: `When will my order arrive, and can I track it?`,
       content: [
-        `Yes, free parking is available near the venue, but spaces are limited and operate on a first-come, first-served basis.`,
+        <p className="accordion-css__item-p">
+          Each piece is made to order and takes about 2–3 weeks to craft and
+          ship. Once it’s on the way, you’ll receive a tracking link to follow
+          your order right to your doorstep.
+        </p>,
       ],
     },
     {
-      title: "Are children allowed?",
+      title: `What payment methods do you accept?`,
       content: [
-        `Yes, children are welcome. Kids under the age of 12 can enter for free, but they must be accompanied by an adult.`,
+        <p className="accordion-css__item-p">
+          We accept bank transfers, credit and debit cards, and UPI
+          payments—choose whatever feels easiest for you. Your payment details
+          are processed safely and never shared.
+        </p>,
       ],
     },
     {
-      title: "Can I get a refund if I can’t attend?",
+      title: `What is your return/exchange policy?`,
       content: [
-        `Unfortunately, tickets are non-refundable. However, you can transfer your ticket to another person by contacting our support team.`,
+        <p className="accordion-css__item-p">
+          We don’t accept returns, but if you receive the wrong piece or a
+          damaged product, we’ll happily exchange it for you. If you’ve received
+          an incorrect or damaged piece, just email us at{" "}
+          <strong>deveshedreams@gmail.com</strong> and we’ll help you process
+          your exchange right away.
+        </p>,
+      ],
+    },
+    {
+      title: `Do you ship internationally?`,
+      content: [
+        <p className="accordion-css__item-p">
+          Not just yet. We currently ship only within India. But stay tuned,
+          we’re working on it.
+        </p>,
       ],
     },
   ];
@@ -92,11 +126,7 @@ const FrequentQue = () => {
       </div>
       <div id="faq_content">
         <div className="faq_content_left">
-          <Image
-            fill
-            src="/assets/images/about/img2.webp"
-            alt="image"
-          />
+          <Image fill src="/assets/images/about/img2.webp" alt="image" />
         </div>
         <div className="faq_content_right">
           <ul className="accordion-css__list">
@@ -130,26 +160,7 @@ const FrequentQue = () => {
                     <div className="accordion-css__item-bottom-content">
                       <div className="accordion-css__card">
                         {item.content.map((para, idx) => (
-                          <p key={idx} className="accordion-css__item-p">
-                            {para
-                              .split(" ")
-                              .map((word, wIdx) =>
-                                [
-                                  "non-profit",
-                                  "affordable",
-                                  "quality",
-                                  "comfort",
-                                  "low",
-                                  "everyone",
-                                  "unable",
-                                  "support",
-                                ].includes(word.toLowerCase()) ? (
-                                  <strong key={wIdx}>{word} </strong>
-                                ) : (
-                                  word + " "
-                                )
-                              )}
-                          </p>
+                          <Fragment key={idx}>{para}</Fragment>
                         ))}
                       </div>
                     </div>

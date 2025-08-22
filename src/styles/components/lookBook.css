@@ -314,6 +314,12 @@
   padding-top: 5px;
 }
 @media (max-width: 576px) {
+  #lb-section3-ig img{
+    height: 100%;
+  }
+  .lb-sec4-img img,.parallex img {
+    height: 100%;
+  }
   #lb-banner2 {
     height: 100vh;
   }
@@ -372,6 +378,7 @@
   #lb-section4 {
     padding: 0 20px;
     flex-direction: column;
+    gap: 20px;
   }
   .lb-sec4-img {
     width: 100%;

@@ -962,7 +962,7 @@
   position: relative;
   overflow: hidden;
 }
-#founder_section img {
+#founder_section >img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1009,8 +1009,9 @@
   padding: 1.5vw;
   background-color: #fff;
 }
-.social_card_container .social_card video {
+.social_card_container .social_card img {
   width: 100%;
+  height: auto;
 }
 
 .social_card_container .social_card a {

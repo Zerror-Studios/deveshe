@@ -168,7 +168,6 @@
   transition: all ease 0.3s;
   font-size: calc(16px - 0.22vw);
   font-family: var(--primary-font-Hel);
-  text-transform: uppercase;
   line-height: 160%;
   border: none;
   outline: none;

@@ -60,7 +60,7 @@
 }
 .overlay3a .textContainer h4 {
   color: white;
-  font-size: 2vw;
+  font-size: 1.5rem;
   font-family: font2;
   margin-bottom: 15px;
   text-transform: uppercase;
@@ -97,6 +97,6 @@
     padding: 20px;
   }
   .overlay3a .textContainer {
-  width: 80%;
+  width: 90%;
 }
 }
