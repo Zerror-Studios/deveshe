@@ -800,7 +800,13 @@
     font-size: 4vw;
 }
 .tweet-footer {
-    font-size: 14px;
+    font-size: 12px;
+}
+.tweet-footer span,.tweet-footer a{
+  white-space: nowrap;
+}
+.author .handle {
+  font-size: 13px;
 }
 .tweet-card {
     padding: 25px;
