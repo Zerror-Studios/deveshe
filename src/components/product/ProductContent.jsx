@@ -7,7 +7,7 @@ import { useVisitor } from "@/hooks/useVisitor";
 import { htmlParser } from "@/utils/Util";
 import { useRouter } from "next/router";
 import { useCartStore } from "@/store/cart-store";
-import Link from "next/link";
+import SizeAssistance from "./SizeAssistance";
 
 const ProductContent = ({ data = {} }) => {
   const router = useRouter();
@@ -16,6 +16,10 @@ const ProductContent = ({ data = {} }) => {
   const { openCart } = useCartStore((state) => state);
 
   const { visitorId } = useVisitor();
+  const [showSizeAssist, setShowSizeAssist] = useState(false);
+
+  const handleOpen = () => setShowSizeAssist(true);
+  const handleClose = () => setShowSizeAssist(false);
 
   const basePrice = useMemo(
     () => (data?.discountedPrice > 0 ? data.discountedPrice : data?.price || 0),
@@ -207,8 +211,9 @@ const ProductContent = ({ data = {} }) => {
                 </div>
                 <div className="ProductDets-size_assist_cntr">
                   <div
+                    onClick={handleOpen}
                     className="easysize_button"
-                    style={{ textTransform: "capitalize" }}
+                    style={{ textTransform: "capitalize",cursor:"pointer" }}
                   >
                     {productOption.optionName} Assistance
                   </div>
@@ -279,6 +284,7 @@ const ProductContent = ({ data = {} }) => {
           </button>
         </div>
       </div>
+       {showSizeAssist && <SizeAssistance onClose={handleClose} />}
     </div>
   );
 };

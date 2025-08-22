@@ -13,6 +13,7 @@ import "@/styles/address.css";
 import "@/styles/profile.css";
 import "@/styles/productLoader.css";
 
+import "@/styles/components/sizeAssistance.css";
 import "@/styles/components/navbar.css";
 import "@/styles/components/login.css";
 import "@/styles/components/home.css";

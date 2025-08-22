@@ -1,0 +1,112 @@
+/* SizeAssistance.css */
+
+.size-assist-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  font-family: var(--primary-font-Hel);
+  font-size: 12px !important;
+}
+
+.size-assist-popup {
+      background-color: #fadcde;
+    background-image: url(/grainy-bg.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+  padding: 100px;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  position: relative;
+}
+
+.size-assist-closeBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.size-assist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.size-assist-header h2{
+    font-family: HenryItalic;
+    font-weight: 400;
+    font-size: 24px;
+}
+
+.size-assist-quizBtn {
+  padding: 5px 15px;
+  border-radius: 20px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.size-assist-section {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.size-assist-section h3 {
+  color: #888;
+  margin-bottom: 10px;
+  font-family: HenryItalic;
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.size-assist-section ul {
+  margin: 0;
+  padding-left: 20px;
+  list-style-type: disc !important; /* ensures bullets */
+  list-style-position: inside !important; /* bullets appear inside the padding */
+}
+
+.size-assist-tableWrapper {
+  overflow-x: auto;
+  margin-top: 10px;
+}
+.measure-table{
+    margin-top: 30px;
+}
+
+.size-assist-tableWrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  table-layout: fixed; 
+}
+
+.size-assist-tableWrapper th,
+.size-assist-tableWrapper td {
+  padding: 10px 5px;
+  border-bottom: 1px solid #ddd;
+}
+.size-assist-tableWrapper th:first-child,
+.size-assist-tableWrapper td:first-child {
+  position: sticky;
+  left: 0;
+  text-align: left;
+  z-index: 2; 
+  width: fit-content;
+}
+
+
+.size-assist-tableWrapper th {
+  font-weight: normal;
+  color: #888;
+}
