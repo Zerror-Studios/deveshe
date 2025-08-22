@@ -7,6 +7,7 @@ import { GET_PRODUCTS } from "@/graphql";
 import VisionSection from "@/components/home/VisionSection";
 import ProductSection from "@/components/home/ProductSection";
 import ProductLoader from "@/components/loaders/ProductLoader";
+import ReviewSection from "@/components/home/ReviewSection";
 
 const Home = ({ meta, productData }) => {
    const sectionRef = useRef(null);
@@ -19,6 +20,7 @@ const Home = ({ meta, productData }) => {
         <ProductSection sectionRef={sectionRef} data={productData} />
       </Suspense>
       <VisionSection />
+      <ReviewSection/>
     </>
   );
 };

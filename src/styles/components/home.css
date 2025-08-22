@@ -363,8 +363,9 @@
   );
   padding: 80px 3vw;
   padding-top: 150px;
-  background-image: url(/grainy-bg.svg);
+  background-image: url(/grainy-lg-bg.svg);
   background-size: 100%;
+  background-position: bottom;
   background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
@@ -440,6 +441,133 @@
 }
 /* vision section end  */
 
+/* review section start */
+
+#review_section {
+  width: 100%;
+  padding-bottom: calc(10rem * 1.25);
+}
+
+.review_slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: calc(10rem * 1.25);
+  position: sticky;
+  top: 0;
+}
+
+.review_title {
+  position: absolute;
+  font-family: heading;
+  font-size: 8vw;
+  line-height: 0.9;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-align: center;
+}
+.review_card {
+  position: relative;
+  width: 39vw;
+  height: 23vw;
+  background-color: white;
+  border-radius: 50px;
+  border: 2px solid black;
+  transform-origin: center;
+  overflow: hidden;
+}
+
+.review_slide:nth-child(1) .review_card{
+  transform: rotate(4deg);
+}
+.review_slide:nth-child(2) .review_card{
+  transform: rotate(2deg);
+}
+.review_slide:nth-child(3) .review_card{
+  transform: rotate(0deg);
+}
+.review_slide:nth-child(4) .review_card{
+  transform: rotate(-2deg);
+}
+.review_slide:nth-child(5) .review_card{
+  transform: rotate(-4deg);
+}
+
+
+/* Rotated plate with big soft shadow like the image */
+.tweet-card {
+  width: 100%;
+  height: 100%;
+  padding: 0 35px ;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: var(--primary-font-Hel);
+}
+
+.tweet-header {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: center;
+  gap: 30px;
+}
+
+.tweet-header .avatar {
+  width: 70px;
+  height: 70px;
+  border-radius:50px;
+  object-fit: cover;
+}
+
+.author .name {
+  font-family: heading;
+  font-size: 26px;
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: 0.1px;
+  margin-bottom: 5px;
+}
+
+.author .handle {
+  margin-top: 2px;
+  font-size: 18px;
+  font-weight: 500;
+  font-family: var(--primary-font-Hel);
+  color: #767676;
+}
+
+.bird svg {
+  display: block;
+  fill: #1D9BF0;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,.05));
+}
+
+/* body text */
+.tweet-body {
+  margin: 18px 0 16px;
+  font-size:1.92vw;
+  font-weight: 500;
+  letter-spacing: .2px;
+}
+
+/* footer row */
+.tweet-footer {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: #767676;
+}
+
+.tweet-footer .tag {
+  text-decoration: none;
+  color: #767676;
+}
+
+
+/* review section end */
+
 @media (max-width: 576px) {
   #home_hero {
     height: 145vh;
@@ -482,7 +610,7 @@
   .polaroid_container .polaroid_card:nth-child(1) {
     transform: translateX(100px) scale(0.8) rotate(-15deg);
     width: 35vw;
-}
+  }
   .polaroid_container .polaroid_card {
     width: 38vw;
     padding: 2vw;
@@ -661,4 +789,40 @@
   .vision_text2 p {
     font-size: 5vw;
   }
+
+  .review_card {
+    width: 100%;
+    height: auto;
+    border-radius: 40px;
+}
+.tweet-body {
+    margin: 18px 0 16px;
+    font-size: 4vw;
+}
+.tweet-footer {
+    font-size: 14px;
+}
+.tweet-card {
+    padding: 25px;
+}
+#review_section {
+    width: 100%;
+    padding: 0 20px;
+    padding-bottom: calc(6rem * 1.25);
+}
+.author .name {
+    font-size: 18px;
+}
+.tweet-header .avatar {
+    width: 50px;
+    height: 50px;
+}
+.tweet-header{
+  gap: 15px;
+}
+.review_title{
+  top: 23%;
+  font-size: 8.5vw;
+  text-align: center;
+}
 }
