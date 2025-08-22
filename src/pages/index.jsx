@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useRef } from "react";
 import SeoHeader from "@/components/seo/SeoHeader";
 import HeroSection from "@/components/home/HeroSection";
 import ExploreSection from "@/components/home/ExploreSection";
@@ -9,13 +9,14 @@ import ProductSection from "@/components/home/ProductSection";
 import ProductLoader from "@/components/loaders/ProductLoader";
 
 const Home = ({ meta, productData }) => {
+   const sectionRef = useRef(null);
   return (
     <>
       <SeoHeader meta={meta} />
       <HeroSection />
-      <ExploreSection />
+      <ExploreSection sectionRef={sectionRef} />
       <Suspense fallback={<ProductLoader />}>
-        <ProductSection data={productData} />
+        <ProductSection sectionRef={sectionRef} data={productData} />
       </Suspense>
       <VisionSection />
     </>

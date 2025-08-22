@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "../common/card/ProductCard";
 import { formatePrice } from "@/utils/Util";
 
-const ProductSection = ({ data }) => {
+const ProductSection = ({ data , sectionRef }) => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const ProductSection = ({ data }) => {
   );
 
   return (
-    <div id="product_section">
+    <div ref={sectionRef} id="product_section">
       {/* Desktop → left and right separate */}
       {!isMobile && <div className="product_left_section">{leftCard}</div>}
 
