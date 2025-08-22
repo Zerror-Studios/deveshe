@@ -453,10 +453,10 @@
     width: 100%;
     position: static;
     text-align: center;
-    height: 110vh;
+    height: 138vh;
     flex-shrink: 0;
   }
-  .text_container_wrap{
+  .text_container_wrap {
     width: 100%;
     display: flex;
     align-items: center;
@@ -475,24 +475,30 @@
   .polaroid_container {
     width: 100%;
     align-items: center;
-    gap: 10vw;
+    flex-direction: row;
+    justify-content: center;
+    gap: 0;
   }
+  .polaroid_container .polaroid_card:nth-child(1) {
+    transform: translateX(100px) scale(0.8) rotate(-15deg);
+    width: 35vw;
+}
   .polaroid_container .polaroid_card {
-    width: 45vw;
+    width: 38vw;
     padding: 2vw;
   }
   .polaroid_container .polaroid_img {
-    height: 35vw;
+    height: 28vw;
   }
   .polaroid_container .polaroid_card p {
-    font-size: 3.5vw;
+    font-size: 2.5vw;
     margin-top: 2vw;
   }
 
   #explore_section {
     min-height: 100vh;
     padding: 20vw 3vw;
-    padding-top: 55vw;
+    padding-top: 50vw;
   }
 
   .explore_text_container h2 {
@@ -549,7 +555,7 @@
     left: -4%;
     bottom: -7vw;
     transform: rotate(-25deg);
-}
+  }
   .explore_strip2 {
     width: 16vw;
     height: auto;
@@ -558,7 +564,7 @@
     right: -4%;
     bottom: -7vw;
     transform: rotate(25deg);
-}
+  }
   .explore_inspired_container::before {
     left: 15%;
     top: 5%;
@@ -596,16 +602,16 @@
     width: 100%;
     border: none;
   }
-  
-  .common_product_card{
+
+  .common_product_card {
     border: none !important;
     display: flex;
     flex-direction: column;
   }
-  .common_product_card img{
+  .common_product_card img {
     height: auto !important;
   }
-  .common_product_card .product_card_details{
+  .common_product_card .product_card_details {
     position: static;
     color: black;
     display: flex;
@@ -614,7 +620,14 @@
     padding: 4vw;
     padding-top: 2vw;
   }
-
+  .common_product_card .product_card_details h4:nth-child(1) {
+    font-family: HenryItalic;
+    font-size: 19px;
+  }
+  .common_product_card .product_card_details h4:nth-child(2) {
+    font-size: 12px;
+    color: #767676;
+  }
   #vision_section {
     padding: 20vw 20px;
     background: none;

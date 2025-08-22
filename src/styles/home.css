@@ -1443,13 +1443,19 @@ button {
 @media (max-width: 576px){
   .ProductDets_Notify_wrap{
     width: 100%;
-    margin: 20px 0;
-
   }
   .ProductDets_ntfy_btn_grid{
     width: 100%;
     max-width: 100%;
   }
+  .ProductDets_ntfy_btn{
+    background-color: #000;
+    color: #fff;
+  }
+  ._btn_wrapper{
+    background-color: #000;
+    color: #fff;
+}
 }
 /* Similar_prd_wrap */
 @media only screen and (min-width: 375px) {
@@ -1745,13 +1751,21 @@ button {
 
 @media (max-width: 576px) {
   .shop_card_tag, .Footer_SocialLinks_bottom li {
-    font-size: 12px;
+    font-size: calc(12.81px - 0.22vw);
   }
+  .footer_nav_ul_list p {
+    font-size: calc(12.81px - 0.22vw);
+}
   .ProductDets_text_container_resp {
     gap: 8px;
   }
   .ProductDets_common_style{
     line-height: .9;
+   
+  }
+  .ProductDets_common_style span{
+     font-size: 12px;
+    color: #767676;
   }
   .ProductDets_size_wrap {
     margin: 32px 0 20px;
@@ -1761,8 +1775,18 @@ button {
   }
   .ProductDets_description_wrap{
     margin-block: 0;
+    width: 100% !important;
     margin: 20px 0 0;
   }
+  
+.ProductDets_reverse_content_wrapper{
+  width: 100%;
+  align-items: flex-start;
+}
+
+.ProductDets_text_container_resp_productName{
+  font-size: 25px !important;
+}
   .ProductDets_info_help{
     margin-top: 32px;
   }

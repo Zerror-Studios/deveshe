@@ -244,7 +244,7 @@ li {
 /* Button */
 
 ._btn_wrapper {
-  font-family: Centra No2, Helvetica, sans-serif;
+  font-family: var(--primary-font-Hel);
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

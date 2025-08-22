@@ -51,8 +51,7 @@ const FounderSection = () => {
       <Image
         width={1000}
         height={1000}
-        src="/assets/images/about/founder.webp
-        "
+        src="/assets/images/about/banner-img.webp"
         alt="founder_image"
       />
       <div className="founder_overlay">
