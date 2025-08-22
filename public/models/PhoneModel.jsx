@@ -52,13 +52,15 @@ export default function PhoneModel(props) {
       duration: 0.5,
     });
   };
-    const scale = isMobile ? 2 : 1.1
-    const position = isMobile ? [0, -10, 0] : [0, -1.5, 0]
+  const scale = isMobile ? 2 : 1.1;
+  const position = isMobile ? [0, -20, 0] : [0, -1.5, 0];
 
   return (
     <group
       onPointerOver={handleHover}
       onPointerOut={handleHoverOut}
+      onPointerDown={handleHover}
+      onPointerUp={handleHoverOut}
       {...props}
       dispose={null}
       scale={scale}
