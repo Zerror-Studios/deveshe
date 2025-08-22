@@ -1744,6 +1744,9 @@ button {
 /* product card details */
 
 @media (max-width: 576px) {
+  .shop_card_tag, .Footer_SocialLinks_bottom li {
+    font-size: 12px;
+  }
   .ProductDets_text_container_resp {
     gap: 8px;
   }
