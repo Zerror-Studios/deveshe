@@ -1,17 +1,64 @@
+import gsap from "gsap";
+import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
-import React from "react";
-
+import React, { useEffect } from "react";
+gsap.registerPlugin(ScrollTrigger)
 const ReviewSection = () => {
+    useEffect(() => {
+      // Split text into <span> only once
+      function splitText(selector) {
+        document.querySelectorAll(selector).forEach((el) => {
+          if (!el.dataset.split) {
+            const letters = el.textContent
+              .split("")
+              .map((char) =>
+                char === " " ? `<span>&nbsp;</span>` : `<span>${char}</span>`
+              );
+            el.innerHTML = letters.join("");
+            el.dataset.split = "true";
+          }
+        });
+      }
+  
+      splitText(".review_title");
+  
+      const ctx = gsap.context(() => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: "#review_section",
+            start: "top 30%",
+            end: "top 0%",
+            // scrub: true,
+            // markers: true,
+          },
+        });
+  
+        tl.fromTo(
+          ".review_title span",
+          { rotateX: "90deg" },
+          {
+            duration: 0.8,
+            rotateX: "0deg",
+            stagger: 0.05,
+            ease: "bounce.out",
+          }
+        );
+  
+        // Refresh in case layout/images/fonts shift anything
+        setTimeout(() => {
+          ScrollTrigger.refresh();
+        }, 500);
+      });
+  
+      return () => ctx.revert();
+    }, []);
   return (
     <div id="review_section">
+      <div className="review_title_slide">
+        <h2 className="review_title">Happy customers</h2>
+      </div>
       {[0, 1, 2, 3, 4].map((_, i) => (
         <div key={i} className="review_slide">
-          {i === 0 && (
-            <h2 className="review_title">
-              Happy <span>customers</span>
-            </h2>
-          )}
-
           <div className="review_card">
             <div className="tweet-card" role="article" aria-label="Tweet card">
               {/* Header */}

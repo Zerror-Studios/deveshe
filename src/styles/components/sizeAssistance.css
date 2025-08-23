@@ -11,7 +11,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-size: 12px !important;
 }
 
@@ -44,7 +44,7 @@
   align-items: center;
 }
 .size-assist-header h2{
-    font-family: HenryItalic;
+    font-family: heading;
     font-weight: 400;
     font-size: 24px;
 }
@@ -64,7 +64,7 @@
 .size-assist-section h3 {
   color: #888;
   margin-bottom: 10px;
-  font-family: HenryItalic;
+  font-family: heading;
     font-weight: 400;
     font-size: 18px;
 }

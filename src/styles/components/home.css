@@ -258,11 +258,11 @@
 
 .explore_inspired_container h5 {
   font-size: 2vw;
-  font-family: font5;
+  font-family: paragraphStyle;
 }
 .explore_inspired_container h3 {
   font-size: 5.5vw;
-  font-family: font3;
+  font-family: paragraphStyleB;
   font-weight: 500;
   line-height: 1.2;
   margin: 2vw 0 10vw;
@@ -445,20 +445,28 @@
 
 #review_section {
   width: 100%;
-  padding-bottom: calc(10rem * 1.25);
 }
 
 .review_slide {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: calc(10rem * 1.25);
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+}
+
+.review_title_slide{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: sticky;
   top: 0;
 }
-
 .review_title {
-  position: absolute;
   font-family: heading;
   font-size: 8vw;
   line-height: 0.9;
@@ -466,11 +474,23 @@
   white-space: nowrap;
   text-align: center;
 }
+.review_title span{
+  transform-origin: top;
+  display: inline-block;
+  color: red;
+}
+.review_title span:nth-child(1),
+.review_title span:nth-child(2),
+.review_title span:nth-child(3),
+.review_title span:nth-child(4),
+.review_title span:nth-child(5){
+  color: black;
+}
 .review_card {
   position: relative;
   width: 39vw;
   height: 23vw;
-  background-color: white;
+  background-color: #ffc7cb;
   border-radius: 50px;
   border: 2px solid black;
   transform-origin: center;
@@ -502,7 +522,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
 }
 
 .tweet-header {
@@ -524,7 +544,6 @@
   font-size: 26px;
   line-height: 1.1;
   font-weight: 800;
-  letter-spacing: 0.1px;
   margin-bottom: 5px;
 }
 
@@ -532,13 +551,13 @@
   margin-top: 2px;
   font-size: 18px;
   font-weight: 500;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   color: #767676;
 }
 
 .bird svg {
   display: block;
-  fill: #1D9BF0;
+  fill: red;
   filter: drop-shadow(0 1px 0 rgba(0,0,0,.05));
 }
 
@@ -547,7 +566,6 @@
   margin: 18px 0 16px;
   font-size:1.92vw;
   font-weight: 500;
-  letter-spacing: .2px;
 }
 
 /* footer row */

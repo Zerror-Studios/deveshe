@@ -35,7 +35,7 @@
 }
 
 .product_card_details h4 {
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-weight: 400;
   font-size: 14px;
   line-height: 1.35;

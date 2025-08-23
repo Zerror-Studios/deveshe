@@ -45,8 +45,8 @@
   color: white;
   margin-bottom: 8px;
   font-weight: 400;
-  font-family: HenryItalic;
-  font-size: 1.5rem;
+  font-family: paragraphStyleB;
+  font-size: 1.1rem;
 }
 .exploreBtn {
   color: white;
@@ -55,23 +55,22 @@
   align-items: center;
   gap: 6px;
   font-weight: 400;
-  font-family: HenryItalic;
+  font-family: paragraphStyleB;
   font-size: 1.5rem;
 }
 .overlay3a .textContainer h4 {
   color: white;
   font-size: 1.5rem;
-  font-family: font2;
+  font-family: heading;
   margin-bottom: 15px;
   text-transform: uppercase;
 }
 .overlay3a .textContainer p {
   color: white;
   font-size: 14px;
-  font-family: font1;
+  font-family: paragraph;
   font-weight: 500;
   margin-bottom: 15px;
-  letter-spacing: 1px;
 }
 .overlay3a .textContainer p span {
   color: white !important;
