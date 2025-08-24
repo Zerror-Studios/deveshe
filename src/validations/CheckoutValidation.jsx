@@ -44,21 +44,21 @@ export const CheckoutSchema = z
     useShippingAsBilling: z.boolean().default(true),
     shippingAddress: AddressSchema,
     billingAddress: AddressSchema.optional(),
-    paymentMethod: z.string().default("credit-card"),
-    cardDetails: z.object({
-      cardNumber: z
-        .string()
-        .min(12, "Card number must be at least 12 digits")
-        .max(19, "Card number must not exceed 19 digits")
-        .regex(/^\d+$/, "Card number must contain only digits"),
-      cardExpire: z.string().min(1, "Card expire is required"),
-      cardCvv: z
-        .string()
-        .min(3, "CVV must be at least 3 digits")
-        .max(4, "CVV must not exceed 4 digits")
-        .regex(/^\d+$/, "CVV must contain only digits"),
-      cardHolderName: z.string().min(1, "Card holder name is required"),
-    }),
+    // paymentMethod: z.string().default("credit-card"),
+    // cardDetails: z.object({
+    //   cardNumber: z
+    //     .string()
+    //     .min(12, "Card number must be at least 12 digits")
+    //     .max(19, "Card number must not exceed 19 digits")
+    //     .regex(/^\d+$/, "Card number must contain only digits"),
+    //   cardExpire: z.string().min(1, "Card expire is required"),
+    //   cardCvv: z
+    //     .string()
+    //     .min(3, "CVV must be at least 3 digits")
+    //     .max(4, "CVV must not exceed 4 digits")
+    //     .regex(/^\d+$/, "CVV must contain only digits"),
+    //   cardHolderName: z.string().min(1, "Card holder name is required"),
+    // }),
   })
   .superRefine((data, ctx) => {
     if (!data.useShippingAsBilling && !data.billingAddress) {

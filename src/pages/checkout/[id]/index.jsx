@@ -11,11 +11,12 @@ import Heading from "@/components/checkout/Heading";
 import ContactDetail from "@/components/checkout/ContactDetail";
 import Delivery from "@/components/checkout/Delivery";
 import Shipping from "@/components/checkout/Shipping";
-import Payment from "@/components/checkout/Payment";
+// import Payment from "@/components/checkout/Payment";
 import BillingAddress from "@/components/checkout/BillingAddress";
 import OrderSummery from "@/components/checkout/OrderSummery";
 import { EmailSubscribedStatus } from "@/utils/Constant";
-const Checkout = ({ meta, initialCartData }) => {
+import Checkout from "nimbbl_sonic";
+const CheckoutPage = ({ meta, initialCartData }) => {
   const [cartData, setCartData] = useState(initialCartData);
   const [isLoading, setIsLoading] = useState(false);
   const [checkoutOrder] = useMutation(CHECKOUT_ORDER);
@@ -29,7 +30,7 @@ const Checkout = ({ meta, initialCartData }) => {
   } = useForm({
     resolver: zodResolver(CheckoutSchema),
     defaultValues: {
-      paymentMethod: "debit_card",
+      // paymentMethod: "debit_card",
       shippingAddress: {
         addressType: "SHIPPING",
         countryCode: "+91",
@@ -46,17 +47,65 @@ const Checkout = ({ meta, initialCartData }) => {
       useShippingAsBilling: true,
     },
   });
+
+  const handleOrderPayment = async (payload) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/payment/handle-order-payment`,
+        {
+          method: "POST",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+            dbtoken: `Bearer ${process.env.NEXT_PUBLIC_DB_TOKEN || ""}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed with status ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(`Error in Payment Order: ${error.message}`);
+      return null;
+    }
+  };
+
+  const launchNimbblSonicCheckout = async (token) => {
+    try {
+      const checkout = new Checkout({ token });
+
+      checkout.open({
+        callback_handler: async function (response) {
+          try {
+            console.log("Nimbbl response:", response);
+
+            if (
+              response?.event_type === "globalCloseCheckoutModal" &&
+              response?.payload
+            ) {
+              const result = await handleOrderPayment(response.payload);
+              console.log("Backend handle-order-payment result:", result);
+            } else {
+              console.warn("Unexpected Nimbbl response:", response);
+            }
+          } catch (err) {
+            console.error("Error in callback_handler:", err);
+          }
+        },
+      });
+    } catch (error) {
+      console.error("Error launching checkout:", error);
+    }
+  };
+
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const {
-        email,
-        emailSubscribedStatus,
-        shippingAddress,
-        billingAddress,
-        paymentMethod,
-        cardDetails,
-      } = data;
+      const { email, emailSubscribedStatus, shippingAddress, billingAddress } =
+        data;
 
       const payload = {
         userData: {
@@ -75,44 +124,45 @@ const Checkout = ({ meta, initialCartData }) => {
       const { data: response } = await checkoutOrder({
         variables: { input: payload },
       });
-      const { token, order_id } = response?.clientCheckout?.nimbblData || {};
-      const nimbblOrderPayload = {
-        order_id: order_id,
-        callback_url: `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/handle-order-payment`,
-        payment_mode_code: paymentMethod,
-        card_no: cardDetails?.cardNumber || "",
-        expiry: cardDetails?.cardExpire || "",
-        card_holder_name: cardDetails?.cardHolderName || "",
-        cvv: cardDetails?.cardCvv || "",
-        transaction_currency: "INR",
-      };
-      const initiatePayment = await fetch(
-        `${process.env.NEXT_PUBLIC_NIMBBL_BASE_URL}/api/v3/initiate-payment`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(nimbblOrderPayload),
-        }
-      );
+      const { token } = response?.clientCheckout?.nimbblData || {};
+      launchNimbblSonicCheckout(token);
+      // const nimbblOrderPayload = {
+      //   order_id: order_id,
+      //   callback_url: `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}}/api/payment/handle-order-payment`,
+      //   payment_mode_code: paymentMethod,
+      //   card_no: cardDetails?.cardNumber || "",
+      //   expiry: cardDetails?.cardExpire || "",
+      //   card_holder_name: cardDetails?.cardHolderName || "",
+      //   cvv: cardDetails?.cardCvv || "",
+      //   transaction_currency: "INR",
+      // };
+      // const initiatePayment = await fetch(
+      //   `${process.env.NEXT_PUBLIC_NIMBBL_BASE_URL}/api/v3/initiate-payment`,
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Accept: "application/json",
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //     body: JSON.stringify(nimbblOrderPayload),
+      //   }
+      // );
 
-      if (!initiatePayment.ok) {
-        toast.error(`Initiate payment failed: ${initiatePayment.statusText}`);
-      }
+      // if (!initiatePayment.ok) {
+      //   toast.error(`Initiate payment failed: ${initiatePayment.statusText}`);
+      // }
 
-      const paymentResponse = await initiatePayment.json();
-      const redirectAction = paymentResponse?.next?.find(
-        (item) => item.action === "redirect"
-      );
+      // const paymentResponse = await initiatePayment.json();
+      // const redirectAction = paymentResponse?.next?.find(
+      //   (item) => item.action === "redirect"
+      // );
 
-      if (redirectAction?.url) {
-        window.location.href = redirectAction.url;
-      } else {
-        toast.error("No redirect action found in payment response");
-      }
+      // if (redirectAction?.url) {
+      //   window.location.href = redirectAction.url;
+      // } else {
+      //   toast.error("No redirect action found in payment response");
+      // }
     } catch (err) {
       console.error(err);
       toast.error(err.message || "Failed");
@@ -141,7 +191,7 @@ const Checkout = ({ meta, initialCartData }) => {
               setValue={setValue}
             />
             <Shipping />
-            <Payment register={register} errors={errors} />
+            {/* <Payment register={register} errors={errors} /> */}
             <BillingAddress
               register={register}
               setValue={setValue}
@@ -165,7 +215,7 @@ const Checkout = ({ meta, initialCartData }) => {
   );
 };
 
-export default Checkout;
+export default CheckoutPage;
 
 export async function getServerSideProps({ params }) {
   const meta = {
