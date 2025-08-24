@@ -71,14 +71,13 @@
 
 #contact_form #right form .input.active h6 {
   top: 0%;
-  font-size: 0.7vw;
+  font-size: 12px;
   opacity: 0.8;
 }
 #contact_form #right form .input h6,
 #contact_form #right form .textarea h6 {
-  font-size: calc(16px - 0.22vw);
-  font-family: var(--primary-font-Hel);
-  line-height: 160%;
+  font-size: 14px;
+  font-family: paragraph;
   font-weight: 400;
   position: absolute;
   top: 50%;
@@ -93,7 +92,7 @@
 }
 #contact_form #right form .textarea.active h6 {
   top: 0%;
-  font-size: 0.7vw;
+  font-size: 12px;
   opacity: 0.8;
 }
 #contact_form #right form input {
@@ -137,10 +136,9 @@
 }
 #contact_form .elem-lf h5 {
   width: 50%;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-weight: 400;
-  line-height: 160%;
-  font-size: calc(16px - 0.22vw);
+  font-size: 14px;
 }
 #contact_form .elem .add {
   width: 49%;
@@ -148,16 +146,14 @@
 }
 
 #contact_form .elem .add h6 {
-  font-size: calc(16px - 0.22vw);
+  font-size: 14px;
   opacity: 0.8;
-  font-family: var(--primary-font-Hel);
-  line-height: 160%;
+  font-family: paragraph;
   font-weight: 600;
 }
 #contact_form .elem .add h5 {
-  font-size: calc(16px - 0.22vw);
-  font-family: var(--primary-font-Hel);
-  line-height: 160%;
+  font-size: 14px;
+  font-family: paragraph;
   font-weight: 400;
 }
 #contact_form #submit-btn {
@@ -166,9 +162,8 @@
   background-color: black;
   color: white !important;
   transition: all ease 0.3s;
-  font-size: calc(16px - 0.22vw);
-  font-family: var(--primary-font-Hel);
-  line-height: 160%;
+  font-size:14px;
+  font-family: paragraph;
   border: none;
   outline: none;
   border-radius: 50px;

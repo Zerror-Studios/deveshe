@@ -1,24 +1,3 @@
-@font-face {
-  font-family: font1;
-  src: url(/fonts/07070ee11dc38bfbd060.woff);
-}
-@font-face {
-  font-family: font2;
-  src: url(/fonts/b44b93a780ecd8dbafec.woff);
-}
-@font-face {
-  font-family: font3;
-  src: url(/fonts/bd8de66be4175fed48a7.woff);
-}
-@font-face {
-  font-family: font4;
-  src: url(/fonts/c77ea51aaaf5f15bd55d.woff);
-}
-@font-face {
-  font-family: font5;
-  src: url(/fonts/dd34dea82ffd23ec2838.woff);
-}
-
 #lookbook-Sec1 {
   width: 100%;
   height: auto;
@@ -60,7 +39,7 @@
 }
 .lb-header-text p {
   font-weight: 400;
-  font-family: HenryItalic;
+  font-family: paragraphStyleB;
   font-size: 1.5rem;
   opacity: 0;
   margin-bottom: 1vw;
@@ -85,7 +64,7 @@
   padding: 8rem 0;
   padding-right: 21.666vw;
   padding-left: 30vw;
-  font-family: font3;
+  font-family: paragraphStyleB;
   font-size: 2.2vw;
   color: black;
   font-weight: 500;
@@ -112,7 +91,7 @@
 }
 #lb-video-overlay p {
   font-size: 14px;
-  font-family: font1;
+  font-family: paragraph;
   font-weight: 100;
   text-transform: uppercase;
   position: relative;
@@ -177,7 +156,7 @@
   align-items: flex-end;
   flex-direction: column;
   text-align: left;
-  font-family: font3;
+  font-family: paragraphStyleB;
   font-size: 2.2vw;
   color: white;
 }

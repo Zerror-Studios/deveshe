@@ -15,8 +15,7 @@
 
 #legal-page h2 {
   font-size: 2vw;
-  font-family: font3;
-  letter-spacing: 0.5px;
+  font-family: heading;
   line-height: 0.8;
   font-weight: 500;
   white-space: nowrap;
@@ -27,7 +26,7 @@
 }
 
 .legal-container h3 {
-  font-family: var(--primary-font-Hel);
+  font-family: heading;
   font-weight: 600;
   line-height: 160%;
   font-size: 1.5vw;
@@ -38,7 +37,7 @@
 }
 
 .legal-container p {
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-weight: 400;
   line-height: 160%;
   font-size: calc(18px - 0.22vw);
@@ -51,7 +50,7 @@
 }
 
 .legal-container li {
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-weight: 400;
   line-height: 160%;
   font-size: calc(18px - 0.22vw);
@@ -67,7 +66,7 @@
 
   #legal-page h2 {
     font-size: calc(25.8px + 1.33333vw);
-    font-family: font3;
+    font-family: heading;
     line-height: 0.8;
     font-weight: 100;
     /* text-transform: uppercase; */

@@ -36,13 +36,12 @@
   text-transform: uppercase;
   font-size: 14px;
   font-weight: 100;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   cursor: pointer;
   position: relative;
   display: inline-block;
   height: fit-content;
   line-height: 1.2;
-  letter-spacing: 1px;
 }
 
 .nav-link a .hoverline {
@@ -123,7 +122,7 @@
 #logo-container p {
   font-size: 14px;
   font-weight: 100;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   color: #000;
   position: absolute;
   top: 50%;
@@ -136,7 +135,7 @@
 #nav-btns p {
   font-size: 14px;
   font-weight: 100;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   color: #000;
   position: absolute;
   top: 50%;
@@ -183,7 +182,7 @@
 #loader_slider p {
   font-size: 14px;
   font-weight: 100;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   color: black;
   text-transform: uppercase;
   position: absolute;

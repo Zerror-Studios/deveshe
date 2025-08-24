@@ -1,25 +1,18 @@
 @font-face {
   font-family: heading;
-  src: url(/fonts/b44b93a780ecd8dbafec.woff);
+  src: url(/assets/fonts/cob/font-ea9181547d67e56abd65.woff2);
 }
 @font-face {
   font-family: paragraph;
-  src: url(/fonts/07070ee11dc38bfbd060.woff);
+  src: url(/assets/fonts/cob/font-69130470425c85950313.woff2);
 }
 @font-face {
   font-family: paragraphStyle;
-  src: url(/fonts/c77ea51aaaf5f15bd55d.woff);
+  src: url(/assets/fonts/dd34dea82ffd23ec2838.woff);
 }
 @font-face {
   font-family: paragraphStyleB;
-  src: url(/fonts/bd8de66be4175fed48a7.woff);
-}
-@font-face {
-  font-family: HenryItalic;
-  src: url(/fonts/Henry-Italic-XZWGQLUJ.woff2);
-}
-:root {
-  --primary-font-Hel: Helvetica, sans-serif;
+  src: url(/assets/fonts/bd8de66be4175fed48a7.woff);
 }
 body::-webkit-scrollbar {
   display: none;
@@ -93,23 +86,21 @@ li {
   position: relative !important;
 }
 ._list-links {
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
-  letter-spacing: 0.02em;
   line-height: 1.35;
   margin: 6px;
 }
 
 ._list-links-redirect {
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
-  letter-spacing: 0.02em;
   line-height: 1.35;
   display: flex;
   /* justify-content: center; */
@@ -160,7 +151,7 @@ li {
   width: 100%;
 }
 .Footer_SocialLinks_bottom {
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -174,12 +165,11 @@ li {
   margin-top: 12px;
 }
 .Footer_SocialLinks_bottom li {
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
-  letter-spacing: 0.02em;
   line-height: 1.35;
   margin: 6px 0;
 }
@@ -194,12 +184,6 @@ li {
 }
 .links:hover {
   color: #000;
-}
-@media only screen and (min-width: 375px) {
-  .footer_nav_ul_list p,
-  .footer_links {
-    font-size: calc(14.81px - 0.22vw);
-  }
 }
 @media only screen and (min-width: 740px) {
   .Footer_wrapper {
@@ -244,17 +228,14 @@ li {
 /* Button */
 
 ._btn_wrapper {
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-weight: 400;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-size: 12px;
-  letter-spacing: 0.02em;
+  font-size: 14px;
   line-height: 1.35;
   height: 40px;
   color: #000;
   border: 1px solid #000;
-  border-radius: 9999px;
+  border-radius: 50px;
   padding: 0 16px;
   display: inline-flex;
   justify-content: center;
@@ -305,12 +286,11 @@ li {
   align-items: center;
 }
 ._btn_wrapper2 {
-  font-family: Centra No2, Helvetica, sans-serif;
+  font-family: paragraph;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 12px;
-  letter-spacing: 0.02em;
   line-height: 1.35;
   height: 40px;
   color: white;
@@ -331,7 +311,6 @@ li {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 12px;
-  letter-spacing: 0.02em;
   line-height: 1.35;
   height: 40px;
   color: white;
@@ -439,12 +418,11 @@ li {
   text-transform: capitalize;
   cursor: pointer;
   font-size: calc(14.81px - 0.22vw);
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   line-height: 1.4;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  letter-spacing: 0.02em;
   line-height: 1.35;
 }
 #side-navbar {
@@ -489,16 +467,15 @@ li {
 .login-nav p {
   font-size: calc(14.81px - 0.22vw);
   font-weight: 500;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
 }
 .nav-contact p {
   font-size: calc(14.81px - 0.22vw);
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   line-height: 1.4;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  letter-spacing: 0.02em;
   line-height: 1.35;
 }
 .nav-contact p:nth-child(1) {
@@ -508,7 +485,7 @@ li {
 }
 
 #nav-logo {
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-size: 16px;
   font-weight: 600;
   text-transform: uppercase;
@@ -534,7 +511,7 @@ li {
   line-height: 0;
 }
 #header-logo {
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-size: 30px;
   font-weight: 600;
   text-transform: uppercase;
@@ -584,14 +561,10 @@ li {
   text-transform: uppercase;
   font-size: 16px;
   font-weight: 100;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   cursor: pointer;
 }
-/* header a {
-  text-decoration: none;
-  text-transform: uppercase;
-  font-size: 16px;
-} */
+
 /* header end */
 
 .nav-social-icons {

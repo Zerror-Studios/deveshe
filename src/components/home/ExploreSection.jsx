@@ -116,9 +116,8 @@ const ExploreSection = ({sectionRef}) => {
     <div id="explore_section">
       <div className="explore_text_container">
         <h2>Explore</h2>
-        <h2 id="red">styles that</h2>
-        <h2>feel like</h2>
-        <h2>you.</h2>
+        <h2 id="red">styles that feel</h2>
+        <h2>like you.</h2>
       </div>
       <div className="explore_polaroid_container">
         <div className="explore_side_card explore_side_card1">

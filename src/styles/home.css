@@ -76,17 +76,16 @@
 .overlay3a .textContainer h4 {
   color: white;
   font-size: 2vw;
-  font-family: font2;
+  font-family: heading;
   margin-bottom: 15px;
   text-transform: uppercase;
 }
 .overlay3a .textContainer p {
   color: white;
   font-size: 14px;
-  font-family: font1;
+  font-family: paragraph;
   font-weight: 500;
   margin-bottom: 15px;
-  letter-spacing: 1px;
 }
 
 .tiles_inner_text {
@@ -105,7 +104,6 @@
 .Vertical_wrapper .tiles_inner_text h1 {
   font-size: 4vw;
   line-height: 0.8;
-  letter-spacing: -0.04em;
   font-weight: 200;
 }
 
@@ -119,7 +117,6 @@
   font-weight: 400;
   line-height: 1.5;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
   text-decoration: none;
 }
 
@@ -138,7 +135,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   padding-bottom: 40px;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
 }
 
 .shop-card_grid {
@@ -150,7 +147,6 @@
   color: currentcolor;
   font-size: inherit;
   font-weight: inherit;
-  letter-spacing: inherit;
   line-height: inherit;
   text-decoration: none;
 }
@@ -264,7 +260,7 @@
 .ProductDets_text_container_brandName {
   font-size: 20px;
   display: none;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
 }
 
 .shop_card_text_brandName {
@@ -326,7 +322,7 @@
 
 .shop_card_price_cntr {
   display: flex;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
 }
 
 
@@ -441,10 +437,6 @@
   font-weight: 400;
 }
 @media only screen and (min-width: 375px) {
-  .shop_card_tag,
-  .Footer_SocialLinks_bottom li {
-    font-size: calc(14.59px + 0.11vw);
-  }
   .ProductDets_shipping_para {
     font-size: 12px !important;
   }
@@ -656,7 +648,6 @@
   color: currentcolor;
   font-size: inherit;
   font-weight: inherit;
-  letter-spacing: inherit;
   line-height: inherit;
 }
 
@@ -720,7 +711,7 @@ button {
 }
 .title_size_color {
   display: none;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-size: 14px;
   color: #7b7b7b;
 }
@@ -739,7 +730,6 @@ button {
   color: currentcolor;
   font-size: inherit;
   font-weight: inherit;
-  letter-spacing: inherit;
   line-height: inherit;
   display: grid;
   scroll-snap-align: flex-start;
@@ -791,18 +781,18 @@ button {
 .ProductDets_text_container_resp {
   display: grid;
   justify-content: flex-start;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   gap: 12px;
 }
 .ProductDets_text_container_resp_productName {
-  font-family: HenryItalic;
+  font-family: heading;
   font-size: 20px;
 }
 .ProductDets_text_container_price_resp {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-size: 14px;
 }
 
@@ -849,7 +839,6 @@ button {
   font-style: normal;
   font-weight: 400;
   text-transform: capitalize;
-  letter-spacing: initial;
   line-height: 1.2;
 }
 
@@ -861,7 +850,7 @@ button {
 
 
 .ProductDets_text_container_productName {
-  font-family: HenryItalic;
+  font-family: heading;
   font-size: 24px;
   display: none;
 }
@@ -876,11 +865,9 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* justify-content: space-between; */
   flex-direction: column;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   margin-block: 36px;
-  letter-spacing: 0.02em;
   line-height: 1.35;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
@@ -894,7 +881,7 @@ button {
 
 .ProductDets_text-container_prdt_Desc {
   max-width: 350px;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-size: 14px;
   display: flex;
   flex-direction: column;
@@ -918,10 +905,9 @@ button {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
-  letter-spacing: 0.02em;
   line-height: 1.35;
   gap: 12px;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
 }
 
 .ProductDets_colorVariant_wrap span:nth-child(1) {
@@ -935,12 +921,11 @@ button {
 }
 
 .ProductDets_collection-wrap {
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
-  letter-spacing: 0.02em;
   line-height: 1.35;
   display: flex;
   gap: 8px;
@@ -1025,12 +1010,10 @@ button {
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 12px;
-  letter-spacing: 0.02em;
-  line-height: 1.35;
+  font-size: 14px;
   gap: 4px;
   display: none;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
 }
 
 #easysize_button {
@@ -1038,7 +1021,6 @@ button {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 12px !important;
-  letter-spacing: 0.02em;
   line-height: 1.35;
   border: none !important;
   margin: 0 !important;
@@ -1058,13 +1040,13 @@ button {
   /* position: absolute; */
   top: 0;
   /* left: 236px; */
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
 }
 
 .ProductDets-weight_numbers_cntr {
   max-width: 280px;
   display: none;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
 }
 
 .ProductDets-size_numbers_inner,
@@ -1079,8 +1061,6 @@ button {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
-  letter-spacing: 0.02em;
-  line-height: 1.35;
   cursor: pointer;
   padding: 4px 8px;
   color: #000000;
@@ -1098,12 +1078,11 @@ button {
 .no-item {
   font-size: calc(14.81px - 0.22vw);
   margin: 28px;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
-  letter-spacing: 0.02em;
   line-height: 1.35;
   position: relative;
 }
@@ -1125,11 +1104,10 @@ button {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 12px;
-  letter-spacing: 0.02em;
   line-height: 1.35;
   gap: 4px;
   display: none;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
 }
 
 .ProductDets-weight_assist_cntr {
@@ -1137,11 +1115,10 @@ button {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 12px;
-  letter-spacing: 0.02em;
   line-height: 1.35;
   gap: 4px;
   display: none;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
 }
 
 #easyweight_button {
@@ -1149,7 +1126,6 @@ button {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 12px !important;
-  letter-spacing: 0.02em;
   line-height: 1.35;
   border: none !important;
   margin: 0 !important;
@@ -1164,7 +1140,7 @@ button {
 .ProductDets-weight_numbers_cntr {
   max-width: 280px;
   display: none;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
 }
 
 .ProductDets-weight_numbers_inner {
@@ -1178,7 +1154,6 @@ button {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
-  letter-spacing: 0.02em;
   line-height: 1.35;
   padding: 4px 8px;
   color: #000000;
@@ -1210,7 +1185,6 @@ button {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 12px;
-  letter-spacing: 0.02em;
   line-height: 1.35;
   height: 40px;
   color: #000000;
@@ -1221,7 +1195,7 @@ button {
   justify-content: center;
   align-items: center;
   transition: color 0.2s, background 0.2s;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   overflow: hidden;
   position: relative;
 }
@@ -1306,9 +1280,8 @@ button {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
-  letter-spacing: 0.02em;
   line-height: 1.35;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
 }
 
 .ProductDets_info_links {
@@ -1332,11 +1305,10 @@ button {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
-  letter-spacing: 0.02em;
   line-height: 1.35;
   color: #000000;
   text-underline-offset: 3px;
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   padding: 6px 0;
 }
 
@@ -1348,14 +1320,8 @@ button {
 .ProductDets_info_text {
   color: #000000;
   font-weight: 400;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-size: 12px;
-  letter-spacing: 0.02em;
-  line-height: 1.35;
-  /* text-decoration: underline; */
-  text-underline-offset: 3px;
-  font-family: var(--primary-font-Hel);
+  font-size: 14px;
+  font-family: paragraph;
 }
 
 
@@ -1374,7 +1340,7 @@ button {
 }
 
 .Similar_prd_pieces {
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-style: normal;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
@@ -1384,7 +1350,7 @@ button {
 }
 
 .Similar_prd_like-this {
-  font-family: HenryItalic;
+  font-family: heading;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -1416,7 +1382,7 @@ button {
 }
 
 .similar-prd-dets {
-  font-family: var(--primary-font-Hel);
+  font-family: paragraph;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -1461,19 +1427,6 @@ button {
 @media only screen and (min-width: 375px) {
   .ProductDets_img_slider_wrap {
     opacity: 0;
-  }
-
-  .ProductDets_text_container_prdt_Desc,
-  .ProductDets_colorVariant_wrap,
-  .ProductDets_collection-wrap,
-  .ProductDets-size_numbers,
-  .ProductDets-weight_numbers,
-  .ProductDets_info_text,
-  .ProductDets_info-btn,
-  .Similar_prd_head,
-  ._list-links-redirect,
-  .ProductDets_text_container_price_resp {
-    font-size: calc(14.81px - 0.22vw);
   }
 
   .Similar_prd_pieces,
@@ -1681,9 +1634,6 @@ button {
   .ProductDets_text_btn_resp_cntr {
     display: none;
   }
-  .ProductDets_text-container_prdt_Desc {
-    font-size: 12px;
-  }
 }
 
 @media only screen and (min-width: 1024px) {
@@ -1710,18 +1660,6 @@ button {
 }
 
 @media only screen and (min-width: 1300px) {
-  .ProductDets_text_container_prdt_Desc,
-  .ProductDets_colorVariant_wrap,
-  .ProductDets_collection-wrap,
-  .ProductDets-size_numbers,
-  .ProductDets-weight_numbers,
-  .ProductDets_info_text,
-  .ProductDets_info-btn,
-  .footer_nav_ul_list p,
-  .links,
-  ._list-links-redirect {
-    font-size: 12px;
-  }
 
   .Similar_prd_head {
     font-size: 36px;
@@ -1797,12 +1735,11 @@ button {
     padding-left: 4px;
   }
   .title_inner-nail h2 {
-    font-family: font2;
+    font-family: heading;
     font-size: 8.4vw;
     line-height: 1;
     text-transform: uppercase;
     white-space: nowrap;
-    letter-spacing: 0px;
     position: relative;
     text-align: center;
     transform: scale(1);
