@@ -1410,6 +1410,13 @@ button {
   .ProductDets_Notify_wrap{
     width: 100%;
   }
+  .mobile_add_btn p{
+    margin-top: .5rem;
+    color: #767676;
+  }
+  .ProductDets-size_assist_cntr{
+    display: block;
+  }
   .ProductDets_ntfy_btn_grid{
     width: 100%;
     max-width: 100%;
@@ -1707,6 +1714,14 @@ button {
   }
   .ProductDets_size_wrap {
     margin: 32px 0 20px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ProductDets-size_assist_cntr{
+    padding: 4px 8px;
+    padding-right: 0;
   }
   .ProfuctDets_fieldset{
     margin: 0;

@@ -20,7 +20,10 @@ const ProductSection = ({ data, sectionRef }) => {
       src={data[0]?.assets[0]?.path || ""}
       alt={data[0]?.name || ""}
       name={data[0]?.name || ""}
-      price={getProductPriceLabel(data?.[0]?.variants, data?.[0]?.discountedPrice)}
+      price={getProductPriceLabel(
+        data?.[0]?.variants,
+        data?.[0]?.discountedPrice
+      )}
     />
   );
 

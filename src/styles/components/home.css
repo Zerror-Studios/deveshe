@@ -373,7 +373,7 @@
   align-items: flex-end;
   gap: 80px;
 }
-#vision_section img{
+#vision_section img {
   position: absolute;
   left: 15%;
   bottom: -10%;
@@ -468,7 +468,7 @@
   height: 100vh;
 }
 
-.review_title_slide{
+.review_title_slide {
   width: 100%;
   height: 100vh;
   display: flex;
@@ -485,7 +485,13 @@
   white-space: nowrap;
   text-align: center;
 }
-.review_title span{
+.review_title_mobile {
+  display: none;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+.review_title span {
   transform-origin: top;
   display: inline-block;
   color: red;
@@ -494,7 +500,7 @@
 .review_title span:nth-child(2),
 .review_title span:nth-child(3),
 .review_title span:nth-child(4),
-.review_title span:nth-child(5){
+.review_title span:nth-child(5) {
   color: black;
 }
 .review_card {
@@ -508,28 +514,27 @@
   overflow: hidden;
 }
 
-.review_slide:nth-child(1) .review_card{
+.review_slide:nth-child(1) .review_card {
   transform: rotate(4deg);
 }
-.review_slide:nth-child(2) .review_card{
+.review_slide:nth-child(2) .review_card {
   transform: rotate(2deg);
 }
-.review_slide:nth-child(3) .review_card{
+.review_slide:nth-child(3) .review_card {
   transform: rotate(0deg);
 }
-.review_slide:nth-child(4) .review_card{
+.review_slide:nth-child(4) .review_card {
   transform: rotate(-2deg);
 }
-.review_slide:nth-child(5) .review_card{
+.review_slide:nth-child(5) .review_card {
   transform: rotate(-4deg);
 }
-
 
 /* Rotated plate with big soft shadow like the image */
 .tweet-card {
   width: 100%;
   height: 100%;
-  padding: 0 35px ;
+  padding: 0 35px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -546,7 +551,7 @@
 .tweet-header .avatar {
   width: 70px;
   height: 70px;
-  border-radius:50px;
+  border-radius: 50px;
   object-fit: cover;
 }
 
@@ -569,13 +574,13 @@
 .bird svg {
   display: block;
   fill: red;
-  filter: drop-shadow(0 1px 0 rgba(0,0,0,.05));
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.05));
 }
 
 /* body text */
 .tweet-body {
   margin: 18px 0 16px;
-  font-size:1.92vw;
+  font-size: 1.92vw;
   font-weight: 500;
 }
 
@@ -594,11 +599,25 @@
   color: #767676;
 }
 
-
 /* review section end */
 
 @media (max-width: 576px) {
-  #vision_section img{
+  .review_title_slide {
+    display: none;
+  }
+  .review_title_large {
+    display: none;
+  }
+  .review_slide {
+    top: 0;
+    width: 100%;
+    height: auto;
+    padding-top: calc(10rem * 1.25);
+  }
+  .review_title_mobile {
+    display: block;
+  }
+  #vision_section img {
     display: none;
   }
   #home_hero {
@@ -827,41 +846,42 @@
     width: 100%;
     height: auto;
     border-radius: 40px;
-}
-.tweet-body {
+  }
+  .tweet-body {
     margin: 18px 0 16px;
     font-size: 4vw;
-}
-.tweet-footer {
+  }
+  .tweet-footer {
     font-size: 12px;
-}
-.tweet-footer span,.tweet-footer a{
-  white-space: nowrap;
-}
-.author .handle {
-  font-size: 13px;
-}
-.tweet-card {
+  }
+  .tweet-footer span,
+  .tweet-footer a {
+    white-space: nowrap;
+  }
+  .author .handle {
+    font-size: 13px;
+  }
+  .tweet-card {
     padding: 25px;
-}
-#review_section {
+  }
+  #review_section {
     width: 100%;
     padding: 0 20px;
     padding-bottom: calc(6rem * 1.25);
-}
-.author .name {
+  }
+  .author .name {
     font-size: 18px;
-}
-.tweet-header .avatar {
+  }
+  .tweet-header .avatar {
     width: 50px;
     height: 50px;
-}
-.tweet-header{
-  gap: 15px;
-}
-.review_title{
-  top: 23%;
-  font-size: 8.5vw;
-  text-align: center;
-}
+  }
+  .tweet-header {
+    gap: 15px;
+  }
+  .review_title {
+    top: 23%;
+    font-size: 8.5vw;
+    text-align: center;
+  }
 }

@@ -1035,6 +1035,9 @@
   #founder_section .founder_overlay {
     padding: 100px 0;
   }
+  .social_card_container .social_card img{
+    height: 25vh;
+  }
   #founder_title h2 {
     font-size: 8.5vw;
   }

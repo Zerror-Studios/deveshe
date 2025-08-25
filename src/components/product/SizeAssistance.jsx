@@ -1,12 +1,68 @@
-import React from "react";
+import Image from "next/image";
+import React, { useEffect, useRef } from "react";
 
-const SizeAssistance = ({ onClose }) => {
+const SizeAssistance = ({ onClose}) => {
+
   return (
-    <div className="size-assist-overlay">
-      <div className="size-assist-popup" data-lenis-prevent>
+    <div
+      className="size-assist-overlay"
+      data-lenis-prevent
+    >
+      <div className="size-assist-guide">
+        <div>
+          <p>Measurements guide</p>
+          <ol>
+            <li>
+              <span>Chest:</span> Measure around the fullest part of your chest,
+              wrapping fully around the body.
+            </li>
+            <li>
+              <span>Waist:</span> Measure around the smallest part of your
+              waistline, wrapping fully around the body.
+            </li>
+            <li>
+              <span>Hips:</span> Measure around the widest part of your hips or
+              buttocks, wrapping fully around the body.
+            </li>
+            <li>
+              <span>Torso length:</span> Measure from the dip between your
+              collarbones down to your hip level.
+            </li>
+            <li>
+              <span>Biceps:</span> Measure around your bicep at the fullest part
+              of your upper arm.
+            </li>
+            <li>
+              <span>Shoulder width:</span> Measure from the tip of one shoulder
+              bone straight across to the other.
+            </li>
+            <li>
+              <span>Arm length:</span> Measure from the shoulder bone down to
+              the wrist where the thumb meets the wrist.
+            </li>
+            <li>
+              <span>Inside Leg Length:</span> Measure from the top of your inner
+              thigh down to your ankle.
+            </li>
+            <li>
+              <span>Outside Leg Length:</span> Measure from your waist down to
+              your ankle.
+            </li>
+          </ol>
+        </div>
+        <Image
+          width={1000}
+          height={1000}
+          src="/guide.avif"
+          alt="measurement_guide"
+        />
+      </div>
+      <div className="size-assist-popup">
         <div className="size-assist-header">
           <h2>Size Assistance</h2>
-          <button className="size-assist-quizBtn" onClick={onClose}>Close</button>
+          <button className="size-assist-quizBtn" onClick={onClose}>
+            Close
+          </button>
         </div>
 
         <div className="size-assist-section">
@@ -77,7 +133,7 @@ const SizeAssistance = ({ onClose }) => {
             </table>
           </div>
         </div>
-           <div className="size-assist-section measure-table">
+        <div className="size-assist-section measure-table">
           <h3>Standard Body Measurements</h3>
           <div className="size-assist-tableWrapper">
             <table>

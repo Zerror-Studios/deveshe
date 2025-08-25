@@ -7,19 +7,15 @@ import { useVisitor } from "@/hooks/useVisitor";
 import { htmlParser } from "@/utils/Util";
 import { useRouter } from "next/router";
 import { useCartStore } from "@/store/cart-store";
-import SizeAssistance from "./SizeAssistance";
 
-const ProductContent = ({ data = {} }) => {
+const ProductContent = ({ data = {} ,handleOpen}) => {
   const router = useRouter();
 
   const { token, isLoggedIn } = useAuthStore((state) => state);
   const { openCart } = useCartStore((state) => state);
 
   const { visitorId } = useVisitor();
-  const [showSizeAssist, setShowSizeAssist] = useState(false);
 
-  const handleOpen = () => setShowSizeAssist(true);
-  const handleClose = () => setShowSizeAssist(false);
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -267,43 +263,7 @@ const ProductContent = ({ data = {} }) => {
             </div>
           )}
         </div>
-        <div className="ProductDets_Notify_wrap mobile_add_btn">
-          <button
-            className="ProductDets_ntfy_btn ProductDets_ntfy_btn_grid"
-            id="easysize-cart-button"
-            style={loading ? { backgroundColor: "black" } : {}}
-            onClick={handleAddToCart}
-          >
-            {loading ? (
-              <div className="ani-wrap">
-                <div className="ani-main" />
-              </div>
-            ) : (
-              <>
-                <span className="ProductDets_ntfy_btn_slect_size">
-                  {!cartBtn ? "Select a Size" : "Add to Bag"}
-                </span>
-                <span className="ProductDets_ntfy_btn_AddtoBeg">
-                  Add to Bag
-                </span>
-                <div className="ProductDets_ntfy_btn_price">
-                  <span>{finalPrice} INR</span>
-                </div>
-              </>
-            )}
-          </button>
-        </div>
-        {isMobile && (
-          <div className="ProductDets_bottom_links_wrap">
-            <div className="ProductDets_info_help">
-              <p className="ProductDets_info_text sql38zc _1l9nr81o">
-                Complimentary shipping on orders above 5000 INR.
-              </p>
-            </div>
-          </div>
-        )}
       </div>
-      {showSizeAssist && <SizeAssistance onClose={handleClose} />}
     </div>
   );
 };
