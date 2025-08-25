@@ -1,30 +1,60 @@
 /* SizeAssistance.css */
 
 .size-assist-overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.3);
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
+  align-items: flex-start;
   z-index: 1000;
   font-family: paragraph;
   font-size: 12px !important;
+  background-color: #fff;
+  overflow-y: auto;
+}
+
+.size-assist-guide {
+  padding: 100px;
+  width: 50%;
+  height: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.size-assist-guide img {
+  width: 80%;
+  height: auto;
+}
+.size-assist-guide p {
+  font-family: heading;
+  font-weight: 400;
+  font-size: 24px;
+}
+.size-assist-guide ol {
+  margin: 20px 0;
+}
+.size-assist-guide ol,
+.size-assist-guide li {
+  list-style: decimal !important;
+  margin-left: 0.4rem;
+}
+.size-assist-guide li {
+  color: #767676;
+  line-height: 1.4;
+}
+.size-assist-guide li span {
+  color: #000;
 }
 
 .size-assist-popup {
-      background-color: #fadcde;
-    background-image: url(/grainy-bg.svg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: top;
   padding: 100px;
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
+  width: 50%;
+  height: auto;
   position: relative;
 }
 
@@ -43,10 +73,10 @@
   justify-content: space-between;
   align-items: center;
 }
-.size-assist-header h2{
-    font-family: heading;
-    font-weight: 400;
-    font-size: 24px;
+.size-assist-header h2 {
+  font-family: heading;
+  font-weight: 400;
+  font-size: 24px;
 }
 
 .size-assist-quizBtn {
@@ -65,8 +95,8 @@
   color: #888;
   margin-bottom: 10px;
   font-family: heading;
-    font-weight: 400;
-    font-size: 18px;
+  font-weight: 400;
+  font-size: 18px;
 }
 
 .size-assist-section ul {
@@ -80,15 +110,15 @@
   overflow-x: auto;
   margin-top: 10px;
 }
-.measure-table{
-    margin-top: 30px;
+.measure-table {
+  margin-top: 30px;
 }
 
 .size-assist-tableWrapper table {
   width: 100%;
   border-collapse: collapse;
   text-align: center;
-  table-layout: fixed; 
+  table-layout: fixed;
 }
 
 .size-assist-tableWrapper th,
@@ -101,12 +131,30 @@
   position: sticky;
   left: 0;
   text-align: left;
-  z-index: 2; 
+  z-index: 2;
   width: fit-content;
 }
-
 
 .size-assist-tableWrapper th {
   font-weight: normal;
   color: #888;
+}
+
+@media (max-width: 576px) {
+  .size-assist-overlay {
+    padding: 50px 0;
+    flex-direction: column; /* stack children vertically */
+    justify-content: flex-start; /* start from top */
+    align-items: stretch; /* take full width */
+  }
+
+  .size-assist-guide {
+    width: 100%;
+    padding: 20px;
+  }
+  .size-assist-popup {
+    width: 100%;
+    padding: 20px;
+    order: -1;
+  }
 }

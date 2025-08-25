@@ -3,11 +3,11 @@
   padding: 200px 0px 50px;
   justify-content: center;
   /* background-color: white; */
-  background-color: #FADCDE;
-    background-image: url(/grainy-lg-bg.svg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: bottom;
+  background-color: #fadcde;
+  background-image: url(/grainy-lg-bg.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom;
 }
 /* new-left-code */
 
@@ -22,7 +22,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 0;
+  padding: 0 0 1rem;
+}
+.checkout_header .checkout_header_titile img {
+  height: 25px;
+  width: auto;
 }
 .checkout_header .checkout_header_titile h1 {
   font-size: 3rem;
@@ -58,7 +62,7 @@ a {
   justify-content: space-between;
 }
 .contact_text_cntr h2 {
-  font-family: var(--secondary-font-Hen);
+  font-family: heading;
 }
 .contact_text_cntr a {
   font-family: paragraph;
@@ -67,7 +71,7 @@ a {
 }
 .same_style_text {
   position: relative;
-  /* font-family: var(--secondary-font-Hen); */
+  /* font-family: heading; */
   font-weight: 400;
   line-height: 1.2;
 }
@@ -160,7 +164,7 @@ a {
   /* row-gap: 2.2rem; */
 }
 .Delivery_container h2 {
-  font-family: var(--secondary-font-Hen);
+  font-family: heading;
 }
 .Delivery_cntr_form {
   position: relative;
@@ -292,7 +296,7 @@ a {
   margin-bottom: 45px;
 }
 .Shipping_title_cntr h2 {
-  font-family: var(--secondary-font-Hen);
+  font-family: heading;
 }
 .Shipping_method_cntr {
   position: relative;
@@ -330,7 +334,7 @@ a {
   grid-template-rows: minmax(auto, max-content);
 }
 .payment_title_cntr h2 {
-  font-family: var(--secondary-font-Hen);
+  font-family: heading;
 }
 .payment_title_cntr p {
   font-family: paragraph;
@@ -554,7 +558,7 @@ a {
   position: relative;
 }
 .Billing_section h2 {
-  font-family: var(--secondary-font-Hen);
+  font-family: heading;
 }
 input:focus {
   outline-color: #000;
@@ -627,27 +631,27 @@ input:focus {
   position: relative;
 }
 .Remember_section h2 {
-  font-family: var(--secondary-font-Hen);
+  font-family: heading;
 }
 .checkout-main button {
-  /* border-width: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px; */
+  height: 40px;
   background-color: #000;
   color: #fff;
   border-radius: 30px;
   padding: 9px 1rem;
   width: 100%;
   transition: all 0.3s ease-in-out;
+  font-family: paragraph;
+  font-weight: 400;
 }
 .checkout-main button:hover {
   background-color: #4b4b4b;
+}
+@media (max-width: 576px) {
+  .checkout_header .checkout_header_titile img {
+    height: 4vw;
+    width: auto;
+  }
 }
 @media only screen and (min-width: 570px) {
   .Name_input_cntr,
@@ -793,7 +797,7 @@ input:focus {
 .checkout-t {
   position: relative;
   font-size: 1.5rem;
-  font-family: var(--secondary-font-Hen);
+  font-family: heading;
   font-weight: 400;
   line-height: 1.2;
 }
@@ -817,6 +821,7 @@ input:focus {
   border-radius: 0px !important;
   background-color: #000 !important;
   color: #fff;
+  min-width: 70px;
 }
 .summary-img-cont {
   position: relative;

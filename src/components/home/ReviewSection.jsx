@@ -55,10 +55,12 @@ const ReviewSection = () => {
   return (
     <div id="review_section">
       <div className="review_title_slide">
-        <h2 className="review_title">Happy customers</h2>
+        <h2 className="review_title review_title_large">Happy customers</h2>
       </div>
       {[0, 1, 2, 3, 4].map((_, i) => (
         <div key={i} className="review_slide">
+            {i === 0 && <h2 className="review_title review_title_mobile">Happy customers</h2>}
+
           <div className="review_card">
             <div className="tweet-card" role="article" aria-label="Tweet card">
               {/* Header */}
