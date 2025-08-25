@@ -1,8 +1,15 @@
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
-import React, { useEffect } from "react";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import React, { useEffect, useRef } from "react";
+
 gsap.registerPlugin(ScrollTrigger);
+
 const VisionSection = () => {
+  const router = useRouter();
+  const imageRef = useRef(null);
+
   useEffect(() => {
     // Split text into <span> only once
     function splitText(selector) {
@@ -43,7 +50,6 @@ const VisionSection = () => {
         }
       );
 
-      // Refresh in case layout/images/fonts shift anything
       setTimeout(() => {
         ScrollTrigger.refresh();
       }, 500);
@@ -52,12 +58,69 @@ const VisionSection = () => {
     return () => ctx.revert();
   }, []);
 
+  // Global mousemove parallax effect
+  useEffect(() => {
+    const img = imageRef.current;
+
+    const handleMouseMove = (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 20; // subtle (range ~ -10px to +10px)
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+
+      gsap.to(img, {
+        x,
+        y,
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
+  const enterHandler = () => {
+    gsap.fromTo(
+      ".text1-btn span",
+      { y: "0%" },
+      {
+        y: "-100%",
+        duration: 0.5,
+        stagger: { amount: 0.2 },
+      }
+    );
+    gsap.fromTo(
+      ".text2-btn span",
+      { y: "0%" },
+      {
+        y: "-100%",
+        duration: 0.5,
+        stagger: { amount: 0.2 },
+      }
+    );
+  };
+
+  const handleClick = () => {
+    router.push("/about");
+  };
+
   return (
     <div id="vision_section">
+      <Image
+        ref={imageRef}
+        width={1000}
+        height={1000}
+        src="/scrapbook/2girl.png"
+        alt="image"
+      />
+
       <div className="vision_text">
         <h2 className="red">The vision</h2>
         <h2>behind the brand</h2>
       </div>
+
       <div className="vision_text2">
         <h6>Built on artistic instinct and expression</h6>
         <p>
@@ -66,6 +129,18 @@ const VisionSection = () => {
           <strong> limited-edition pieces made with purpose</strong> and
           personality.
         </p>
+        <div
+          onClick={handleClick}
+          onMouseEnter={enterHandler}
+          className="explore_inspired_button"
+        >
+          [
+          <div className="inspired_button_wrap" id="btn-text-wrap">
+            <h4 className="text1-btn">Read More</h4>
+            <h4 className="text2-btn">Read More</h4>
+          </div>
+          ]
+        </div>
       </div>
     </div>
   );
