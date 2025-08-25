@@ -33,6 +33,8 @@ const Login = ({ setToggle }) => {
     onCompleted: (response) => {
       const { user, userToken } = response?.userLogin || {};
       if (userToken && user) {
+        localStorage.removeItem("visitorId");
+        localStorage.removeItem("visitorExpire");
         setToken(userToken);
         setUser(user);
         setIsLoggedIn(true);

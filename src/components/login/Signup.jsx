@@ -49,6 +49,8 @@ const Signup = ({ setToggle }) => {
       const { data: response } = await signupUser({ variables: { input } });
       const { user, userToken } = response?.clientUserSave || {};
       if (userToken && Object.keys(user).length > 0) {
+        localStorage.removeItem("visitorId");
+        localStorage.removeItem("visitorExpire");
         setToken(userToken);
         setUser(user);
         setIsLoggedIn(true);
