@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { formatePrice } from "@/utils/Util";
+import { getProductPriceLabel } from "@/utils/Util";
 import ProductCard from "../common/card/ProductCard";
 import { useRouter } from "next/router";
 import gsap from "gsap";
@@ -9,15 +9,15 @@ gsap.registerPlugin(ScrollTrigger);
 const ProductListGrid = ({ title = "You may also like", data }) => {
   if (!data && data.length === 0) return;
   const router = useRouter();
-   const [isMobile, setIsMobile] = useState(false);
-  
-    // detect mobile screen
-    useEffect(() => {
-      const checkMobile = () => setIsMobile(window.innerWidth <= 576);
-      checkMobile();
-      window.addEventListener("resize", checkMobile);
-      return () => window.removeEventListener("resize", checkMobile);
-    }, []);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // detect mobile screen
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 576);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useLayoutEffect(() => {
     if (window.innerWidth < 576) return;
@@ -57,9 +57,6 @@ const ProductListGrid = ({ title = "You may also like", data }) => {
       </h2>
       <div className="Similar_prd_cntr">
         {(!isMobile ? data : data?.slice(0, 4))?.map((item, idx) => {
-          const minVariant = item?.variants.reduce((min, item) =>
-            item.variantPrice < min.variantPrice ? item : min
-          );
           return (
             <ProductCard
               key={idx}
@@ -67,9 +64,10 @@ const ProductListGrid = ({ title = "You may also like", data }) => {
               src={item?.assets?.[0]?.path || ""}
               alt={item?.assets?.[0]?.altText || ""}
               name={item?.name || ""}
-              price={`Starts from ${formatePrice(
-                minVariant?.variantPrice || item?.discountedPrice || ""
-              )}`}
+              price={getProductPriceLabel(
+                item?.variants,
+                item?.discountedPrice
+              )}
             />
           );
         })}

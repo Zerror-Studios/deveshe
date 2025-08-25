@@ -1,5 +1,5 @@
 import React from "react";
-import { formatePrice } from "@/utils/Util";
+import { getProductPriceLabel } from "@/utils/Util";
 import ProductCard from "../common/card/ProductCard";
 
 const ProductContainer = ({ data }) => {
@@ -8,9 +8,6 @@ const ProductContainer = ({ data }) => {
     <div id="prodcut-container">
       {data?.map((item, index) => {
         const { path = "", altText = "" } = item?.assets?.[0] || {};
-        const minVariant = item?.variants.reduce((min, item) =>
-          item.variantPrice < min.variantPrice ? item : min
-        );
         return (
           <ProductCard
             key={`product-${index}`}
@@ -18,9 +15,7 @@ const ProductContainer = ({ data }) => {
             src={path || ""}
             alt={altText}
             name={item?.name || ""}
-            price={`Starts from ${formatePrice(
-              minVariant?.variantPrice || item?.discountedPrice || ""
-            )}`}
+            price={getProductPriceLabel(item?.variants, item?.discountedPrice)}
           />
         );
       })}

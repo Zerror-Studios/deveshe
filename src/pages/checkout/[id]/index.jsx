@@ -16,7 +16,9 @@ import BillingAddress from "@/components/checkout/BillingAddress";
 import OrderSummery from "@/components/checkout/OrderSummery";
 import { EmailSubscribedStatus } from "@/utils/Constant";
 import Checkout from "nimbbl_sonic";
+import { useRouter } from "next/router";
 const CheckoutPage = ({ meta, initialCartData }) => {
+  const router = useRouter();
   const [cartData, setCartData] = useState(initialCartData);
   const [isLoading, setIsLoading] = useState(false);
   const [checkoutOrder] = useMutation(CHECKOUT_ORDER);
@@ -66,7 +68,13 @@ const CheckoutPage = ({ meta, initialCartData }) => {
       if (!response.ok) {
         throw new Error(`Failed with status ${response.status}`);
       }
-      return await response.json();
+      const result = await response.json();
+      if (result?.data?.redirectUrl) {
+        router.push({
+          pathname: result.data.redirectUrl,
+          query: { awb_code: result.data.awb_code },
+        });
+      }
     } catch (error) {
       console.error(`Error in Payment Order: ${error.message}`);
       return null;
@@ -86,10 +94,7 @@ const CheckoutPage = ({ meta, initialCartData }) => {
               response?.event_type === "globalCloseCheckoutModal" &&
               response?.payload
             ) {
-              const result = await handleOrderPayment(response.payload);
-              console.log("Backend handle-order-payment result:", result);
-            } else {
-              console.warn("Unexpected Nimbbl response:", response);
+              await handleOrderPayment(response.payload);
             }
           } catch (err) {
             console.error("Error in callback_handler:", err);
@@ -126,43 +131,6 @@ const CheckoutPage = ({ meta, initialCartData }) => {
       });
       const { token } = response?.clientCheckout?.nimbblData || {};
       launchNimbblSonicCheckout(token);
-      // const nimbblOrderPayload = {
-      //   order_id: order_id,
-      //   callback_url: `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}}/api/payment/handle-order-payment`,
-      //   payment_mode_code: paymentMethod,
-      //   card_no: cardDetails?.cardNumber || "",
-      //   expiry: cardDetails?.cardExpire || "",
-      //   card_holder_name: cardDetails?.cardHolderName || "",
-      //   cvv: cardDetails?.cardCvv || "",
-      //   transaction_currency: "INR",
-      // };
-      // const initiatePayment = await fetch(
-      //   `${process.env.NEXT_PUBLIC_NIMBBL_BASE_URL}/api/v3/initiate-payment`,
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Accept: "application/json",
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //     body: JSON.stringify(nimbblOrderPayload),
-      //   }
-      // );
-
-      // if (!initiatePayment.ok) {
-      //   toast.error(`Initiate payment failed: ${initiatePayment.statusText}`);
-      // }
-
-      // const paymentResponse = await initiatePayment.json();
-      // const redirectAction = paymentResponse?.next?.find(
-      //   (item) => item.action === "redirect"
-      // );
-
-      // if (redirectAction?.url) {
-      //   window.location.href = redirectAction.url;
-      // } else {
-      //   toast.error("No redirect action found in payment response");
-      // }
     } catch (err) {
       console.error(err);
       toast.error(err.message || "Failed");

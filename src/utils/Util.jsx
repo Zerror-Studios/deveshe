@@ -16,3 +16,19 @@ export const formatePrice = (price) => {
   }).format(price);
   return formattedPrice;
 };
+
+export const getProductPriceLabel = (variants = [], discountedPrice = 0) => {
+  if (!variants || variants.length === 0) {
+    return formatePrice(discountedPrice || 0);
+  }
+  const prices = variants.map((v) => v.variantPrice).filter(Boolean);
+  if (prices.length === 0) {
+    return formatePrice(discountedPrice || 0);
+  }
+  const minPrice = Math.min(...prices);
+  const maxPrice = Math.max(...prices);
+  if (minPrice === maxPrice) {
+    return formatePrice(minPrice);
+  }
+  return `Starts from ${formatePrice(minPrice)}`;
+};
