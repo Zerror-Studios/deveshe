@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import gsap from "gsap";
@@ -7,12 +7,15 @@ import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Button from "./Button";
 import { useAuthStore } from "@/store/auth-store";
+import { useRouter } from "next/router";
 gsap.registerPlugin(ScrollTrigger);
 
-const NavbarMobile = ({openCart}) => {
+const NavbarMobile = ({ openCart }) => {
   const { isLoggedIn } = useAuthStore((state) => state);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuTL = useRef(null);
+  const router = useRouter();
+  const [percent, setPercent] = useState(0);
 
   useGSAP(() => {
     menuTL.current = gsap
@@ -88,34 +91,109 @@ const NavbarMobile = ({openCart}) => {
       return newState;
     });
   };
+  const startLoader = () => {
+    let current = 0;
+    const interval = setInterval(() => {
+      current++;
+      setPercent(current);
+
+      if (current >= 100) {
+        clearInterval(interval);
+      }
+    }, 10);
+  };
+
+  useEffect(() => {
+    var tl = gsap.timeline();
+
+    // Move logo and nav buttons smoothly at the same time
+    tl.call(startLoader)
+      .to("#loader_slider p", {
+        top: "95%",
+        duration: 0.8,
+        delay: 1,
+        ease: "power4.Out",
+      })
+  .fromTo(
+        ".navbar-mobile-wrap",
+        {
+          y: "-100%",
+          opacity: 0,
+        },
+        {
+          y: "-0%",
+          opacity: 1,
+          duration: 0.8,
+          ease: "power4.Out",
+        }
+      )
+      .to("#loader_slider", {
+        opacity: 0,
+        duration: 0.8,
+        ease: "power4.Out",
+        onComplete: () => {
+          gsap.set("#loader_slider", { display: "none" }); // 👈 hide after fade
+        },
+      })
+    
+  }, []);
 
   return (
     <>
       <div className="navbar-mobile">
-        <Link href="/" id="nav-logo">
-          <Image width={1000} height={1000} src="/assets/images/logo/d.webp" alt="D" />
-          <Image width={1000} height={1000} src="/assets/images/logo/v.webp" alt="V" />
-          <Image width={1000} height={1000} src="/assets/images/logo/s.webp" alt="S" />
-          <Image width={1000} height={1000} src="/assets/images/logo/m.webp" alt="M" />
-        </Link>
-        <div className="menu-icons">
-          <Link href={isLoggedIn ? "/profile" : "/login"}>
+        {router.pathname === "/" && (
+          <div id="loader_slider">
+            <p>
+              loading... <span>{percent}%</span>
+            </p>
+          </div>
+        )}
+        <div className="navbar-mobile-wrap">
+          <Link href="/" id="nav-logo">
             <Image
-              className="account-logo"
-              width={23}
-              height={23}
-              src="/images/user.png"
-              alt="logo"
+              width={1000}
+              height={1000}
+              src="/assets/images/logo/d.webp"
+              alt="D"
+            />
+            <Image
+              width={1000}
+              height={1000}
+              src="/assets/images/logo/v.webp"
+              alt="V"
+            />
+            <Image
+              width={1000}
+              height={1000}
+              src="/assets/images/logo/s.webp"
+              alt="S"
+            />
+            <Image
+              width={1000}
+              height={1000}
+              src="/assets/images/logo/m.webp"
+              alt="M"
             />
           </Link>
-          <HiOutlineShoppingBag
-            onClick={openCart}
-            className="bag-icon"
-            size={23}
-          />
-          <div id="menu-btn" onClick={toggleMenu}>
-            <span className="line1m linem"></span>
-            <span className="line2m linem"></span>
+          <div className="menu-icons">
+            <Link href={isLoggedIn ? "/profile" : "/login"}>
+              <Image
+                className="account-logo"
+                width={23}
+                height={23}
+                src="/images/user.png"
+                alt="logo"
+              />
+            </Link>
+            <HiOutlineShoppingBag
+              onClick={openCart}
+              className="bag-icon"
+              size={23}
+            />
+            <div id="menu-btn" onClick={toggleMenu}>
+              <span className="line1m linem"></span>
+              <span className="line2m linem"></span>
+            </div>
           </div>
         </div>
         <div id="side-navbar">
@@ -138,7 +216,11 @@ const NavbarMobile = ({openCart}) => {
                 </p>
               </div>
               <div className="nav-social-icons">
-                 <a href="https://www.instagram.com/de_ve_she_dreams" className="nav-s-icon" target="_blank">
+                <a
+                  href="https://www.instagram.com/de_ve_she_dreams"
+                  className="nav-s-icon"
+                  target="_blank"
+                >
                   <svg
                     className="icon-instagram"
                     width="19"
