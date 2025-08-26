@@ -88,8 +88,6 @@ const CheckoutPage = ({ meta, initialCartData }) => {
       checkout.open({
         callback_handler: async function (response) {
           try {
-            console.log("Nimbbl response:", response);
-
             if (
               response?.event_type === "globalCloseCheckoutModal" &&
               response?.payload
