@@ -69,11 +69,7 @@ const ProductDetail = ({ meta, data, productList }) => {
               Complimentary shipping on orders above 5000 INR.
             </p>
           </div>
-          {showSizeAssist && (
-            <SizeAssistance
-              onClose={handleClose}
-            />
-          )}
+          {showSizeAssist && <SizeAssistance onClose={handleClose} />}
         </div>
       </Suspense>
       <ProductModalPreview

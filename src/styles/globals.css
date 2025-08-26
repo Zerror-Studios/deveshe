@@ -514,6 +514,7 @@ li {
   align-items: center;
   justify-content: space-between;
   position: relative;
+  z-index: 10;
 }
 .menu-icons a {
   line-height: 0;

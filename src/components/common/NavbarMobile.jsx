@@ -104,9 +104,16 @@ const NavbarMobile = ({ openCart }) => {
   };
 
   useEffect(() => {
+    if (router.pathname !== "/") {
+      gsap.set(".navbar-mobile-wrap", {
+        y: "0%",
+        opacity: 1,
+      });
+      return;
+    } // ✅ only run on homepage
+
     var tl = gsap.timeline();
 
-    // Move logo and nav buttons smoothly at the same time
     tl.call(startLoader)
       .to("#loader_slider p", {
         top: "95%",
@@ -114,14 +121,14 @@ const NavbarMobile = ({ openCart }) => {
         delay: 1,
         ease: "power4.Out",
       })
-  .fromTo(
+      .fromTo(
         ".navbar-mobile-wrap",
         {
           y: "-100%",
           opacity: 0,
         },
         {
-          y: "-0%",
+          y: "0%",
           opacity: 1,
           duration: 0.8,
           ease: "power4.Out",
@@ -132,11 +139,10 @@ const NavbarMobile = ({ openCart }) => {
         duration: 0.8,
         ease: "power4.Out",
         onComplete: () => {
-          gsap.set("#loader_slider", { display: "none" }); // 👈 hide after fade
+          gsap.set("#loader_slider", { display: "none" });
         },
-      })
-    
-  }, []);
+      });
+  }, [router.pathname]); // ✅ re-run if route changes
 
   return (
     <>
