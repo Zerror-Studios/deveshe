@@ -99,9 +99,8 @@ const ProductContent = ({ data = {}, handleOpen }) => {
         ...(!isLoggedIn && visitorId ? { guestId: visitorId } : {}),
       };
 
-      const { data: response } = await addItemToCart({ variables: payload });
+      await addItemToCart({ variables: payload });
       openCart();
-      console.log(response);
     } catch (err) {
       console.error(err);
       toast.error(err.message || "Failed to add item to cart");

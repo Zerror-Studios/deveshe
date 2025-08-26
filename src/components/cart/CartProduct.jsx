@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { formatePrice } from "@/utils/Util";
@@ -8,9 +8,32 @@ const CartProduct = ({
   renderVariants,
   handleAddItem,
   handleRemoveItem,
-  itemAddLoader,
-  itemRemoveLoader,
 }) => {
+  const [removing, setRemoving] = useState(false);
+  const [adding, setAdding] = useState(false);
+
+  const onRemove = async (isCompleteRemove = true) => {
+    try {
+      setRemoving(true);
+      await handleRemoveItem(
+        item?.productId || null,
+        item?.variantDetail?.variantDetailId || null,
+        isCompleteRemove
+      );
+    } finally {
+      setRemoving(false);
+    }
+  };
+
+  const onAdd = async () => {
+    try {
+      setAdding(true);
+      await handleAddItem(item?.productId || null, item?.variantDetail || {});
+    } finally {
+      setAdding(false);
+    }
+  };
+
   return (
     <div className="cart_product">
       <div className="cart_image">
@@ -30,43 +53,21 @@ const CartProduct = ({
             </span>
             <div className="cart_qt">
               <span>Quantity</span>
-              <button
-                disabled={itemRemoveLoader}
-                onClick={() =>
-                  handleRemoveItem(
-                    item?.productId || null,
-                    item?.variantDetail?.variantDetailId || null,
-                    false
-                  )
-                }
-              >
+              <button disabled={removing} onClick={() => onRemove(false)}>
                 <FiMinus />
               </button>
               <span>{item.qty}</span>
-              <button
-                disabled={itemAddLoader}
-                onClick={() =>
-                  handleAddItem(
-                    item?.productId || null,
-                    item?.variantDetail || {}
-                  )
-                }
-              >
+              <button disabled={adding} onClick={onAdd}>
                 <FiPlus />
               </button>
             </div>
           </div>
           <button
-          className="remove_cart_btn"
-            disabled={itemRemoveLoader}
-            onClick={() =>
-              handleRemoveItem(
-                item?.productId || null,
-                item?.variantDetail?.variantDetailId || null
-              )
-            }
+            className="remove_cart_btn"
+            disabled={removing}
+            onClick={() => onRemove(true)}
           >
-            {itemRemoveLoader ? "Removing..." : "Remove"}
+            {removing ? "Removing..." : "Remove"}
           </button>
         </div>
         <div className="product_price">

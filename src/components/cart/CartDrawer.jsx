@@ -8,22 +8,27 @@ import { useAuthStore } from "@/store/auth-store";
 import { useVisitor } from "@/hooks/useVisitor";
 import { formatePrice } from "@/utils/Util";
 import gsap from "gsap";
-import CartProduct from "./CartProduct";
+import CartProduct from "@/components/cart/CartProduct";
+
 const CartDrawer = ({ isOpen, closeCart }) => {
   const router = useRouter();
   const { visitorId } = useVisitor();
   const { token, user, isLoggedIn } = useAuthStore((state) => state);
+
   const [isBtnLoading, setIsBtnLoading] = useState(false);
+
   const [addCartItem, { loading: itemAddLoader }] =
     useMutation(ADD_ITEM_TO_CART);
   const [removeCartItem, { loading: itemRemoveLoader }] = useMutation(
     REMOVE_ITEM_FROM_CART
   );
+
   const cartListPayload = isLoggedIn
     ? { token }
     : visitorId
     ? { guestId: visitorId }
     : {};
+
   const {
     data: cartResponse,
     loading,
@@ -31,6 +36,8 @@ const CartDrawer = ({ isOpen, closeCart }) => {
   } = useQuery(CART_LIST, {
     skip: !isOpen,
     variables: cartListPayload,
+    fetchPolicy: "network-only",
+    nextFetchPolicy: "cache-first",
   });
 
   const {
@@ -62,10 +69,10 @@ const CartDrawer = ({ isOpen, closeCart }) => {
       };
 
       const { data: response } = await addCartItem({ variables: payload });
-      const message = response?.addItemToCart || null;
+      const message = response?.addItemToCart;
       if (!message) return;
       toast.success(message || "Item added successfully!");
-      refetch(cartListPayload);
+      await refetch();
     } catch (err) {
       console.error(err);
       toast.error(err.message || "Failed to add item in cart");
@@ -86,13 +93,13 @@ const CartDrawer = ({ isOpen, closeCart }) => {
         isCompleteRemove,
       };
       const { data: response } = await removeCartItem({ variables: { input } });
-      const message = response?.removeItemFromCart || null;
+      const message = response?.removeItemFromCart;
       if (!message) return;
       toast.success(message || "Item removed successfully!");
-      refetch(cartListPayload);
+      await refetch();
     } catch (err) {
       console.error(err);
-      toast.error(err.message || "Failed to remove item form cart");
+      toast.error(err.message || "Failed to remove item from cart");
     }
   };
 
@@ -100,16 +107,18 @@ const CartDrawer = ({ isOpen, closeCart }) => {
     setIsBtnLoading(true);
     setTimeout(() => {
       closeCart();
-      router.push("/checkout/" + _id);
+      router.push("/checkout/" + _id).finally(() => {
+        setIsBtnLoading(false);
+      });
     }, 1000);
-    setIsBtnLoading(false);
   };
+
+  // Drawer animation
   const drawerRef = useRef(null);
   const backdropRef = useRef(null);
   useEffect(() => {
+    const tl = gsap.timeline();
     if (isOpen) {
-      var tl = gsap.timeline();
-
       tl.to(backdropRef.current, {
         opacity: 1,
         pointerEvents: "auto",
@@ -120,7 +129,6 @@ const CartDrawer = ({ isOpen, closeCart }) => {
         ease: "power3.out",
       });
     } else {
-      var tl = gsap.timeline();
       tl.to(drawerRef.current, {
         x: "100%",
         duration: 0.4,
@@ -144,45 +152,42 @@ const CartDrawer = ({ isOpen, closeCart }) => {
             <RxCross2 />
           </button>
         </div>
+
         <div id="drawer_products" data-lenis-prevent>
-          {cart && cart.length > 0 ? (
-            <>
-              {cart.map((item, i) => {
-                return (
-                  <CartProduct
-                    key={`item-${i}`}
-                    item={item}
-                    renderVariants={renderVariants}
-                    handleAddItem={handleAddItem}
-                    handleRemoveItem={handleRemoveItem}
-                    itemAddLoader={itemAddLoader}
-                    itemRemoveLoader={itemRemoveLoader}
-                  />
-                );
-              })}
-            </>
+          {cart?.length > 0 ? (
+            cart.map((item, i) => (
+              <CartProduct
+                key={`cart-product-item-${i}`}
+                index={i}
+                item={item}
+                renderVariants={renderVariants}
+                handleAddItem={handleAddItem}
+                handleRemoveItem={handleRemoveItem}
+              />
+            ))
           ) : (
             <span id="no_item">There are currently no items in your bag.</span>
           )}
         </div>
+
         <div id="drawer_bottom">
           <div className="total_price">
             <span>Total</span>
             {totalprice !== discountedPrice && (
-              <span>{formatePrice(totalprice || "")}</span>
+              <span>{formatePrice(totalprice)}</span>
             )}
-            <span>{formatePrice(discountedPrice || "")}</span>
+            <span>{formatePrice(discountedPrice)}</span>
           </div>
           <div className="checkout_btn_container">
             <span>Free worldwide shipping on orders over 5000 INR</span>
             <button
               className="_btn_wrapper"
-              style={
-                isBtnLoading
-                  ? { backgroundColor: "black", width: "100%" }
-                  : { width: "100%" }
-              }
+              style={{
+                width: "100%",
+                ...(isBtnLoading && { backgroundColor: "black" }),
+              }}
               onClick={navigateCheckout}
+              disabled={isBtnLoading}
             >
               {isBtnLoading ? (
                 <div className="ani-wrap">
