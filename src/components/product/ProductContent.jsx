@@ -8,7 +8,7 @@ import { htmlParser } from "@/utils/Util";
 import { useRouter } from "next/router";
 import { useCartStore } from "@/store/cart-store";
 
-const ProductContent = ({ data = {} ,handleOpen}) => {
+const ProductContent = ({ data = {}, handleOpen }) => {
   const router = useRouter();
 
   const { token, isLoggedIn } = useAuthStore((state) => state);
@@ -16,15 +16,6 @@ const ProductContent = ({ data = {} ,handleOpen}) => {
 
   const { visitorId } = useVisitor();
 
-
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkScreen = () => setIsMobile(window.innerWidth <= 576);
-    checkScreen();
-    window.addEventListener("resize", checkScreen);
-    return () => window.removeEventListener("resize", checkScreen);
-  }, []);
   const basePrice = useMemo(
     () => (data?.discountedPrice > 0 ? data.discountedPrice : data?.price || 0),
     [data]
@@ -253,15 +244,13 @@ const ProductContent = ({ data = {} ,handleOpen}) => {
             </button>
           </div>
 
-          {!isMobile && (
-            <div className="ProductDets_bottom_links_wrap">
-              <div className="ProductDets_info_help">
-                <p className="ProductDets_info_text sql38zc _1l9nr81o">
-                  Complimentary shipping on orders above 5000 INR.
-                </p>
-              </div>
+          <div className="ProductDets_bottom_links_wrap ProductDets_bottom_links_wrap_large">
+            <div className="ProductDets_info_help">
+              <p className="ProductDets_info_text sql38zc _1l9nr81o">
+                Complimentary shipping on orders above 5000 INR.
+              </p>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

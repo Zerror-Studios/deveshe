@@ -12,6 +12,9 @@ import "@/styles/success.css";
 import "@/styles/address.css";
 import "@/styles/profile.css";
 import "@/styles/productLoader.css";
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
 
 import "@/styles/components/sizeAssistance.css";
 import "@/styles/components/navbar.css";

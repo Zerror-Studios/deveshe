@@ -599,6 +599,7 @@
   display: grid;
   grid-column: 1;
   grid-row: 1;
+  background-color: #fadcde;
 }
 
 .ProductDets_img_slider_wrap {
@@ -1407,6 +1408,9 @@ button {
   /* gap: 32px; */
 }
 @media (max-width: 576px){
+  .ProductDets_bottom_links_wrap_large{
+    display: none;
+  }
   .ProductDets_Notify_wrap{
     width: 100%;
   }

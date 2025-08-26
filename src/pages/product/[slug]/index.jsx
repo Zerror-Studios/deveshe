@@ -35,7 +35,7 @@ const ProductDetail = ({ meta, data, productList }) => {
               <ProductImageGrid
                 assets={data?.assets || []}
                 setSelectedAsset={setSelectedAsset}
-              />
+                />
               <ProductContent handleOpen={handleOpen} data={data || {}} />
             </div>
             <ProductListGrid key={router.asPath} data={productList} />
