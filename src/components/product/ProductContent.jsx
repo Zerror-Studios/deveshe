@@ -1,26 +1,17 @@
 import React, { useEffect, useState, useMemo } from "react";
-import toast from "react-hot-toast";
-import { useMutation } from "@apollo/client";
-import { ADD_ITEM_TO_CART } from "@/graphql";
-import { useAuthStore } from "@/store/auth-store";
-import { useVisitor } from "@/hooks/useVisitor";
 import { htmlParser } from "@/utils/Util";
-import { useRouter } from "next/router";
-import { useCartStore } from "@/store/cart-store";
 
-const ProductContent = ({ data = {}, handleOpen }) => {
-  const router = useRouter();
-
-  const { token, isLoggedIn } = useAuthStore((state) => state);
-  const { openCart } = useCartStore((state) => state);
-
-  const { visitorId } = useVisitor();
-
-  const basePrice = useMemo(
-    () => (data?.discountedPrice > 0 ? data.discountedPrice : data?.price || 0),
-    [data]
-  );
-
+const ProductContent = ({
+  data = {},
+  finalPrice,
+  loading,
+  cartBtn,
+  setFinalPrice,
+  setVariantMatched,
+  setCartBtn,
+  handleOpen,
+  handleAddToCart,
+}) => {
   const colorOption = useMemo(
     () =>
       data?.productOptions?.find((opt) => opt.showInProductPageAs === "Color"),
@@ -35,12 +26,7 @@ const ProductContent = ({ data = {}, handleOpen }) => {
     [data]
   );
 
-  const [finalPrice, setFinalPrice] = useState(basePrice);
   const [selectedVariants, setSelectedVariants] = useState({});
-  const [variantMatched, setVariantMatched] = useState(null);
-  const [cartBtn, setCartBtn] = useState(false);
-  const [addItemToCart, { loading }] = useMutation(ADD_ITEM_TO_CART);
-
   // Initialize default variants and color
   useEffect(() => {
     if (!data?.productOptions?.length) return;
@@ -81,30 +67,6 @@ const ProductContent = ({ data = {}, handleOpen }) => {
     setSelectedVariants(updated);
     setCartBtn(Object.keys(updated).length === data.productOptions?.length);
     updatePriceBasedOnVariant(updated);
-  };
-
-  const handleAddToCart = async () => {
-    if (!cartBtn) return;
-
-    try {
-      const productId = router?.query?.slug;
-      if (!productId) throw new Error("Product ID not found");
-
-      const payload = {
-        input: {
-          productId,
-          variantDetail: variantMatched,
-          ...(isLoggedIn && token ? { token } : {}),
-        },
-        ...(!isLoggedIn && visitorId ? { guestId: visitorId } : {}),
-      };
-
-      await addItemToCart({ variables: payload });
-      openCart();
-    } catch (err) {
-      console.error(err);
-      toast.error(err.message || "Failed to add item to cart");
-    }
   };
 
   if (!data) return null;

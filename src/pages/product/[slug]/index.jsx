@@ -1,22 +1,59 @@
-import React, { Suspense, useEffect, useRef, useState } from "react";
-
-import ProductLoader from "@/components/loaders/ProductLoader";
+import React, { useMemo, useState } from "react";
+import { useRouter } from "next/router";
+import { useVisitor } from "@/hooks/useVisitor";
+import { useMutation } from "@apollo/client";
+import { useAuthStore } from "@/store/auth-store";
+import { useCartStore } from "@/store/cart-store";
+import { createApolloClient } from "@/lib/apolloClient";
+import { ADD_ITEM_TO_CART, GET_PRODUCT_BY_ID, GET_PRODUCTS } from "@/graphql";
 import SeoHeader from "@/components/seo/SeoHeader";
 import ProductListGrid from "@/components/product/ProductListGrid";
 import ProductModalPreview from "@/components/product/ProductModalPreview";
 import ProductImageGrid from "@/components/product/ProductImageGrid";
-import { createApolloClient } from "@/lib/apolloClient";
-import { GET_PRODUCT_BY_ID, GET_PRODUCTS } from "@/graphql";
 import ProductContent from "@/components/product/ProductContent";
-import { useRouter } from "next/router";
 import SizeAssistance from "@/components/product/SizeAssistance";
+import toast from "react-hot-toast";
 
 const ProductDetail = ({ meta, data, productList }) => {
+  const router = useRouter();
+  const { visitorId } = useVisitor();
+  const basePrice = useMemo(
+    () => (data?.discountedPrice > 0 ? data.discountedPrice : data?.price || 0),
+    [data]
+  );
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState({});
-  const router = useRouter();
-
   const [showSizeAssist, setShowSizeAssist] = useState(false);
+  const [finalPrice, setFinalPrice] = useState(basePrice);
+  const [variantMatched, setVariantMatched] = useState(null);
+  const [cartBtn, setCartBtn] = useState(false);
+  const { token, isLoggedIn } = useAuthStore((state) => state);
+  const { openCart } = useCartStore((state) => state);
+  const [addItemToCart, { loading }] = useMutation(ADD_ITEM_TO_CART);
+
+  const handleAddToCart = async () => {
+    if (!cartBtn) return;
+
+    try {
+      const productId = router?.query?.slug;
+      if (!productId) throw new Error("Product ID not found");
+
+      const payload = {
+        input: {
+          productId,
+          variantDetail: variantMatched,
+          ...(isLoggedIn && token ? { token } : {}),
+        },
+        ...(!isLoggedIn && visitorId ? { guestId: visitorId } : {}),
+      };
+
+      await addItemToCart({ variables: payload });
+      openCart();
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message || "Failed to add item to cart");
+    }
+  };
 
   const handleOpen = () => {
     setShowSizeAssist(true);
@@ -27,51 +64,59 @@ const ProductDetail = ({ meta, data, productList }) => {
   return (
     <>
       <SeoHeader meta={meta} />
-      <Suspense fallback={<ProductLoader />}>
-        <div className="ProductDetails_wrapper">
-          <div className="ProductDetails_cntr">
-            <div className="ProductDets_main"></div>
-            <div className="ProductDets_grid">
-              <ProductImageGrid
-                assets={data?.assets || []}
-                setSelectedAsset={setSelectedAsset}
-                />
-              <ProductContent handleOpen={handleOpen} data={data || {}} />
-            </div>
-            <ProductListGrid key={router.asPath} data={productList} />
+      <div className="ProductDetails_wrapper">
+        <div className="ProductDetails_cntr">
+          <div className="ProductDets_main"></div>
+          <div className="ProductDets_grid">
+            <ProductImageGrid
+              assets={data?.assets || []}
+              setSelectedAsset={setSelectedAsset}
+            />
+            <ProductContent
+              data={data || {}}
+              finalPrice={finalPrice}
+              cartBtn={cartBtn}
+              loading={loading}
+              setFinalPrice={setFinalPrice}
+              setCartBtn={setCartBtn}
+              setVariantMatched={setVariantMatched}
+              handleOpen={handleOpen}
+              handleAddToCart={handleAddToCart}
+            />
           </div>
-          <div className="ProductDets_Notify_wrap mobile_add_btn">
-            <button
-              className="ProductDets_ntfy_btn ProductDets_ntfy_btn_grid"
-              id="easysize-cart-button"
-              // style={loading ? { backgroundColor: "black" } : {}}
-              // onClick={handleAddToCart}
-            >
-              {/* {loading ? (
+          <ProductListGrid key={router.asPath} data={productList} />
+        </div>
+        <div className="ProductDets_Notify_wrap mobile_add_btn">
+          <button
+            className="ProductDets_ntfy_btn ProductDets_ntfy_btn_grid"
+            id="easysize-cart-button"
+            style={loading ? { backgroundColor: "black" } : {}}
+            onClick={handleAddToCart}
+          >
+            {loading ? (
               <div className="ani-wrap">
                 <div className="ani-main" />
               </div>
-            ) : ( */}
+            ) : (
               <>
                 <span className="ProductDets_ntfy_btn_slect_size">
-                  {/* {!cartBtn ? "Select a Size" : "Add to Bag"} */}
+                  {!cartBtn ? "Select a Size" : "Add to Bag"}
                 </span>
                 <span className="ProductDets_ntfy_btn_AddtoBeg">
                   Add to Bag
                 </span>
                 <div className="ProductDets_ntfy_btn_price">
-                  <span>3999 INR</span>
+                  <span>{finalPrice} INR</span>
                 </div>
               </>
-              {/* )} */}
-            </button>
-            <p className="ProductDets_info_text sql38zc _1l9nr81o">
-              Complimentary shipping on orders above 5000 INR.
-            </p>
-          </div>
-          {showSizeAssist && <SizeAssistance onClose={handleClose} />}
+            )}
+          </button>
+          <p className="ProductDets_info_text sql38zc _1l9nr81o">
+            Complimentary shipping on orders above 5000 INR.
+          </p>
         </div>
-      </Suspense>
+        {showSizeAssist && <SizeAssistance onClose={handleClose} />}
+      </div>
       <ProductModalPreview
         data={selectedAsset}
         isOpen={isPreviewOpen}
