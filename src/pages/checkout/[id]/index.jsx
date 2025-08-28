@@ -17,10 +17,12 @@ import OrderSummery from "@/components/checkout/OrderSummery";
 import { EmailSubscribedStatus } from "@/utils/Constant";
 import Checkout from "nimbbl_sonic";
 import { useRouter } from "next/router";
+import Loader from "@/components/checkout/Loader";
 const CheckoutPage = ({ meta, initialCartData }) => {
   const router = useRouter();
   const [cartData, setCartData] = useState(initialCartData);
   const [isLoading, setIsLoading] = useState(false);
+  const [isPageLoading, setIsPageLoading] = useState(false);
   const [checkoutOrder] = useMutation(CHECKOUT_ORDER);
   const {
     register,
@@ -87,6 +89,7 @@ const CheckoutPage = ({ meta, initialCartData }) => {
 
       checkout.open({
         callback_handler: async function (response) {
+          setIsPageLoading(true);
           try {
             if (
               response?.event_type === "globalCloseCheckoutModal" &&
@@ -96,6 +99,8 @@ const CheckoutPage = ({ meta, initialCartData }) => {
             }
           } catch (err) {
             console.error("Error in callback_handler:", err);
+          } finally {
+            setIsPageLoading(false);
           }
         },
       });
@@ -177,6 +182,7 @@ const CheckoutPage = ({ meta, initialCartData }) => {
           <OrderSummery cartData={cartData || {}} setCartData={setCartData} />
         </div>
       </div>
+      <Loader isLoading={isPageLoading} />
     </>
   );
 };
