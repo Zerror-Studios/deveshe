@@ -6,7 +6,14 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
-const ProductListGrid = ({ title = "You may also like", data }) => {
+const ProductListGrid = ({
+  title = "You may also like",
+  data,
+  loading,
+  handleAddToCart,
+  cartBtn,
+  finalPrice,
+}) => {
   if (!data && data.length === 0) return;
   const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
@@ -71,6 +78,34 @@ const ProductListGrid = ({ title = "You may also like", data }) => {
             />
           );
         })}
+      </div>
+
+      <div className="ProductDets_Notify_wrap mobile_add_btn">
+        <button
+          className="ProductDets_ntfy_btn ProductDets_ntfy_btn_grid"
+          id="easysize-cart-button"
+          style={loading ? { backgroundColor: "black" } : {}}
+          onClick={handleAddToCart}
+        >
+          {loading ? (
+            <div className="ani-wrap">
+              <div className="ani-main" />
+            </div>
+          ) : (
+            <>
+              <span className="ProductDets_ntfy_btn_slect_size">
+                {!cartBtn ? "Select a Size" : "Add to Bag"}
+              </span>
+              <span className="ProductDets_ntfy_btn_AddtoBeg">Add to Bag</span>
+              <div className="ProductDets_ntfy_btn_price">
+                <span>{finalPrice} INR</span>
+              </div>
+            </>
+          )}
+        </button>
+        <p className="ProductDets_info_text sql38zc _1l9nr81o">
+          Complimentary shipping on orders above 5000 INR.
+        </p>
       </div>
     </div>
   );

@@ -485,6 +485,7 @@
   }
   .Similar_prd_head {
     padding: 20px !important;
+    padding-top: 40px !important;
   }
   .ProductDets_text_btn_resp_cntr .ProductDets_text_btn_resp_wrap,
   .ProductDets_blank-div {
@@ -1332,7 +1333,6 @@ button {
 .Similar_prd_wrap {
   position: relative;
   height: 100%;
-  padding-top: 16px;
 }
 
 .Similar_prd_head {
@@ -1413,7 +1413,7 @@ button {
 
 
 .swiper-pagination-bullet{
-  height: 6px !important;
+  height: 4px !important;
   width: 30px !important;
   border-radius: 0 !important;
   background-color: white;
