@@ -56,6 +56,10 @@
   transform-origin: left;
 }
 
+.nav-link a.active  .hoverline{
+  transform: scaleX(1) !important;
+}
+
 .nav-link a:hover .hoverline {
   transform: scaleX(1);
   transform-origin: left;

@@ -12,7 +12,6 @@ import "@/styles/success.css";
 import "@/styles/address.css";
 import "@/styles/profile.css";
 import "@/styles/productLoader.css";
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
 
@@ -27,6 +26,7 @@ import "@/styles/components/contact.css";
 import "@/styles/components/cart.css";
 import "@/styles/components/common/polaroid.css";
 import "@/styles/components/common/productCard.css";
+import "@/styles/components/common/footer.css";
 
 export default function App({ Component, pageProps }) {
   const client = createApolloClient();

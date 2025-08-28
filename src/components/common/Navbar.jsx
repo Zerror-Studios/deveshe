@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { useAuthStore } from "@/store/auth-store";
+import { MenuData } from "@/helpers/MenuData";
 gsap.registerPlugin(ScrollTrigger);
 
 const Navbar = ({ openCart }) => {
@@ -332,22 +333,12 @@ const Navbar = ({ openCart }) => {
           />
         </Link>
         <div className="nav-link">
-          <Link href="/">
-            shop
-            <div className="hoverline"></div>
-          </Link>
-          <Link href="/lookbook">
-            lookbook
-            <div className="hoverline"></div>
-          </Link>
-          <Link href="/about">
-            about
-            <div className="hoverline"></div>
-          </Link>
-          <Link href="/contact">
-            contact
-            <div className="hoverline"></div>
-          </Link>
+          {MenuData.map((link, idx) => (
+            <Link key={idx} href={link.link} className={`${router.pathname === link.link ? 'active':''}`}>
+              {link.name}
+              <div className="hoverline"></div>
+            </Link>
+          ))}
         </div>
         <div id="nav-btns">
           <p>looking for</p>

@@ -1,63 +1,47 @@
 import Link from "next/link";
 import React from "react";
-import Button from "./Button";
-import { footerLinks, footerNavlinks } from "@/helpers";
-import LinksDot from "@/components/LinksDot";
 
 const Footer = () => {
   return (
-    <div className="Footer_wrapper">
-      <div className="Footer_cntr">
-        <nav className="fotter_nav" aria-label="Primary navigation links">
-          <ul className="footer_nav_ul">
-            {Object.keys(footerLinks).map((section, sectionIndex) => {
-              return (
-                <li
-                  key={sectionIndex}
-                  className="footer_nav_ul_list _list-links"
-                >
-                  <p className="">{section}</p>
-                  <ul>
-                    {footerLinks[section].map((link, linkIndex) => (
-                      <li
-                        key={linkIndex}
-                        className="_list-links _list-links-redirect"
-                      >
-                        <Link href={link.path} passHref className="footer_links links">
-                          <LinksDot>{link.name}</LinksDot>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-        <div className="_btn-width">
-          <div className="footer_nav_signup_btn_cntr">
-            <div className="footer_nav_signup_btn_align">
-              <Button className="_btn-width">Sign up to the newsletter</Button>
-            </div>
+    <footer id="footer">
+      <div id="footer_top">
+        <div id="footer_links">
+          <div className="footer_link_wrap">
+            <p>Quicklinks</p>
+            <Link href="/">Shop</Link>
+            <Link href="/lookbook">Lookbook</Link>
+            <Link href="/about">About</Link>
+          </div>
+          <div className="footer_link_wrap">
+            <p>Customer Care</p>
+            <Link href="/privacy-policy">Privacy Policy</Link>
+            <Link href="/shipping-returns">Shipping & Returns</Link>
+            <Link href="/terms-of-service">Terms Of Service</Link>
+          </div>
+          <div className="footer_link_wrap">
+            <p>Social</p>
+            <a
+              target="_blank"
+              href="https://www.instagram.com/de_ve_she_dreams"
+            >
+              Instagram
+            </a>
           </div>
         </div>
+        <div id="footer_btn">
+            <button id="common_black_btn" >Sign up to the newsletter</button>
+        </div>
       </div>
-      <div className="Footer_SocialLinks_cntr">
-        <nav aria-label="Additional navigation links">
-          <ul className="Footer_SocialLinks_bottom">
-            {footerNavlinks.map((item, id) => {
-              return (
-                <li key={id} className="">
-                  <Link href={item.path} className="links">
-                    <linksDot>{item.name}</linksDot>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+      <div id="footer_bottom">
+        <p>© 2025 De Ve She Dreams. All rights reserved.</p>
+        <div>
+          Developed by{" "}
+          <a target="_black" href="https://www.zerrorstudios.com/">
+            Zerror Studios
+          </a>
+        </div>
       </div>
-    </div>
+    </footer>
   );
 };
 

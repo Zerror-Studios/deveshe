@@ -1,0 +1,154 @@
+#footer {
+  padding: 40px;
+  background: linear-gradient(4.66deg, #ffa9af -8%, #fadcde 14%);
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  border-top: 1px solid lightgray;
+}
+
+#footer_top {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+#footer_links {
+  width: 50%;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+.footer_link_wrap {
+  width: 100%;
+  max-width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+.footer_link_wrap p {
+  font-family: heading;
+  font-weight: 400;
+  font-size: 14px;
+  margin-bottom: 5px;
+  letter-spacing: .3px;
+}
+.footer_link_wrap a {
+  position: relative;
+  font-family: paragraph;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.35;
+  margin-top: 4px;
+}
+.footer_link_wrap a::before{
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background-color: #000;
+  border-radius: 50px;
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: all ease .3s;
+}
+.footer_link_wrap a:hover:before{
+  left: -12px;
+  opacity: 1;
+}
+#footer_btn {
+  width: 50%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#footer_bottom {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  gap: 5px;
+  font-family: paragraph;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+#footer_bottom a {
+  font-weight: 600;
+  position: relative;
+}
+#footer_bottom a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background-color: black;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform ease 0.3s;
+}
+#footer_bottom a:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* common btn  */
+
+#common_black_btn {
+  width: 100%;
+  height: fit-content;
+  max-width: 235px;
+  padding: 8.5px 0;
+  border-radius: 50px;
+  border: 1px solid black;
+  color: black;
+  font-family: paragraph;
+  font-weight: 400;
+  font-size: 14px;
+  transition: all ease .3s;
+  cursor: pointer;
+}
+
+#common_black_btn:hover {
+  background-color: black;
+  color: white;
+}
+
+
+@media (max-width:576px) {
+  #footer{
+    gap: 40px;
+    padding:30px 20px;
+  }
+  #footer_top{
+    flex-direction: column;
+    gap: 15px;
+  }
+  #footer_links {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+  .footer_link_wrap{
+    width: 50%;
+    max-width: 50%;
+    margin-bottom: 25px;
+  }
+  #footer_bottom{
+    text-align: left;
+    align-items: flex-start;
+  }
+  #footer_btn{
+    width: 100%;
+  }
+
+  #common_black_btn {
+    width: 100%;
+    max-width: 100%;
+  }
+}

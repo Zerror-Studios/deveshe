@@ -147,11 +147,13 @@
 
 #contact_form .elem .add h6 {
   font-size: 14px;
-  opacity: 0.8;
-  font-family: paragraph;
-  font-weight: 600;
+  font-family: heading;
+  font-weight: 400;
+  letter-spacing: .3px;
 }
-#contact_form .elem .add h5 {
+#contact_form .elem .add h5,#contact_form .elem .add a {
+  text-decoration: none;
+  display: block;
   font-size: 14px;
   font-family: paragraph;
   font-weight: 400;

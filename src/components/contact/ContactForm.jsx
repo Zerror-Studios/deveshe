@@ -104,8 +104,8 @@ const ContactForm = () => {
         <div className="elem">
           <div className="add">
             <h6>Business enquiries</h6>
-            <h5>deveshedreams@gmail.com</h5>
-            <h5>+919833983775</h5>
+            <a href="mailto:deveshedreams@gmail.com">deveshedreams@gmail.com</a>
+            <a href="tel:+919833983775">+919833983775</a>
           </div>
           <div className="add">
             <h6>Address</h6>

@@ -2,8 +2,8 @@ import React from "react";
 import { useCartStore } from "@/store/cart-store";
 import Navbar from "@/components/common/Navbar";
 import NavbarMobile from "@/components/common/NavbarMobile";
-import Footer from "@/components/common/Footer";
 import CartDrawer from "../cart/CartDrawer";
+import Footer from "../common/Footer";
 const Layout = ({ children }) => {
   const { isCartOpen, openCart, closeCart } = useCartStore((state) => state);
 
