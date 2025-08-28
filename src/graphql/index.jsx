@@ -11,3 +11,4 @@ export * from "@/graphql/mutations/cart.mutation";
 export * from "@/graphql/mutations/address.mutation";
 export * from "@/graphql/mutations/cart.mutation";
 export * from "@/graphql/mutations/checkout.mutation";
+export * from "@/graphql/mutations/contact-form.mutation";

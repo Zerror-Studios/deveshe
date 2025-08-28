@@ -1,8 +1,29 @@
-import gsap from "gsap";
 import React, { useEffect } from "react";
-import Phone from "./Phone";
+import gsap from "gsap";
+import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@apollo/client";
+import { CREATE_CONTACT_FORM } from "@/graphql";
 
+// Contact Form Validation
+const contactSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().min(1, "Email is required").email("Invalid email"),
+  subject: z.string().min(1, "Topic is required"),
+  phoneNumber: z
+    .string()
+    .min(1, "Phone number is required")
+    .transform((val) => val.replace(/\D/g, ""))
+    .refine((val) => val.length === 10, {
+      message: "Phone number must be exactly 10 digits",
+    }),
+
+  message: z.string().min(5, "Message must be at least 5 characters"),
+});
 const ContactForm = () => {
+  const [createContact, { loading }] = useMutation(CREATE_CONTACT_FORM);
   useEffect(() => {
     // Handle input focus and blur
     document.querySelectorAll("#right form .input").forEach((i) => {
@@ -54,69 +75,115 @@ const ContactForm = () => {
     });
   }, []);
 
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(contactSchema),
+  });
+
+  const onSubmit = async (data) => {
+    try {
+      const input = {
+        ...data,
+      };
+      const { data: response } = await createContact({ variables: { input } });
+      const message = response?.createContactForm || {};
+      if (message) {
+        toast.success(message);
+        reset();
+      } else {
+        toast.error("Failed to submit the form.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message || "Failed to submitted contact form");
+    }
+  };
+
   return (
-    <section id="contact_form">
-      <div className="phone_container">
-        <Phone />
-      </div>
-      <div id="form">
-        <div id="left"></div>
-        <div id="right">
-          <form>
-            <div className="input lineanime">
-              <input type="text" />
-              <h6>name*</h6>
-              <div className="linei"></div>
-            </div>
-            <div className="input lineanime">
-              <input type="text" />
-              <h6>email*</h6>
-              <div className="linei"></div>
-            </div>
-            <div className="input lineanime">
-              <input type="text" />
-              <h6>topic*</h6>
-              <div className="linei"></div>
-            </div>
-            <div className="input lineanime">
-              <input type="text" />
-              <h6>phone number*</h6>
-              <div className="linei"></div>
-            </div>
-            <div className="textarea lineanime">
-              <h6>message*</h6>
-              <div className="linei"></div>
-              <textarea></textarea>
-            </div>
-            <button type="submit" id="submit-btn">
-              Submit
-            </button>
-          </form>
-        </div>
-      </div>
-      <div id="address">
-        <div className="elem elem-lf">
-          <h5>
-            We believe in the power of digital, and we love collaborating with
-            brands that feel the same. Let&apos;s connect.
-          </h5>
-        </div>
-        <div className="elem">
-          <div className="add">
-            <h6>Business enquiries</h6>
-            <a href="mailto:deveshedreams@gmail.com">deveshedreams@gmail.com</a>
-            <a href="tel:+919833983775">+919833983775</a>
+    <div id="form">
+      <div id="left"></div>
+      <div id="right">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="input lineanime">
+            <input type="text" {...register("name")} />
+            <h6>name*</h6>
+            <div className="linei"></div>
+            {errors.name && (
+              <p
+                className="error-p"
+                style={{ bottom: "-20px", marginTop: "5px" }}
+              >
+                {errors.name.message}
+              </p>
+            )}
           </div>
-          <div className="add">
-            <h6>Address</h6>
-            <h5>
-              1102, Mahindra Heights. <br /> 96 Tardeo Road. <br /> Mumbai
-              400034
-            </h5>
+
+          <div className="input lineanime">
+            <input type="text" {...register("email")} />
+            <h6>email*</h6>
+            <div className="linei"></div>
+            {errors.email && (
+              <p
+                className="error-p"
+                style={{ bottom: "-20px", marginTop: "5px" }}
+              >
+                {errors.email.message}
+              </p>
+            )}
           </div>
-        </div>
+
+          <div className="input lineanime">
+            <input type="text" {...register("subject")} />
+            <h6>topic*</h6>
+            <div className="linei"></div>
+            {errors.subject && (
+              <p
+                className="error-p"
+                style={{ bottom: "-20px", marginTop: "5px" }}
+              >
+                {errors.subject.message}
+              </p>
+            )}
+          </div>
+
+          <div className="input lineanime">
+            <input type="number" {...register("phoneNumber")} />
+            <h6>phone number*</h6>
+            <div className="linei"></div>
+            {errors.phoneNumber && (
+              <p
+                className="error-p"
+                style={{ bottom: "-20px", marginTop: "5px" }}
+              >
+                {errors.phoneNumber.message}
+              </p>
+            )}
+          </div>
+
+          <div className="textarea lineanime">
+            <h6>message*</h6>
+            <div className="linei"></div>
+            <textarea {...register("message")} />
+            {errors.message && (
+              <p
+                className="error-p"
+                style={{ bottom: "-20px", marginTop: "5px" }}
+              >
+                {errors.message.message}
+              </p>
+            )}
+          </div>
+
+          <button type="submit" id="submit-btn" disabled={loading}>
+            {loading ? "Submitting..." : "Submit"}
+          </button>
+        </form>
       </div>
-    </section>
+    </div>
   );
 };
 

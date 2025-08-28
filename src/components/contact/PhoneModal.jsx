@@ -19,15 +19,17 @@ const AnimatedCamera = () => {
   return null
 }
 
-const Phone = () => {
+const PhoneModal = () => {
   return (
+    <div className="phone_container">
       <Canvas camera={{ position: [10, 10, 45], fov: 75 }}>
         <ambientLight intensity={2} />
         <PhoneModel />
         <Environment files="/models/gem.hdr" />
         <AnimatedCamera />
       </Canvas>
+    </div>
   )
 }
 
-export default Phone;
+export default PhoneModal;

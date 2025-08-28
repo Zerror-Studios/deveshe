@@ -1,12 +1,18 @@
-import ContactForm from "@/components/contact/ContactForm";
-import SeoHeader from "@/components/seo/SeoHeader";
 import React from "react";
+import SeoHeader from "@/components/seo/SeoHeader";
+import PhoneModal from "@/components/contact/PhoneModal";
+import ContactForm from "@/components/contact/ContactForm";
+import AddressSection from "@/components/contact/AddressSection";
 
 const Contact = ({ meta }) => {
   return (
     <>
       <SeoHeader meta={meta} />
-      <ContactForm />
+      <section id="contact_form">
+        <PhoneModal />
+        <ContactForm />
+        <AddressSection />
+      </section>
     </>
   );
 };
