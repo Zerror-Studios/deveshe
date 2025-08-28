@@ -1407,6 +1407,25 @@ button {
   flex-direction: column;
   /* gap: 32px; */
 }
+.swiper-horizontal > .swiper-pagination-bullets.swiper-pagination-bullets-dynamic, .swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic {
+  width: 70% !important;
+}
+
+
+.swiper-pagination-bullet{
+  height: 6px !important;
+  width: 30px !important;
+  border-radius: 0 !important;
+  background-color: white;
+  background: white !important;
+  opacity: .5 !important;
+}
+.swiper-pagination-bullet-active {
+  background-color:white  !important;
+  opacity: 1 !important;
+}
+
+
 @media (max-width: 576px){
   .ProductDets_bottom_links_wrap_large{
     display: none;
@@ -1417,6 +1436,8 @@ button {
   .mobile_add_btn p{
     margin-top: .5rem;
     color: #767676;
+    text-align: center;
+    font-size: 13px;
   }
   .ProductDets-size_assist_cntr{
     display: block;

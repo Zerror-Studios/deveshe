@@ -1,5 +1,7 @@
+import { MenuData } from "@/helpers/MenuData";
 import Link from "next/link";
 import React from "react";
+import CommonButton from "./CommonButton";
 
 const Footer = () => {
   return (
@@ -8,9 +10,11 @@ const Footer = () => {
         <div id="footer_links">
           <div className="footer_link_wrap">
             <p>Quicklinks</p>
-            <Link href="/">Shop</Link>
-            <Link href="/lookbook">Lookbook</Link>
-            <Link href="/about">About</Link>
+            {MenuData.map((link, idx) => (
+              <Link key={idx} href={link.link}>
+                {link.name}
+              </Link>
+            ))}
           </div>
           <div className="footer_link_wrap">
             <p>Customer Care</p>
@@ -29,7 +33,7 @@ const Footer = () => {
           </div>
         </div>
         <div id="footer_btn">
-            <button id="common_black_btn" >Sign up to the newsletter</button>
+          <CommonButton title={"Sign up to the newsletter"} href={"/"} />
         </div>
       </div>
       <div id="footer_bottom">

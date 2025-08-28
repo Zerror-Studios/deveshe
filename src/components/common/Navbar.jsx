@@ -303,38 +303,42 @@ const Navbar = ({ openCart }) => {
         )}
         <Link href="/" id="logo-container">
           <p>new emotions?</p>
-          <Image
-            width={1000}
-            height={1000}
-            src="/assets/images/logo/d.webp"
-            alt="D"
-            className="logo"
-          />
-          <Image
-            width={1000}
-            height={1000}
-            src="/assets/images/logo/v.webp"
-            alt="V"
-            className="logo"
-          />
-          <Image
-            width={1000}
-            height={1000}
-            src="/assets/images/logo/s.webp"
-            alt="S"
-            className="logo"
-          />
-          <Image
-            width={1000}
-            height={1000}
-            src="/assets/images/logo/m.webp"
-            alt="M"
-            className="logo"
-          />
+              <Image
+                width={1000}
+                height={1000}
+                src="/assets/images/logo/d.webp"
+                alt="D"
+                className="logo"
+              />
+              <Image
+                width={1000}
+                height={1000}
+                src="/assets/images/logo/v.webp"
+                alt="V"
+                className="logo"
+              />
+              <Image
+                width={1000}
+                height={1000}
+                src="/assets/images/logo/s.webp"
+                alt="S"
+                className="logo"
+              />
+              <Image
+                width={1000}
+                height={1000}
+                src="/assets/images/logo/m.webp"
+                alt="M"
+                className="logo"
+              />
         </Link>
         <div className="nav-link">
           {MenuData.map((link, idx) => (
-            <Link key={idx} href={link.link} className={`${router.pathname === link.link ? 'active':''}`}>
+            <Link
+              key={idx}
+              href={link.link}
+              className={`${router.pathname === link.link ? "active" : ""}`}
+            >
               {link.name}
               <div className="hoverline"></div>
             </Link>

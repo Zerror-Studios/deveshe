@@ -77,16 +77,14 @@ const ProductImageGrid = ({ assets = [], setSelectedAsset }) => {
         </>
       ) : (
         <Swiper
-          pagination={{
-            dynamicBullets: true,
-          }}
+          pagination={true}
           modules={[Pagination]}
           className="mySwiper"
         >
           {assets &&
             assets?.map((item, index) => {
               return (
-                <SwiperSlide>
+                <SwiperSlide key={index}>
                   <Image
                     onClick={() => setSelectedAsset(item)}
                     width={1000}

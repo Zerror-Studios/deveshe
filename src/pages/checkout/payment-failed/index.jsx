@@ -1,27 +1,29 @@
 import React from "react";
 import SeoHeader from "@/components/seo/SeoHeader";
+import Image from "next/image";
+import CommonButton from "@/components/common/CommonButton";
 
 const PaymentFailed = ({ meta }) => {
   return (
     <>
       <SeoHeader meta={meta} />
-      <div className="thank-cont">
-        {/* <div className="tlc t-logo-check">
-          <img src={"/check.gif"} fill loading="lazy" loop="false" />
-        </div> */}
 
-        <div className="trc">
-          <div className="t-text">
-            <h1>Payment Failed</h1>
-            <p>
-              Unfortunately, your payment could not be processed. Please try
-              again to complete your order.
-            </p>
-            <a href="/">
-              <p className="donation-success__btn">Go to home page</p>
-            </a>
-          </div>
-        </div>
+      <div id="status_section">
+        <Image
+          width={1000}
+          height={1000}
+          src="/fail.gif"
+          className="fail_gif"
+          alt="payment failed"
+        />
+        <h2>
+          Payment <span>Failed</span>
+        </h2>
+        <p>
+          Unfortunately, your payment could not be processed. Please try again
+          to complete your order.
+        </p>
+        <CommonButton title={"Go Back to Home"} href={"/"} />
       </div>
     </>
   );

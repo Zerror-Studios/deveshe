@@ -1,10 +1,11 @@
 #footer {
   padding: 40px;
-  background: linear-gradient(4.66deg, #ffa9af -8%, #fadcde 14%);
   display: flex;
   flex-direction: column;
   gap: 50px;
   border-top: 1px solid lightgray;
+  position: relative;
+  background-color: #fadcde;
 }
 
 #footer_top {
@@ -97,27 +98,6 @@
   transform-origin: left;
 }
 
-/* common btn  */
-
-#common_black_btn {
-  width: 100%;
-  height: fit-content;
-  max-width: 235px;
-  padding: 8.5px 0;
-  border-radius: 50px;
-  border: 1px solid black;
-  color: black;
-  font-family: paragraph;
-  font-weight: 400;
-  font-size: 14px;
-  transition: all ease .3s;
-  cursor: pointer;
-}
-
-#common_black_btn:hover {
-  background-color: black;
-  color: white;
-}
 
 
 @media (max-width:576px) {
@@ -147,8 +127,4 @@
     width: 100%;
   }
 
-  #common_black_btn {
-    width: 100%;
-    max-width: 100%;
-  }
 }

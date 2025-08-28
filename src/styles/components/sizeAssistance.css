@@ -6,28 +6,32 @@
   left: 0;
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   z-index: 1000;
   font-family: paragraph;
-  font-size: 12px !important;
-  background-color: #fff;
+  font-size: 13px !important;
+  background-color: rgba(0, 0, 0, 0.488);
   overflow-y: auto;
+  padding: 80px;
+  backdrop-filter: blur(8px);
 }
-
+.size-assist_wrap {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  background-color: #fadcde;
+  padding: 40px;
+}
 .size-assist-guide {
-  padding: 100px;
   width: 50%;
-  height: auto;
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-direction: column;
 }
 .size-assist-guide img {
-  width: 80%;
+  width: 50%;
+  filter: brightness(200%) invert(1);
   height: auto;
 }
 .size-assist-guide p {
@@ -52,9 +56,7 @@
 }
 
 .size-assist-popup {
-  padding: 100px;
   width: 50%;
-  height: auto;
   position: relative;
 }
 
@@ -87,7 +89,7 @@
 }
 
 .size-assist-section {
-  margin-top: 20px;
+  margin-top: 30px;
   text-align: left;
 }
 
@@ -97,6 +99,9 @@
   font-family: heading;
   font-weight: 400;
   font-size: 18px;
+}
+.size-heading {
+  font-weight: 600;
 }
 
 .size-assist-section ul {
@@ -109,43 +114,87 @@
 .size-assist-tableWrapper {
   overflow-x: auto;
   margin-top: 10px;
+  width: 100%;
+}
+.size-assist-tableWrapper thead tr,
+.size-assist-tableWrapper thead th {
+  background-color: red !important;  
+  color: white !important;          
+}
+/* Chrome, Edge, Safari */
+.size-assist-tableWrapper::-webkit-scrollbar {
+  height: 5px; /* horizontal scrollbar height */
+}
+
+.size-assist-tableWrapper::-webkit-scrollbar-track {
+  background: transparent; 
+  border-radius: 10px;
+}
+
+.size-assist-tableWrapper::-webkit-scrollbar-thumb {
+  background: #8888889c; 
+  border-radius: 10px;
+}
+
+.size-assist-tableWrapper::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }
 .measure-table {
   margin-top: 30px;
 }
+.size-assist-tableWrapper {
+  overflow-x: auto; /* allow horizontal scrolling */
+  width: 100%;
+}
 
 .size-assist-tableWrapper table {
-  width: 100%;
   border-collapse: collapse;
+  table-layout: fixed; /* force equal column widths */
+  width: fit-content;
   text-align: center;
-  table-layout: fixed;
 }
 
 .size-assist-tableWrapper th,
 .size-assist-tableWrapper td {
+  width: 150px; /* fixed width */
+  max-width: 150px;
   padding: 10px 5px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #000;
+  white-space: nowrap;   /* prevent wrapping */
+  overflow: hidden;      /* hide overflow */
+  text-overflow: ellipsis; /* add "..." when content too long */
 }
+
 .size-assist-tableWrapper th:first-child,
 .size-assist-tableWrapper td:first-child {
   position: sticky;
   left: 0;
-  text-align: left;
   z-index: 2;
-  width: fit-content;
+  width: 100px !important;
+  max-width: 100px;
+  background-color: #fadcde;
 }
-
-.size-assist-tableWrapper th {
-  font-weight: normal;
-  color: #888;
+.size-assist-tableWrapper th:first-child::after,
+.size-assist-tableWrapper td:first-child::after{
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: .5px;
+  height: 100%;
+  background-color: black;
 }
 
 @media (max-width: 576px) {
   .size-assist-overlay {
+    padding: 0;
+  }
+  .size-assist_wrap {
     padding: 50px 0;
-    flex-direction: column; /* stack children vertically */
-    justify-content: flex-start; /* start from top */
-    align-items: stretch; /* take full width */
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
   }
 
   .size-assist-guide {

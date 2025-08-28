@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import SeoHeader from "@/components/seo/SeoHeader";
+import Image from "next/image";
+import CommonButton from "@/components/common/CommonButton";
 
 const ThankYou = ({ meta }) => {
   const router = useRouter();
@@ -24,27 +26,25 @@ const ThankYou = ({ meta }) => {
   return (
     <>
       <SeoHeader meta={meta} />
-      <div className="thank-cont">
-        <div className="tlc t-logo-check">
-          <img src={"/check.gif"} alt="Success" loading="lazy" />
-        </div>
-
-        <div className="trc">
-          <div className="t-text">
-            <h1>Thank You for Your Purchase!</h1>
-            <p>
-              Your payment has been successfully processed. We’re preparing your
-              order and will send you updates soon. Thank you for shopping.
-            </p>
-            <p>
-              You will be redirected to the home page in <strong>{time}</strong>{" "}
-              seconds
-            </p>
-            <a href="/">
-              <p className="donation-success__btn">Go to home page</p>
-            </a>
-          </div>
-        </div>
+      <div id="status_section">
+        <Image
+          width={1000}
+          height={1000}
+          src="/success.gif"
+          alt="payment successfull"
+        />
+        <h2>
+          Thank You <br /> for Your <span>Purchase!</span>
+        </h2>
+        <p>
+          Your payment has been successfully processed. We’re preparing your
+          order and will send you updates soon. Thank you for shopping.
+        </p>
+        <p>
+          You will be redirected to the home page in<strong> {time} </strong>
+          seconds
+        </p>
+        <CommonButton title={"Go Back to Home"} href={"/"} />
       </div>
     </>
   );

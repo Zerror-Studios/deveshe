@@ -9,12 +9,11 @@ const Heading = () => {
       <span>
         <Link href={"#"} className="checkout_header_titile">
           <Image
-          width={1000}
-          height={1000}
-                src="/assets/images/logo/logo-m.webp"
-                alt="logo"
-              />
-          {/* <h1>De Ve She Dreams</h1> */}
+            width={1000}
+            height={1000}
+            src="/assets/images/logo/logo-m.webp"
+            alt="logo"
+          />
         </Link>
       </span>
       <span>

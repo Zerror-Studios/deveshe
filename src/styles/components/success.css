@@ -1,0 +1,66 @@
+#status_section {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+#status_section h2 {
+  font-size: 6.5vw;
+  font-family: heading;
+  line-height: 0.9;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-align: center;
+  margin: 2rem 0 1rem;
+}
+#status_section h2 span {
+  color: red;
+}
+#status_section p {
+  width: 30%;
+  text-align: center;
+  color: black;
+  margin-bottom: 1em;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: paragraph;
+  line-height: 1.5;
+}
+
+#status_section img {
+  width: auto;
+  height: 80px;
+}
+#status_section .fail_gif {
+  height: 70px;
+}
+
+#status_section #common_black_btn{
+  margin-top: 1rem;
+}
+
+@media (max-width: 576px) {
+  #status_section{
+    padding: 20px;
+  }
+  #status_section h2 {
+    font-size: 8.5vw;
+    line-height: 1;
+  }
+  #status_section p {
+    width: 80%;
+    color: black;
+    margin-bottom: 1em;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: paragraph;
+    line-height: 1.5;
+  }
+  #status_section .fail_gif {
+    height: 55px;
+  }
+}
