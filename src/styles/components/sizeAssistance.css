@@ -86,6 +86,7 @@
   border-radius: 20px;
   border: 1px solid black;
   cursor: pointer;
+  color: #000 !important;
 }
 
 .size-assist-section {
@@ -149,15 +150,14 @@
 
 .size-assist-tableWrapper table {
   border-collapse: collapse;
-  table-layout: fixed; /* force equal column widths */
   width: fit-content;
   text-align: center;
 }
 
 .size-assist-tableWrapper th,
 .size-assist-tableWrapper td {
-  width: 150px; /* fixed width */
-  max-width: 150px;
+  width: 100px; /* fixed width */
+  max-width: 100px;
   padding: 10px 5px;
   border-bottom: 1px solid #000;
   white-space: nowrap;   /* prevent wrapping */
@@ -201,6 +201,10 @@
     width: 100%;
     padding: 20px;
   }
+  .size-assist-tableWrapper table {
+    table-layout: fixed; /* force equal column widths */
+
+}
   .size-assist-popup {
     width: 100%;
     padding: 20px;

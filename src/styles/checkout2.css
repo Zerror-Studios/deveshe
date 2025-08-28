@@ -833,15 +833,18 @@ input:focus {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  width: 100%;
 }
 .summary-name {
   font-size: 12px;
   max-width: 170px;
-  /* margin-bottom: 3px; */
 }
 .varients-cart {
   display: flex;
   gap: 3px;
+  width: fit-content;
+  white-space: nowrap;
+  width: 100%;
 }
 
 .summary-qtn {

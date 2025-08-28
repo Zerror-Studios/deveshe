@@ -29,6 +29,7 @@
   justify-content: space-between;
 }
 #drawer_header {
+  font-family: heading;
   width: 100%;
   display: flex;
   align-items: center;
@@ -57,6 +58,7 @@
 .total_price {
   border-bottom: 1px solid black;
   border-top: 1px solid black;
+  font-family: heading;
 }
 
 .checkout_btn_container > span {

@@ -47,10 +47,11 @@
 .nav-link a .hoverline {
   position: absolute;
   left: 0;
-  bottom: -5%;
+  bottom: 0%;
+  display: inline-block;
   background-color: #000;
   width: 100%;
-  height: 0.01vw;
+  height: 0.07vw;
   transition: all ease 0.3s;
   transform: scaleX(0);
   transform-origin: left;

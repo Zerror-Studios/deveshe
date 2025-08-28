@@ -121,9 +121,9 @@ const Navbar = ({ openCart }) => {
       tl.call(startLoader)
         .to("#loader_slider p", {
           top: "95%",
-          duration: 0.8,
+          duration: 0.5,
           delay: 1,
-          ease: "power4.Out",
+          ease: "power2.in",
         })
         .to(
           "#logo-container",
