@@ -1009,6 +1009,7 @@ button {
 }
 
 .ProductDets-size_assist_cntr {
+  position: relative;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -1016,6 +1017,23 @@ button {
   gap: 4px;
   display: none;
   font-family: paragraph;
+  line-height: 1 !important;
+}
+.ProductDets-size_assist_cntr::after{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 0.05vw;
+  background-color: black;
+  bottom: 15%;
+  left: 0;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform ease .3s;
+}
+.ProductDets-size_assist_cntr:hover::after{
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 #easysize_button {

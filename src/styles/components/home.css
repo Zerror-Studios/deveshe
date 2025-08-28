@@ -530,6 +530,8 @@
   transform: rotate(-4deg);
 }
 
+
+
 /* Rotated plate with big soft shadow like the image */
 .tweet-card {
   width: 100%;
@@ -549,8 +551,8 @@
 }
 
 .tweet-header .avatar {
-  width: 70px;
-  height: 70px;
+  width: 65px;
+  height: 65px;
   border-radius: 50px;
   object-fit: cover;
 }
@@ -562,6 +564,13 @@
   font-weight: 800;
   margin-bottom: 5px;
 }
+.author .rating-s{
+  fill: red;
+}
+.author .rating-star{
+  fill: red;
+  opacity: .4;
+}
 
 .author .handle {
   margin-top: 2px;
@@ -571,10 +580,9 @@
   color: #767676;
 }
 
-.bird svg {
-  display: block;
-  fill: red;
-  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.05));
+.bird img {
+  width: 45px;
+  height: auto;
 }
 
 /* body text */

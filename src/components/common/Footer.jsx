@@ -37,13 +37,13 @@ const Footer = () => {
         </div>
       </div>
       <div id="footer_bottom">
-        <p>© 2025 De Ve She Dreams. All rights reserved.</p>
         <div>
           Developed by{" "}
           <a target="_black" href="https://www.zerrorstudios.com/">
             Zerror Studios
           </a>
         </div>
+        <p>© 2025. All rights reserved.</p>
       </div>
     </footer>
   );

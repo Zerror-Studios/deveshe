@@ -19,8 +19,7 @@ const OrderSummery = ({ cartData, setCartData }) => {
           className="cart_item_det"
         >
           <p className="cart-p">
-            <span>{value}</span>
-            {idx < variant.length - 1 && " /"}
+            {idx === 0 ? 'Color:':'Size:'} <span>{value}</span>
           </p>
         </div>
       </div>
@@ -56,7 +55,9 @@ const OrderSummery = ({ cartData, setCartData }) => {
                 </div>
                 <div className="summary-details">
                   <div className="summary-name">{item.name}</div>
-                  {renderVariants(item?.variantDetail?.selectedOptions || [])}
+                   <div style={{ fontSize: "12px"  }}>
+                    {renderVariants(item?.variantDetail?.selectedOptions || [])}
+                  </div>
                   <div style={{ fontSize: "12px" }}>
                     {" "}
                     Qty: {item?.qty || ""}

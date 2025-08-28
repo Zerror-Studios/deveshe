@@ -2,6 +2,7 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
 import React, { useEffect } from "react";
+import { FaStar } from "react-icons/fa6";
 gsap.registerPlugin(ScrollTrigger);
 const ReviewSection = () => {
   useEffect(() => {
@@ -56,59 +57,49 @@ const ReviewSection = () => {
     {
       id: 1,
       name: "Sachi Bhansali",
-      handle: "@sachibhansali",
-      avatar: "/assets/images/home/home_banner.webp", // replace with actual image if any
+      avatar: "/placeholder/avatar-female.jpg", // replace with actual image if any
       content:
         "I love the blue ombré top I got! It’s so comfortable and fits so well! I love the silver detailing on the sleeves too, just the right amount of accent needed to elevate the top!",
-      time: "1:21 PM",
-      date: "Aug 26, 2025",
+      time: "11:42 AM",
+      date: "Feb 12, 2025",
       tag: "De Ve She Dreams",
+      rating: 5,
     },
     {
       id: 2,
       name: "Nami Shah",
-      handle: "@namishah",
-      avatar: "/assets/images/home/home_banner.webp",
+      avatar: "/placeholder/avatar-female.jpg",
       content:
         "The designs for each piece feel thoughtful and unique while maintaining consistent quality. Great statement pieces to add to any wardrobe!",
-      time: "1:21 PM",
-      date: "Aug 26, 2025",
+      time: "3:15 PM",
+      date: "Mar 28, 2025",
       tag: "De Ve She Dreams",
+      rating: 4,
     },
     {
       id: 3,
       name: "Vrishali Pispati",
-      handle: "@vrishalipispati",
-      avatar: "/assets/images/home/home_banner.webp",
+      avatar: "/placeholder/avatar-female.jpg",
       content:
         "I bought this printed poplin shirt for my son and he absolutely loves it. It’s comfortable and looks great on him.",
-      time: "1:21 PM",
-      date: "Aug 26, 2025",
+      time: "9:05 AM",
+      date: "May 09, 2025",
       tag: "De Ve She Dreams",
+      rating: 4,
     },
     {
       id: 4,
       name: "Aruja Kothari",
-      handle: "@arujakothari",
-      avatar: "/assets/images/home/home_banner.webp",
+      avatar: "/placeholder/avatar-female.jpg",
       content:
         "The collection at De Ve She Dreams is super versatile! Love the way they use motifs along with abstract patterns. The fabric is so comfortable and you can easily style the pieces up or down! 100% recommended 😍",
-      time: "1:21 PM",
-      date: "Aug 26, 2025",
+      time: "6:48 PM",
+      date: "Jun 14, 2025",
       tag: "De Ve She Dreams",
-    },
-    {
-      id: 5,
-      name: "Vedika Jhunjhunwala",
-      handle: "@vedikajhunjhunwala",
-      avatar: "/assets/images/home/home_banner.webp",
-      content:
-        "I love how every outfit from this brand feels like it has a story behind it. The fabrics are amazing and the quality really shows that a lot of thought goes into every detail. It’s the kind of clothing you want to keep forever",
-      time: "1:21 PM",
-      date: "Aug 26, 2025",
-      tag: "De Ve She Dreams",
+      rating: 5,
     },
   ];
+
   return (
     <div id="review_section">
       <div className="review_title_slide">
@@ -135,15 +126,21 @@ const ReviewSection = () => {
                 />
                 <div className="author">
                   <div className="name">{review.name}</div>
-                  {review.handle && (
-                    <div className="handle">{review.handle}</div>
-                  )}
+                  {[...Array(5)].map((_, index) => (
+                    <FaStar
+                      key={index}
+                      className={`${index < review.rating ? '':'rating-star'} rating-s`}
+                    />
+                  ))}
                 </div>
 
                 <div className="bird" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" width="28" height="28">
-                    <path d="M23 4.8c-.8.4-1.7.6-2.6.8.9-.6 1.6-1.4 2-2.5-.9.5-1.9.9-3 .1-1-1-2.7-1-3.7 0-1 .9-1.3 2.3-.8 3.5-3.4-.2-6.6-1.8-8.7-4.5-1.1 2-.6 4.6 1.3 6-.7 0-1.4-.2-2-.5v.1c0 2.2 1.6 4.1 3.8 4.6-.7.2-1.4.2-2.1.1.6 1.9 2.3 3.2 4.3 3.2-1.6 1.3-3.7 2.1-5.9 2.1H2c2.1 1.4 4.6 2.1 7.1 2.1 8.5 0 13.2-7.1 13.2-13.2v-.6c.9-.6 1.6-1.4 2.2-2.3z" />
-                  </svg>
+                   <Image
+                  width={1000}
+                  height={1000}
+                  src='/scrapbook/letter.png'
+                  alt={review.name}
+                />
                 </div>
               </div>
 

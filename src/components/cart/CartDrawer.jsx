@@ -50,9 +50,8 @@ const CartDrawer = ({ isOpen, closeCart }) => {
 
   const renderVariants = (variant) =>
     variant.map((value, idx) => (
-      <span key={idx}>
-        {value}
-        {idx < variant.length - 1 && " / "}
+      <span key={idx} style={{display:"block"}}>
+         {idx === 0 ? 'Color:':'Size:'} {value}
       </span>
     ));
 
