@@ -5,96 +5,53 @@ import gsap from "gsap";
 const SizeAssistance = ({ onClose }) => {
   const overlayRef = useRef(null);
   const wrapRef = useRef(null);
-useEffect(() => {
-  const tl = gsap.timeline();
+  useEffect(() => {
+    const tl = gsap.timeline();
 
-  // First overlay fades in, then wrap slides in
-  tl.to(overlayRef.current, {
-    opacity: 1,
-    duration: 0.5,
-    ease: "power2.out"
-  })
-  .fromTo(
-    wrapRef.current,
-    { y: "-100%", opacity: 0 },
-    {
-      y: "0%",
+    // First overlay fades in, then wrap slides in
+    tl.to(overlayRef.current, {
       opacity: 1,
-      duration: 0.8,
-      ease: "power4.out"
-    },
-    "-=0.2" // start slightly before overlay finishes
-  );
-}, []);
-
-const handleCloseClick = () => {
-  const tl = gsap.timeline({
-    onComplete: onClose, // call onClose after everything finishes
-  });
-
-  // First wrap slides out, then overlay fades
-  tl.to(wrapRef.current, {
-    y: "-100%",
-    opacity: 0,
-    duration: 0.7,
-    ease: "power4.inOut"
-  })
-  .to(
-    overlayRef.current,
-    {
-      opacity: 0,
       duration: 0.5,
-      ease: "power2.in"
-    },
-    "-=0.2" // overlap slightly for fluid effect
-  );
-};
+      ease: "power2.out",
+    }).fromTo(
+      wrapRef.current,
+      { y: "-100%", opacity: 0 },
+      {
+        y: "0%",
+        opacity: 1,
+        duration: 0.8,
+        ease: "power4.out",
+      },
+      "-=0.2" // start slightly before overlay finishes
+    );
+  }, []);
+
+  const handleCloseClick = () => {
+    const tl = gsap.timeline({
+      onComplete: onClose, // call onClose after everything finishes
+    });
+
+    // First wrap slides out, then overlay fades
+    tl.to(wrapRef.current, {
+      y: "-100%",
+      opacity: 0,
+      duration: 0.7,
+      ease: "power4.inOut",
+    }).to(
+      overlayRef.current,
+      {
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.in",
+      },
+      "-=0.2" // overlap slightly for fluid effect
+    );
+  };
 
   return (
     <div className="size-assist-overlay" data-lenis-prevent ref={overlayRef}>
       <div className="size-assist_wrap" ref={wrapRef}>
         <div className="size-assist-guide">
-          <div>
-            <p>Measurements guide</p>
-            <ol>
-              <li>
-                <span>Chest:</span> Measure around the fullest part of your
-                chest, wrapping fully around the body.
-              </li>
-              <li>
-                <span>Waist:</span> Measure around the smallest part of your
-                waistline, wrapping fully around the body.
-              </li>
-              <li>
-                <span>Hips:</span> Measure around the widest part of your hips
-                or buttocks, wrapping fully around the body.
-              </li>
-              <li>
-                <span>Torso length:</span> Measure from the dip between your
-                collarbones down to your hip level.
-              </li>
-              <li>
-                <span>Biceps:</span> Measure around your bicep at the fullest
-                part of your upper arm.
-              </li>
-              <li>
-                <span>Shoulder width:</span> Measure from the tip of one
-                shoulder bone straight across to the other.
-              </li>
-              <li>
-                <span>Arm length:</span> Measure from the shoulder bone down to
-                the wrist where the thumb meets the wrist.
-              </li>
-              <li>
-                <span>Inside Leg Length:</span> Measure from the top of your
-                inner thigh down to your ankle.
-              </li>
-              <li>
-                <span>Outside Leg Length:</span> Measure from your waist down to
-                your ankle.
-              </li>
-            </ol>
-          </div>
           <Image
             width={1000}
             height={1000}
@@ -111,7 +68,7 @@ const handleCloseClick = () => {
             </button>
           </div>
 
-          <div className="size-assist-section">
+          {/* <div className="size-assist-section">
             <p className="size-heading">Fit</p>
             <ul>
               <li>Relaxed suede coat with a loose fit.</li>
@@ -124,7 +81,7 @@ const handleCloseClick = () => {
             <ul>
               <li>Model is 5'11" and is wearing FR 36</li>
             </ul>
-          </div>
+          </div> */}
 
           <div className="size-assist-section">
             <p className="size-heading">
@@ -175,7 +132,6 @@ const handleCloseClick = () => {
               </table>
             </div>
           </div>
-
           <div className="size-assist-section measure-table">
             <p className="size-heading">
               Standard Women's Size Chart (with Rise + Inseam added for context)
@@ -241,6 +197,47 @@ const handleCloseClick = () => {
                 </tbody>
               </table>
             </div>
+          </div>
+          <div className="size-assist-section">
+            <p  className="size-heading">Measurements guide</p>
+            <ol>
+              <li>
+                <span>Chest:</span> Measure around the fullest part of your
+                chest, wrapping fully around the body.
+              </li>
+              <li>
+                <span>Waist:</span> Measure around the smallest part of your
+                waistline, wrapping fully around the body.
+              </li>
+              <li>
+                <span>Hips:</span> Measure around the widest part of your hips
+                or buttocks, wrapping fully around the body.
+              </li>
+              <li>
+                <span>Torso length:</span> Measure from the dip between your
+                collarbones down to your hip level.
+              </li>
+              <li>
+                <span>Biceps:</span> Measure around your bicep at the fullest
+                part of your upper arm.
+              </li>
+              <li>
+                <span>Shoulder width:</span> Measure from the tip of one
+                shoulder bone straight across to the other.
+              </li>
+              <li>
+                <span>Arm length:</span> Measure from the shoulder bone down to
+                the wrist where the thumb meets the wrist.
+              </li>
+              <li>
+                <span>Inside Leg Length:</span> Measure from the top of your
+                inner thigh down to your ankle.
+              </li>
+              <li>
+                <span>Outside Leg Length:</span> Measure from your waist down to
+                your ankle.
+              </li>
+            </ol>
           </div>
         </div>
       </div>

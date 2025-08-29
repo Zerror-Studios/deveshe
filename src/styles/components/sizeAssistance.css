@@ -30,27 +30,22 @@
   flex-direction: column;
 }
 .size-assist-guide img {
-  width: 80%;
+  width: 90%;
   height: auto;
 }
-.size-assist-guide p {
-  font-family: heading;
-  font-weight: 400;
-  font-size: 24px;
+
+.size-assist-popup ol {
 }
-.size-assist-guide ol {
-  margin: 20px 0;
-}
-.size-assist-guide ol,
-.size-assist-guide li {
+.size-assist-popup ol,
+.size-assist-popup li {
   list-style: decimal !important;
   margin-left: 0.4rem;
 }
-.size-assist-guide li {
+.size-assist-popup li {
   color: #767676;
   line-height: 1.4;
 }
-.size-assist-guide li span {
+.size-assist-popup li span {
   color: #000;
 }
 
@@ -102,6 +97,7 @@
 }
 .size-heading {
   font-weight: 600;
+  margin-bottom: 5px;
 }
 
 .size-assist-section ul {
@@ -118,8 +114,8 @@
 }
 .size-assist-tableWrapper thead tr,
 .size-assist-tableWrapper thead th {
-  background-color: red !important;  
-  color: white !important;          
+  background-color: red !important;
+  color: white !important;
 }
 /* Chrome, Edge, Safari */
 .size-assist-tableWrapper::-webkit-scrollbar {
@@ -127,17 +123,17 @@
 }
 
 .size-assist-tableWrapper::-webkit-scrollbar-track {
-  background: transparent; 
+  background: transparent;
   border-radius: 10px;
 }
 
 .size-assist-tableWrapper::-webkit-scrollbar-thumb {
-  background: #8888889c; 
+  background: #8888889c;
   border-radius: 10px;
 }
 
 .size-assist-tableWrapper::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: #555;
 }
 .measure-table {
   margin-top: 30px;
@@ -159,8 +155,8 @@
   max-width: 100px;
   padding: 10px 5px;
   border-bottom: 1px solid #000;
-  white-space: nowrap;   /* prevent wrapping */
-  overflow: hidden;      /* hide overflow */
+  white-space: nowrap; /* prevent wrapping */
+  overflow: hidden; /* hide overflow */
   text-overflow: ellipsis; /* add "..." when content too long */
 }
 
@@ -174,13 +170,13 @@
   background-color: #fadcde;
 }
 .size-assist-tableWrapper th:first-child::after,
-.size-assist-tableWrapper td:first-child::after{
-  content: '';
+.size-assist-tableWrapper td:first-child::after {
+  content: "";
   position: absolute;
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: .5px;
+  width: 0.5px;
   height: 100%;
   background-color: black;
 }
@@ -202,8 +198,7 @@
   }
   .size-assist-tableWrapper table {
     table-layout: fixed; /* force equal column widths */
-
-}
+  }
   .size-assist-popup {
     width: 100%;
     padding: 20px;
