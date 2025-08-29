@@ -34,15 +34,14 @@ const CheckoutPage = ({ meta, initialCartData }) => {
   } = useForm({
     resolver: zodResolver(CheckoutSchema),
     defaultValues: {
-      // paymentMethod: "debit_card",
       shippingAddress: {
-        addressType: "SHIPPING",
+        addressType: "HOME",
         countryCode: "+91",
         country: "India",
         primary: true,
       },
       billingAddress: {
-        addressType: "BILLING",
+        addressType: "HOME",
         countryCode: "+91",
         country: "India",
         primary: false,
@@ -54,6 +53,7 @@ const CheckoutPage = ({ meta, initialCartData }) => {
 
   const handleOrderPayment = async (payload) => {
     try {
+      setIsPageLoading(true);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/payment/handle-order-payment`,
         {
@@ -71,15 +71,18 @@ const CheckoutPage = ({ meta, initialCartData }) => {
         throw new Error(`Failed with status ${response.status}`);
       }
       const result = await response.json();
-      if (result?.data?.redirectUrl) {
-        router.push({
-          pathname: result.data.redirectUrl,
-          query: { awb_code: result.data.awb_code },
+      const { redirectUrl, awb_code } = result.data || {};
+      if (redirectUrl) {
+        await router.push({
+          pathname: redirectUrl,
+          ...(awb_code ? { query: { awb_code } } : {}),
         });
       }
     } catch (error) {
       console.error(`Error in Payment Order: ${error.message}`);
       return null;
+    } finally {
+      setIsPageLoading(false);
     }
   };
 
@@ -89,7 +92,6 @@ const CheckoutPage = ({ meta, initialCartData }) => {
 
       checkout.open({
         callback_handler: async function (response) {
-          setIsPageLoading(true);
           try {
             if (
               response?.event_type === "globalCloseCheckoutModal" &&
@@ -99,8 +101,6 @@ const CheckoutPage = ({ meta, initialCartData }) => {
             }
           } catch (err) {
             console.error("Error in callback_handler:", err);
-          } finally {
-            setIsPageLoading(false);
           }
         },
       });

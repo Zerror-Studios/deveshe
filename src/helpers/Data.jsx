@@ -245,9 +245,7 @@ export const countriesData = [
 ];
 
 export const addressType = [
-  { label: "HOME", value: "HOME" },
-  { label: "WORK", value: "WORK" },
-  { label: "SHIPPING", value: "SHIPPING" },
-  { label: "BILLING", value: "BILLING" },
-  { label: "OTHER", value: "OTHER" },
+  { label: "Home", value: "HOME" },
+  { label: "Work", value: "WORK" },
+  { label: "Other", value: "OTHER" },
 ];

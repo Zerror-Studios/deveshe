@@ -14,12 +14,13 @@ const BillingAddress = ({ errors, control, register, setValue }) => {
 
   useEffect(() => {
     if (useShippingAsBilling) {
-      const { phone, countryCode, ...rest } = shippingAddress || {};
+      const { phone, countryCode, addressType, ...rest } =
+        shippingAddress || {};
       setValue("billingAddress", {
         ...rest,
         phone: phone || "",
         countryCode: countryCode || "",
-        addressType: "BILLING",
+        addressType: addressType || "HOME",
       });
     }
   }, [useShippingAsBilling, shippingAddress, setValue]);
@@ -65,7 +66,7 @@ const BillingAddress = ({ errors, control, register, setValue }) => {
                               disabled={useShippingAsBilling}
                               className="w-100"
                               type="text"
-                              placeholder="First name"
+                              placeholder="First Name"
                               {...register("billingAddress.firstname")}
                             />
                             {errors?.billingAddress?.firstname && (
@@ -80,7 +81,7 @@ const BillingAddress = ({ errors, control, register, setValue }) => {
                               disabled={useShippingAsBilling}
                               className="w-100"
                               type="text"
-                              placeholder="Last name"
+                              placeholder="Last Name"
                               {...register("billingAddress.lastname")}
                             />
                             {errors?.billingAddress?.lastname && (
@@ -119,7 +120,7 @@ const BillingAddress = ({ errors, control, register, setValue }) => {
                               disabled={useShippingAsBilling}
                               className="w-100"
                               type="text"
-                              placeholder="States"
+                              placeholder="State"
                               {...register("billingAddress.states")}
                             />
                             {errors?.billingAddress?.states && (
@@ -136,7 +137,7 @@ const BillingAddress = ({ errors, control, register, setValue }) => {
                               disabled={useShippingAsBilling}
                               className="w-100"
                               type="number"
-                              placeholder="postal code"
+                              placeholder="ZIP Code"
                               {...register("billingAddress.pincode")}
                             />
                             {errors?.billingAddress?.pincode && (

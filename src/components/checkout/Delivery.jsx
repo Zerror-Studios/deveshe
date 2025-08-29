@@ -16,7 +16,7 @@ const Delivery = ({ errors, control, register, setValue }) => {
               <input
                 className="w-100"
                 type="text"
-                placeholder="First name"
+                placeholder="First Name"
                 {...register("shippingAddress.firstname")}
               />
               {errors?.shippingAddress?.firstname && (
@@ -29,7 +29,7 @@ const Delivery = ({ errors, control, register, setValue }) => {
               <input
                 className="w-100"
                 type="text"
-                placeholder="Last name"
+                placeholder="Last Name"
                 {...register("shippingAddress.lastname")}
               />
               {errors?.shippingAddress?.lastname && (
@@ -60,7 +60,7 @@ const Delivery = ({ errors, control, register, setValue }) => {
               <input
                 className="w-100"
                 type="text"
-                placeholder="States"
+                placeholder="State"
                 {...register("shippingAddress.states")}
               />
               {errors?.shippingAddress?.states && (
@@ -76,7 +76,7 @@ const Delivery = ({ errors, control, register, setValue }) => {
               <input
                 className="w-100"
                 type="number"
-                placeholder="postal code"
+                placeholder="ZIP Code"
                 {...register("shippingAddress.pincode")}
               />
               {errors?.shippingAddress?.pincode && (
