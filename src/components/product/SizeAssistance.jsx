@@ -98,7 +98,7 @@ const handleCloseClick = () => {
           <Image
             width={1000}
             height={1000}
-            src="/size-chart.png"
+            src="/size-guide.png"
             alt="measurement_guide"
           />
         </div>

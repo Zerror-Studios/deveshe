@@ -45,7 +45,7 @@ const Navbar = ({ openCart }) => {
         currentX += width + spacing;
       });
 
-      if (router.pathname !== "/") {
+     if (router.pathname !== "/" || router.query.section === "shop") {
         gsap.set("html,body", { overflow: "visible" });
         gsap.set("#logo-container img", { filter: "invert(0)" });
         gsap.set(".nav-link a", { color: "#000" });
@@ -121,7 +121,7 @@ const Navbar = ({ openCart }) => {
       tl.call(startLoader)
         .to("#loader_slider p", {
           y: "95%",
-          duration: .8,
+          duration: 0.8,
           delay: 0.8,
           ease: "power2.out",
         })

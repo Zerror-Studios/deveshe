@@ -30,8 +30,7 @@
   flex-direction: column;
 }
 .size-assist-guide img {
-  width: 50%;
-  filter: brightness(200%) invert(1);
+  width: 80%;
   height: auto;
 }
 .size-assist-guide p {

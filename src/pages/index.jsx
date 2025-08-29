@@ -1,4 +1,5 @@
-import React, { Suspense, useRef } from "react";
+import React, { Suspense, useRef, useEffect } from "react";
+import { useRouter } from "next/router";
 import SeoHeader from "@/components/seo/SeoHeader";
 import HeroSection from "@/components/home/HeroSection";
 import ExploreSection from "@/components/home/ExploreSection";
@@ -10,7 +11,36 @@ import ProductLoader from "@/components/loaders/ProductLoader";
 import ReviewSection from "@/components/home/ReviewSection";
 
 const Home = ({ meta, productData }) => {
-   const sectionRef = useRef(null);
+  const sectionRef = useRef(null);
+  const router = useRouter();
+
+  const scrollToShop = (delay = 1000) => {
+    setTimeout(() => {
+      if (sectionRef.current) {
+        sectionRef.current.scrollIntoView({ behavior: "smooth" });
+      }
+    }, delay); // delay in milliseconds
+  };
+  // Run scroll on mount AND whenever route/query changes
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    const checkAndScroll = () => {
+      if (router.query.section === "shop" || window.location.hash === "#shop") {
+        scrollToShop();
+      }
+    };
+
+    // Initial check
+    checkAndScroll();
+
+    router.events.on("routeChangeComplete", checkAndScroll);
+
+    return () => {
+      router.events.off("routeChangeComplete", checkAndScroll);
+    };
+  }, [router.isReady, router.query, router.events]);
+
   return (
     <>
       <SeoHeader meta={meta} />
@@ -20,12 +50,14 @@ const Home = ({ meta, productData }) => {
         <ProductSection sectionRef={sectionRef} data={productData} />
       </Suspense>
       <VisionSection />
-      <ReviewSection/>
+      <ReviewSection />
     </>
   );
 };
 
 export default Home;
+
+// getServerSideProps stays the same
 
 export async function getServerSideProps() {
   const meta = {
@@ -48,7 +80,7 @@ export async function getServerSideProps() {
     });
     return {
       props: {
-        meta: meta,
+        meta,
         productData: data?.getClientSideProducts?.products || [],
       },
     };
@@ -56,7 +88,7 @@ export async function getServerSideProps() {
     console.error("Error fetching data:", error.message);
     return {
       props: {
-        meta: meta,
+        meta,
         productData: [],
       },
     };
