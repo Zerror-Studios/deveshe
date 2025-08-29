@@ -9,6 +9,7 @@ import VisionSection from "@/components/home/VisionSection";
 import ProductSection from "@/components/home/ProductSection";
 import ProductLoader from "@/components/loaders/ProductLoader";
 import ReviewSection from "@/components/home/ReviewSection";
+import { ProductStatus } from "@/utils/Constant";
 
 const Home = ({ meta, productData }) => {
   const sectionRef = useRef(null);
@@ -76,6 +77,10 @@ export async function getServerSideProps() {
       variables: {
         offset: 0,
         limit: 11,
+        filters: {
+          categoryIds: ["6898b3cdddf0354e025da816"],
+          status: ProductStatus.PUBLISHED,
+        },
       },
     });
     return {

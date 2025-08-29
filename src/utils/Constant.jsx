@@ -2,6 +2,13 @@ export const Const = {
   ClientLink: "https://www.deveshedreams.com",
 };
 
+export const ProductStatus = {
+  DRAFT: "DRAFT",
+  SCHEDULED: "SCHEDULED",
+  PUBLISHED: "PUBLISHED",
+  ARCHIVED: "ARCHIVED",
+};
+
 export const UserStatus = {
   DEACTIVE: "DEACTIVE",
   ACTIVE: "ACTIVE",

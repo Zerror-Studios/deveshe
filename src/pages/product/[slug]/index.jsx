@@ -13,6 +13,7 @@ import ProductImageGrid from "@/components/product/ProductImageGrid";
 import ProductContent from "@/components/product/ProductContent";
 import SizeAssistance from "@/components/product/SizeAssistance";
 import toast from "react-hot-toast";
+import { ProductStatus } from "@/utils/Constant";
 
 const ProductDetail = ({ meta, data, productList }) => {
   const router = useRouter();
@@ -129,7 +130,15 @@ export async function getServerSideProps({ params }) {
       }),
       client.query({
         query: GET_PRODUCTS,
-        variables: { offset: 0, limit: 5 },
+        variables: {
+          offset: 0,
+          limit: 5,
+          filters: {
+            categoryIds: ["6898b3cdddf0354e025da816"],
+            status: ProductStatus.PUBLISHED,
+            idNotInclude: id
+          },
+        },
       }),
     ].filter(Boolean);
 
