@@ -1,10 +1,58 @@
 import Image from "next/image";
 import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
 
 const SizeAssistance = ({ onClose }) => {
+  const overlayRef = useRef(null);
+  const wrapRef = useRef(null);
+useEffect(() => {
+  const tl = gsap.timeline();
+
+  // First overlay fades in, then wrap slides in
+  tl.to(overlayRef.current, {
+    opacity: 1,
+    duration: 0.5,
+    ease: "power2.out"
+  })
+  .fromTo(
+    wrapRef.current,
+    { y: "-100%", opacity: 0 },
+    {
+      y: "0%",
+      opacity: 1,
+      duration: 0.8,
+      ease: "power4.out"
+    },
+    "-=0.2" // start slightly before overlay finishes
+  );
+}, []);
+
+const handleCloseClick = () => {
+  const tl = gsap.timeline({
+    onComplete: onClose, // call onClose after everything finishes
+  });
+
+  // First wrap slides out, then overlay fades
+  tl.to(wrapRef.current, {
+    y: "-100%",
+    opacity: 0,
+    duration: 0.7,
+    ease: "power4.inOut"
+  })
+  .to(
+    overlayRef.current,
+    {
+      opacity: 0,
+      duration: 0.5,
+      ease: "power2.in"
+    },
+    "-=0.2" // overlap slightly for fluid effect
+  );
+};
+
   return (
-    <div className="size-assist-overlay" data-lenis-prevent>
-      <div className="size-assist_wrap">
+    <div className="size-assist-overlay" data-lenis-prevent ref={overlayRef}>
+      <div className="size-assist_wrap" ref={wrapRef}>
         <div className="size-assist-guide">
           <div>
             <p>Measurements guide</p>
@@ -54,17 +102,17 @@ const SizeAssistance = ({ onClose }) => {
             alt="measurement_guide"
           />
         </div>
+
         <div className="size-assist-popup">
           <div className="size-assist-header">
             <h2>Size Assistance</h2>
-            <button className="size-assist-quizBtn" onClick={onClose}>
+            <button className="size-assist-quizBtn" onClick={handleCloseClick}>
               Close
             </button>
           </div>
 
           <div className="size-assist-section">
             <p className="size-heading">Fit</p>
-
             <ul>
               <li>Relaxed suede coat with a loose fit.</li>
               <li>True to size. Recommended to take your normal size.</li>
@@ -79,7 +127,9 @@ const SizeAssistance = ({ onClose }) => {
           </div>
 
           <div className="size-assist-section">
-            <p className="size-heading">Standard Women's Size Chart (approx, India/US/UK)</p>
+            <p className="size-heading">
+              Standard Women's Size Chart (approx, India/US/UK)
+            </p>
             <div className="size-assist-tableWrapper">
               <table>
                 <thead>
@@ -125,9 +175,16 @@ const SizeAssistance = ({ onClose }) => {
               </table>
             </div>
           </div>
+
           <div className="size-assist-section measure-table">
-            <p className="size-heading">Standard Women's Size Chart (with Rise + Inseam added for context)</p>
-            <p><em>(Typical ready-to-wear ranges, India/US — may vary by brand)</em></p>
+            <p className="size-heading">
+              Standard Women's Size Chart (with Rise + Inseam added for context)
+            </p>
+            <p>
+              <em>
+                (Typical ready-to-wear ranges, India/US — may vary by brand)
+              </em>
+            </p>
             <div className="size-assist-tableWrapper">
               <table>
                 <thead>

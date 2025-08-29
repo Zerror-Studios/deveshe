@@ -295,13 +295,16 @@
   left: 0px;
   bottom: -8px;
   color: red;
-  font-size: 13px;
+  font-size: 11px;
+  font-family: paragraph;
 }
 
 .error {
   color: red;
   margin-top: -20px;
-  font-size: 13px;
+  font-size: 11px;
+  font-family: paragraph;
+
 }
 
 .login-error {
@@ -309,7 +312,9 @@
   text-align: center;
   margin-top: 8px;
   margin-bottom: 15px;
-  font-size: 13px;
+  font-size: 11px;
+  font-family: paragraph;
+
 }
 
 .phone-error {

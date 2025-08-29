@@ -120,10 +120,10 @@ const Navbar = ({ openCart }) => {
       // Move logo and nav buttons smoothly at the same time
       tl.call(startLoader)
         .to("#loader_slider p", {
-          top: "95%",
-          duration: 0.5,
-          delay: 1,
-          ease: "power2.in",
+          y: "95%",
+          duration: .8,
+          delay: 0.8,
+          ease: "power2.out",
         })
         .to(
           "#logo-container",
@@ -303,34 +303,34 @@ const Navbar = ({ openCart }) => {
         )}
         <Link href="/" id="logo-container">
           <p>new emotions?</p>
-              <Image
-                width={1000}
-                height={1000}
-                src="/assets/images/logo/d.webp"
-                alt="D"
-                className="logo"
-              />
-              <Image
-                width={1000}
-                height={1000}
-                src="/assets/images/logo/v.webp"
-                alt="V"
-                className="logo"
-              />
-              <Image
-                width={1000}
-                height={1000}
-                src="/assets/images/logo/s.webp"
-                alt="S"
-                className="logo"
-              />
-              <Image
-                width={1000}
-                height={1000}
-                src="/assets/images/logo/m.webp"
-                alt="M"
-                className="logo"
-              />
+          <Image
+            width={1000}
+            height={1000}
+            src="/assets/images/logo/d.webp"
+            alt="D"
+            className="logo"
+          />
+          <Image
+            width={1000}
+            height={1000}
+            src="/assets/images/logo/v.webp"
+            alt="V"
+            className="logo"
+          />
+          <Image
+            width={1000}
+            height={1000}
+            src="/assets/images/logo/s.webp"
+            alt="S"
+            className="logo"
+          />
+          <Image
+            width={1000}
+            height={1000}
+            src="/assets/images/logo/m.webp"
+            alt="M"
+            className="logo"
+          />
         </Link>
         <div className="nav-link">
           {MenuData.map((link, idx) => (
