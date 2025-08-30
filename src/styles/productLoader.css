@@ -78,6 +78,9 @@ border-bottom: 1px solid black;
 }
 
 @media (max-width:576px) {
+  .loader-main-div{
+    border: none;
+  }
   .loading-card-desk{
     display: none;
   }
