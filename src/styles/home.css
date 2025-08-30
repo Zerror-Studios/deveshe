@@ -1219,12 +1219,20 @@ button {
   overflow: hidden;
   position: relative;
 }
+.desktop_add_btn .ProductDets_ntfy_btn_grid{
+  max-width: 100% !important;
+}
 
 .ProductDets_ntfy_btn_grid {
   justify-content: space-between;
   grid-template-columns: auto auto;
   display: grid;
   max-width: 250px;
+  background-color: #000;
+  color: white !important;
+}
+.ProductDets_ntfy_btn_grid:hover{
+  font-weight: 600;
 }
 .ProductBtn_line_Anim {
   width: 100%;
@@ -1234,7 +1242,6 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* opacity: 0; */
   cursor: pointer;
 }
 .ProductBtn_line_cntr {
@@ -1244,7 +1251,6 @@ button {
   display: flex;
   align-items: center;
   overflow: hidden;
-  /* background-color: red; */
 }
 .ProductBtn_line {
   position: absolute;

@@ -3,7 +3,6 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Link from "next/link";
 import Image from "next/image";
-import { FiArrowUpRight } from "react-icons/fi";
 import styles from "@/components/lookbook/Lookbook.module.css";
 import { htmlParser } from "@/utils/Util";
 
@@ -88,9 +87,6 @@ const ChapterList = ({ data = [] }) => {
                 {item?.description && (
                   <>{htmlParser(item?.description || "")}</>
                 )}
-                <span className={styles.exploreBtn}>
-                  Explore <FiArrowUpRight />
-                </span>
               </div>
             </div>
           </Link>

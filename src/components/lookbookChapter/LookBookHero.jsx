@@ -9,14 +9,21 @@ gsap.registerPlugin(ScrollTrigger);
 
 const splitText = (element) => {
   if (!element || element.dataset.split) return;
-  const letters = element.textContent
-    .split("")
-    .map((char) =>
-      char === " " ? `<span>&nbsp;</span>` : `<span>${char}</span>`
-    );
-  element.innerHTML = letters.join("");
+
+  const words = element.textContent.trim().split(" ");
+
+  const wordSpans = words.map((word) => {
+    const letters = word
+      .split("")
+      .map((char) => `<span class="letter">${char}</span>`)
+      .join("");
+    return `<span class="word">${letters}</span>`;
+  });
+
+  element.innerHTML = wordSpans.join(`<span class="space">&nbsp;</span>`);
   element.dataset.split = "true";
 };
+
 
 const LookBookHero = ({ title, subheading, description, asset }) => {
   const router = useRouter();

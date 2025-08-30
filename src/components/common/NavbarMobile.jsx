@@ -187,8 +187,8 @@ const NavbarMobile = ({ openCart }) => {
                 className="account-logo"
                 width={23}
                 height={23}
-                src="/images/user.png"
-                alt="logo"
+                src="/placeholder/user.png"
+                alt="account"
               />
             </Link>
             <HiOutlineShoppingBag

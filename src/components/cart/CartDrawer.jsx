@@ -178,7 +178,7 @@ const CartDrawer = ({ isOpen, closeCart }) => {
             <span>{formatePrice(discountedPrice)}</span>
           </div>
           <div className="checkout_btn_container">
-            <span>Free worldwide shipping on orders over 5000 INR</span>
+            <span>Our outfits are made to order! The delivery time for our products is approx. 2 weeks</span>
             <button
               className="_btn_wrapper"
               style={{
