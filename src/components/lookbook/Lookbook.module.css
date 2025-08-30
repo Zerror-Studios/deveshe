@@ -35,7 +35,7 @@
   align-items: center;
   justify-content: flex-start;
   background-color: rgba(0, 0, 0, 0.08);
-  padding: 100px;
+  padding: 100px 40px;
 }
 
 .overlay3a .textContainer {

@@ -14,33 +14,36 @@ import { ProductStatus } from "@/utils/Constant";
 const Home = ({ meta, productData }) => {
   const sectionRef = useRef(null);
   const router = useRouter();
-
-  const scrollToShop = (delay = 1000) => {
-    setTimeout(() => {
-      if (sectionRef.current) {
-        sectionRef.current.scrollIntoView({ behavior: "smooth" });
-      }
-    }, delay); // delay in milliseconds
-  };
-  // Run scroll on mount AND whenever route/query changes
   useEffect(() => {
     if (!router.isReady) return;
 
-    const checkAndScroll = () => {
-      if (router.query.section === "shop" || window.location.hash === "#shop") {
-        scrollToShop();
+    const scrollToHash = () => {
+      const targetId = window.location.hash?.replace("#", "");
+      if (targetId) {
+        const el = document.getElementById(targetId);
+        if (el) {
+          // small delay ensures DOM is painted
+          setTimeout(() => {
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+          }, 500);
+        }
       }
     };
 
-    // Initial check
-    checkAndScroll();
+    // 1️⃣ Run after mount
+    scrollToHash();
 
-    router.events.on("routeChangeComplete", checkAndScroll);
+    // 2️⃣ Run again when route changes
+    router.events.on("routeChangeComplete", scrollToHash);
+
+    // 3️⃣ Run again when hash changes (user clicks same-page anchor)
+    window.addEventListener("hashchange", scrollToHash);
 
     return () => {
-      router.events.off("routeChangeComplete", checkAndScroll);
+      router.events.off("routeChangeComplete", scrollToHash);
+      window.removeEventListener("hashchange", scrollToHash);
     };
-  }, [router.isReady, router.query, router.events]);
+  }, [router.isReady, router.events]);
 
   return (
     <>

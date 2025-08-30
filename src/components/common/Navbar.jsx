@@ -45,7 +45,7 @@ const Navbar = ({ openCart }) => {
         currentX += width + spacing;
       });
 
-     if (router.pathname !== "/" || router.query.section === "shop") {
+     if (router.pathname !== "/" || window.location.hash === "#shop") {
         gsap.set("html,body", { overflow: "visible" });
         gsap.set("#logo-container img", { filter: "invert(0)" });
         gsap.set(".nav-link a", { color: "#000" });

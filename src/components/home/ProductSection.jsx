@@ -28,7 +28,7 @@ const ProductSection = ({ data, sectionRef }) => {
   );
 
   return (
-    <div ref={sectionRef} id="product_section">
+    <div ref={sectionRef} id="shop">
       {/* Desktop → left and right separate */}
       {!isMobile && <div className="product_left_section">{leftCard}</div>}
 
