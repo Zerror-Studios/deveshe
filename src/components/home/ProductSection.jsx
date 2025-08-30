@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "../common/card/ProductCard";
 import { getProductPriceLabel } from "@/utils/Util";
+import ProductLoader from "../loaders/ProductLoader";
 
 const ProductSection = ({ data, sectionRef }) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -12,18 +13,21 @@ const ProductSection = ({ data, sectionRef }) => {
     return () => window.removeEventListener("resize", checkScreen);
   }, []);
 
-  if (!data || data.length === 0) return null;
+  // fallback loader if data is null or empty
+  if (!data || data.length === 0) {
+    return <ProductLoader />;
+  }
+
+  const getFirstAsset = (product) =>
+    product?.assets && product.assets.length > 0 ? product.assets[0].path : "";
 
   const leftCard = (
     <ProductCard
-      href={"/product/" + data[0]?._id || ""}
-      src={data[0]?.assets[0]?.path || ""}
+      href={"/product/" + (data[0]?._id || "")}
+      src={getFirstAsset(data[0])}
       alt={data[0]?.name || ""}
       name={data[0]?.name || ""}
-      price={getProductPriceLabel(
-        data?.[0]?.variants,
-        data?.[0]?.discountedPrice
-      )}
+      price={getProductPriceLabel(data[0]?.variants, data[0]?.discountedPrice)}
     />
   );
 
@@ -36,21 +40,16 @@ const ProductSection = ({ data, sectionRef }) => {
         {/* Mobile → put left card here */}
         {isMobile && leftCard}
 
-        {data?.slice(1, 11)?.map((item, index) => {
-          return (
-            <ProductCard
-              key={index}
-              href={"/product/" + item?._id || ""}
-              src={item?.assets[0]?.path || ""}
-              alt={item?.name || ""}
-              name={item?.name || ""}
-              price={getProductPriceLabel(
-                item?.variants,
-                item?.discountedPrice
-              )}
-            />
-          );
-        })}
+        {data.slice(1, 11).map((item, index) => (
+          <ProductCard
+            key={index}
+            href={"/product/" + (item?._id || "")}
+            src={getFirstAsset(item)}
+            alt={item?.name || ""}
+            name={item?.name || ""}
+            price={getProductPriceLabel(item?.variants, item?.discountedPrice)}
+          />
+        ))}
       </div>
     </div>
   );
