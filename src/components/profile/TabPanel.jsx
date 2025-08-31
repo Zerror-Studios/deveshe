@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
@@ -9,9 +9,6 @@ const Basic = dynamic(() => import("@/components/profile/panel").then(mod => mod
   ssr: false,
 });
 const Order = dynamic(() => import("@/components/profile/panel").then(mod => mod.Order), {
-  ssr: false,
-});
-const Payment = dynamic(() => import("@/components/profile/panel").then(mod => mod.Payment), {
   ssr: false,
 });
 const Address = dynamic(() => import("@/components/profile/panel").then(mod => mod.Address), {
@@ -51,15 +48,12 @@ const TabPanel = ({ tab }) => {
       <CustomTabPanel value={tab} index={0}>
         <Basic />
       </CustomTabPanel>
-      <CustomTabPanel value={tab} index={1}>
+      {/* <CustomTabPanel value={tab} index={1}>
         <Order />
       </CustomTabPanel>
       <CustomTabPanel value={tab} index={2}>
-        <Payment />
-      </CustomTabPanel>
-      <CustomTabPanel value={tab} index={3}>
         <Address />
-      </CustomTabPanel>
+      </CustomTabPanel> */}
     </>
   );
 };

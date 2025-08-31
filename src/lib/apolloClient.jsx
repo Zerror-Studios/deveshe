@@ -1,10 +1,42 @@
-import { ApolloClient, InMemoryCache, HttpLink, from } from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
+import Router from "next/router";
 import fetch from "cross-fetch";
+import { ApolloClient, InMemoryCache, HttpLink, from } from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
+import { setContext } from "@apollo/client/link/context";
+
+// UNAUTHENTICATED Verify
+const handleUnauthorized = () => {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user-auth");
+    Router.replace("/login");
+  }
+};
+
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    for (let err of graphQLErrors) {
+      if (
+        err.extensions?.code === "UNAUTHENTICATED" ||
+        err.extensions?.code === "GRAPHQL_VALIDATION_FAILED"
+      ) {
+        handleUnauthorized();
+      }
+    }
+  }
+
+  if (
+    networkError?.statusCode === 401 ||
+    networkError?.response?.status === 401
+  ) {
+    handleUnauthorized();
+  }
+});
 
 // Define the static GraphQL HTTP link
 const httpLink = new HttpLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL_API_URL,
+  credentials: "include",
   fetch,
 });
 
@@ -33,7 +65,7 @@ const authLink = setContext((_, { headers }) => {
 export function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
-    link: from([authLink, httpLink]),
+    link: from([errorLink, authLink, httpLink]),
     cache: new InMemoryCache(),
   });
 }

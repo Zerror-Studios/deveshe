@@ -3,6 +3,7 @@ import SeoHeader from "@/components/seo/SeoHeader";
 import ChapterList from "@/components/lookbook/ChapterList";
 import { createApolloClient } from "@/lib/apolloClient";
 import { GET_LOOKBOOKS } from "@/graphql";
+import { ProductStatus } from "@/utils/Constant";
 
 const Lookbook = ({ meta, data }) => {
   return (
@@ -35,6 +36,7 @@ export async function getServerSideProps() {
       variables: {
         offset: 0,
         limit: 10,
+        filter: { status: ProductStatus.PUBLISHED }
       },
     });
 

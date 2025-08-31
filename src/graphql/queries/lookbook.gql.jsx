@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const GET_LOOKBOOKS = gql`
-  query GetClientSideLookBooks($limit: Int, $offset: Int) {
-    getClientSideLookBooks(limit: $limit, offset: $offset) {
+  query GetClientSideLookBooks($limit: Int, $offset: Int, $filter: LookBookFilterInput) {
+    getClientSideLookBooks(limit: $limit, offset: $offset, filter: $filter) {
       lookBooks {
         _id
         name

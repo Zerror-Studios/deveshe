@@ -1,5 +1,7 @@
 export const Const = {
   ClientLink: "https://www.deveshedreams.com",
+  IN_STOCK: "IN_STOCK",
+  OUT_OF_STOCK: "OUT_OF_STOCK",
 };
 
 export const ProductStatus = {
@@ -7,6 +9,11 @@ export const ProductStatus = {
   SCHEDULED: "SCHEDULED",
   PUBLISHED: "PUBLISHED",
   ARCHIVED: "ARCHIVED",
+};
+
+export const StockStatus = {
+  IN_STOCK: "In Stock",
+  OUT_OF_STOCK: "Out of stock",
 };
 
 export const UserStatus = {

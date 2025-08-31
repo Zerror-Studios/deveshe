@@ -9,6 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 const ProductListGrid = ({
   title = "You may also like",
   data,
+  buttonText,
   loading,
   handleAddToCart,
   cartBtn,
@@ -94,9 +95,9 @@ const ProductListGrid = ({
           ) : (
             <>
               <span className="ProductDets_ntfy_btn_slect_size">
-                {!cartBtn ? "Select a Size" : "Add to Bag"}
+                {!cartBtn ? "Select a Size" : buttonText}
               </span>
-              <span className="ProductDets_ntfy_btn_AddtoBeg">Add to Bag</span>
+              <span className="ProductDets_ntfy_btn_AddtoBeg">{buttonText}</span>
               <div className="ProductDets_ntfy_btn_price">
                 <span>{finalPrice} INR</span>
               </div>

@@ -46,9 +46,8 @@ const TabList = ({ tab, setTab }) => {
         sx={{ borderColor: "rgba(0,0,0,0.2)" }}
       >
         <AntTab id="tab" label="My Profile" />
-        <AntTab id="tab" label="Order History" />
-        <AntTab id="tab" label="Payment Method" />
-        <AntTab id="tab" label="Saved Addresses" />
+        {/* <AntTab id="tab" label="Order History" />
+        <AntTab id="tab" label="Saved Addresses" /> */}
         
       </AntTabs>
        <div id="logout_btn" className="_btn_wrapper _btn_height _w-full de-btn">

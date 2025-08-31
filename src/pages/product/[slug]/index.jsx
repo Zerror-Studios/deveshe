@@ -13,7 +13,7 @@ import ProductImageGrid from "@/components/product/ProductImageGrid";
 import ProductContent from "@/components/product/ProductContent";
 import SizeAssistance from "@/components/product/SizeAssistance";
 import toast from "react-hot-toast";
-import { ProductStatus } from "@/utils/Constant";
+import { Const, ProductStatus, StockStatus } from "@/utils/Constant";
 
 const ProductDetail = ({ meta, data, productList }) => {
   const router = useRouter();
@@ -33,7 +33,7 @@ const ProductDetail = ({ meta, data, productList }) => {
   const [addItemToCart, { loading }] = useMutation(ADD_ITEM_TO_CART);
 
   const handleAddToCart = async () => {
-    if (!cartBtn) return;
+    if (!cartBtn || variantMatched.stockStatus === Const.OUT_OF_STOCK) return;
 
     try {
       const productId = router?.query?.slug;
@@ -61,7 +61,10 @@ const ProductDetail = ({ meta, data, productList }) => {
   };
 
   const handleClose = () => setShowSizeAssist(false);
-
+  const buttonText =
+    variantMatched?.stockStatus === Const.OUT_OF_STOCK
+      ? StockStatus[variantMatched?.stockStatus]
+      : "Add to Bag";
   return (
     <>
       <SeoHeader meta={meta} />
@@ -76,6 +79,7 @@ const ProductDetail = ({ meta, data, productList }) => {
             <ProductContent
               data={data || {}}
               finalPrice={finalPrice}
+              buttonText={buttonText}
               cartBtn={cartBtn}
               loading={loading}
               setFinalPrice={setFinalPrice}
@@ -88,6 +92,7 @@ const ProductDetail = ({ meta, data, productList }) => {
           <ProductListGrid
             key={router.asPath}
             data={productList}
+            buttonText={buttonText}
             loading={loading}
             handleAddToCart={handleAddToCart}
             cartBtn={cartBtn}
@@ -136,7 +141,7 @@ export async function getServerSideProps({ params }) {
           filters: {
             categoryIds: ["6898b3cdddf0354e025da816"],
             status: ProductStatus.PUBLISHED,
-            idNotInclude: id
+            idNotInclude: id,
           },
         },
       }),

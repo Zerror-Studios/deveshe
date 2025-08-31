@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { htmlParser } from "@/utils/Util";
+import { Const, StockStatus } from "@/utils/Constant";
 
 const ProductContent = ({
   data = {},
   finalPrice,
+  buttonText,
   loading,
   cartBtn,
   setFinalPrice,
@@ -70,7 +72,6 @@ const ProductContent = ({
   };
 
   if (!data) return null;
-
   return (
     <div className="ProductDets_text_wrapper">
       <div className="ProductDets_blank-div">
@@ -192,10 +193,10 @@ const ProductContent = ({
               ) : (
                 <>
                   <span className="ProductDets_ntfy_btn_slect_size">
-                    {!cartBtn ? "Select a Size" : "Add to Bag"}
+                    {!cartBtn ? "Select a Size" : buttonText}
                   </span>
                   <span className="ProductDets_ntfy_btn_AddtoBeg">
-                    Add to Bag
+                    {buttonText}
                   </span>
                   <div className="ProductDets_ntfy_btn_price">
                     <span>{finalPrice} INR</span>

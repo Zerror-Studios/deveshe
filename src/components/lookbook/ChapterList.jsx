@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const ChapterList = ({ data = [] }) => {
   useEffect(() => {
-    if (!data || data.length <= 1) return;
+    if (!data || data.length === 0) return;
 
     const ctx = gsap.context(() => {
       const timeline = gsap.timeline({

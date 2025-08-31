@@ -12,22 +12,29 @@ import { UserStatus } from "@/utils/Constant";
 import toast from "react-hot-toast";
 import "react-international-phone/style.css";
 
-const SignupSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  countryCode: z.string().min(1, "Country Code is required"),
-  phoneNumber: z.string().min(1, "Phone number is required"),
-  email: z.string().email("Invalid email"),
-  password: z
-    .string()
-    .min(6, "Password must be at least 6 characters")
-    .regex(/[A-Z]/, "Must contain an uppercase letter")
-    .regex(/[0-9]/, "Must contain a number"),
-});
+const SignupSchema = z
+  .object({
+    firstName: z.string().min(1, "First name is required"),
+    lastName: z.string().min(1, "Last name is required"),
+    countryCode: z.string().min(1, "Country Code is required"),
+    phoneNumber: z.string().min(1, "Phone number is required"),
+    email: z.string().min(1, "Email is required").email("Invalid email"),
+    password: z
+      .string()
+      .min(6, "Password must be at least 6 characters")
+      .regex(/[A-Z]/, "Must contain an uppercase letter")
+      .regex(/[0-9]/, "Must contain a number"),
+    confirmPassword: z.string().min(1, "Confirm password is required"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 const Signup = ({ setToggle }) => {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
+  const [confirmVisible, setConfirmVisible] = useState(false);
   const [signupUser, { loading }] = useMutation(SIGN_UP_USER);
   const { setToken, setUser, setIsLoggedIn } = useAuthStore((state) => state);
 
@@ -42,8 +49,9 @@ const Signup = ({ setToggle }) => {
 
   const onSubmit = async (data) => {
     try {
+      const { confirmPassword, ...rest } = data;
       const input = {
-        ...data,
+        ...rest,
         status: UserStatus.ACTIVE,
       };
       const { data: response } = await signupUser({ variables: { input } });
@@ -149,6 +157,26 @@ const Signup = ({ setToggle }) => {
               />
               {errors?.password && (
                 <div className="error-p">{errors?.password?.message || ""}</div>
+              )}
+            </div>
+            {/* Confirm Password */}
+            <div className="pass-cont inp-rel">
+              <div
+                className="eye-cont flex-all"
+                onClick={() => setConfirmVisible(!confirmVisible)}
+              >
+                {confirmVisible ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+              </div>
+              <input
+                type={confirmVisible ? "text" : "password"}
+                className="login-inp"
+                placeholder="Confirm Password"
+                {...register("confirmPassword")}
+              />
+              {errors?.confirmPassword && (
+                <div className="error-p">
+                  {errors?.confirmPassword?.message}
+                </div>
               )}
             </div>
 
