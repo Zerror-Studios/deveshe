@@ -35,7 +35,7 @@
   align-items: center;
   justify-content: flex-start;
   background-color: rgba(0, 0, 0, 0.08);
-  padding: 100px;
+  padding: 100px 40px;
 }
 
 .overlay3a .textContainer {
@@ -48,26 +48,17 @@
   font-family: paragraphStyleB;
   font-size: 1.1rem;
 }
-.exploreBtn {
-  color: white;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 400;
-  font-family: paragraphStyleB;
-  font-size: 1.5rem;
-}
+
 .overlay3a .textContainer h4 {
   color: white;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-family: heading;
   margin-bottom: 15px;
   text-transform: uppercase;
 }
 .overlay3a .textContainer p {
   color: white;
-  font-size: 14px;
+  font-size: 16px;
   font-family: paragraph;
   font-weight: 500;
   margin-bottom: 15px;

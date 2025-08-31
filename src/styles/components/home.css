@@ -318,7 +318,7 @@
 /* explore section end */
 
 /* product section start */
-#product_section {
+#shop {
   width: 100%;
   height: auto;
   display: flex;
@@ -774,7 +774,7 @@
     font-size: 5vw;
   }
 
-  #product_section {
+  #shop {
     display: flex;
     flex-wrap: wrap;
   }

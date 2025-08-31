@@ -172,6 +172,9 @@
   margin-top: 30px;
   cursor: pointer;
 }
+#contact_form #submit-btn:hover{
+  font-weight: 600;
+}
 
 
 @media (max-width: 576px) {
