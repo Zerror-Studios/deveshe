@@ -16,7 +16,7 @@ const Address = () => {
   } = useAuthStore((state) => state);
 
   const payload = {
-    filter: { userId: _id },
+    filters: { userId: _id },
     limit: LIMIT,
     offset,
     sort: { createdAt: Sort.DESC, primary: Sort.ASC },

@@ -16,10 +16,7 @@ const handleUnauthorized = () => {
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     for (let err of graphQLErrors) {
-      if (
-        err.extensions?.code === "UNAUTHENTICATED" ||
-        err.extensions?.code === "GRAPHQL_VALIDATION_FAILED"
-      ) {
+      if (err.extensions?.code === "UNAUTHENTICATED") {
         handleUnauthorized();
       }
     }
@@ -36,7 +33,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 // Define the static GraphQL HTTP link
 const httpLink = new HttpLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL_API_URL,
-  credentials: "include",
+  credentials: "same-origin",
   fetch,
 });
 

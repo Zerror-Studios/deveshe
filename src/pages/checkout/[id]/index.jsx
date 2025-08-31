@@ -17,12 +17,14 @@ import OrderSummery from "@/components/checkout/OrderSummery";
 import { EmailSubscribedStatus } from "@/utils/Constant";
 import Checkout from "nimbbl_sonic";
 import { useRouter } from "next/router";
+import { useAuthStore } from "@/store/auth-store";
 import Loader from "@/components/checkout/Loader";
 const CheckoutPage = ({ meta, initialCartData }) => {
   const router = useRouter();
   const [cartData, setCartData] = useState(initialCartData);
   const [isLoading, setIsLoading] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(false);
+  const { isLoggedIn, user } = useAuthStore((state) => state);
   const [checkoutOrder] = useMutation(CHECKOUT_ORDER);
   const {
     register,
@@ -46,6 +48,7 @@ const CheckoutPage = ({ meta, initialCartData }) => {
         country: "India",
         primary: false,
       },
+      email: isLoggedIn ? user?.email : "",
       emailSubscribedStatus: EmailSubscribedStatus.SUBSCRIBED,
       useShippingAsBilling: true,
     },

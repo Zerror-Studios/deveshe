@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 export const USER_ADDRESS_LIST = gql`
   query GetAddressByFilters(
-    $filter: AddressFilterInput
+    $filters: AddressFilterInput
     $limit: Int
     $offset: Int
     $sort: AddressSortInput
@@ -11,7 +11,7 @@ export const USER_ADDRESS_LIST = gql`
       limit: $limit
       offset: $offset
       sort: $sort
-      filter: $filter
+      filters: $filters
     ) {
       data {
         _id

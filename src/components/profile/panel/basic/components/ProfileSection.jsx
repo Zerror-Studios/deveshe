@@ -33,11 +33,11 @@ const ProfileSection = () => {
   } = useForm({
     resolver: zodResolver(SignupSchema),
     defaultValues: {
-      firstName: user.firstName || "",
-      lastName: user.lastName || "",
-      email: user.email || "",
-      countryCode: user.countryCode || "+91",
-      phoneNumber: user.phoneNumber || "",
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      email: user?.email || "",
+      countryCode: user?.countryCode || "+91",
+      phoneNumber: user?.phoneNumber || "",
     },
   });
   const onSubmit = async (data) => {
