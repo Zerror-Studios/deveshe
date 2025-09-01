@@ -516,6 +516,9 @@ input[type="number"] {
     width: 100%;
     max-width: 100%;
   }
+  .common_btn_loadin{
+    padding: 0 8vw;
+  }
   #menu-btn {
     width: 22px;
     height: 9px;
