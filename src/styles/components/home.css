@@ -2,8 +2,9 @@
 #home_hero {
   width: 100%;
   height: 230vh;
-  background-color: #000;
+  background-color: #fadcde;
   position: relative;
+  
 }
 #home_hero > img {
   width: 100%;
@@ -794,9 +795,6 @@
     border: none !important;
     display: flex;
     flex-direction: column;
-  }
-  .common_product_card img {
-    height: auto !important;
   }
   .common_product_card .product_card_details {
     position: static;

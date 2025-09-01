@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import React from "react";
 
-const CommonButton = ({ title, href, onClick }) => {
+const CommonButton = ({ title, href, onClick, loading = false }) => {
   const router = useRouter();
 
   const handleClick = () => {
@@ -13,8 +13,20 @@ const CommonButton = ({ title, href, onClick }) => {
   };
 
   return (
-    <button id="common_black_btn" onClick={handleClick}>
-      {title}
+    <button
+      id="common_black_btn"
+      onClick={handleClick}
+      disabled={loading}
+    >
+      {loading ? (
+        <div className="common_btn_loadin">
+          <div className="loading_line_wrap">
+            <div className="loading_line"></div>
+          </div>
+        </div>
+      ) : (
+        title
+      )}
     </button>
   );
 };

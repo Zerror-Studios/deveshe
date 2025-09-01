@@ -34,13 +34,13 @@ const ImageSectionTwo = ({ leftData, rightData }) => {
   return (
     <div id='lb-section4'>
       {leftData && (
-        <div className='lb-sec4-img'>
+        <div className='lb-sec4-img skeleton-loading'>
             <Image width={1000} height={1000} src={leftData?.imageUrl || ""} alt="" />
         </div>
       )}
       {rightData && (
-        <div className='lb-sec4-img'>
-            <Image width={1000} height={1000} src={rightData?.imageUrl || ""} alt="" />
+        <div className='lb-sec4-img skeleton-loading'>
+            <Image width={1000}  height={1000} src={rightData?.imageUrl || ""} alt="" />
         </div>
       )}
     </div>

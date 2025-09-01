@@ -41,7 +41,7 @@ const BannerContainer = ({ data }) => {
 
   return (
     <div ref={bannerRef} id="lb-banner2">
-      <div id="main-banner-container">
+      <div id="main-banner-container" className="skeleton-loading">
         <Image
           width={1000}
           height={1000}

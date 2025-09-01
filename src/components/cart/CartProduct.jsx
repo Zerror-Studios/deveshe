@@ -36,7 +36,7 @@ const CartProduct = ({
 
   return (
     <div className="cart_product">
-      <div className="cart_image">
+      <div className="cart_image skeleton-loading">
         <Image
           width={1000}
           height={1000}

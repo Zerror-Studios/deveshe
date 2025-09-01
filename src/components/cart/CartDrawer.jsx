@@ -9,6 +9,7 @@ import { useVisitor } from "@/hooks/useVisitor";
 import { formatePrice } from "@/utils/Util";
 import gsap from "gsap";
 import CartProduct from "@/components/cart/CartProduct";
+import CommonButton from "../common/CommonButton";
 
 const CartDrawer = ({ isOpen, closeCart }) => {
   const router = useRouter();
@@ -50,8 +51,8 @@ const CartDrawer = ({ isOpen, closeCart }) => {
 
   const renderVariants = (variant) =>
     variant.map((value, idx) => (
-      <span key={idx} style={{display:"block"}}>
-         {idx === 0 ? 'Color:':'Size:'} {value}
+      <span key={idx} style={{ display: "block" }}>
+        {idx === 0 ? "Color:" : "Size:"} {value}
       </span>
     ));
 
@@ -178,24 +179,15 @@ const CartDrawer = ({ isOpen, closeCart }) => {
             <span>{formatePrice(discountedPrice)}</span>
           </div>
           <div className="checkout_btn_container">
-            <span>Our outfits are made to order! The delivery time for our products is approx. 2 weeks</span>
-            <button
-              className="_btn_wrapper"
-              style={{
-                width: "100%",
-                ...(isBtnLoading && { backgroundColor: "black" }),
-              }}
+            <span>
+              Our outfits are made to order! The delivery time for our products
+              is approx. 2 weeks
+            </span>
+            <CommonButton
+              title={"Checkout"}
               onClick={navigateCheckout}
-              disabled={isBtnLoading}
-            >
-              {isBtnLoading ? (
-                <div className="ani-wrap">
-                  <div className="ani-main"></div>
-                </div>
-              ) : (
-                <>Checkout</>
-              )}
-            </button>
+              loading={isBtnLoading}
+            />
           </div>
         </div>
       </div>

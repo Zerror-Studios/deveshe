@@ -24,7 +24,7 @@ const VideoContainer = ({ data }) => {
           <p>{htmlParser(data?.paragraph || "")}</p>
         </div>
       )}
-      <div id="lb-video-container">
+      <div id="lb-video-container" className="skeleton-loading">
         <div id="lb-video-overlay" onClick={handleVideoClick}>
           <p>{isPaused ? "Play" : "Pause"}</p>
         </div>

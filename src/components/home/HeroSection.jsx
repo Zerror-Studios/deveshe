@@ -103,7 +103,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <div id="home_hero">
+    <div id="home_hero" className="skeleton-loading">
       <Image
         width={1000}
         height={1000}

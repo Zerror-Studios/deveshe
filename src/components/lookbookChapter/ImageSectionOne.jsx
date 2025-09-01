@@ -34,7 +34,7 @@ const ImageSectionOne = ({ data }) => {
 
   return (
     <div id="lb-section3">
-      <div id="lb-section3-ig">
+      <div id="lb-section3-ig" className="skeleton-loading">
         <Image
           width={1000}
           height={1000}

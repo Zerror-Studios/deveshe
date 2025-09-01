@@ -12,6 +12,19 @@ const ChapterList = ({ data = [] }) => {
   useEffect(() => {
     if (!data || data.length === 0) return;
 
+    const cursor = document.querySelector(`.${styles.cursorlookbook}`);
+
+    const moveCursor = (e) => {
+      gsap.to(cursor, {
+        left: e.clientX,
+        top: e.clientY,
+        duration: 0.6,
+        ease: "power3.out",
+      });
+    };
+
+    window.addEventListener("mousemove", moveCursor);
+
     const ctx = gsap.context(() => {
       const timeline = gsap.timeline({
         scrollTrigger: {
@@ -27,7 +40,6 @@ const ChapterList = ({ data = [] }) => {
       for (let i = 0; i < data.length; i++) {
         const elemId = `#elem${i + 1}`;
 
-        // Animate in (skip for the first one since it's already visible)
         if (i > 0) {
           timeline.to(
             elemId,
@@ -40,7 +52,6 @@ const ChapterList = ({ data = [] }) => {
           );
         }
 
-        // Animate out if not the last one
         if (i < data.length - 1) {
           timeline.to(
             elemId,
@@ -54,18 +65,19 @@ const ChapterList = ({ data = [] }) => {
         }
       }
 
-      // Refresh after short delay
       setTimeout(() => ScrollTrigger.refresh(), 200);
     });
 
     return () => {
       ctx.revert();
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      window.removeEventListener("mousemove", moveCursor);
     };
   }, [data]);
 
   return (
     <div className={styles.lookbookWrapper}>
+      <div className={styles.cursorlookbook}>Explore</div>
       <div id="lookbookList" className={styles.lookbookList}>
         {data.map((item, index) => (
           <Link

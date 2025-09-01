@@ -34,7 +34,7 @@ const ProductSection = ({ data, sectionRef }) => {
   return (
     <div ref={sectionRef} id="shop">
       {/* Desktop → left and right separate */}
-      {!isMobile && <div className="product_left_section">{leftCard}</div>}
+      {!isMobile && <div className="product_left_section skeleton-loading">{leftCard}</div>}
 
       <div className="product_right_section">
         {/* Mobile → put left card here */}

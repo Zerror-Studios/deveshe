@@ -47,7 +47,7 @@ const ImageSectionThree = ({ leftData, rightData }) => {
   return (
     <div id="lb-section5">
       {leftData && (
-        <div className="lb-section5-ig-wrap parallex">
+        <div className="lb-section5-ig-wrap parallex skeleton-loading">
           <Image
             width={1000}
             height={1000}
@@ -57,8 +57,9 @@ const ImageSectionThree = ({ leftData, rightData }) => {
         </div>
       )}
       {rightData && (
-        <div className="lb-section5-ig-wrap scroll-section">
+        <div className="lb-section5-ig-wrap scroll-section ">
           <Image
+          className="skeleton-loading"
             width={1000}
             height={1000}
             src={rightData?.imageUrl || ""}
