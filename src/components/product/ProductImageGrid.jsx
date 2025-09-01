@@ -84,7 +84,7 @@ const ProductImageGrid = ({ assets = [], setSelectedAsset }) => {
           {assets &&
             assets?.map((item, index) => {
               return (
-                <SwiperSlide key={index}>
+                <SwiperSlide key={index} className="skeleton-loading">
                   <Image
                     onClick={() => setSelectedAsset(item)}
                     width={1000}

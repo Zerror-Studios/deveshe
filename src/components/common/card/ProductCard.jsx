@@ -4,8 +4,8 @@ import React from "react";
 
 const ProductCard = ({ href, src, name, price, alt }) => {
   return (
-    <Link href={href} className="common_product_card skeleton-loading">
-      <Image width={1000} height={1000} src={src} alt={alt} />
+    <Link href={href} className="common_product_card">
+      <Image className="skeleton-loading" width={1000} height={1000} src={src} alt={alt} />
       <div className="product_card_details">
         <h4>{name}</h4>
         <h4>{price}</h4>
