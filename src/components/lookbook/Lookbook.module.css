@@ -111,4 +111,7 @@
   .overlay3a .textContainer {
   width: 90%;
 }
+.cursorlookbook{
+  display: none;
+}
 }

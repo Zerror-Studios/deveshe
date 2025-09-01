@@ -82,7 +82,7 @@ const ChapterList = ({ data = [] }) => {
         {data.map((item, index) => (
           <Link
             href={`/lookbook/${item._id}`}
-            className={`${styles.elem} ${styles.elem1}`}
+            className={`${styles.elem} ${styles.elem1} skeleton-loading`}
             id={`elem${index + 1}`}
             key={item._id}
           >
