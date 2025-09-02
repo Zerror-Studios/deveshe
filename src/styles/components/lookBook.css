@@ -303,12 +303,7 @@
   .lb-sec4-img img,.parallex img {
     height: 100%;
   }
-  #lb-banner2 {
-    height: 100vh;
-  }
-  #main-banner-container{
-    height: 100vh;
-  }
+
   .lb-header-text h2 {
     font-size:8.5vw;
   }

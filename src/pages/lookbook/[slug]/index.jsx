@@ -11,6 +11,8 @@ import { GET_LOOKBOOK_BY_ID } from "@/graphql";
 import { createApolloClient } from "@/lib/apolloClient";
 
 const LookbookDetail = ({ meta, data }) => {
+  console.log(data);
+  
   return (
     <>
       <SeoHeader meta={meta} />

@@ -52,7 +52,7 @@ const ImageSectionThree = ({ leftData, rightData }) => {
             width={1000}
             height={1000}
             src={leftData?.imageUrl || ""}
-            alt=""
+            alt="image"
           />
         </div>
       )}
@@ -63,7 +63,7 @@ const ImageSectionThree = ({ leftData, rightData }) => {
             width={1000}
             height={1000}
             src={rightData?.imageUrl || ""}
-            alt=""
+            alt="image"
           />
         </div>
       )}
