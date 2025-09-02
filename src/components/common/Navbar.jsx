@@ -56,7 +56,7 @@ const Navbar = ({ openCart }) => {
         });
         gsap.set("#nav-btns svg", { stroke: "#000" });
         gsap.set("#nav-line", { backgroundColor: "#000" });
-        gsap.set(".logo", { position: "static" });
+        gsap.set(".logo", { position: "static",transform:"translate(0,0)" });
         gsap.set("#logo-container", { gap: "13px" });
         gsap.set(".hoverline", { backgroundColor: "#000" });
         gsap.set("#logo-container", { left: "2%" });
