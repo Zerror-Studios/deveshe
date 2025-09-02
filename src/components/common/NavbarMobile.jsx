@@ -105,7 +105,7 @@ const NavbarMobile = ({ openCart }) => {
   };
 
   useEffect(() => {
-    if (router.pathname !== "/") {
+    if (router.pathname !== "/" || window.location.hash === "#shop") {
       gsap.set(".navbar-mobile-wrap", {
         y: "0%",
         opacity: 1,
