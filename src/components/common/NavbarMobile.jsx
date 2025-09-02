@@ -8,6 +8,7 @@ import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Button from "./Button";
 import { useAuthStore } from "@/store/auth-store";
 import { useRouter } from "next/router";
+import CommonButton from "./CommonButton";
 gsap.registerPlugin(ScrollTrigger);
 
 const NavbarMobile = ({ openCart }) => {
@@ -144,6 +145,11 @@ const NavbarMobile = ({ openCart }) => {
       });
   }, [router.pathname]); // ✅ re-run if route changes
 
+  const handleLoginBtn = () => {
+    router.push("/login");
+    toggleMenu();
+  };
+
   return (
     <>
       <div className="navbar-mobile">
@@ -205,10 +211,8 @@ const NavbarMobile = ({ openCart }) => {
         <div id="side-navbar">
           <div className="side-menu-links">
             <div className="nav-top">
-              <Link href="/login" className="login-nav">
-                <Button className="_btn-width">Login / Signup</Button>
-              </Link>
-              <Link href="/">shop</Link>
+              <CommonButton title={"Login / Signup"} onClick={handleLoginBtn} />
+              <Link href="/#shop">shop</Link>
               <Link href="/lookbook">lookbook</Link>
               <Link href="/about">about</Link>
               <Link href="/contact">contact</Link>

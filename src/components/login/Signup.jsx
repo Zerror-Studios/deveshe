@@ -11,6 +11,7 @@ import { useAuthStore } from "@/store/auth-store";
 import { UserStatus } from "@/utils/Constant";
 import toast from "react-hot-toast";
 import "react-international-phone/style.css";
+import CommonButton from "../common/CommonButton";
 
 const SignupSchema = z
   .object({
@@ -77,10 +78,7 @@ const Signup = ({ setToggle }) => {
         <div className="login-inner">
           <div className="login-t">Sign Up</div>
 
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-3"
-          >
+          <form onSubmit={handleSubmit(onSubmit)} className="login-form">
             <div className="name-cont">
               <div className="half-inp-cont inp-rel">
                 <input
@@ -180,13 +178,7 @@ const Signup = ({ setToggle }) => {
               )}
             </div>
 
-            <button
-              type="submit"
-              className="login-btn flex-all"
-              disabled={loading}
-            >
-              {loading ? <div className="login-load" /> : "Signup"}
-            </button>
+            <CommonButton title={"Signup"} loading={loading} />
           </form>
 
           <div className="not-up">

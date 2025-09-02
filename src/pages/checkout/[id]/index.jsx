@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,7 +11,6 @@ import Heading from "@/components/checkout/Heading";
 import ContactDetail from "@/components/checkout/ContactDetail";
 import Delivery from "@/components/checkout/Delivery";
 import Shipping from "@/components/checkout/Shipping";
-// import Payment from "@/components/checkout/Payment";
 import BillingAddress from "@/components/checkout/BillingAddress";
 import OrderSummery from "@/components/checkout/OrderSummery";
 import { EmailSubscribedStatus } from "@/utils/Constant";
@@ -19,6 +18,8 @@ import Checkout from "nimbbl_sonic";
 import { useRouter } from "next/router";
 import { useAuthStore } from "@/store/auth-store";
 import Loader from "@/components/checkout/Loader";
+import gsap from "gsap";
+import CommonButton from "@/components/common/CommonButton";
 const CheckoutPage = ({ meta, initialCartData }) => {
   const router = useRouter();
   const [cartData, setCartData] = useState(initialCartData);
@@ -144,12 +145,31 @@ const CheckoutPage = ({ meta, initialCartData }) => {
       setIsLoading(false);
     }
   };
+  const leftRef = useRef(null);
+  const rightRef = useRef(null);
+
+  useEffect(() => {
+    const tl = gsap.timeline({
+      defaults: { duration: 0.8, ease: "power3.out" },
+    });
+
+    gsap.set([leftRef.current, rightRef.current], {
+      opacity: 0,
+      y: 100,
+    });
+
+    tl.to([leftRef.current, rightRef.current], {
+      opacity: 1,
+      y: 0,
+      duration: 1,
+    });
+  }, []);
 
   return (
     <>
       <SeoHeader meta={meta} />
       <div className="checkout-cont">
-        <div className="checkout-left">
+        <div className="checkout-left" ref={leftRef}>
           <Heading />
           <form onSubmit={handleSubmit(onSubmit)} className="checkout-main">
             <ContactDetail
@@ -165,23 +185,19 @@ const CheckoutPage = ({ meta, initialCartData }) => {
               setValue={setValue}
             />
             <Shipping />
-            {/* <Payment register={register} errors={errors} /> */}
             <BillingAddress
               register={register}
               setValue={setValue}
               control={control}
               errors={errors}
             />
-            <button
-              disabled={isLoading}
-              type="submit"
-              style={{ marginTop: "30px" }}
-            >
-              {isLoading ? "Loading..." : "Pay now"}
-            </button>
+            <CommonButton
+              title={"Pay now"}
+              loading={isLoading}
+            />
           </form>
         </div>
-        <div className="checkout-right">
+        <div className="checkout-right" ref={rightRef}>
           <OrderSummery cartData={cartData || {}} setCartData={setCartData} />
         </div>
       </div>

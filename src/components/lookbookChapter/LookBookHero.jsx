@@ -24,7 +24,6 @@ const splitText = (element) => {
   element.dataset.split = "true";
 };
 
-
 const LookBookHero = ({ title, subheading, description, asset }) => {
   const router = useRouter();
 
@@ -46,35 +45,38 @@ const LookBookHero = ({ title, subheading, description, asset }) => {
       texttl
         .to(headerImageRef.current, {
           y: 0,
-          duration: 1,
-          delay: 1,
-          ease: "power4.out",
+          duration: 0.8, // slightly slower for smoothness
+          delay: 0.8,
+          ease: "power3.out",
         })
         .to(pRef.current, {
           opacity: 1,
-          duration: 0.3,
-          ease: "power1.out",
+          duration: 0.5, // slower fade for smooth feel
+          ease: "power3.out",
+          delay: -0.2,
         })
         .to(h2Ref.current.querySelectorAll("span"), {
           rotateX: "0deg",
-          duration: 0.8,
-          stagger: 0.05,
-          ease: "bounce.out",
-        })
-        
+          duration: 1,
+          stagger: 0.08, // slightly larger stagger for fluidity
+          ease: "back.out(1.2)", // gentle overshoot
+          delay: -0.3,
+        });
 
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 1,
-        },
-      }).to(imgRef.current, {
-        scale: 1.2,
-        duration: 1,
-        ease: "none",
-      });
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 1,
+          },
+        })
+        .to(imgRef.current, {
+          scale: 1.2,
+          duration: 1,
+          ease: "none",
+        });
     }, sectionRef);
 
     return () => ctx.revert(); // cleanup

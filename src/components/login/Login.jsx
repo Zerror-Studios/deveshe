@@ -8,6 +8,7 @@ import { useLazyQuery } from "@apollo/client";
 import { LOGIN_USER } from "@/graphql";
 import toast from "react-hot-toast";
 import { useAuthStore } from "@/store/auth-store";
+import CommonButton from "../common/CommonButton";
 
 // Schema validation
 const LoginSchema = z.object({
@@ -68,7 +69,7 @@ const Login = ({ setToggle }) => {
               {...register("email")}
             />
             {errors?.email && (
-              <div className="error">{errors?.email?.message || ""}</div>
+              <div className="error-p">{errors?.email?.message || ""}</div>
             )}
           </div>
 
@@ -86,17 +87,10 @@ const Login = ({ setToggle }) => {
               {...register("password")}
             />
             {errors?.password && (
-              <div className="error">{errors?.password?.message || ""}</div>
+              <div className="error-p">{errors?.password?.message || ""}</div>
             )}
           </div>
-
-          <button
-            type="submit"
-            className="login-btn flex-all"
-            disabled={loading}
-          >
-            {loading ? <div className="login-load"></div> : "Login"}
-          </button>
+          <CommonButton title={"Login"} loading={loading} />
         </form>
 
         <div className="not-up">

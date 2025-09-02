@@ -53,6 +53,10 @@
   flex-wrap: wrap;
   justify-content: space-between;
 }
+#contact_form #right form #common_black_btn{
+  margin-top: 30px;
+  max-width: 100%;
+}
 #contact_form #right form .input {
   width: 49%;
   margin-bottom: 30px;
@@ -174,6 +178,10 @@
 }
 #contact_form #submit-btn:hover{
   font-weight: 600;
+}
+#contact_form,
+.animate-item {
+  opacity: 0;
 }
 
 

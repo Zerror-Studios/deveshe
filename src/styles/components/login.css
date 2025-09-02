@@ -50,6 +50,10 @@
 .login-form{
   margin-bottom: 10px;
 }
+.login-form #common_black_btn{
+  max-width: 100%;
+  margin-top: 30px;
+}
 .login-right-cont {
   width: 40%;
   transition: all 0.5s ease;

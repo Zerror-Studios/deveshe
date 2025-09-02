@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { htmlParser } from "@/utils/Util";
 import { Const, StockStatus } from "@/utils/Constant";
+import gsap from "gsap";
 
 const ProductContent = ({
   data = {},
@@ -71,9 +72,30 @@ const ProductContent = ({
     updatePriceBasedOnVariant(updated);
   };
 
+  const wrapperRef = useRef(null);
+
+  useEffect(() => {
+    if (!wrapperRef.current) return;
+
+
+    // Hide everything initially
+    gsap.set(wrapperRef.current, { opacity: 0, y: 30 });
+
+    const tl = gsap.timeline({
+      defaults: { duration: 0.8, ease: "power3.out" },
+    });
+
+    // Animate the wrapper
+    tl.fromTo(
+      wrapperRef.current,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 1 }
+    );
+  }, [data]);
+
   if (!data) return null;
   return (
-    <div className="ProductDets_text_wrapper">
+    <div className="ProductDets_text_wrapper" ref={wrapperRef}>
       <div className="ProductDets_blank-div">
         <div className="ProductDets_text-container">
           <div className="ProductDets_text_container_resp">

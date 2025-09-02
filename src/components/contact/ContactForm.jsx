@@ -6,6 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client";
 import { CREATE_CONTACT_FORM } from "@/graphql";
+import CommonButton from "../common/CommonButton";
 
 // Contact Form Validation
 const contactSchema = z.object({
@@ -178,9 +179,7 @@ const ContactForm = () => {
             )}
           </div>
 
-          <button type="submit" id="submit-btn" disabled={loading}>
-            {loading ? "Submitting..." : "Submit"}
-          </button>
+          <CommonButton title={"Submit"} loading={loading} />
         </form>
       </div>
     </div>

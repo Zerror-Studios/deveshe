@@ -42,6 +42,10 @@ a {
 .checkout-main {
   position: relative;
 }
+.checkout-main #common_black_btn{
+  margin-top: 30px;
+  max-width: 100%;
+}
 .checkout-main form {
   display: flex;
   flex-direction: column;
