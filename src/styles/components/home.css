@@ -298,8 +298,8 @@
   color: red;
 }
 .explore_strip1 {
-  width: 14.5vw;
-  height: auto;
+  width: auto;
+  height: 140vh;
   object-fit: cover;
   position: absolute;
   left: -4%;
@@ -307,8 +307,8 @@
   transform: rotate(-25deg);
 }
 .explore_strip2 {
-  width: 14.5vw;
-  height: auto;
+  width: auto;
+  height: 140vh;
   object-fit: cover;
   position: absolute;
   right: -4%;

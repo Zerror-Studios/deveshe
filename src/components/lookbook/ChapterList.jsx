@@ -10,21 +10,81 @@ gsap.registerPlugin(ScrollTrigger);
 
 const ChapterList = ({ data = [] }) => {
   useEffect(() => {
-    if (!data || data.length === 0) return;
+    if (!data) return;
 
     const cursor = document.querySelector(`.${styles.cursorlookbook}`);
+    const wrapper = document.querySelector(`.${styles.lookbookWrapper}`);
+    const cursorInner = cursor.querySelector(`.${styles.cursorInner}`);
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let prevX = 0;
+    let prevY = 0;
 
     const moveCursor = (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
       gsap.to(cursor, {
-        left: e.clientX,
-        top: e.clientY,
-        duration: 0.6,
+        opacity: 1,
+        width: "70px",
+        height: "70px",
+        duration: 0.2,
+        color: "black",
         ease: "power3.out",
       });
     };
 
-    window.addEventListener("mousemove", moveCursor);
+    const leaveCursor = () => {
+      gsap.to(cursor, {
+        opacity: 0,
+        width: 0,
+        height: 0,
+        color: "white",
+        duration: 0.2,
+        ease: "power3.out",
+      });
+    };
 
+    const render = () => {
+      const dx = mouseX - prevX;
+      const dy = mouseY - prevY;
+
+      prevX += dx * 0.2;
+      prevY += dy * 0.2;
+
+      const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+      const dist = Math.min(Math.sqrt(dx * dx + dy * dy) * 0.15, 10);
+
+      gsap.set(cursor, {
+        left: prevX,
+        top: prevY,
+        scaleX: 1 + dist / 60,
+        scaleY: 1 - dist / 50,
+        transformOrigin: "center",
+      });
+
+      if (cursorInner) {
+        gsap.set(cursorInner, { rotation: -angle });
+      }
+
+      requestAnimationFrame(render);
+    };
+
+    // 👉 attach listeners only to wrapper
+    wrapper.addEventListener("mousemove", moveCursor);
+    wrapper.addEventListener("mouseleave", leaveCursor);
+
+    render();
+
+    return () => {
+      wrapper.removeEventListener("mousemove", moveCursor);
+      wrapper.removeEventListener("mouseleave", leaveCursor);
+    };
+  }, [data]);
+
+  useEffect(() => {
+    if (!data || data.length === 0) return;
     const ctx = gsap.context(() => {
       const timeline = gsap.timeline({
         scrollTrigger: {
@@ -71,7 +131,6 @@ const ChapterList = ({ data = [] }) => {
     return () => {
       ctx.revert();
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-      window.removeEventListener("mousemove", moveCursor);
     };
   }, [data]);
 
