@@ -197,7 +197,7 @@
   will-change: transform;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 1000px) {
   #nav {
     display: none;
   }

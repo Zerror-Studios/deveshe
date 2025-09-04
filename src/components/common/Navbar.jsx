@@ -14,7 +14,7 @@ const Navbar = ({ openCart }) => {
   const [percent, setPercent] = useState(0);
 
   useEffect(() => {
-    if (window.innerWidth < 576) return;
+    if (window.innerWidth < 1000) return;
 
     const init = async () => {
       const logos = document.querySelectorAll(".logo");
