@@ -32,7 +32,7 @@
   font-weight: 400;
   font-size: 14px;
   margin-bottom: 5px;
-  letter-spacing: .3px;
+  letter-spacing: 0.3px;
 }
 .footer_link_wrap a {
   position: relative;
@@ -42,8 +42,8 @@
   line-height: 1.35;
   margin-top: 4px;
 }
-.footer_link_wrap a::before{
-  content: '';
+.footer_link_wrap a::before {
+  content: "";
   position: absolute;
   width: 4px;
   height: 4px;
@@ -53,9 +53,9 @@
   top: 50%;
   transform: translateY(-50%);
   opacity: 0;
-  transition: all ease .3s;
+  transition: all ease 0.3s;
 }
-.footer_link_wrap a:hover:before{
+.footer_link_wrap a:hover:before {
   left: -12px;
   opacity: 1;
 }
@@ -98,14 +98,12 @@
   transform-origin: left;
 }
 
-
-
-@media (max-width:576px) {
-  #footer{
+@media (max-width: 576px) {
+  #footer {
     gap: 40px;
-    padding:30px 20px;
+    padding: 30px 20px;
   }
-  #footer_top{
+  #footer_top {
     flex-direction: column;
     gap: 15px;
   }
@@ -114,17 +112,48 @@
     flex-wrap: wrap;
     gap: 0;
   }
-  .footer_link_wrap{
+  .footer_link_wrap {
     width: 50%;
     max-width: 50%;
     margin-bottom: 25px;
   }
-  #footer_bottom{
+  #footer_bottom {
     text-align: left;
     align-items: flex-start;
   }
-  #footer_btn{
+  #footer_btn {
     width: 100%;
   }
+}
 
+/* Tablets (portrait) */
+@media (min-width: 577px) and (max-width: 768px) {
+  #footer {
+    padding: 25px;
+  }
+  #footer_links {
+    flex-wrap: wrap;
+  }
+  .footer_link_wrap {
+    width: 45%;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 890px) {
+  #contact_form #address {
+    height: auto;
+    flex-direction: column;
+    gap: 2vw;
+  }
+  #contact_form #address .elem {
+    width: 100%;
+}
+  #contact_form .elem-lf h5 {
+    width: 50%;
+  }
+}
+@media (min-width: 769px) and (max-width: 992px) {
+  #footer {
+    padding: 25px;
+  }
 }

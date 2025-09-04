@@ -53,7 +53,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
 }
-#contact_form #right form #common_black_btn{
+#contact_form #right form #common_black_btn {
   margin-top: 30px;
   max-width: 100%;
 }
@@ -153,9 +153,10 @@
   font-size: 14px;
   font-family: heading;
   font-weight: 400;
-  letter-spacing: .3px;
+  letter-spacing: 0.3px;
 }
-#contact_form .elem .add h5,#contact_form .elem .add a {
+#contact_form .elem .add h5,
+#contact_form .elem .add a {
   text-decoration: none;
   display: block;
   font-size: 14px;
@@ -168,7 +169,7 @@
   background-color: black;
   color: white !important;
   transition: all ease 0.3s;
-  font-size:14px;
+  font-size: 14px;
   font-family: paragraph;
   border: none;
   outline: none;
@@ -176,14 +177,13 @@
   margin-top: 30px;
   cursor: pointer;
 }
-#contact_form #submit-btn:hover{
+#contact_form #submit-btn:hover {
   font-weight: 600;
 }
 #contact_form,
 .animate-item {
   opacity: 0;
 }
-
 
 @media (max-width: 576px) {
   #contact_form {
@@ -203,7 +203,7 @@
     width: 100%;
     height: 30vh;
     margin-top: -10vw;
-}
+  }
   #contact_form #address {
     flex-direction: column;
     height: auto;
@@ -232,7 +232,65 @@
   #contact_form #right form input {
     padding: 3vw 0;
   }
-
 }
+
+/* Tablets (portrait) */
+@media (min-width: 577px) and (max-width: 768px) {
+    #contact_form {
+    height: auto;
+    min-height: 100vh;
+    padding: 150px 25px 80px;
+    gap: 10vw;
+  }
+  #contact_form #left {
+    display: none;
+  }
+  #contact_form #right {
+    width: 100%;
+  }
+  .phone_container {
+    position: static;
+    width: 100%;
+    height: 30vh;
+    margin-top: -10vw;
+  }
+  #contact_form #address {
+    flex-direction: column;
+    height: auto;
+    gap: 7vw;
+  }
+  #contact_form #address .elem {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+  }
+  #contact_form .elem-lf h5 {
+    width: 80%;
+  }
+  #contact_form .elem .add {
+    width: 45%;
+    font-size: 12px;
+  }
+
+  #contact_form #right form .textarea.active h6 {
+    font-size: 12px;
+  }
+  #contact_form #right form .input.active h6 {
+    font-size: 12px;
+  }
+  #contact_form #right form input {
+    padding: 3vw 0;
+  }
+}
+
+/* Tablets (landscape) / Small laptops */
+@media (min-width: 769px) and (max-width: 992px) {
+}
+
+/* Desktops */
+@media (min-width: 993px) and (max-width: 1200px) {
+}
+
+
 
 /* contact css end */

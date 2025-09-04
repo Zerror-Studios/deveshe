@@ -47,10 +47,10 @@
   height: 200%;
   transform: translateX(-50%);
 }
-.login-form{
+.login-form {
   margin-bottom: 10px;
 }
-.login-form #common_black_btn{
+.login-form #common_black_btn {
   max-width: 100%;
   margin-top: 30px;
 }
@@ -75,9 +75,9 @@
 }
 
 .left-two {
-	height: 50%;
-	width: 100%;
-	background-color:#FADCDE ;
+  height: 50%;
+  width: 100%;
+  background-color: #fadcde;
 }
 
 .login-inner {
@@ -235,22 +235,23 @@
 }
 
 .half-inp {
-	width: 100%;
-	height: 30px;
-	border: none;
-	border-bottom: 1px solid rgba(0, 0, 0, .3);
-	outline: none;
-	margin: 10px 0px;
-	padding: 0 5px;
-	background-color: transparent;
+  width: 100%;
+  height: 30px;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  outline: none;
+  margin: 10px 0px;
+  padding: 0 5px;
+  background-color: transparent;
 }
-.react-international-phone-input-container .react-international-phone-input{
-	background-color: transparent !important;
+.react-international-phone-input-container .react-international-phone-input {
+  background-color: transparent !important;
 }
-.react-international-phone-input-container .react-international-phone-country-selector-button {
-	background-color: transparent !important;
-	border: none !important;
-	border-bottom: 1px solid rgba(0, 0, 0, .3) !important;
+.react-international-phone-input-container
+  .react-international-phone-country-selector-button {
+  background-color: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3) !important;
 }
 
 .login-left-cont .login-inp {
@@ -293,7 +294,6 @@
   position: relative;
   font-family: paragraph;
 }
-
 .error-p {
   position: absolute;
   left: 0px;
@@ -302,33 +302,12 @@
   font-size: 11px;
   font-family: paragraph;
 }
-
-.error {
-  color: red;
-  margin-top: -20px;
-  font-size: 11px;
-  font-family: paragraph;
-
-}
-
-.login-error {
-  color: red;
-  text-align: center;
-  margin-top: 8px;
-  margin-bottom: 15px;
-  font-size: 11px;
-  font-family: paragraph;
-
-}
-
 .phone-error {
   bottom: -19px;
 }
-
 .gender-err {
   bottom: -18px;
 }
-
 .inp-cont {
   width: 100%;
   height: 40px;
@@ -356,15 +335,6 @@
   border: none;
   outline: none;
   font-size: 15px;
-}
-
-.login-load {
-  border: 3px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  border-top: 3px solid rgba(255, 255, 255, 1);
-  width: 25px;
-  height: 25px;
-  animation: spin 2s linear infinite;
 }
 
 .react-tel-input .form-control {
@@ -445,22 +415,6 @@
 .react-tel-input .flag-dropdown.open {
   z-index: 2;
 }
-.login-load {
-  border: 3px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  border-top: 3px solid rgba(255, 255, 255, 1);
-  width: 25px;
-  height: 25px;
-  animation: spin 2s linear infinite;
-}
-.loader-btn {
-  border: 3px solid rgba(0, 0, 0, 0.2);
-  border-radius: 50%;
-  border-top: 3px solid rgba(0, 0, 0, 1);
-  width: 25px;
-  height: 25px;
-  animation: spin 1s linear infinite;
-}
 
 @media (max-width: 576px) {
   .login-left-cont {
@@ -474,8 +428,38 @@
   }
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+/* Tablets (portrait) */
+@media (min-width: 577px) and (max-width: 768px) {
+  .login-left-cont {
+    display: none;
+  }
+  .login-right-cont {
+    width: 100%;
+  }
+  .login-inner {
+    width: 65%;
+  }
+}
+
+/* Tablets (landscape) / Small laptops */
+@media (min-width: 769px) and (max-width: 992px) {
+  .login-left-cont {
+    width: 45%;
+  }
+  .login-right-cont {
+    width: 55%;
+  }
+   .login-inner {
+    width: 75%;
+  }
+}
+
+/* Desktops */
+@media (min-width: 993px) and (max-width: 1200px) {
+    .login-left-cont {
+    width: 50%;
+  }
+  .login-right-cont {
+    width: 50%;
   }
 }

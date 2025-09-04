@@ -44,8 +44,8 @@
   opacity: 0;
   margin-bottom: 1vw;
 }
-.word{
-   display: inline-block; 
+.word {
+  display: inline-block;
   white-space: nowrap;
 }
 .lb-header-image {
@@ -297,30 +297,34 @@
   padding-top: 5px;
 }
 @media (max-width: 576px) {
-  #lb-section3-ig img{
+  #lb-section3-ig img {
     height: 100%;
   }
-  .lb-sec4-img img,.parallex img {
+  .lb-sec4-img img,
+  .parallex img {
     height: 100%;
   }
 
   .lb-header-text h2 {
-    font-size:8.5vw;
+    font-size: 8.5vw;
   }
   .lb-header-wrapper {
     height: 38vh;
-}
+  }
   .lb-header-text p {
     font-size: 5vw;
     margin-bottom: 5vw;
   }
+  #lb-video-container {
+    height: 80vh;
+  }
   #lb-text-container {
     width: 100%;
-    font-size: 7vw;
-    padding: 5rem 20px;
+    font-size: 6vw;
+    padding: 4rem 20px;
   }
   #main-banner-text p {
-    font-size: 7vw;
+    font-size: 6vw;
   }
   #prodcut-container {
     width: 100%;
@@ -376,4 +380,97 @@
     display: flex !important;
     gap: 0;
   }
+}
+
+/* Tablets (portrait) */
+@media (min-width: 445px) and (max-width: 576px) {
+  #lb-text-container {
+    width: 100%;
+    font-size: 4.5vw;
+    padding: 4rem 20px;
+  }
+  #main-banner-text p {
+    font-size: 4.5vw;
+  }
+}
+
+/* Tablets (portrait) */
+@media (min-width: 577px) and (max-width: 768px) {
+  #lb-text-container {
+    width: 100%;
+    font-size: 3.5vw;
+    padding: 4rem 25px;
+  }
+  #main-banner-text p {
+    font-size: 3.5vw;
+  }
+  #prodcut-container {
+    padding: 0 25px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  #main-banner-text {
+    width: 80%;
+  }
+  #lb-section3 {
+    padding: 25px;
+  }
+  #lb-section3-ig {
+    width: 80vw;
+    height: 38rem;
+  }
+  #lb-section4 {
+    padding: 0 25px;
+    flex-direction: column;
+    gap: 25px;
+  }
+  .lb-sec4-img {
+    width: 100%;
+    height: 50vh;
+  }
+  #lb-section5 {
+    padding: 10vh 25px;
+  }
+  .parallex {
+    height: 65vh;
+  }
+  .lb-header-wrapper {
+    height: 46vh;
+  }
+}
+
+/* Tablets (landscape) / Small laptops */
+@media (min-width: 769px) and (max-width: 992px) {
+  #lb-text-container {
+    padding: 5rem 10rem;
+  }
+  #prodcut-container {
+    padding: 0 25px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .common_product_card {
+    height: 395px;
+  }
+  #main-banner-text {
+    width: 50%;
+  }
+  #lb-section3-ig {
+    width: 60vw;
+    height: 45rem;
+  }
+  #lb-section4 {
+    padding: 0 25px;
+  }
+  .lb-sec4-img  {
+    height: 45vh;
+  }
+  .parallex{
+    height: 78vh;
+  }
+  .lb-header-wrapper {
+    height: 50vh;
+  }
+}
+
+/* Desktops */
+@media (min-width: 993px) and (max-width: 1200px) {
 }
