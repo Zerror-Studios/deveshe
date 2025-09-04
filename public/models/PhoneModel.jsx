@@ -10,7 +10,7 @@ export default function PhoneModel(props) {
 
   // detect mobile screen
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 576);
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);

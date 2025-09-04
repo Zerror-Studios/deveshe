@@ -12,7 +12,7 @@ const ProductImageGrid = ({ assets = [], setSelectedAsset }) => {
 
   // detect mobile screen
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 576);
+    const checkMobile = () => setIsMobile(window.innerWidth <= 1000);
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);

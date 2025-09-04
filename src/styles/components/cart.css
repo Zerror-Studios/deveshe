@@ -214,3 +214,25 @@
     height: 280px !important;
   }
 }
+
+/* Tablets (portrait) */
+@media (min-width: 577px) and (max-width: 768px) {
+  #drawer{
+    width: 80%;
+  }
+}
+
+/* Tablets (landscape) / Small laptops */
+@media (min-width: 769px) and (max-width: 992px) {
+    #drawer{
+    width: 65%;
+  }
+}
+
+/* Desktops */
+@media (min-width: 993px) and (max-width: 1200px) {
+   #drawer{
+    width: 55%;
+  }
+}
+

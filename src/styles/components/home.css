@@ -381,7 +381,7 @@
   width: 25%;
   height: auto;
   object-fit: cover;
-  z-index: 9;
+  z-index: 8;
 }
 .vision_text {
   width: 100%;
@@ -891,3 +891,307 @@
     text-align: center;
   }
 }
+
+/* Tablets (portrait) */
+@media (min-width: 577px) and (max-width: 768px) {
+    .review_title_slide {
+    display: none;
+  }
+  .review_title_large {
+    display: none;
+  }
+  .review_slide {
+    top: 0;
+    width: 100%;
+    height: auto;
+    padding-top: calc(10rem * 1.25);
+  }
+  .review_title_mobile {
+    display: block;
+  }
+  #vision_section img {
+    display: none;
+  }
+  #home_hero {
+    height: 145vh;
+  }
+  #hero_container {
+    padding: 0 3vw 15vw;
+    background-color: rgba(0, 0, 0, 0.17);
+    gap: 5vw;
+  }
+  #hero_container .text_container {
+    width: 100%;
+    position: static;
+    text-align: center;
+    height: 138vh;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .text_container_wrap {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: sticky;
+    bottom: 10px;
+  }
+  #hero_container .text_container p {
+    font-size: 4vw;
+    line-height: 1.4;
+  }
+  #hero_container .text_container h3 {
+    font-size: 4vw;
+    line-height: 1.4;
+  }
+  .polaroid_container {
+    width: 100%;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    gap: 0;
+  }
+  .polaroid_container .polaroid_card:nth-child(1) {
+    transform: translateX(100px) scale(0.8) rotate(-15deg);
+    width: 30vw;
+  }
+  .polaroid_container .polaroid_card {
+    width: 35vw;
+    padding: 2vw;
+  }
+  .polaroid_container .polaroid_img {
+    height: 25vw;
+  }
+  .polaroid_container .polaroid_card p {
+    font-size: 2vw;
+    margin-top: 2vw;
+  }
+
+  #explore_section {
+    min-height: 100vh;
+    padding: 20vw 3vw;
+    padding-top: 50vw;
+  }
+
+  .explore_text_container h2 {
+    font-size: 9vw;
+  }
+  .explore_text_container::before {
+    left: -10%;
+    top: 5%;
+    width: 20px;
+    height: 20px;
+  }
+  .explore_text_container::after {
+    right: -10%;
+    top: 0;
+    width: 20px;
+    height: 20px;
+  }
+  .explore_polaroid_container {
+    justify-content: center;
+    margin-top: 15vw;
+  }
+  .explore_side_card {
+    display: none;
+  }
+  .explore_center_card {
+    width: 40%;
+    padding: 5vw;
+    transform: rotate(10deg);
+  }
+  .explore_center_card img {
+    height: 32vw;
+  }
+  .explore_center_card p {
+    font-size: 2vw;
+    margin-top: 2vw;
+  }
+
+  .explore_inspired_container {
+    margin-top: 16vw;
+  }
+  .explore_inspired_container h5 {
+    font-size: 5vw;
+  }
+
+  .explore_inspired_container h3 {
+    font-size: 8vw;
+    margin: 7vw 0 10vw;
+  }
+  .explore_strip1 {
+    width: 16vw;
+    height: auto;
+    object-fit: cover;
+    position: absolute;
+    left: -4%;
+    bottom: -7vw;
+    transform: rotate(-25deg);
+  }
+  .explore_strip2 {
+    width: 16vw;
+    height: auto;
+    object-fit: cover;
+    position: absolute;
+    right: -4%;
+    bottom: -7vw;
+    transform: rotate(25deg);
+  }
+  .explore_inspired_container::before {
+    left: 15%;
+    top: 5%;
+    width: 20px;
+    height: 20px;
+  }
+  .explore_inspired_container::after {
+    right: 15%;
+    top: 0;
+    width: 20px;
+    height: 20px;
+  }
+  .explore_inspired_button {
+    font-size: 5vw;
+  }
+  .inspired_button_wrap {
+    height: 5vw;
+  }
+  .inspired_button_wrap h4 {
+    font-size: 5vw;
+  }
+
+  #shop {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .product_left_section {
+    position: static;
+    width: 50%;
+    height: auto;
+    overflow: hidden;
+    border: none;
+  }
+  .product_right_section {
+    width: 100%;
+    border: none;
+  }
+
+  .common_product_card {
+    border: none !important;
+    display: flex;
+    flex-direction: column;
+  }
+  .common_product_card .product_card_details {
+    position: static;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 4vw;
+    padding-top: 2vw;
+  }
+  .common_product_card .product_card_details h4:nth-child(1) {
+    font-family: heading;
+    font-size: 16px;
+  }
+  .common_product_card .product_card_details h4:nth-child(2) {
+    font-size: 12px;
+    color: #767676;
+  }
+  #vision_section {
+    padding: 20vw 20px;
+    background: none;
+    background-image: none;
+  }
+  .vision_text h2 {
+    font-size: 9vw;
+    text-align: center;
+  }
+  .vision_text::before {
+    left: 15%;
+    top: 5%;
+    width: 20px;
+    height: 20px;
+  }
+  .vision_text::after {
+    right: 15%;
+    top: 0;
+    width: 20px;
+    height: 20px;
+  }
+  #vision_section {
+    gap: 45px;
+  }
+  .vision_text2 {
+    width: 100%;
+  }
+  .vision_text2 h6 {
+    font-size: 4vw;
+  }
+  .vision_text2 p {
+    font-size: 4vw;
+    margin-bottom: 4vw;
+  }
+
+  .review_card {
+    width: 70%;
+    height: auto;
+    border-radius: 40px;
+  }
+  .tweet-body {
+    margin: 18px 0 16px;
+    font-size: 2.5vw;
+  }
+  .tweet-footer {
+    font-size: 12px;
+  }
+  .tweet-footer span,
+  .tweet-footer a {
+    white-space: nowrap;
+  }
+  .author .handle {
+    font-size: 13px;
+  }
+  .tweet-card {
+    padding: 25px;
+  }
+  #review_section {
+    width: 100%;
+    padding: 0 20px;
+    padding-bottom: calc(6rem * 1.25);
+  }
+  .author .name {
+    font-size: 18px;
+  }
+  .tweet-header .avatar {
+    width: 50px;
+    height: 50px;
+  }
+  .tweet-header {
+    gap: 15px;
+  }
+  .review_title {
+    top: 23%;
+    font-size: 8.5vw;
+    text-align: center;
+  }
+}
+
+/* Tablets (landscape) / Small laptops */
+@media (min-width: 769px) and (max-width: 992px) {
+  .explore_center_card img {
+    height: 30vh;
+  }
+  .explore_strip1 ,.explore_strip2{
+    height: 95vh;
+  }
+  .review_card{
+    width: 50vw;
+    height: auto;
+    padding: 2vw 0;
+  }
+}
+
+/* Desktops */
+@media (min-width: 993px) and (max-width: 1200px) {
+}
+

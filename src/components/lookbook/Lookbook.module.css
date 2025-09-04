@@ -101,19 +101,51 @@
   border-radius: 50%;
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: .8px;
+  letter-spacing: 0.8px;
   font-family: paragraph;
 }
 
-
-@media (max-width: 576px){
-  .overlay3a{
+@media (max-width: 576px) {
+  .overlay3a {
     padding: 20px;
   }
   .overlay3a .textContainer {
-  width: 90%;
+    width: 90%;
+  }
+  .cursorlookbook {
+    display: none;
+  }
 }
-.cursorlookbook{
-  display: none;
+
+/* Tablets (portrait) */
+@media (min-width: 577px) and (max-width: 768px) {
+  .overlay3a {
+    padding: 30px;
+  }
+  .overlay3a .textContainer {
+    width: 70%;
+  }
+  .cursorlookbook {
+    display: none;
+  }
 }
+
+/* Tablets (landscape) / Small laptops */
+@media (min-width: 769px) and (max-width: 992px) {
+  .overlay3a {
+    padding: 30px;
+  }
+  .overlay3a .textContainer {
+    width: 65%;
+  }
+}
+
+/* Desktops */
+@media (min-width: 993px) and (max-width: 1200px) {
+  .overlay3a {
+    padding: 30px;
+  }
+  .overlay3a .textContainer {
+    width: 48%;
+  }
 }

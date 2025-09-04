@@ -962,7 +962,7 @@
   position: relative;
   overflow: hidden;
 }
-#founder_section >img {
+#founder_section > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1035,7 +1035,7 @@
   #founder_section .founder_overlay {
     padding: 100px 0;
   }
-  .social_card_container .social_card img{
+  .social_card_container .social_card img {
     height: 25vh;
   }
   #founder_title h2 {
@@ -1078,10 +1078,10 @@
     height: auto;
     position: relative;
   }
-      .our_journey_vertical {
-        width: 67%;
-        bottom: -200vh;
-    }
+  .our_journey_vertical {
+    width: 67%;
+    bottom: -200vh;
+  }
   .journey_text {
     position: static;
     width: 100%;
@@ -1174,10 +1174,190 @@
   .porcess_content p {
     font-size: 5vw;
   }
-  .process_card{
+  .process_card {
     width: 80%;
   }
   .process_card p {
     font-size: 3.5vw;
+  }
+}
+
+/* Tablets (portrait) */
+@media (min-width: 576px) and (max-width: 768px) {
+    #founder_section {
+    height: 160vh;
+  }
+
+  #founder_section .founder_overlay {
+    padding: 100px 0;
+  }
+  .social_card_container .social_card img {
+    height: 50vh;
+  }
+  #founder_title h2 {
+    font-size: 9vw;
+  }
+  .social_card_container .social_card {
+    width: 48%;
+    padding: 2vw;
+  }
+  .social_card_container .social_card a {
+    font-size: 3.5vw;
+    margin-top: 2vw;
+  }
+  .faq_content_left {
+    display: none;
+  }
+  .faq_content_right {
+    width: 100%;
+  }
+  #faq_section h2 {
+    font-size: 9vw;
+  }
+  #faq_content {
+    width: 100%;
+  }
+  #faq_section {
+    padding: 15vw 20px;
+    gap: 12vw;
+  }
+  .accordion-css__item-h3 {
+    text-align: left;
+    font-size: 3.5vw;
+  }
+  .rainbox-sides {
+    display: none;
+  }
+
+  #our_journey {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .our_journey_vertical {
+        width: 65%;
+        bottom: -310vh;
+        height: 400vh !important;
+    }
+  .journey_text {
+    position: static;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20vw;
+    padding: 20vw 0 45vw;
+  }
+  .journey_top {
+    width: 100%;
+    height: auto;
+  }
+  .journey_text h2 {
+    font-size: 9vw;
+    line-height: 1;
+  }
+  .chat-cloud p {
+    font-size: 2vw;
+  }
+  .sun {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+  .joruney_wrap {
+    width: 100%;
+    flex-direction: column;
+    padding: 0 20px;
+    gap: 4rem;
+  }
+  .joruney_wrap h4 {
+    font-size: 4vw;
+    margin-bottom: 2vw;
+  }
+  .joruney_wrap p {
+    font-size: 4vw;
+  }
+  .joruney_wrap .text_container {
+    width: 100%;
+  }
+  .joruney_wrap .img_container {
+    width: 100%;
+    margin-right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .joruney_wrap .img_container img:nth-child(1) {
+    width: 35%;
+    margin-right: -20%;
+  }
+  .joruney_wrap .img_container img:nth-child(2) {
+    width: 28%;
+        left: 14%;
+        bottom: -35%;
+  }
+  #our_process {
+    padding: 20px;
+    padding-bottom: 20vh;
+    position: relative;
+    overflow: hidden;
+  }
+  .process_svg {
+    height: 35vh;
+    bottom: -5vh;
+    /* display: none; */
+  }
+  .ranbow-vertical__1-svg {
+    width: 16em;
+    height: 100%;
+  }
+
+  .process_container {
+    flex-direction: column;
+    gap: 4rem;
+  }
+  .process_strip:nth-child(1) {
+    position: static;
+  }
+  .process_strip {
+    width: 100%;
+    padding-top: 0 !important;
+    align-items: center;
+  }
+  .porcess_content h4 {
+    font-size: 4vw;
+    margin-bottom: 2vw;
+  }
+  .porcess_content p {
+    font-size: 4vw;
+  }
+  .process_card {
+    width: 70%;
+  }
+  .process_card p {
+    font-size: 3.5vw;
+  }
+}
+
+/* Tablets (landscape) / Small laptops */
+@media (min-width: 768px) and (max-width: 992px) {
+  .process_svg {
+    bottom: -36vh;
+  }
+  .ranbow-vertical__1-svg {
+    width: 15em;
+  }
+  .social_card_container .social_card img{
+    height: 60vh;
+  }
+}
+
+/* Desktops */
+@media (min-width: 992px) and (max-width: 1286px) {
+    .process_svg {
+    bottom: -30vh;
+  }
+    .ranbow-vertical__1-svg {
+    width: 20em;
   }
 }

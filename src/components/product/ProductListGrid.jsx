@@ -28,7 +28,7 @@ const ProductListGrid = ({
   }, []);
 
   useLayoutEffect(() => {
-    if (window.innerWidth < 576) return;
+    if (window.innerWidth < 1000) return;
 
     let ctx = gsap.context(() => {
       const tl = gsap.timeline({
