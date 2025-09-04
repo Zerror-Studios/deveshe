@@ -39,12 +39,12 @@
   height: 70px;
 }
 
-#status_section #common_black_btn{
+#status_section #common_black_btn {
   margin-top: 1rem;
 }
 
 @media (max-width: 576px) {
-  #status_section{
+  #status_section {
     padding: 20px;
   }
   #status_section h2 {
@@ -62,5 +62,26 @@
   }
   #status_section .fail_gif {
     height: 55px;
+  }
+}
+
+/* Tablets (portrait) */
+@media (min-width: 577px) and (max-width: 768px) {
+  #status_section p {
+    width: 60%;
+  }
+}
+
+/* Tablets (landscape) / Small laptops */
+@media (min-width: 769px) and (max-width: 992px) {
+  #status_section p {
+    width: 50%;
+  }
+}
+
+/* Desktops */
+@media (min-width: 993px) and (max-width: 1200px) {
+  #status_section p {
+    width: 45%;
   }
 }

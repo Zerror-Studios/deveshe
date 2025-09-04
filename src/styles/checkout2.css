@@ -42,7 +42,7 @@ a {
 .checkout-main {
   position: relative;
 }
-.checkout-main #common_black_btn{
+.checkout-main #common_black_btn {
   margin-top: 30px;
   max-width: 100%;
 }
@@ -833,7 +833,7 @@ input:focus {
   overflow: hidden;
   flex-shrink: 0;
 }
-.summary-img-cont img{
+.summary-img-cont img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1087,5 +1087,62 @@ input:focus {
   .checkout_header .checkout_header_titile h1 {
     font-size: 1.8rem;
     white-space: nowrap;
+  }
+}
+
+/* Tablets (portrait) */
+@media (min-width: 576px) and (max-width: 890px) {
+  .checkout-cont {
+    flex-direction: column-reverse;
+    padding: 100px 80px 50px;
+  }
+  .checkout-left {
+    width: 100%;
+    padding: 20px;
+    margin: 0;
+  }
+  .checkout-right {
+    width: 100%;
+    margin: 0px 0px;
+    padding: 20px;
+  }
+  .summary-cont {
+    gap: 15px;
+  }
+  .checkout_header .checkout_header_titile h1 {
+    font-size: 1.8rem;
+    white-space: nowrap;
+  }
+}
+
+/* Tablets (landscape) / Small laptops */
+@media (min-width: 890px) and (max-width: 992px) {
+  .checkout-cont {
+    padding: 200px 25px 50px;
+    gap: 20px;
+  }
+  .checkout-left {
+    width: 55%;
+    padding-left: 0px;
+  }
+  .checkout-right {
+    width: 45%;
+    margin: 0;
+  }
+}
+
+/* Desktops */
+@media (min-width: 993px) and (max-width: 1200px) {
+  .checkout-cont {
+    padding: 200px 60px 50px;
+    gap: 20px;
+  }
+  .checkout-left {
+    width: 55%;
+    padding-left: 0px;
+  }
+  .checkout-right {
+    width: 45%;
+    margin: 0;
   }
 }

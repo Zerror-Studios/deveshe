@@ -1503,6 +1503,23 @@ button {
   }
 }
 
+/* Tablets (portrait) */
+@media (min-width: 577px) and (max-width: 1000px) {
+  .ProductDets_blank-div {
+    justify-content: flex-start;
+  }
+  .ProductDets_text_wrapper {
+    padding: 40px 0 0;
+    background-image: none;
+  }
+  .ProductDets_text-container_prdt_Desc {
+    max-width: 500px;
+  }
+  .Similar_prd_cntr {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media only screen and (min-width: 1000px) {
   .ProductDets_size_Mainwrap {
     margin: 1.5rem 0;
