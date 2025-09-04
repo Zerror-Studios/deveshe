@@ -5,11 +5,33 @@ import { countriesData, addressType } from "@/helpers/Data";
 import "react-international-phone/style.css";
 import { IoLocationOutline } from "react-icons/io5";
 import CommonButton from "../common/CommonButton";
+import { useAuthStore } from "@/store/auth-store";
+import { Sort } from "@/utils/Constant";
+import { useQuery } from "@apollo/client";
+import { USER_ADDRESS_LIST } from "@/graphql";
 
-const Delivery = ({ data, errors, control, register, setValue }) => {
+const Delivery = ({ errors, control, register, setValue }) => {
+  const LIMIT = 10;
   const [isAddress, setIsAddress] = useState(true);
   const [selectedAddress, setSelectedAddress] = useState(null);
+  const [offset, setOffset] = useState(0);
   const shippingAddress = useWatch({ control, name: "shippingAddress" });
+  const { isLoggedIn, user } = useAuthStore((state) => state);
+  const payload = {
+    filters: { userId: user?._id },
+    limit: LIMIT,
+    offset,
+    sort: { createdAt: Sort.DESC, primary: Sort.ASC },
+  };
+  const {
+    data: addressResponse,
+    loading,
+  } = useQuery(USER_ADDRESS_LIST, {
+    skip: !isLoggedIn,
+    variables: payload,
+  });
+  const { data = [] } = addressResponse?.getAddressByFilters || {};
+
   useEffect(() => {
     if (data.length > 0) {
       setIsAddress(false);
@@ -33,66 +55,76 @@ const Delivery = ({ data, errors, control, register, setValue }) => {
           <div className="order-div">
             <div style={{ marginTop: "0.6rem" }}>
               <div className="address-grid">
-                {data?.map((item, index) => (
-                  <div key={`address-${index}`} className="address-div">
-                    <div className="locationlogo">
-                      <IoLocationOutline className="localogo" />
+                {loading ? (
+                  <>
+                    <div className="no-order-div flex-all">
+                      <div className="loader-btn" />
                     </div>
-                    <div className="address-select-input">
-                      <label className="checkbox-container">
-                        <input
-                          type="radio"
-                          value={index}
-                          checked={selectedAddress === index}
-                          onChange={handleAddress}
-                        />
-                        <span className="checkmark">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 14 14"
-                            focusable="false"
-                            aria-hidden="true"
-                            className="arrow"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="m12.1 2.8-5.877 8.843a.35.35 0 0 1-.54.054L1.4 7.4"
-                            ></path>
-                          </svg>
-                        </span>
-                      </label>
-                    </div>
-                    <div className="add-detail">
-                      <div className="name-btn">
-                        <p className="add-name">
-                          {item?.firstname || ""} {item?.lastname || ""}
-                        </p>
-                        <div className="actions">{/* <Profilebtn/> */}</div>
+                  </>
+                ) : (
+                  <>
+                    {data?.map((item, index) => (
+                      <div key={`address-${index}`} className="address-div">
+                        <div className="locationlogo">
+                          <IoLocationOutline className="localogo" />
+                        </div>
+                        <div className="address-select-input">
+                          <label className="checkbox-container">
+                            <input
+                              type="radio"
+                              value={index}
+                              checked={selectedAddress === index}
+                              onChange={handleAddress}
+                            />
+                            <span className="checkmark">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 14 14"
+                                focusable="false"
+                                aria-hidden="true"
+                                className="arrow"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="m12.1 2.8-5.877 8.843a.35.35 0 0 1-.54.054L1.4 7.4"
+                                ></path>
+                              </svg>
+                            </span>
+                          </label>
+                        </div>
+                        <div className="add-detail">
+                          <div className="name-btn">
+                            <p className="add-name">
+                              {item?.firstname || ""} {item?.lastname || ""}
+                            </p>
+                            <div className="actions">{/* <Profilebtn/> */}</div>
+                          </div>
+                          <p className="add-name">
+                            {item?.flat || ""} {item?.addressline1 || ""}
+                          </p>
+                          <p className="add-name">{item?.addressline2 || ""}</p>
+                          <p className="add-name">
+                            {item?.city || ""}, {item?.country || ""}
+                          </p>
+                          <p className="add-name">{item?.pincode || ""}</p>
+                          <div className="phone-btn">
+                            <p
+                              className="add-name"
+                              style={{ fontWeight: "400", marginTop: "5px" }}
+                            >
+                              {" "}
+                              {item?.phone || ""}
+                            </p>
+                          </div>
+                          <p className="add-name" style={{ marginTop: "5px" }}>
+                            <b>{item?.addressType || ""}</b>
+                          </p>
+                        </div>
                       </div>
-                      <p className="add-name">
-                        {item?.flat || ""} {item?.addressline1 || ""}
-                      </p>
-                      <p className="add-name">{item?.addressline2 || ""}</p>
-                      <p className="add-name">
-                        {item?.city || ""}, {item?.country || ""}
-                      </p>
-                      <p className="add-name">{item?.pincode || ""}</p>
-                      <div className="phone-btn">
-                        <p
-                          className="add-name"
-                          style={{ fontWeight: "400", marginTop: "5px" }}
-                        >
-                          {" "}
-                          {item?.phone || ""}
-                        </p>
-                      </div>
-                      <p className="add-name" style={{ marginTop: "5px" }}>
-                        <b>{item?.addressType || ""}</b>
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                    ))}
+                  </>
+                )}
               </div>
             </div>
           </div>

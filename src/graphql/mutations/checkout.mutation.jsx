@@ -10,7 +10,7 @@ export const CHECKOUT_ORDER = gql`
         fulfillmentStatus
         paymentStatus
         orderNo
-        nimbblTransanctionId
+        nimbblTransactionId
         nimbblUserId
       }
       nimbblData {

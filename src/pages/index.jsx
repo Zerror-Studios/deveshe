@@ -1,4 +1,4 @@
-import React, { Suspense, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import SeoHeader from "@/components/seo/SeoHeader";
 import HeroSection from "@/components/home/HeroSection";
@@ -7,7 +7,6 @@ import { createApolloClient } from "@/lib/apolloClient";
 import { GET_PRODUCTS } from "@/graphql";
 import VisionSection from "@/components/home/VisionSection";
 import ProductSection from "@/components/home/ProductSection";
-import ProductLoader from "@/components/loaders/ProductLoader";
 import ReviewSection from "@/components/home/ReviewSection";
 import { ProductStatus } from "@/utils/Constant";
 
@@ -50,9 +49,7 @@ const Home = ({ meta, productData }) => {
       <SeoHeader meta={meta} />
       <HeroSection />
       <ExploreSection sectionRef={sectionRef} />
-      <Suspense fallback={<ProductLoader />}>
-        <ProductSection sectionRef={sectionRef} data={productData} />
-      </Suspense>
+      <ProductSection sectionRef={sectionRef} data={productData} />
       <VisionSection />
       <ReviewSection />
     </>

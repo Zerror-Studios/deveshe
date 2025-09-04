@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckoutSchema } from "@/validations/CheckoutValidation";
 import { createApolloClient } from "@/lib/apolloClient";
-import { useMutation } from "@apollo/client";
-import { CART_LIST, CHECKOUT_ORDER } from "@/graphql";
+import { useMutation, useQuery } from "@apollo/client";
+import { CART_LIST, CHECKOUT_ORDER, USER_ADDRESS_LIST } from "@/graphql";
 import SeoHeader from "@/components/seo/SeoHeader";
 import Heading from "@/components/checkout/Heading";
 import ContactDetail from "@/components/checkout/ContactDetail";
@@ -13,7 +13,7 @@ import Delivery from "@/components/checkout/Delivery";
 import Shipping from "@/components/checkout/Shipping";
 import BillingAddress from "@/components/checkout/BillingAddress";
 import OrderSummery from "@/components/checkout/OrderSummery";
-import { EmailSubscribedStatus } from "@/utils/Constant";
+import { EmailSubscribedStatus, Sort } from "@/utils/Constant";
 import Checkout from "nimbbl_sonic";
 import { useRouter } from "next/router";
 import { useAuthStore } from "@/store/auth-store";
@@ -57,7 +57,7 @@ const CheckoutPage = ({ meta, initialCartData }) => {
   useEffect(() => {
     if (isLoggedIn) {
       setValue("email", user?.email);
-      setValue("emailSubscribedStatus", user?.emailSubscribedStatus);
+      setValue("emailSubscribedStatus", user?.emailSubscribedStatus || EmailSubscribedStatus.NEVER_SUBSCRIBED);
     }
   }, [isLoggedIn]);
 
@@ -190,7 +190,6 @@ const CheckoutPage = ({ meta, initialCartData }) => {
               errors={errors}
             />
             <Delivery
-              data={user?.addresses || []}
               control={control}
               errors={errors}
               register={register}
