@@ -13,6 +13,8 @@ import CommonButton from "../common/CommonButton";
 
 const CartDrawer = ({ isOpen, closeCart }) => {
   const router = useRouter();
+  const drawerRef = useRef(null);
+  const backdropRef = useRef(null);
   const { visitorId } = useVisitor();
   const { token, user, isLoggedIn } = useAuthStore((state) => state);
 
@@ -103,19 +105,19 @@ const CartDrawer = ({ isOpen, closeCart }) => {
     }
   };
 
-  const navigateCheckout = () => {
-    setIsBtnLoading(true);
-    setTimeout(() => {
+  const navigateCheckout = async () => {
+    try {
+      setIsBtnLoading(true);
+      await router.push(`/checkout/${_id}`);
       closeCart();
-      router.push("/checkout/" + _id).finally(() => {
-        setIsBtnLoading(false);
-      });
-    }, 1000);
+    } catch (err) {
+      console.error("Navigation failed:", err);
+    } finally {
+      setIsBtnLoading(false);
+    }
   };
 
   // Drawer animation
-  const drawerRef = useRef(null);
-  const backdropRef = useRef(null);
   useEffect(() => {
     const tl = gsap.timeline();
     if (isOpen) {

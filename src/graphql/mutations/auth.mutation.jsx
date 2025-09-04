@@ -9,6 +9,8 @@ export const SIGN_UP_USER = gql`
         countryCode
         addresses {
           _id
+          firstname
+          lastname
           addressType
           addressline1
           addressline2
@@ -29,9 +31,11 @@ export const SIGN_UP_USER = gql`
         dateOfBirth
         email
         firstName
-        gender
         lastName
+        gender
         phoneNumber
+        emailSubscribedStatus
+        status
       }
       userToken
     }
@@ -92,5 +96,12 @@ export const UPDATE_USER_PASSWORD = gql`
     ) {
       userToken
     }
+  }
+`;
+
+// Update Status
+export const UPDATE_USER_STATUS = gql`
+  mutation ChangeUserStatus($email: String!, $status: UserStatusEnum!) {
+    changeUserStatus(email: $email, status: $status)
   }
 `;

@@ -49,11 +49,17 @@ const CheckoutPage = ({ meta, initialCartData }) => {
         country: "India",
         primary: false,
       },
-      email: isLoggedIn ? user?.email : "",
       emailSubscribedStatus: EmailSubscribedStatus.SUBSCRIBED,
       useShippingAsBilling: true,
     },
   });
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      setValue("email", user?.email);
+      setValue("emailSubscribedStatus", user?.emailSubscribedStatus);
+    }
+  }, [isLoggedIn]);
 
   const handleOrderPayment = async (payload) => {
     try {
@@ -77,16 +83,20 @@ const CheckoutPage = ({ meta, initialCartData }) => {
       const result = await response.json();
       const { redirectUrl, awb_code } = result.data || {};
       if (redirectUrl) {
-        await router.push({
-          pathname: redirectUrl,
-          ...(awb_code ? { query: { awb_code } } : {}),
-        });
+        await router.push(
+          {
+            pathname: redirectUrl,
+            ...(awb_code ? { query: { awb_code } } : {}),
+          },
+          undefined,
+          { shallow: true }
+        );
+        setIsPageLoading(false);
       }
     } catch (error) {
       console.error(`Error in Payment Order: ${error.message}`);
-      return null;
-    } finally {
       setIsPageLoading(false);
+      return null;
     }
   };
 
@@ -110,6 +120,8 @@ const CheckoutPage = ({ meta, initialCartData }) => {
       });
     } catch (error) {
       console.error("Error launching checkout:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -139,10 +151,9 @@ const CheckoutPage = ({ meta, initialCartData }) => {
       const { token } = response?.clientCheckout?.nimbblData || {};
       launchNimbblSonicCheckout(token);
     } catch (err) {
+      setIsLoading(false);
       console.error(err);
       toast.error(err.message || "Failed");
-    } finally {
-      setIsLoading(false);
     }
   };
   const leftRef = useRef(null);
@@ -179,6 +190,7 @@ const CheckoutPage = ({ meta, initialCartData }) => {
               errors={errors}
             />
             <Delivery
+              data={user?.addresses || []}
               control={control}
               errors={errors}
               register={register}
@@ -191,10 +203,7 @@ const CheckoutPage = ({ meta, initialCartData }) => {
               control={control}
               errors={errors}
             />
-            <CommonButton
-              title={"Pay now"}
-              loading={isLoading}
-            />
+            <CommonButton title={"Pay now"} loading={isLoading} />
           </form>
         </div>
         <div className="checkout-right" ref={rightRef}>

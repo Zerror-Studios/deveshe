@@ -103,7 +103,8 @@ a {
   position: relative;
 }
 /* Hide the default checkbox */
-.checkbox-container input[type="checkbox"] {
+.checkbox-container input[type="checkbox"],
+.checkbox-container input[type="radio"] {
   display: none;
 }
 
@@ -134,7 +135,8 @@ a {
 }
 
 /* Checkbox checked state */
-.checkbox-container input[type="checkbox"]:checked + .checkmark {
+.checkbox-container input[type="checkbox"]:checked + .checkmark,
+.checkbox-container input[type="radio"]:checked + .checkmark {
   background-color: black;
   border-color: black;
 }
@@ -151,7 +153,8 @@ a {
 }
 
 /* Show the arrow when checked */
-.checkbox-container input[type="checkbox"]:checked + .checkmark .arrow {
+.checkbox-container input[type="checkbox"]:checked + .checkmark .arrow,
+.checkbox-container input[type="radio"]:checked + .checkmark .arrow {
   display: block;
 }
 .checkbox-container h6 {

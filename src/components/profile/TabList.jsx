@@ -2,8 +2,8 @@ import React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { styled } from "@mui/material/styles";
-import { useApolloClient } from "@apollo/client";
-import { useAuthStore } from "@/store/auth-store";
+import { handleLogout } from "@/utils/graphql-utils";
+import { useAuth } from "@/context/AuthContext";
 
 const AntTabs = styled(Tabs)({
   borderBottom: "1px solid #e8e8e8",
@@ -38,20 +38,7 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(
   })
 );
 const TabList = ({ tab, setTab }) => {
-  const client = useApolloClient();
-  const { clearAuth } = useAuthStore((state) => state);
-
-  const handleLogout = async () => {
-    try {
-      clearAuth();
-      localStorage.removeItem("user-auth");
-      await client.clearStore();
-      window.location.href = "/";
-    } catch (err) {
-      console.error("Logout error:", err);
-    }
-  };
-
+  const { logout } = useAuth();
   return (
     <div id="tab_list">
       <AntTabs
@@ -63,11 +50,11 @@ const TabList = ({ tab, setTab }) => {
       >
         <AntTab id="tab" label="My Profile" />
         <AntTab id="tab" label="Saved Addresses" />
-        {/* <AntTab id="tab" label="Order History" /> */}
+        <AntTab id="tab" label="Order History" />
       </AntTabs>
       <div
         id="logout_btn"
-        onClick={handleLogout}
+        onClick={logout}
         className="_btn_wrapper _btn_height _w-full de-btn"
       >
         Logout

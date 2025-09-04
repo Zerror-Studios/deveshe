@@ -46,6 +46,7 @@ const Signup = ({ setToggle }) => {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(SignupSchema),
+    mode: "onChange",
   });
 
   const onSubmit = async (data) => {

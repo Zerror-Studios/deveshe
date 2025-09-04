@@ -27,16 +27,19 @@ import "@/styles/components/success.css";
 import "@/styles/components/common/polaroid.css";
 import "@/styles/components/common/productCard.css";
 import "@/styles/components/common/footer.css";
+import { AuthProvider } from "@/context/AuthContext";
 
 export default function App({ Component, pageProps }) {
   const client = createApolloClient();
   return (
     <>
       <ApolloProvider client={client}>
-        <Layout>
-          <SmoothScroller />
-          <Component {...pageProps} />
-        </Layout>
+        <AuthProvider>
+          <Layout>
+            <SmoothScroller />
+            <Component {...pageProps} />
+          </Layout>
+        </AuthProvider>
         <Toaster position="top-right" reverseOrder={false} />
       </ApolloProvider>
     </>

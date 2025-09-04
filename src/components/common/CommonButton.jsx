@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import React from "react";
 
-const CommonButton = ({ title, href, onClick, loading = false }) => {
+const CommonButton = ({ title, href, onClick, loading = false, type = "submit" }) => {
   const router = useRouter();
 
   const handleClick = () => {
@@ -15,6 +15,7 @@ const CommonButton = ({ title, href, onClick, loading = false }) => {
   return (
     <button
       id="common_black_btn"
+      type={type}
       onClick={handleClick}
       disabled={loading}
     >

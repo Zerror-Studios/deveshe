@@ -1,97 +1,114 @@
-.address-div{
-    width: 49%;
-    border: 0.5px solid rgba(0, 0, 0, 0.2);
-    padding: 15px;
-    min-height: 190px;
-    border-radius: 6px;
-    display: flex;
-    gap: 15px;
-    cursor: pointer;
+.address-div {
+  position: relative;
+  width: 49%;
+  border: 0.5px solid rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  min-height: 190px;
+  border-radius: 6px;
+  display: flex;
+  gap: 15px;
+  cursor: pointer;
 }
-.line-order{
-    margin-bottom: 30px !important;
+.line-order {
+  margin-bottom: 30px !important;
 }
-.address-div:hover{
-    background-color: rgba(0, 0, 0, 0.03);
+.address-div:hover {
+  background-color: rgba(0, 0, 0, 0.03);
 }
-.wrap-payment-head{
-    padding: 20px;
-    padding-bottom: 0;
+.wrap-payment-head {
+  padding: 20px;
+  padding-bottom: 0;
 }
-.localogo{
-    font-size: 25px;
+.localogo {
+  font-size: 25px;
 }
-.locationlogo{
-
+.locationlogo {
 }
-.logoplus{
-    font-size: 25px;
+.logoplus {
+  font-size: 25px;
 }
-.add-btn{
-    width: 10vw;
+.add-btn {
+  width: 10vw;
 }
-.add-detail{
-    width: 100%;
+.add-detail {
+  width: 100%;
 }
-.logowithadd{
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    cursor: pointer;
+.logowithadd {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
 }
-.logowithadd p{
-    color: red;
+.logowithadd p {
+  color: red;
 }
-.setadd{
-    /* padding: 14px; */
-    /* height: 60vh; */
-    overflow: auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 3px;
+.setadd {
+  /* padding: 14px; */
+  /* height: 60vh; */
+  overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 3px;
 }
-.add-name{
-    font-weight: 400;
-    font-size: 12px;
-    font-family: paragraph;
+.add-name {
+  font-weight: 400;
+  font-size: 12px;
+  font-family: paragraph;
 }
-.phone-btn{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.phone-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .btns-add {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }
-.ava{
-    border-radius: 15px;
-    padding: 5px;
-    width: 80px;
-    height: 30px;
+.ava {
+  border-radius: 15px;
+  padding: 5px;
+  width: 80px;
+  height: 30px;
 }
-.ava:hover{
-    background-color: #e5f2fd;
+.ava:hover {
+  background-color: #e5f2fd;
 }
-.menupro:hover{
-    background-color: #e5f2fd;
-}
-
-.name-btn{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.menupro:hover {
+  background-color: #e5f2fd;
 }
 
-.pro-name{
-    padding: 10px;
-}
-.itempro{
-    margin-left: 15px;
+.name-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
+.pro-name {
+  padding: 10px;
+}
+.itempro {
+  margin-left: 15px;
+}
+.address-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+.address-grid .address-div {
+  width: 100% !important;
+}
+.address-select-input {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+@media (max-width: 767px) {
+  .address-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
 /* .address-icon-group {
     display: flex;
     align-items: flex-start;

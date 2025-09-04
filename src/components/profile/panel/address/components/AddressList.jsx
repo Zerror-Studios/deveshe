@@ -77,6 +77,9 @@ const AddressList = ({
                           {item?.phone || ""}
                         </p>
                       </div>
+                      <p className="add-name" style={{ marginTop: "5px" }}>
+                        <b>{item?.addressType || ""}</b>
+                      </p>
                     </div>
                   </div>
                 ))}

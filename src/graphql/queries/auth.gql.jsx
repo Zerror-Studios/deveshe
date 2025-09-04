@@ -9,6 +9,8 @@ export const LOGIN_USER = gql`
         countryCode
         addresses {
           _id
+          firstname
+          lastname
           addressType
           addressline1
           addressline2
@@ -29,9 +31,11 @@ export const LOGIN_USER = gql`
         dateOfBirth
         email
         firstName
-        gender
         lastName
+        gender
         phoneNumber
+        emailSubscribedStatus
+        status
       }
       userToken
     }
