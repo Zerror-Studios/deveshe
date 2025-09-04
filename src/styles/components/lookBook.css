@@ -395,7 +395,7 @@
 }
 
 /* Tablets (portrait) */
-@media (min-width: 577px) and (max-width: 768px) {
+@media (min-width: 576px) and (max-width: 768px) {
   #lb-text-container {
     width: 100%;
     font-size: 3.5vw;
@@ -445,7 +445,7 @@
   }
   #prodcut-container {
     padding: 0 25px;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
   .common_product_card {
     height: 395px;

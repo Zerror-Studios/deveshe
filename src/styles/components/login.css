@@ -429,7 +429,7 @@
 }
 
 /* Tablets (portrait) */
-@media (min-width: 577px) and (max-width: 768px) {
+@media (min-width: 576px) and (max-width: 768px) {
   .login-left-cont {
     display: none;
   }
@@ -442,7 +442,7 @@
 }
 
 /* Tablets (landscape) / Small laptops */
-@media (min-width: 769px) and (max-width: 992px) {
+@media (min-width: 768px) and (max-width: 992px) {
   .login-left-cont {
     width: 45%;
   }
@@ -455,7 +455,7 @@
 }
 
 /* Desktops */
-@media (min-width: 993px) and (max-width: 1200px) {
+@media (min-width: 992px) and (max-width: 1200px) {
     .login-left-cont {
     width: 50%;
   }

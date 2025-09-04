@@ -381,7 +381,7 @@
   width: 25%;
   height: auto;
   object-fit: cover;
-  z-index: 9;
+  z-index: 8;
 }
 .vision_text {
   width: 100%;
@@ -1178,6 +1178,17 @@
 
 /* Tablets (landscape) / Small laptops */
 @media (min-width: 769px) and (max-width: 992px) {
+  .explore_center_card img {
+    height: 30vh;
+  }
+  .explore_strip1 ,.explore_strip2{
+    height: 95vh;
+  }
+  .review_card{
+    width: 50vw;
+    height: auto;
+    padding: 2vw 0;
+  }
 }
 
 /* Desktops */
