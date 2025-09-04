@@ -2,7 +2,6 @@ import React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { styled } from "@mui/material/styles";
-import { handleLogout } from "@/utils/graphql-utils";
 import { useAuth } from "@/context/AuthContext";
 
 const AntTabs = styled(Tabs)({
