@@ -51,13 +51,6 @@ const CartDrawer = ({ isOpen, closeCart }) => {
     cart = [],
   } = cartResponse?.getCart || {};
 
-  const renderVariants = (variant) =>
-    variant.map((value, idx) => (
-      <span key={idx} style={{ display: "block" }}>
-        {idx === 0 ? "Color:" : "Size:"} {value}
-      </span>
-    ));
-
   const handleAddItem = async (productId, variantDetail) => {
     try {
       const { __typename, ...variantWithoutTypename } = variantDetail;
@@ -162,7 +155,6 @@ const CartDrawer = ({ isOpen, closeCart }) => {
                 key={`cart-product-item-${i}`}
                 index={i}
                 item={item}
-                renderVariants={renderVariants}
                 handleAddItem={handleAddItem}
                 handleRemoveItem={handleRemoveItem}
               />

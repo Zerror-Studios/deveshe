@@ -5,6 +5,44 @@ export const htmlParser = (data = "") => {
   return parse(data || "");
 };
 
+// utils/formatTime.ts
+export const formatDateTime = (dateString) => {
+  if (!dateString) return "";
+
+  const date = new Date(dateString);
+
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const dayName = days[date.getDay()];
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = months[date.getMonth()];
+  const year = String(date.getFullYear()).slice(-2);
+
+  return `${dayName}, ${day} ${month}, ${year}`;
+};
+
 export const formatePrice = (price) => {
   if (!price) return "0";
   const hasDecimal = price % 1 !== 0;
@@ -31,4 +69,13 @@ export const getProductPriceLabel = (variants = [], discountedPrice = 0) => {
     return formatePrice(minPrice);
   }
   return `Starts from ${formatePrice(minPrice)}`;
+};
+
+export const renderVariants = (variant = []) => {
+  if (variant.length === 0) return;
+  return variant.map((value, idx) => (
+    <span key={idx} style={{ display: "block" }}>
+      {idx === 0 ? "Color:" : "Size:"} {value}
+    </span>
+  ));
 };

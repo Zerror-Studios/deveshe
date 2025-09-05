@@ -15,6 +15,7 @@ export const ORDER_LIST = gql`
       totalprice
       discountedPrice
       totalDiscount
+      awb_code
       cart {
         name
         description

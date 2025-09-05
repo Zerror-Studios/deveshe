@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { FiMinus, FiPlus } from "react-icons/fi";
-import { formatePrice } from "@/utils/Util";
+import { formatePrice, renderVariants } from "@/utils/Util";
 
 const CartProduct = ({
   item,
-  renderVariants,
   handleAddItem,
   handleRemoveItem,
 }) => {
