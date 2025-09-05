@@ -108,6 +108,9 @@
   .address-grid {
     grid-template-columns: repeat(1, 1fr);
   }
+  .address-div {
+    width: 100%;
+  }
 }
 /* .address-icon-group {
     display: flex;

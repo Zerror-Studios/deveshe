@@ -149,11 +149,23 @@ const NavbarMobile = ({ openCart }) => {
     router.push("/login");
     toggleMenu();
   };
+  const [hash, setHash] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setHash(window.location.hash);
+
+      const handleHashChange = () => setHash(window.location.hash);
+      window.addEventListener("hashchange", handleHashChange);
+
+      return () => window.removeEventListener("hashchange", handleHashChange);
+    }
+  }, [router.pathname]);
 
   return (
     <>
       <div className="navbar-mobile">
-        {router.pathname === "/" && (
+        {router.pathname === "/" && hash !== "#shop" && (
           <div id="loader_slider">
             <p>
               loading... <span>{percent}%</span>
@@ -211,7 +223,12 @@ const NavbarMobile = ({ openCart }) => {
         <div id="side-navbar">
           <div className="side-menu-links">
             <div className="nav-top">
-              <CommonButton title={"Login / Signup"} onClick={handleLoginBtn} />
+              {!isLoggedIn && (
+                <CommonButton
+                  title={"Login / Signup"}
+                  onClick={handleLoginBtn}
+                />
+              )}
               <Link href="/#shop">shop</Link>
               <Link href="/lookbook">lookbook</Link>
               <Link href="/about">about</Link>
