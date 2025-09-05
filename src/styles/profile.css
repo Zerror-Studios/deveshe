@@ -1175,6 +1175,7 @@
   .div-tab #ant-tabs {
     margin-bottom: 30px !important;
     overflow-x: auto;
+    width: 100%;
   }
   .add-payment-main {
     width: 100%;

@@ -149,7 +149,7 @@ const NavbarMobile = ({ openCart }) => {
     router.push("/login");
     toggleMenu();
   };
-   const [hash, setHash] = useState("");
+  const [hash, setHash] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -166,12 +166,12 @@ const NavbarMobile = ({ openCart }) => {
     <>
       <div className="navbar-mobile">
         {router.pathname === "/" && hash !== "#shop" && (
-        <div id="loader_slider">
-          <p>
-            loading... <span>{percent}%</span>
-          </p>
-        </div>
-      )}
+          <div id="loader_slider">
+            <p>
+              loading... <span>{percent}%</span>
+            </p>
+          </div>
+        )}
         <div className="navbar-mobile-wrap">
           <Link href="/" id="nav-logo">
             <Image
@@ -223,7 +223,12 @@ const NavbarMobile = ({ openCart }) => {
         <div id="side-navbar">
           <div className="side-menu-links">
             <div className="nav-top">
-              <CommonButton title={"Login / Signup"} onClick={handleLoginBtn} />
+              {!isLoggedIn && (
+                <CommonButton
+                  title={"Login / Signup"}
+                  onClick={handleLoginBtn}
+                />
+              )}
               <Link href="/#shop">shop</Link>
               <Link href="/lookbook">lookbook</Link>
               <Link href="/about">about</Link>
