@@ -149,17 +149,29 @@ const NavbarMobile = ({ openCart }) => {
     router.push("/login");
     toggleMenu();
   };
+   const [hash, setHash] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setHash(window.location.hash);
+
+      const handleHashChange = () => setHash(window.location.hash);
+      window.addEventListener("hashchange", handleHashChange);
+
+      return () => window.removeEventListener("hashchange", handleHashChange);
+    }
+  }, [router.pathname]);
 
   return (
     <>
       <div className="navbar-mobile">
-        {router.pathname === "/" && (
-          <div id="loader_slider">
-            <p>
-              loading... <span>{percent}%</span>
-            </p>
-          </div>
-        )}
+        {router.pathname === "/" && hash !== "#shop" && (
+        <div id="loader_slider">
+          <p>
+            loading... <span>{percent}%</span>
+          </p>
+        </div>
+      )}
         <div className="navbar-mobile-wrap">
           <Link href="/" id="nav-logo">
             <Image
