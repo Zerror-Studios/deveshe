@@ -91,7 +91,7 @@ const ContactForm = () => {
         ...data,
       };
       const { data: response } = await createContact({ variables: { input } });
-      const message = response?.createContactForm || {};
+      const message = response?.createContact || {};
       if (message) {
         toast.success(message);
         reset();
