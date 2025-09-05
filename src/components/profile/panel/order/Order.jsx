@@ -12,6 +12,7 @@ const columns = [
   "Price",
   "Status",
   "AWB Code",
+  "Track",
 ];
 const Order = () => {
   const LIMIT = 100;

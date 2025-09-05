@@ -1,7 +1,8 @@
 import React from "react";
-import styles from "@/components/profile/panel/order/components/Table.module.css";
+import Link from "next/link";
 import { FaSort } from "react-icons/fa6";
 import { formatDateTime, formatePrice, renderVariants } from "@/utils/Util";
+import styles from "@/components/profile/panel/order/components/Table.module.css";
 
 const Table = ({ data = [], columns = [], loading }) => {
   if (loading) return;
@@ -92,6 +93,20 @@ const Table = ({ data = [], columns = [], loading }) => {
                         </span>
                       </td>
                       <td>{item?.awb_code || "NA"}</td>
+                      <td>
+                        {item?.awb_code ? (
+                          <Link
+                            id="common_black_btn"
+                            href={`https://shiprocket.co/tracking/${item?.awb_code}`}
+                            target="_blank"
+                            style={{maxWidth: "unset", padding: "5px 12px", fontSize: "12px"}}
+                          >
+                            Track
+                          </Link>
+                        ) : (
+                          "NA"
+                        )}
+                      </td>
                     </tr>
                   );
                 })}
