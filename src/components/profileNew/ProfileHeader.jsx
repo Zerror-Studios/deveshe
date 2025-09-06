@@ -10,7 +10,7 @@ const tabs = [
 const ProfileHeader = ({ activeTab, setTab }) => {
   return (
     <div id="profile_header">
-      <div>
+      <div className="tab_container">
         {tabs.map((tab) => (
           <span
             key={tab.id}
