@@ -3,7 +3,7 @@
   background-color: #fadcde;
   background-image: url(/grainy-lg-bg.svg);
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-size: cover;
   background-position: bottom;
   padding: 160px;
   padding-bottom: 100px;
@@ -33,7 +33,7 @@
 .profile_tab {
   padding: 15px;
   border-bottom: 4px solid transparent;
-  transition: all ease 0.3s;
+  transition: all ease 0.1s;
   display: inline-block;
   cursor: pointer;
 }

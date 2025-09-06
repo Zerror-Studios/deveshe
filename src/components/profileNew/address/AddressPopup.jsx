@@ -1,6 +1,7 @@
-"use client";
 import React, { useState } from "react";
 import { IoLocationOutline } from "react-icons/io5";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 const AddressPopup = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -20,7 +21,7 @@ const AddressPopup = ({ isOpen, onClose }) => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" }); // clear error when typing
+    setErrors({ ...errors, [e.target.name]: "" });
   };
 
   const validateForm = () => {
@@ -32,7 +33,6 @@ const AddressPopup = ({ isOpen, onClose }) => {
     if (!formData.postal) newErrors.postal = "Postal code is required";
     if (!formData.state) newErrors.state = "State is required";
     if (!formData.phone) newErrors.phone = "Phone number is required";
-
     return newErrors;
   };
 
@@ -43,7 +43,6 @@ const AddressPopup = ({ isOpen, onClose }) => {
       setErrors(newErrors);
       return;
     }
-    // ✅ Save logic here
     console.log("Form Submitted", formData);
     onClose();
   };
@@ -54,17 +53,13 @@ const AddressPopup = ({ isOpen, onClose }) => {
     <div onClick={onClose} className="modal-overlay" id="address_popup">
       <div onClick={(e) => e.stopPropagation()} className="modal-content">
         <h3 className="modal-title">
-          Address details{" "}
-          <span className="location-icon">
-            <IoLocationOutline />
-          </span>
+          Address details <span className="location-icon"><IoLocationOutline /></span>
         </h3>
 
-        <div className="info-box">
-          Your Address Details will be saved securely
-        </div>
+        <div className="info-box">Your Address Details will be saved securely</div>
 
         <form className="address-form" onSubmit={handleSubmit}>
+          {/* Name */}
           <div className="form-row">
             <div style={{ flex: 1 }}>
               <input
@@ -74,9 +69,7 @@ const AddressPopup = ({ isOpen, onClose }) => {
                 value={formData.firstName}
                 onChange={handleChange}
               />
-              {errors.firstName && (
-                <span className="error-text">{errors.firstName}</span>
-              )}
+              {errors.firstName && <span className="error-text">{errors.firstName}</span>}
             </div>
             <div style={{ flex: 1 }}>
               <input
@@ -86,12 +79,11 @@ const AddressPopup = ({ isOpen, onClose }) => {
                 value={formData.lastName}
                 onChange={handleChange}
               />
-              {errors.lastName && (
-                <span className="error-text">{errors.lastName}</span>
-              )}
+              {errors.lastName && <span className="error-text">{errors.lastName}</span>}
             </div>
           </div>
 
+          {/* Address */}
           <input
             type="text"
             name="address1"
@@ -99,9 +91,7 @@ const AddressPopup = ({ isOpen, onClose }) => {
             value={formData.address1}
             onChange={handleChange}
           />
-          {errors.address1 && (
-            <span className="error-text">{errors.address1}</span>
-          )}
+          {errors.address1 && <span className="error-text">{errors.address1}</span>}
 
           <input
             type="text"
@@ -120,9 +110,7 @@ const AddressPopup = ({ isOpen, onClose }) => {
                 value={formData.city}
                 onChange={handleChange}
               />
-              {errors.city && (
-                <span className="error-text">{errors.city}</span>
-              )}
+              {errors.city && <span className="error-text">{errors.city}</span>}
             </div>
             <div style={{ flex: 1 }}>
               <input
@@ -132,12 +120,11 @@ const AddressPopup = ({ isOpen, onClose }) => {
                 value={formData.postal}
                 onChange={handleChange}
               />
-              {errors.postal && (
-                <span className="error-text">{errors.postal}</span>
-              )}
+              {errors.postal && <span className="error-text">{errors.postal}</span>}
             </div>
           </div>
 
+          {/* Country + State */}
           <div className="form-row">
             <div style={{ flex: 1 }}>
               <input
@@ -156,24 +143,26 @@ const AddressPopup = ({ isOpen, onClose }) => {
                 value={formData.state}
                 onChange={handleChange}
               />
-              {errors.state && (
-                <span className="error-text">{errors.state}</span>
-              )}
+              {errors.state && <span className="error-text">{errors.state}</span>}
             </div>
           </div>
 
+          {/* Phone + Address Type */}
           <div className="form-row">
             <div style={{ flex: 1 }}>
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Phone"
+              <PhoneInput
+                country={"in"}
                 value={formData.phone}
-                onChange={handleChange}
+                onChange={(value) => {
+                  setFormData({ ...formData, phone: value });
+                  setErrors({ ...errors, phone: "" });
+                }}
+                enableSearch={true}
+                inputStyle={{ width: "100%" }}
+                buttonStyle={{ border: "none" }}
+                placeholder="Phone number"
               />
-              {errors.phone && (
-                <span className="error-text">{errors.phone}</span>
-              )}
+              {errors.phone && <span className="error-text">{errors.phone}</span>}
             </div>
             <div style={{ flex: 1 }}>
               <select
@@ -188,13 +177,10 @@ const AddressPopup = ({ isOpen, onClose }) => {
             </div>
           </div>
 
+          {/* Actions */}
           <div className="form-actions">
-            <button type="button" className="btn cancel" onClick={onClose}>
-              Cancel
-            </button>
-            <button type="submit" className="btn save">
-              Save
-            </button>
+            <button type="button" className="btn cancel" onClick={onClose}>Cancel</button>
+            <button type="submit" className="btn save">Save</button>
           </div>
         </form>
       </div>
