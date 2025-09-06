@@ -5,8 +5,9 @@ import AddressHeader from "./AddressHeader";
 const AddressBlocks = () => {
   return (
     <>
-      <AddressHeader/>
+      <AddressHeader />
       <AddressContainer />
+      
     </>
   );
 };

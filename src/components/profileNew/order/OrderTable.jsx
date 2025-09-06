@@ -37,52 +37,66 @@ const orders = [
 
 const OrderTable = () => {
   return (
-    <div className="table-container">
-      <table className="order-table">
-        <thead>
-          <tr>
-            <th>Order Id</th>
-            <th>Product</th>
-            <th>Order Date</th>
-            <th>Price</th>
-            <th>Status</th>
-            <th>AWB Code</th>
-            <th>Track</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order, index) => (
-            <tr key={index}>
-              <td>{order.id}</td>
-              <td>
-                <div className="product-cell">
-                  <Image className="skeleton-loading" width={1000} height={1000} src={order.product.image} alt={order.product.name} />
-                  <div>
-                    <p className="product-name">{order.product.name}</p>
-                    <p>Qty : {order.product.qty}</p>
-                    <p>Sku : {order.product.sku}</p>
-                    <p>Color: {order.product.color}</p>
-                  </div>
-                </div>
-              </td>
-              <td>{order.date}</td>
-              <td>{order.price}</td>
-              <td>
-                <span
-                  className={`status ${
-                    order.status.toLowerCase() === "paid" ? "paid" : "unpaid"
-                  }`}
-                >
-                  {order.status}
-                </span>
-              </td>
-              <td>{order.awb}</td>
-              <td>{order.track}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      {orders.length > 0 ? (
+        <div className="table-container">
+          <table className="order-table">
+            <thead>
+              <tr>
+                <th>Order Id</th>
+                <th>Product</th>
+                <th>Order Date</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>AWB Code</th>
+                <th>Track</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((order, index) => (
+                <tr key={index}>
+                  <td>{order.id}</td>
+                  <td>
+                    <div className="product-cell">
+                      <Image
+                        className="skeleton-loading"
+                        width={1000}
+                        height={1000}
+                        src={order.product.image}
+                        alt={order.product.name}
+                      />
+                      <div>
+                        <p className="product-name">{order.product.name}</p>
+                        <p>Qty : {order.product.qty}</p>
+                        <p>Sku : {order.product.sku}</p>
+                        <p>Color: {order.product.color}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{order.date}</td>
+                  <td>{order.price}</td>
+                  <td>
+                    <span
+                      className={`status ${
+                        order.status.toLowerCase() === "paid"
+                          ? "paid"
+                          : "unpaid"
+                      }`}
+                    >
+                      {order.status}
+                    </span>
+                  </td>
+                  <td>{order.awb}</td>
+                  <td>{order.track}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p className="no-data">There is no order history to show</p>
+      )}
+    </>
   );
 };
 

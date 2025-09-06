@@ -20,12 +20,26 @@ const ProfileDetails = () => {
           // loading={isBtnLoading}
         />
         <form className="user_form">
-          <input type="text" placeholder="Username" />
-          <input type="text" placeholder="Last Name" />
-          <input type="email" placeholder="Email" />
-          <input type="phone" placeholder="Phone" />
+          <div className="user_form_input">
+            <input type="text" placeholder="Username" />
+            <span className="error-text">Username is required</span>
+          </div>
+          <div className="user_form_input">
+            <input type="text" placeholder="Last Name" />
+            <span className="error-text">Lastname is required</span>
+          </div>
+          <div className="user_form_input">
+            <input type="email" placeholder="Email" />
+            <span className="error-text">Email is required</span>
+          </div>
+          <div className="user_form_input">
+            <input type="phone" placeholder="Phone" />
+            <span className="error-text">Phone number is required</span>
+          </div>
         </form>
-        <span id="edit_user_details"><FaUserEdit /></span>
+        <span id="edit_user_details">
+          <FaUserEdit />
+        </span>
       </div>
     </div>
   );

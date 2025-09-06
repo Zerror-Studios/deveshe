@@ -144,8 +144,14 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 15px;
 }
+.user_form_input{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
 
 .user_form input {
+  width: 100%;
   padding: 10px;
   background-color: #f4e9ea;
   border: none;
@@ -168,7 +174,14 @@
   gap: 15px;
 }
 
+.password_input{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
 .change_pass_form input {
+  width: 100%;
   padding: 10px;
   background-color: #f4e9ea;
   border: none;
@@ -181,10 +194,10 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 30px;
+  flex-wrap: wrap;
 }
 .address_card {
-  width: 50%;
+  width: 48.5%;
   display: flex;
   align-items: flex-start;
   gap: 15px;
@@ -211,6 +224,14 @@
 .person_location,
 .person_name {
   font-weight: 600;
+}
+
+.no-data{
+  width: 100%;
+  flex-shrink: 0;
+  text-align: center;
+  margin-top: 100px;
+  font-size: 22px;
 }
 
 /* order table */
@@ -385,6 +406,13 @@
   color: #fff;
   border: none;
 }
+.error-text {
+  color: #d32f2f !important;
+  font-size: 12px;
+  margin-bottom: 5px;
+  display: block;
+}
+
 
 
 /* deactivate popup */

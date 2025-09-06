@@ -6,7 +6,7 @@ const OrderBlock = () => {
   return (
      <>
       <OrderHeader/>
-      <OrderTable/>
+      <OrderTable/> 
     </>
   )
 }

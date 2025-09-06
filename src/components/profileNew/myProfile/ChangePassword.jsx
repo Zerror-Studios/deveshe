@@ -15,14 +15,24 @@ const ChangePassword = () => {
       </div>
       <div className="profile_right_container">
         <form className="change_pass_form">
-          <input type="password"  placeholder="Enter Current Password"/>
-          <input type="password"  placeholder="Enter New Password"/>
-          <input type="password"  placeholder="Confirm New Password"/>
+          <div className="password_input">
+            <input type="password" placeholder="Enter Current Password" />
+            <span className="error-text">Current password is required</span>
+          </div>
+          <div className="password_input">
+            <input type="password" placeholder="Enter New Password" />
+            <span className="error-text">
+              Password must be at least 8 characters
+            </span>
+          </div>
+          <div className="password_input">
+            <input type="password" placeholder="Confirm New Password" />
+          </div>
           <CommonButton
-          title="Change Password"
-          // onClick={navigateCheckout}
-          // loading={isBtnLoading}
-        />
+            title="Change Password"
+            // onClick={navigateCheckout}
+            // loading={isBtnLoading}
+          />
         </form>
       </div>
     </div>
