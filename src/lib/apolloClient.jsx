@@ -3,10 +3,12 @@ import fetch from "cross-fetch";
 import { ApolloClient, InMemoryCache, HttpLink, from } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
+import { useAuthStore } from "@/store/auth-store";
 
 // UNAUTHENTICATED Verify
 const handleUnauthorized = () => {
   if (typeof window !== "undefined") {
+    useAuthStore.getState().clearAuth();
     localStorage.removeItem("token");
     localStorage.removeItem("user-auth");
     Router.replace("/login");
@@ -16,7 +18,7 @@ const handleUnauthorized = () => {
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     for (let err of graphQLErrors) {
-      if (err.extensions?.code === "UNAUTHENTICATED") {
+      if (err.extensions?.code === "UNAUTHENTICATED" || err.extensions.exception.name === "TokenExpiredError") {
         handleUnauthorized();
       }
     }
