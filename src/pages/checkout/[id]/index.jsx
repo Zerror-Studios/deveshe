@@ -57,7 +57,10 @@ const CheckoutPage = ({ meta, initialCartData }) => {
   useEffect(() => {
     if (isLoggedIn) {
       setValue("email", user?.email);
-      setValue("emailSubscribedStatus", user?.emailSubscribedStatus || EmailSubscribedStatus.NEVER_SUBSCRIBED);
+      setValue(
+        "emailSubscribedStatus",
+        user?.emailSubscribedStatus || EmailSubscribedStatus.NEVER_SUBSCRIBED
+      );
     }
   }, [isLoggedIn]);
 
@@ -141,8 +144,8 @@ const CheckoutPage = ({ meta, initialCartData }) => {
           emailSubscribedStatus,
         },
         cartId: cartData?._id,
-        shippingAddress,
-        billingAddress,
+        shippingAddress: { email, ...shippingAddress },
+        billingAddress: { email, ...billingAddress },
       };
 
       const { data: response } = await checkoutOrder({
