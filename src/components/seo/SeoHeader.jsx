@@ -72,21 +72,17 @@ const SeoHeader = ({ meta }) => {
         clientLink={`${Const.ClientLink}/`}
         logoUrl={`${Const.ClientLink}/favicon.jpeg`}
         address={{
-          streetAddress: "1102, Mahindra Heights, 96 Tardeo Road",
+          streetAddress: "Bankeybihari Holdings B5, 3rd floor, Everest Apt., Pt. Madan Mohan Malviya Marg, Tardeo",
           addressLocality: "Mumbai",
           addressRegion: "Maharashtra",
           postalCode: "400034",
           addressCountry: "IN",
         }}
         contact={{
-          telephone: "+91 98339 83775",
+          telephone: "+919833983775",
           contactType: "Customer Service",
           areaServed: "IN",
           availableLanguage: "English",
-          hoursAvailable: {
-            opens: "09:00",
-            closes: "18:00",
-          },
         }}
         sameAs={[
           "https://www.instagram.com/DeVeSheDreams/",
