@@ -11,7 +11,7 @@ const NewsMediaOrganizationSchema = ({
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "NewsMediaOrganization",
-    name: {name},
+    name,
     url: clientLink,
     logo: {
       "@type": "ImageObject",

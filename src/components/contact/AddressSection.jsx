@@ -18,7 +18,10 @@ const AddressSection = () => {
         <div className="add">
           <h6>Address</h6>
           <h5>
-            1102, Mahindra Heights. <br /> 96 Tardeo Road. <br /> Mumbai 400034
+            Bankeybihari Holdings <br />
+            B5, 3rd floor, Everest Apt., <br />
+            Pt. Madan Mohan Malviya Marg, <br />
+            Tardeo, Mumbai-400 034
           </h5>
         </div>
       </div>
