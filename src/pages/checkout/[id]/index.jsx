@@ -139,7 +139,7 @@ const CheckoutPage = ({ meta, initialCartData }) => {
           firstName: shippingAddress.firstname,
           lastName: shippingAddress.lastname,
           email,
-          phone: shippingAddress.phone,
+          phoneNumber: shippingAddress.phone,
           countryCode: shippingAddress.countryCode,
           emailSubscribedStatus,
         },
