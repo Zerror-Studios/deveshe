@@ -136,7 +136,7 @@ const BillingAddress = ({ errors, control, register, setValue }) => {
                             <input
                               disabled={useShippingAsBilling}
                               className="w-100"
-                              type="number"
+                              type="text"
                               placeholder="ZIP Code"
                               {...register("billingAddress.pincode")}
                             />

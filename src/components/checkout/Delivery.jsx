@@ -203,7 +203,7 @@ const Delivery = ({ errors, control, register, setValue }) => {
               <div>
                 <input
                   className="w-100"
-                  type="number"
+                  type="text"
                   placeholder="ZIP Code"
                   {...register("shippingAddress.pincode")}
                 />
