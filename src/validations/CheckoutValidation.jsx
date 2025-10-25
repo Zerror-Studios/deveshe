@@ -15,14 +15,7 @@ export const AddressSchema = z.object({
   country: z.string().min(1, "Country is required"),
   states: z.string().min(1, "State is required"),
   city: z.string().min(1, "city is required"),
-  pincode: z.coerce
-    .number({
-      required_error: "Pincode is required",
-      invalid_type_error: "Pincode must be a number",
-    })
-    .refine((val) => !isNaN(val), {
-      message: "Pincode must be a number",
-    }),
+  pincode: z.string().min(1, "Pincode is required"),
   countryCode: z.string().min(1, "Country Code is required"),
   phone: z.string().min(1, "Phone number is required"),
   primary: z.boolean(),
