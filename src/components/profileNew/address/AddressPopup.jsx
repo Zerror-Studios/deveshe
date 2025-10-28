@@ -1,56 +1,96 @@
-import React, { useState } from "react";
-import { IoLocationOutline } from "react-icons/io5";
+import React, { useLayoutEffect } from "react";
 import PhoneInput from "react-phone-input-2";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-hot-toast";
+import { IoLocationOutline } from "react-icons/io5";
+import { useMutation } from "@apollo/client";
+import { USER_ADDRESS_SAVE_OR_UPDATE } from "@/graphql";
+import { useAuthStore } from "@/store/auth-store";
+import { addressType } from "@/helpers/Data";
 import "react-phone-input-2/lib/style.css";
 
-const AddressPopup = ({ isOpen, onClose }) => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    address1: "",
-    address2: "",
-    city: "",
-    postal: "",
-    country: "India",
-    state: "",
-    phone: "",
-    addressType: "Home",
+// Zod schema
+const addressSchema = z.object({
+  firstname: z.string().min(1, "First name is required"),
+  lastname: z.string().min(1, "Last name is required"),
+  addressType: z.string().min(1, "Address type is required"),
+  addressline1: z.string().min(1, "Address Line 1 is required"),
+  addressline2: z.string().optional(),
+  city: z.string().min(1, "City is required"),
+  pincode: z.string().min(4, "Pincode is required"),
+  country: z.string().min(1, "Country is required"),
+  states: z.string().min(1, "State is required"),
+  phone: z.string().min(8, "Phone is required"),
+  countryCode: z.string().min(1, "Country code is required"),
+});
+
+const AddressPopup = ({ isOpen, addressId, listPayload, setOpen, refetch }) => {
+  const {
+    user: { _id },
+  } = useAuthStore((state) => state);
+  const [saveUpdateAddress, { loading }] = useMutation(
+    USER_ADDRESS_SAVE_OR_UPDATE
+  );
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(addressSchema),
+    defaultValues: {
+      firstname: "",
+      lastname: "",
+      addressType: "HOME",
+      addressline1: "",
+      addressline2: "",
+      city: "",
+      pincode: "",
+      country: "India",
+      states: "",
+      phone: "",
+      countryCode: "+91",
+    },
   });
 
-  const [errors, setErrors] = useState({});
+  useLayoutEffect(() => {
+    document.body.classList.add("overflow-hidden");
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, []);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" });
-  };
-
-  const validateForm = () => {
-    let newErrors = {};
-    if (!formData.firstName) newErrors.firstName = "First name is required";
-    if (!formData.lastName) newErrors.lastName = "Last name is required";
-    if (!formData.address1) newErrors.address1 = "Address line 1 is required";
-    if (!formData.city) newErrors.city = "City is required";
-    if (!formData.postal) newErrors.postal = "Postal code is required";
-    if (!formData.state) newErrors.state = "State is required";
-    if (!formData.phone) newErrors.phone = "Phone number is required";
-    return newErrors;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newErrors = validateForm();
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
+  const onSubmit = async (data) => {
+    try {
+      const input = {
+        userId: _id,
+        ...data,
+      };
+      const { data: response } = await saveUpdateAddress({
+        variables: {
+          input,
+          ...(addressId ? { addressSaveOrUpdateId: addressId } : ""),
+        },
+      });
+      const addressResponse = response?.addressSaveOrUpdate;
+      if (addressResponse && Object.keys(addressResponse)?.length) {
+        toast.success("Address saved successfully!");
+        await refetch(listPayload);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.message || "Failed to save");
+    } finally {
+      reset();
+      setOpen(false);
     }
-    console.log("Form Submitted", formData);
-    onClose();
   };
-
   if (!isOpen) return null;
-
   return (
-    <div onClick={onClose} className="modal-overlay" id="address_popup">
+    <div onClick={() => setOpen(false)} className="modal-overlay" id="address_popup">
       <div onClick={(e) => e.stopPropagation()} className="modal-content">
         <h3 className="modal-title">
           Address details <span className="location-icon"><IoLocationOutline /></span>
@@ -58,69 +98,63 @@ const AddressPopup = ({ isOpen, onClose }) => {
 
         <div className="info-box">Your Address Details will be saved securely</div>
 
-        <form className="address-form" onSubmit={handleSubmit}>
+        <form className="address-form" onSubmit={handleSubmit(onSubmit)}>
           {/* Name */}
           <div className="form-row">
             <div style={{ flex: 1 }}>
               <input
                 type="text"
-                name="firstName"
                 placeholder="First Name"
-                value={formData.firstName}
-                onChange={handleChange}
+                {...register("firstname")}
               />
-              {errors.firstName && <span className="error-text">{errors.firstName}</span>}
+              {errors.firstname && (
+                <span className="error-text">{errors.firstname.message}</span>
+              )}
             </div>
             <div style={{ flex: 1 }}>
               <input
                 type="text"
-                name="lastName"
                 placeholder="Last Name"
-                value={formData.lastName}
-                onChange={handleChange}
+                {...register("lastname")}
               />
-              {errors.lastName && <span className="error-text">{errors.lastName}</span>}
+              {errors.lastname && (
+                <span className="error-text">{errors.lastname.message}</span>
+              )}
             </div>
           </div>
 
           {/* Address */}
           <input
             type="text"
-            name="address1"
             placeholder="Address Line 1"
-            value={formData.address1}
-            onChange={handleChange}
+            {...register("addressline1")}
           />
-          {errors.address1 && <span className="error-text">{errors.address1}</span>}
+          {errors.addressline1 && (
+            <span className="error-text">{errors.addressline1.message}</span>
+          )}
 
           <input
             type="text"
-            name="address2"
             placeholder="Address Line 2 (Optional)"
-            value={formData.address2}
-            onChange={handleChange}
+            {...register("addressline2")}
           />
 
           <div className="form-row">
             <div style={{ flex: 1 }}>
               <input
                 type="text"
-                name="city"
                 placeholder="City"
-                value={formData.city}
-                onChange={handleChange}
+                {...register("city")}
               />
-              {errors.city && <span className="error-text">{errors.city}</span>}
+              {errors.city && <span className="error-text">{errors.city.message}</span>}
             </div>
             <div style={{ flex: 1 }}>
               <input
-                type="text"
-                name="postal"
+                type="number"
                 placeholder="Postal Number"
-                value={formData.postal}
-                onChange={handleChange}
+                {...register("pincode")}
               />
-              {errors.postal && <span className="error-text">{errors.postal}</span>}
+              {errors.pincode && <span className="error-text">{errors.pincode.message}</span>}
             </div>
           </div>
 
@@ -129,21 +163,20 @@ const AddressPopup = ({ isOpen, onClose }) => {
             <div style={{ flex: 1 }}>
               <input
                 type="text"
-                name="country"
                 placeholder="Country"
-                value={formData.country}
-                onChange={handleChange}
+                {...register("country")}
               />
+              {errors.country && (
+                <span className="error-text">{errors.country.message}</span>
+              )}
             </div>
             <div style={{ flex: 1 }}>
               <input
                 type="text"
-                name="state"
                 placeholder="State"
-                value={formData.state}
-                onChange={handleChange}
+                {...register("states")}
               />
-              {errors.state && <span className="error-text">{errors.state}</span>}
+              {errors.states && <span className="error-text">{errors.states.message}</span>}
             </div>
           </div>
 
@@ -152,35 +185,45 @@ const AddressPopup = ({ isOpen, onClose }) => {
             <div style={{ flex: 1 }}>
               <PhoneInput
                 country={"in"}
-                value={formData.phone}
-                onChange={(value) => {
-                  setFormData({ ...formData, phone: value });
-                  setErrors({ ...errors, phone: "" });
+                onChange={(value, metadata) => {
+                  const countryCode = `+${metadata?.country?.dialCode || 91
+                    }`;
+                  const numberOnly = value?.replace(countryCode, "").trim();
+
+                  setValue("countryCode", countryCode, {
+                    shouldValidate: true,
+                  });
+                  setValue("phone", numberOnly, {
+                    shouldValidate: true,
+                  });
                 }}
                 enableSearch={true}
                 inputStyle={{ width: "100%" }}
                 buttonStyle={{ border: "none" }}
                 placeholder="Phone number"
               />
-              {errors.phone && <span className="error-text">{errors.phone}</span>}
+              <input type="hidden" {...register("countryCode")} />
+              <input type="hidden" {...register("phone")} />
+              {errors.phone && (
+                <span className="error-text">{errors.phone.message}</span>
+              )}
             </div>
             <div style={{ flex: 1 }}>
-              <select
-                name="addressType"
-                value={formData.addressType}
-                onChange={handleChange}
-              >
-                <option value="Home">Home</option>
-                <option value="Work">Work</option>
-                <option value="Other">Other</option>
+              <select {...register("addressType")}>
+                {addressType?.map((item, index) => (
+                  <option key={index} value={item?.value || ""}>
+                    {item?.label || ""}
+                  </option>
+                ))}
               </select>
+              {errors.addressType && <span className="error-text">{errors.addressType.message}</span>}
             </div>
           </div>
 
           {/* Actions */}
           <div className="form-actions">
-            <button type="button" className="btn cancel" onClick={onClose}>Cancel</button>
-            <button type="submit" className="btn save">Save</button>
+            <button type="button" className="btn cancel" onClick={() => setOpen(false)}>Cancel</button>
+            <button type="submit" disabled={loading} className="btn save">{loading ? <div className="login-load" /> : "Save"}</button>
           </div>
         </form>
       </div>

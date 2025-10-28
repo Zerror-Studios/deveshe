@@ -1,36 +1,25 @@
 import React, { useState } from "react";
+import Box from "@mui/material/Box";
 import SeoHeader from "@/components/seo/SeoHeader";
-import ProfileBlocks from "@/components/profileNew/myProfile/ProfileBlocks";
-import ProfileHeader from "@/components/profileNew/ProfileHeader";
-import AddressBlocks from "@/components/profileNew/address/AddressBlocks";
-import OrderBlock from "@/components/profileNew/order/OrderBlock";
+import TabList from "@/components/profile/TabList";
+import TabPanel from "@/components/profile/TabPanel";
 import withAuth from "@/lib/withAuth";
 
 const Profile = ({ meta }) => {
   const [tab, setTab] = useState(0);
-
-  const renderTabContent = () => {
-    switch (tab) {
-      case 0:
-        return <ProfileBlocks />;
-      case 1:
-        return <AddressBlocks />;
-      case 2:
-        return <OrderBlock />;
-      default:
-        return <ProfileBlocks />;
-    }
-  };
-
   return (
     <>
       <SeoHeader meta={meta} />
-      <section id="profile_section">
-        <div id="profile_container">
-          <ProfileHeader setTab={setTab} activeTab={tab} />
-          {renderTabContent()}
+      <div className="parent-div">
+        <div className="outerdiv-pro">
+          <div className="div-tab">
+            <Box sx={{ width: "100%" }}>
+              <TabList tab={tab} setTab={setTab} />
+              <TabPanel tab={tab} />
+            </Box>
+          </div>
         </div>
-      </section>
+      </div>
     </>
   );
 };

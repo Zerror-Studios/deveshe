@@ -1,6 +1,75 @@
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { useMutation } from "@apollo/client";
+import { UPDATE_USER_PASSWORD } from "@/graphql";
+import { useAuthStore } from "@/store/auth-store";
+import { toast } from "react-hot-toast";
 import CommonButton from "@/components/common/CommonButton";
 
+const passwordSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Current password is required"),
+    newPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .regex(/[a-z]/, "Must include at least one lowercase letter")
+      .regex(/[A-Z]/, "Must include at least one uppercase letter")
+      .regex(/[0-9]/, "Must include at least one number")
+      .regex(/[^a-zA-Z0-9]/, "Must include at least one special character"),
+    renewPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.renewPassword, {
+    path: ["renewPassword"],
+    message: "Passwords do not match",
+  });
+
 const ChangePassword = () => {
+  const [visible, setVisible] = useState({
+    currentPassword: false,
+    newPassword: false,
+    renewPassword: false,
+  });
+  const [updatePassword, { loading }] = useMutation(UPDATE_USER_PASSWORD);
+  const { user, setToken } = useAuthStore((state) => state);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: zodResolver(passwordSchema),
+  });
+
+  const onVisibleChange = (key) => {
+    setVisible((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const onSubmit = async (data) => {
+    try {
+      const input = {
+        email: user?.email || null,
+        currentPassword: data?.currentPassword || null,
+        newPassword: data?.renewPassword || null,
+      };
+      const { data: response } = await updatePassword({
+        variables: { ...input },
+      });
+      const { userToken } = response?.changeUserPassword || {};
+      if (userToken) {
+        setToken(userToken);
+        reset();
+        toast.success("Password Updated successfully!");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.message || "Update failed");
+      reset();
+    }
+  };
   return (
     <div id="change_password" className="detail_block">
       <div className="profile_left_container">
@@ -14,24 +83,74 @@ const ChangePassword = () => {
         </p>
       </div>
       <div className="profile_right_container">
-        <form className="change_pass_form">
+        <form onSubmit={handleSubmit(onSubmit)} className="change_pass_form">
           <div className="password_input">
-            <input type="password" placeholder="Enter Current Password" />
-            <span className="error-text">Current password is required</span>
+            <div
+              className="eye-cont flex-all"
+              style={{ top: "-13px", color: "rgba(0,0,0,0.2)" }}
+              onClick={() => onVisibleChange("currentPassword")}
+            >
+              {visible?.currentPassword ? (
+                <AiOutlineEye />
+              ) : (
+                <AiOutlineEyeInvisible />
+              )}
+            </div>
+            <input
+              type={visible?.currentPassword ? "text" : "password"}
+              placeholder="Enter Current Password"
+              {...register("currentPassword")}
+            />
+            {errors.currentPassword && (
+              <span className="error-text">{errors.currentPassword.message}</span>
+            )}
           </div>
           <div className="password_input">
-            <input type="password" placeholder="Enter New Password" />
-            <span className="error-text">
-              Password must be at least 8 characters
-            </span>
+            <div
+              className="eye-cont flex-all"
+              style={{ top: "-13px", color: "rgba(0,0,0,0.2)" }}
+              onClick={() => onVisibleChange("newPassword")}
+            >
+              {visible?.newPassword ? (
+                <AiOutlineEye />
+              ) : (
+                <AiOutlineEyeInvisible />
+              )}
+            </div>
+            <input
+              type={visible?.newPassword ? "text" : "password"}
+              placeholder="Enter New Password"
+              {...register("newPassword")}
+            />
+            {errors.newPassword && (
+              <span className="error-text">{errors.newPassword.message}</span>
+            )}
           </div>
           <div className="password_input">
-            <input type="password" placeholder="Confirm New Password" />
+            <div
+              className="eye-cont flex-all"
+              style={{ top: "-13px", color: "rgba(0,0,0,0.2)" }}
+              onClick={() => onVisibleChange("renewPassword")}
+            >
+              {visible?.renewPassword ? (
+                <AiOutlineEye />
+              ) : (
+                <AiOutlineEyeInvisible />
+              )}
+            </div>
+            <input
+              type={visible?.renewPassword ? "text" : "password"}
+              placeholder="Confirm New Password"
+              {...register("renewPassword")}
+            />
+            {errors.renewPassword && (
+              <span className="error-text">{errors.renewPassword.message}</span>
+            )}
           </div>
           <CommonButton
+            type="submit"
             title="Change Password"
-            // onClick={navigateCheckout}
-            // loading={isBtnLoading}
+            loading={loading}
           />
         </form>
       </div>

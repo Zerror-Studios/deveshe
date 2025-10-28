@@ -1,4 +1,5 @@
 import React from "react";
+import { useAuth } from "@/context/AuthContext";
 import CommonButton from "../common/CommonButton";
 
 const tabs = [
@@ -8,6 +9,7 @@ const tabs = [
 ];
 
 const ProfileHeader = ({ activeTab, setTab }) => {
+  const { logout } = useAuth();
   return (
     <div id="profile_header">
       <div className="tab_container">
@@ -24,8 +26,8 @@ const ProfileHeader = ({ activeTab, setTab }) => {
 
       <CommonButton
         title="Logout"
-        // onClick={navigateCheckout}
-        // loading={isBtnLoading}
+        onClick={logout}
+      // loading={isBtnLoading}
       />
     </div>
   );
