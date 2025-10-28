@@ -260,9 +260,9 @@
 }
 
 .order-table th {
-  background: red;
+  background: pink;
   text-align: left;
-  color: white;
+  color: black;
   font-weight: 600;
   white-space: nowrap;
 }

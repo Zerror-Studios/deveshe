@@ -1,6 +1,6 @@
 import React from "react";
 import { useAuth } from "@/context/AuthContext";
-import CommonButton from "../common/CommonButton";
+// import CommonButton from "../common/CommonButton";
 
 const tabs = [
   { id: 0, label: "My Profile" },
@@ -24,11 +24,13 @@ const ProfileHeader = ({ activeTab, setTab }) => {
         ))}
       </div>
 
-      <CommonButton
-        title="Logout"
+      <div
+        id="logout_btn"
         onClick={logout}
-      // loading={isBtnLoading}
-      />
+        className="_btn_wrapper _btn_height _w-full de-btn"
+      >
+        Logout
+      </div>
     </div>
   );
 };
