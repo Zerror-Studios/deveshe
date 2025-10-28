@@ -176,6 +176,7 @@
 }
 
 .password_input {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 3px;
@@ -216,7 +217,7 @@
   height: 24px;
 }
 .address_details {
-  width: 40%;
+  width: 50%;
   display: flex;
   flex-direction: column;
   gap: 2px;

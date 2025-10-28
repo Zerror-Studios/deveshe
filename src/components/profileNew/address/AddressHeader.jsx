@@ -1,9 +1,7 @@
+import React from "react";
 import CommonButton from "@/components/common/CommonButton";
-import React, { useState } from "react";
-import AddressPopup from "./AddressPopup";
 
-const AddressHeader = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const AddressHeader = ({ setIsOpen }) => {
   return (
     <>
       <div id="profile_header_inside" className="detail_block">
@@ -17,10 +15,9 @@ const AddressHeader = () => {
         <CommonButton
           title="Add Address"
           onClick={() => setIsOpen(true)}
-          // loading={isBtnLoading}
+        // loading={isBtnLoading}
         />
       </div>
-      <AddressPopup isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>
   );
 };

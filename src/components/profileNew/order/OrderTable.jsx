@@ -1,5 +1,7 @@
 "use client";
+import { formatDateTime, formatePrice, renderVariants } from "@/utils/Util";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const orders = [
@@ -35,7 +37,7 @@ const orders = [
   },
 ];
 
-const OrderTable = () => {
+const OrderTable = ({ data, columns, loading }) => {
   return (
     <>
       {orders.length > 0 ? (
@@ -43,53 +45,80 @@ const OrderTable = () => {
           <table className="order-table">
             <thead>
               <tr>
-                <th>Order Id</th>
-                <th>Product</th>
-                <th>Order Date</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th>AWB Code</th>
-                <th>Track</th>
+                {columns?.map((item, index) => {
+                  return (
+                    <>
+                      <th key={`order-column-${index}`}>
+                        {item}
+                      </th>
+                    </>
+                  );
+                })}
               </tr>
             </thead>
             <tbody>
-              {orders.map((order, index) => (
-                <tr key={index}>
-                  <td>{order.id}</td>
-                  <td>
-                    <div className="product-cell">
-                      <Image
-                        className="skeleton-loading"
-                        width={1000}
-                        height={1000}
-                        src={order.product.image}
-                        alt={order.product.name}
-                      />
-                      <div>
-                        <p className="product-name">{order.product.name}</p>
-                        <p>Qty : {order.product.qty}</p>
-                        <p>Sku : {order.product.sku}</p>
-                        <p>Color: {order.product.color}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>{order.date}</td>
-                  <td>{order.price}</td>
-                  <td>
-                    <span
-                      className={`status ${
-                        order.status.toLowerCase() === "paid"
+              {data.map((item, index) => {
+                const cart =
+                  item?.cart && item?.cart?.length > 0 ? item?.cart : [];
+                return (
+                  <tr key={`order-row-${index}`}>
+                    <td>{item.orderNo}</td>
+                    <td>
+                      {cart?.map((cartItem, cartIndex) => {
+                        return (
+                          <div className="product-cell" key={`order-product-${cartIndex}`}>
+                            <Image
+                              className="skeleton-loading"
+                              width={1000}
+                              height={1000}
+                              src={cartItem?.asset?.path || ""}
+                              alt={cartItem?.asset?.altText || ""}
+                            />
+                            <div>
+                              <p className="product-name">{cartItem?.name || ""}</p>
+                              <p>Qty : {cartItem?.qty || ""}</p>
+                              <p>Sku : {cartItem?.variantDetail?.sku || ""}</p>
+                              <p>{renderVariants(
+                                cartItem?.variantDetail?.selectedOptions ||
+                                []
+                              )}</p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </td>
+                    <td>{formatDateTime(item?.createdAt || "")}</td>
+                    <td>{formatePrice(item?.discountedPrice || 0)}</td>
+                    <td>
+                      <span
+                        className={`status ${item.paymentStatus === "PAID"
                           ? "paid"
                           : "unpaid"
-                      }`}
-                    >
-                      {order.status}
-                    </span>
-                  </td>
-                  <td>{order.awb}</td>
-                  <td>{order.track}</td>
-                </tr>
-              ))}
+                          }`}
+                      >
+                        {item && item.paymentStatus === "PAID"
+                          ? "Paid"
+                          : "Unpaid"}
+                      </span>
+                    </td>
+                    <td>{item?.awb_code || "NA"}</td>
+                    <td>
+                      {item?.awb_code ? (
+                        <Link
+                          id="common_black_btn"
+                          href={`https://shiprocket.co/tracking/${item?.awb_code}`}
+                          target="_blank"
+                          style={{ maxWidth: "unset", padding: "5px 12px", fontSize: "12px" }}
+                        >
+                          Track
+                        </Link>
+                      ) : (
+                        "NA"
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
