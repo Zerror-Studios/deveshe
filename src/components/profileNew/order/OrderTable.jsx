@@ -3,6 +3,7 @@ import { formatDateTime, formatePrice, renderVariants } from "@/utils/Util";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { FiArrowRight } from "react-icons/fi";
 
 const orders = [
   {
@@ -108,9 +109,10 @@ const OrderTable = ({ data, columns, loading }) => {
                           id="common_black_btn"
                           href={`https://shiprocket.co/tracking/${item?.awb_code}`}
                           target="_blank"
-                          style={{ maxWidth: "unset", padding: "5px 12px", fontSize: "12px" }}
+                          className="track-btn"
                         >
                           Track
+                          <FiArrowRight />
                         </Link>
                       ) : (
                         "NA"
