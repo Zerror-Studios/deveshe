@@ -6,14 +6,16 @@ import gsap from "gsap";
 const ProductContent = ({
   data = {},
   finalPrice,
-  buttonText,
   loading,
+  notifyLoading,
+  isOutOfStock,
   cartBtn,
   setFinalPrice,
   setVariantMatched,
   setCartBtn,
   handleOpen,
   handleAddToCart,
+  handleNotifyMe,
 }) => {
   const colorOption = useMemo(
     () =>
@@ -137,9 +139,8 @@ const ProductContent = ({
                       onClick={() => {
                         handleVariants(colorOption.optionName, choice.name);
                       }}
-                      className={`shop-card_grid collection_grid ${
-                        selected ? "Product_active_color" : ""
-                      }`}
+                      className={`shop-card_grid collection_grid ${selected ? "Product_active_color" : ""
+                        }`}
                     >
                       <div className="ProductDets_collection_imgs_grid_cntr">
                         <div className="ProductDets_imgs_grid_cntr ProductDets_imgs_grid_cntr2">
@@ -178,9 +179,8 @@ const ProductContent = ({
                               choice.name
                             );
                           }}
-                          className={`ProductDets-size_numbers ${
-                            selected ? "acitve" : ""
-                          }`}
+                          className={`ProductDets-size_numbers ${selected ? "acitve" : ""
+                            }`}
                         >
                           {choice.name}
                         </div>
@@ -203,7 +203,7 @@ const ProductContent = ({
 
           <div className="ProductDets_Notify_wrap desktop_add_btn">
             <button
-              className="ProductDets_ntfy_btn ProductDets_ntfy_btn_grid"
+              className={`ProductDets_ntfy_btn ${!isOutOfStock ? "ProductDets_ntfy_btn_grid" : "BtnOutline_Grid"}`}
               id="easysize-cart-button"
               style={loading ? { backgroundColor: "black" } : {}}
               onClick={handleAddToCart}
@@ -215,10 +215,10 @@ const ProductContent = ({
               ) : (
                 <>
                   <span className="ProductDets_ntfy_btn_slect_size">
-                    {!cartBtn ? "Select a Size" : buttonText}
+                    {!cartBtn ? "Select a Size" : isOutOfStock ? StockStatus.OUT_OF_STOCK : "Add to Bag"}
                   </span>
                   <span className="ProductDets_ntfy_btn_AddtoBeg">
-                    {buttonText}
+                    {isOutOfStock ? StockStatus.OUT_OF_STOCK : "Add to Bag"}
                   </span>
                   <div className="ProductDets_ntfy_btn_price">
                     <span>{finalPrice} INR</span>
@@ -226,6 +226,29 @@ const ProductContent = ({
                 </>
               )}
             </button>
+            {isOutOfStock && (
+              <button
+                className="ProductDets_ntfy_btn ProductDets_ntfy_btn_grid"
+                id="easysize-cart-button"
+                style={notifyLoading ? { backgroundColor: "black" } : {}}
+                onClick={handleNotifyMe}
+              >
+                {notifyLoading ? (
+                  <div className="ani-wrap">
+                    <div className="ani-main" />
+                  </div>
+                ) : (
+                  <>
+                    <span className="ProductDets_ntfy_btn_slect_size">
+                      Notify me
+                    </span>
+                    <span className="ProductDets_ntfy_btn_AddtoBeg">
+                      Notify me
+                    </span>
+                  </>
+                )}
+              </button>
+            )}
           </div>
 
           <div className="ProductDets_bottom_links_wrap ProductDets_bottom_links_wrap_large">

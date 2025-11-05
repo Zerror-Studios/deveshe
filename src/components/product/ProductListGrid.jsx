@@ -4,12 +4,13 @@ import ProductCard from "../common/card/ProductCard";
 import { useRouter } from "next/router";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
+import { StockStatus } from "@/utils/Constant";
 gsap.registerPlugin(ScrollTrigger);
 
 const ProductListGrid = ({
   title = "You may also like",
   data,
-  buttonText,
+  isOutOfStock,
   loading,
   handleAddToCart,
   cartBtn,
@@ -95,9 +96,9 @@ const ProductListGrid = ({
           ) : (
             <>
               <span className="ProductDets_ntfy_btn_slect_size">
-                {!cartBtn ? "Select a Size" : buttonText}
+                {!cartBtn ? "Select a Size" : isOutOfStock ? StockStatus.OUT_OF_STOCK : "Add to Bag"}
               </span>
-              <span className="ProductDets_ntfy_btn_AddtoBeg">{buttonText}</span>
+              <span className="ProductDets_ntfy_btn_AddtoBeg">{isOutOfStock ? StockStatus.OUT_OF_STOCK : "Add to Bag"}</span>
               <div className="ProductDets_ntfy_btn_price">
                 <span>{finalPrice} INR</span>
               </div>
