@@ -5,7 +5,7 @@ import { useMutation } from "@apollo/client";
 import { useAuthStore } from "@/store/auth-store";
 import { useCartStore } from "@/store/cart-store";
 import { createApolloClient } from "@/lib/apolloClient";
-import { ADD_ITEM_TO_CART, GET_PRODUCT_BY_ID, GET_PRODUCTS } from "@/graphql";
+import { ADD_ITEM_TO_CART, CREATE_BACK_IN_STOCK_REQUEST, GET_PRODUCT_BY_ID, GET_PRODUCTS } from "@/graphql";
 import SeoHeader from "@/components/seo/SeoHeader";
 import ProductListGrid from "@/components/product/ProductListGrid";
 import ProductModalPreview from "@/components/product/ProductModalPreview";
@@ -28,10 +28,10 @@ const ProductDetail = ({ meta, data, productList }) => {
   const [finalPrice, setFinalPrice] = useState(basePrice);
   const [variantMatched, setVariantMatched] = useState(null);
   const [cartBtn, setCartBtn] = useState(false);
-  const { token, isLoggedIn } = useAuthStore((state) => state);
+  const { token, user, isLoggedIn } = useAuthStore((state) => state);
   const { openCart } = useCartStore((state) => state);
   const [addItemToCart, { loading }] = useMutation(ADD_ITEM_TO_CART);
-
+  const [createNotifyRequest, { loading: notifyLoading }] = useMutation(CREATE_BACK_IN_STOCK_REQUEST);
   const handleAddToCart = async () => {
     if (!cartBtn || variantMatched.stockStatus === Const.OUT_OF_STOCK) return;
 
@@ -56,15 +56,39 @@ const ProductDetail = ({ meta, data, productList }) => {
     }
   };
 
+  const handleNotifyMe = async () => {
+    if (variantMatched.stockStatus !== Const.OUT_OF_STOCK) return;
+    if (!isLoggedIn) return router.push("/login");
+    try {
+      const productId = router?.query?.slug;
+      if (!productId) throw new Error("Product ID not found");
+
+      const payload = {
+        input: {
+          productId,
+          email: user?.email,
+          userId: user?._id,
+          variantId: variantMatched?.variantDetailId,
+        },
+      };
+
+      await createNotifyRequest({ variables: payload });
+      toast.success("You’ll be notified when this item is back in stock!");
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message || "Failed to notify");
+    }
+  };
+
   const handleOpen = () => {
     setShowSizeAssist(true);
   };
 
   const handleClose = () => setShowSizeAssist(false);
-  const buttonText =
-    variantMatched?.stockStatus === Const.OUT_OF_STOCK
-      ? StockStatus[variantMatched?.stockStatus]
-      : "Add to Bag";
+  // const buttonText =
+  //   variantMatched?.stockStatus === Const.OUT_OF_STOCK
+  //     ? StockStatus[variantMatched?.stockStatus]
+  //     : "Add to Bag";
   return (
     <>
       <SeoHeader meta={meta} />
@@ -79,20 +103,22 @@ const ProductDetail = ({ meta, data, productList }) => {
             <ProductContent
               data={data || {}}
               finalPrice={finalPrice}
-              buttonText={buttonText}
               cartBtn={cartBtn}
               loading={loading}
+              notifyLoading={notifyLoading}
+              isOutOfStock={variantMatched?.stockStatus === Const.OUT_OF_STOCK}
               setFinalPrice={setFinalPrice}
               setCartBtn={setCartBtn}
               setVariantMatched={setVariantMatched}
               handleOpen={handleOpen}
               handleAddToCart={handleAddToCart}
+              handleNotifyMe={handleNotifyMe}
             />
           </div>
           <ProductListGrid
             key={router.asPath}
             data={productList}
-            buttonText={buttonText}
+            isOutOfStock={variantMatched?.stockStatus === Const.OUT_OF_STOCK}
             loading={loading}
             handleAddToCart={handleAddToCart}
             cartBtn={cartBtn}

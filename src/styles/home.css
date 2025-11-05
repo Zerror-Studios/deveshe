@@ -1201,6 +1201,17 @@ button {
   overflow: hidden;
   position: relative;
 }
+.BtnOutline_Grid {
+  display: flex;
+  justify-content: space-between;
+}
+.BtnOutline_Grid:hover {
+  background: unset!important;
+  color: unset!important;
+}
+.BtnOutline_Grid:hover .ProductDets_ntfy_btn_slect_size {
+  color: unset!important;
+}
 .desktop_add_btn .ProductDets_ntfy_btn_grid {
   max-width: 100% !important;
 }
