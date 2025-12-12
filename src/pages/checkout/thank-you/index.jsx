@@ -54,13 +54,31 @@ export default ThankYou;
 
 export async function getServerSideProps() {
   const meta = {
-    title: "Thank You for Your Order | DeVeSheDreams",
+    title: "Thank You for Your Order – DeVeSheDreams",
     description:
-      "Your order with DeVeSheDreams has been placed successfully. We will send you a confirmation email with all the details shortly. Thank you for shopping with us!",
-    keywords:
-      "DeVeSheDreams order confirmation, thank you page, order placed successfully, online shopping India, designer wear, luxury fashion, order success, DeVeSheDreams shopping",
+      "Thank you for your order! Your DeVeSheDreams purchase has been successfully placed. We’ll notify you with shipping details and updates.",
+    keywords: [
+      "DeVeSheDreams order confirmation",
+      "order received",
+      "thank you for your order",
+      "purchase confirmation",
+      "order success"
+    ],
+    primaryKeywords: ["DeVeSheDreams order confirmation", "order received"],
     author: "DeVeSheDreams",
-    robots: "noindex,follow",
+    robots: "noindex, nofollow",
+    og: {
+      title: "Thank You for Your Order – DeVeSheDreams",
+      description:
+        "Your order has been successfully placed at DeVeSheDreams. Thank you for shopping with us! We’ll keep you updated on your order status."
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Thank You for Your Order – DeVeSheDreams",
+      description:
+        "Order received! DeVeSheDreams will send you updates on your order status and shipping details."
+    }
   };
+
   return { props: { meta } };
 }

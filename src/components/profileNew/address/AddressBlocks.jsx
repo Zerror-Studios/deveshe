@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { USER_ADDRESS_LIST } from "@/graphql";
 import AddressHeader from "./AddressHeader";
 import AddressContainer from "./AddressContainer";
@@ -12,12 +12,10 @@ const AddressBlocks = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [addressId, setAddressId] = useState(null);
   const [offset, setOffset] = useState(0);
-  const {
-    user: { _id },
-  } = useAuthStore((state) => state);
+  const { user } = useAuthStore();
 
   const payload = {
-    filters: { userId: _id },
+    filters: { userId: user?._id },
     limit: LIMIT,
     offset,
     sort: { createdAt: Sort.DESC, primary: Sort.ASC },

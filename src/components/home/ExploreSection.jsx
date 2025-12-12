@@ -3,7 +3,7 @@ import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
 import React, { useEffect } from "react";
 gsap.registerPlugin(ScrollTrigger);
-const ExploreSection = ({sectionRef}) => {
+const ExploreSection = ({ sectionRef }) => {
   useEffect(() => {
     // Split text into spans
     const splitText = (selector) => {
@@ -102,7 +102,7 @@ const ExploreSection = ({sectionRef}) => {
       }
     );
   };
-   const handleScrollTo = () => {
+  const handleScrollTo = () => {
     if (sectionRef.current) {
       sectionRef.current.scrollIntoView({
         behavior: "smooth", // smooth scrolling

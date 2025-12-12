@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { useAuthStore } from "@/store/auth-store";
 import { ORDER_LIST } from "@/graphql";
 import Table from "@/components/profile/panel/order/components/Table";

@@ -47,9 +47,7 @@ const CartProduct = ({
         <div className="product_dets">
           <div className="product_dets_top">
             <span>{item?.name || ""}</span>
-            <span>
-              {renderVariants(item?.variantDetail?.selectedOptions || [])}
-            </span>
+            {renderVariants(item?.product?.productOptions || [], item?.variantDetail?.selectedOptions || [])}
             <div className="cart_qt">
               <span>Quantity</span>
               <button disabled={removing} onClick={() => onRemove(false)}>

@@ -5,7 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-hot-toast";
 import { IoLocationOutline } from "react-icons/io5";
-import { useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
 import { USER_ADDRESS_SAVE_OR_UPDATE } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
 import { addressType } from "@/helpers/Data";
@@ -27,9 +27,7 @@ const addressSchema = z.object({
 });
 
 const AddressPopup = ({ isOpen, addressId, listPayload, setOpen, refetch }) => {
-  const {
-    user: { _id },
-  } = useAuthStore((state) => state);
+  const { user } = useAuthStore();
   const [saveUpdateAddress, { loading }] = useMutation(
     USER_ADDRESS_SAVE_OR_UPDATE
   );
@@ -66,7 +64,7 @@ const AddressPopup = ({ isOpen, addressId, listPayload, setOpen, refetch }) => {
   const onSubmit = async (data) => {
     try {
       const input = {
-        userId: _id,
+        userId: user?._id,
         ...data,
       };
       const { data: response } = await saveUpdateAddress({

@@ -1,7 +1,16 @@
 export const Const = {
   ClientLink: "https://www.deveshedreams.com",
+  Brand: "Deveshe Dreams",
   IN_STOCK: "IN_STOCK",
   OUT_OF_STOCK: "OUT_OF_STOCK",
+};
+
+export const StatusCode = {
+  Success: 200,
+  NotFound: 404,
+  UnAuthorized: 401,
+  Forbidden: 403,
+  IntervalServer: 500,
 };
 
 export const ProductStatus = {

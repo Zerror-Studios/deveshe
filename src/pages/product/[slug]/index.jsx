@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { useVisitor } from "@/hooks/useVisitor";
-import { useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
 import { useAuthStore } from "@/store/auth-store";
 import { useCartStore } from "@/store/cart-store";
 import { createApolloClient } from "@/lib/apolloClient";
@@ -12,8 +12,9 @@ import ProductModalPreview from "@/components/product/ProductModalPreview";
 import ProductImageGrid from "@/components/product/ProductImageGrid";
 import ProductContent from "@/components/product/ProductContent";
 import SizeAssistance from "@/components/product/SizeAssistance";
-import toast from "react-hot-toast";
+import { toast } from 'react-toastify';
 import { Const, ProductStatus, StockStatus } from "@/utils/Constant";
+import { AuthCookies } from "@/utils/AuthCookies";
 
 const ProductDetail = ({ meta, data, productList }) => {
   const router = useRouter();
@@ -28,15 +29,16 @@ const ProductDetail = ({ meta, data, productList }) => {
   const [finalPrice, setFinalPrice] = useState(basePrice);
   const [variantMatched, setVariantMatched] = useState(null);
   const [cartBtn, setCartBtn] = useState(false);
-  const { token, user, isLoggedIn } = useAuthStore((state) => state);
+  const { user, isLoggedIn } = useAuthStore((state) => state);
   const { openCart } = useCartStore((state) => state);
+  const token = AuthCookies.get();
   const [addItemToCart, { loading }] = useMutation(ADD_ITEM_TO_CART);
   const [createNotifyRequest, { loading: notifyLoading }] = useMutation(CREATE_BACK_IN_STOCK_REQUEST);
   const handleAddToCart = async () => {
     if (!cartBtn || variantMatched.stockStatus === Const.OUT_OF_STOCK) return;
 
     try {
-      const productId = router?.query?.slug;
+      const productId = data?._id;
       if (!productId) throw new Error("Product ID not found");
 
       const payload = {
@@ -60,7 +62,7 @@ const ProductDetail = ({ meta, data, productList }) => {
     if (variantMatched.stockStatus !== Const.OUT_OF_STOCK) return;
     if (!isLoggedIn) return router.push("/login");
     try {
-      const productId = router?.query?.slug;
+      const productId = data?._id;
       if (!productId) throw new Error("Product ID not found");
 
       const payload = {
@@ -85,10 +87,7 @@ const ProductDetail = ({ meta, data, productList }) => {
   };
 
   const handleClose = () => setShowSizeAssist(false);
-  // const buttonText =
-  //   variantMatched?.stockStatus === Const.OUT_OF_STOCK
-  //     ? StockStatus[variantMatched?.stockStatus]
-  //     : "Add to Bag";
+
   return (
     <>
       <SeoHeader meta={meta} />
@@ -141,7 +140,7 @@ const ProductDetail = ({ meta, data, productList }) => {
 export default ProductDetail;
 
 export async function getServerSideProps({ params }) {
-  const id = params?.slug || "";
+  const slug = params?.slug || "";
   const meta = {
     title: "DeVeSheDreams – Wear Your Imagination",
     description:
@@ -157,7 +156,7 @@ export async function getServerSideProps({ params }) {
     const queries = [
       client.query({
         query: GET_PRODUCT_BY_ID,
-        variables: { getClientSideProductByIdId: id },
+        variables: { slug },
       }),
       client.query({
         query: GET_PRODUCTS,
@@ -167,7 +166,7 @@ export async function getServerSideProps({ params }) {
           filters: {
             categoryIds: ["6898b3cdddf0354e025da816"],
             status: ProductStatus.PUBLISHED,
-            idNotInclude: id,
+            slugNotInclude: slug,
           },
         },
       }),
@@ -176,7 +175,7 @@ export async function getServerSideProps({ params }) {
     const [productRes, productListRes] = await Promise.all(queries);
     return {
       props: {
-        meta,
+        meta: productRes?.data?.getClientSideProductById?.meta || meta,
         data: productRes?.data?.getClientSideProductById || {},
         productList:
           productListRes?.data?.getClientSideProducts?.products || [],

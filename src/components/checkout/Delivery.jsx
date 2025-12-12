@@ -7,7 +7,7 @@ import { IoLocationOutline } from "react-icons/io5";
 import CommonButton from "../common/CommonButton";
 import { useAuthStore } from "@/store/auth-store";
 import { Sort } from "@/utils/Constant";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { USER_ADDRESS_LIST } from "@/graphql";
 
 const Delivery = ({ errors, control, register, setValue }) => {
@@ -278,9 +278,8 @@ const Delivery = ({ errors, control, register, setValue }) => {
             <div className="Phone_input_cntr div-name">
               <PhoneInput
                 defaultCountry="in"
-                value={`+${
-                  shippingAddress?.countryCode?.replace("+", "") || "91"
-                }${shippingAddress?.phone || ""}`}
+                value={`+${shippingAddress?.countryCode?.replace("+", "") || "91"
+                  }${shippingAddress?.phone || ""}`}
                 className="delivery__phone_btn"
                 inputClassName="delivery__input__phone"
                 onChange={(value, metadata) => {

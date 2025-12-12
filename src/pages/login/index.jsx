@@ -49,11 +49,30 @@ export async function getStaticProps() {
   const meta = {
     title: "Login – DeVeSheDreams",
     description:
-      "Log in to your DeVeSheDreams account to access your profile, wishlist, and order history.",
-    keywords:
-      "login, DeVeSheDreams account, sign in, user login, profile access",
+      "Access your DeVeSheDreams account to manage orders, update your profile, and enjoy a personalized fashion experience.",
+    keywords: [
+      "DeVeSheDreams login",
+      "account access",
+      "sign in",
+      "user account",
+      "dashboard",
+      "profile management"
+    ],
+    primaryKeywords: ["DeVeSheDreams login", "account access"],
     author: "DeVeSheDreams",
-    robots: "noindex,follow",
+    robots: "noindex, nofollow",
+    og: {
+      title: "Login – DeVeSheDreams",
+      description:
+        "Sign in to your DeVeSheDreams account to access your orders, profile, and personalized fashion recommendations."
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Login – DeVeSheDreams",
+      description:
+        "Log in to your DeVeSheDreams account to manage your orders and profile details securely."
+    }
   };
+
   return { props: { meta } };
 }

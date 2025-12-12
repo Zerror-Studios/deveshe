@@ -33,13 +33,31 @@ export default PaymentFailed;
 
 export async function getServerSideProps() {
   const meta = {
-    title: "Payment Failed | DeVeSheDreams",
+    title: "Payment Failed – DeVeSheDreams",
     description:
-      "Unfortunately, your payment with DeVeSheDreams could not be processed. Please try again or contact our support team for assistance.",
-    keywords:
-      "DeVeSheDreams payment failed, payment error, transaction failed, retry payment, payment issue, DeVeSheDreams checkout error, online shopping payment problem",
+      "Unfortunately, your payment could not be processed. Please try again or contact DeVeSheDreams support for assistance.",
+    keywords: [
+      "DeVeSheDreams payment failed",
+      "payment error",
+      "transaction failed",
+      "checkout issue",
+      "order payment problem"
+    ],
+    primaryKeywords: ["DeVeSheDreams payment failed", "payment error"],
     author: "DeVeSheDreams",
-    robots: "noindex,follow",
+    robots: "noindex, nofollow",
+    og: {
+      title: "Payment Failed – DeVeSheDreams",
+      description:
+        "Your payment could not be processed. Please try again or reach out to DeVeSheDreams support for help with your order."
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Payment Failed – DeVeSheDreams",
+      description:
+        "Payment unsuccessful! Contact DeVeSheDreams support or try again to complete your order."
+    }
   };
+
   return { props: { meta } };
 }

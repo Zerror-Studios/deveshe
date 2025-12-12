@@ -5,13 +5,14 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { PhoneInput } from "react-international-phone";
-import { useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
 import { SIGN_UP_USER } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
 import { UserStatus } from "@/utils/Constant";
-import toast from "react-hot-toast";
+import { toast } from 'react-toastify';
 import "react-international-phone/style.css";
 import CommonButton from "../common/CommonButton";
+import { AuthCookies } from "@/utils/AuthCookies";
 
 const SignupSchema = z
   .object({
@@ -37,7 +38,7 @@ const Signup = ({ setToggle }) => {
   const [visible, setVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [signupUser, { loading }] = useMutation(SIGN_UP_USER);
-  const { setToken, setUser, setIsLoggedIn } = useAuthStore((state) => state);
+  const { setUser, setIsLoggedIn } = useAuthStore((state) => state);
 
   const {
     register,
@@ -61,7 +62,8 @@ const Signup = ({ setToggle }) => {
       if (userToken && Object.keys(user).length > 0) {
         localStorage.removeItem("visitorId");
         localStorage.removeItem("visitorExpire");
-        setToken(userToken);
+        AuthCookies.remove(); // clear previous
+        AuthCookies.set(userToken);
         setUser(user);
         setIsLoggedIn(true);
         toast.success("Account created successfully!");

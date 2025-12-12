@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { USER_ADDRESS_LIST } from "@/graphql";
 import AddressList from "@/components/profile/panel/address/components/AddressList";
 import AddressModal from "@/components/profile/panel/address/components/AddressModal";

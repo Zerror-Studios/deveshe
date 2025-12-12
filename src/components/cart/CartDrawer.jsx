@@ -1,22 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
 import { RxCross2 } from "react-icons/rx";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client/react";
 import { ADD_ITEM_TO_CART, CART_LIST, REMOVE_ITEM_FROM_CART } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
 import { useVisitor } from "@/hooks/useVisitor";
-import { formatePrice } from "@/utils/Util";
+import { formatePrice, getCartItemCount } from "@/utils/Util";
 import gsap from "gsap";
 import CartProduct from "@/components/cart/CartProduct";
 import CommonButton from "../common/CommonButton";
+import { AuthCookies } from "@/utils/AuthCookies";
 
 const CartDrawer = ({ isOpen, closeCart }) => {
   const router = useRouter();
   const drawerRef = useRef(null);
   const backdropRef = useRef(null);
+  const token = AuthCookies.get();
   const { visitorId } = useVisitor();
-  const { token, user, isLoggedIn } = useAuthStore((state) => state);
+  const { user, isLoggedIn } = useAuthStore((state) => state);
 
   const [isBtnLoading, setIsBtnLoading] = useState(false);
 
@@ -29,8 +31,8 @@ const CartDrawer = ({ isOpen, closeCart }) => {
   const cartListPayload = isLoggedIn
     ? { token }
     : visitorId
-    ? { guestId: visitorId }
-    : {};
+      ? { guestId: visitorId }
+      : {};
 
   const {
     data: cartResponse,
@@ -45,12 +47,12 @@ const CartDrawer = ({ isOpen, closeCart }) => {
 
   const {
     _id,
-    itemcount = 0,
     totalprice = 0,
     discountedPrice = 0,
     cart = [],
   } = cartResponse?.getCart || {};
 
+  const count = getCartItemCount(cart);
   const handleAddItem = async (productId, variantDetail) => {
     try {
       const { __typename, ...variantWithoutTypename } = variantDetail;
@@ -141,7 +143,7 @@ const CartDrawer = ({ isOpen, closeCart }) => {
       <div id="drawer" onClick={(e) => e.stopPropagation()} ref={drawerRef}>
         <div id="drawer_header">
           <span>
-            Bag <sup>({itemcount})</sup>
+            Bag <sup>({count})</sup>
           </span>
           <button id="close" onClick={closeCart}>
             <RxCross2 />

@@ -1,6 +1,7 @@
 import React from "react";
-import { useAuth } from "@/context/AuthContext";
-// import CommonButton from "../common/CommonButton";
+import { useRouter } from "next/router";
+import { useAuthStore } from "@/store/auth-store";
+import { AuthCookies } from "@/utils/AuthCookies"
 
 const tabs = [
   { id: 0, label: "My Profile" },
@@ -9,7 +10,14 @@ const tabs = [
 ];
 
 const ProfileHeader = ({ activeTab, setTab }) => {
-  const { logout } = useAuth();
+  const router = useRouter();
+  const { clearAuth } = useAuthStore();
+  const handleSignout = () => {
+    AuthCookies.remove();
+    clearAuth();
+    localStorage.clear();
+    router.replace("/");
+  }
   return (
     <div id="profile_header">
       <div className="tab_container">
@@ -26,7 +34,7 @@ const ProfileHeader = ({ activeTab, setTab }) => {
 
       <div
         id="logout_btn"
-        onClick={logout}
+        onClick={handleSignout}
         className="_btn_wrapper _btn_height _w-full de-btn"
       >
         Logout

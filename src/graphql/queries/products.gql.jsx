@@ -16,6 +16,7 @@ export const GET_PRODUCTS = gql`
         discountedPrice
         costOfGoods
         productType
+        slug
         status
         isDeleted
         variants {
@@ -46,8 +47,8 @@ export const GET_PRODUCTS = gql`
 `;
 
 export const GET_PRODUCT_BY_ID = gql`
-  query GetClientSideProductById($getClientSideProductByIdId: ID!) {
-    getClientSideProductById(id: $getClientSideProductByIdId) {
+  query GetClientSideProductById($slug: String) {
+    getClientSideProductById(slug: $slug) {
       _id
       additionalInfo {
         description
@@ -61,6 +62,7 @@ export const GET_PRODUCT_BY_ID = gql`
       categories {
         _id
         name
+        slug
       }
       description
       name
@@ -82,6 +84,26 @@ export const GET_PRODUCT_BY_ID = gql`
       saleType
       saleValue
       status
+      slug
+      meta {
+        title
+        description
+        keywords
+        primaryKeywords
+        author
+        robots
+        og {
+          title
+          description
+          image
+        }
+        twitter {
+          card
+          title
+          description
+          image
+        }
+      }
       variants {
         _id
         selectedOptions

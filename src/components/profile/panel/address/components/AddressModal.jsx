@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-hot-toast";
 import { IoLocationOutline } from "react-icons/io5";
 import { PhoneInput } from "react-international-phone";
-import { useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
 import { USER_ADDRESS_SAVE_OR_UPDATE } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
 import { addressType } from "@/helpers/Data";
@@ -274,9 +274,8 @@ const AddressModal = ({ addressId, listPayload, setOpen, refetch }) => {
                     style={{ borderBottom: "none" }}
                     inputClassName="general__input__phone"
                     onChange={(value, metadata) => {
-                      const countryCode = `+${
-                        metadata?.country?.dialCode || 91
-                      }`;
+                      const countryCode = `+${metadata?.country?.dialCode || 91
+                        }`;
                       const numberOnly = value?.replace(countryCode, "").trim();
 
                       setValue("countryCode", countryCode, {

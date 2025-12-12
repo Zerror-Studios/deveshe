@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from 'react-toastify';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckoutSchema } from "@/validations/CheckoutValidation";
-import { createApolloClient } from "@/lib/apolloClient";
-import { useMutation, useQuery } from "@apollo/client";
-import { CART_LIST, CHECKOUT_ORDER, USER_ADDRESS_LIST } from "@/graphql";
+import { useMutation, useQuery } from "@apollo/client/react";
+import { CART_LIST, CHECKOUT_ORDER } from "@/graphql";
 import SeoHeader from "@/components/seo/SeoHeader";
 import Heading from "@/components/checkout/Heading";
 import ContactDetail from "@/components/checkout/ContactDetail";
@@ -20,13 +19,28 @@ import { useAuthStore } from "@/store/auth-store";
 import Loader from "@/components/checkout/Loader";
 import gsap from "gsap";
 import CommonButton from "@/components/common/CommonButton";
-const CheckoutPage = ({ meta, initialCartData }) => {
+const CheckoutPage = ({ meta }) => {
   const router = useRouter();
-  const [cartData, setCartData] = useState(initialCartData);
   const [isLoading, setIsLoading] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(false);
   const { isLoggedIn, user } = useAuthStore((state) => state);
   const [checkoutOrder] = useMutation(CHECKOUT_ORDER);
+  const cartListPayload = {
+    cartId: router?.query?.id,
+  };
+  const {
+    data: response,
+    loading,
+    refetch,
+  } = useQuery(CART_LIST, {
+    skip: !router?.query?.id,
+    variables: cartListPayload,
+    fetchPolicy: "network-only",
+    nextFetchPolicy: "cache-first",
+  });
+
+  const cartData = response?.getCart || {};
+
   const {
     register,
     handleSubmit,
@@ -209,7 +223,7 @@ const CheckoutPage = ({ meta, initialCartData }) => {
           </form>
         </div>
         <div className="checkout-right" ref={rightRef}>
-          <OrderSummery cartData={cartData || {}} setCartData={setCartData} />
+          <OrderSummery data={cartData} refetch={() => refetch(cartListPayload)} />
         </div>
       </div>
       <Loader isLoading={isPageLoading} />
@@ -223,33 +237,33 @@ export async function getServerSideProps({ params }) {
   const meta = {
     title: "Checkout – DeVeSheDreams",
     description:
-      "Review your cart, enter shipping details, and complete your DeVeSheDreams order securely.",
-    keywords:
-      "checkout, DeVeSheDreams cart, order process, shipping information, payment",
+      "Securely complete your purchase at DeVeSheDreams. Review your items, apply discounts, and choose your preferred payment method.",
+    keywords: [
+      "DeVeSheDreams checkout",
+      "secure checkout",
+      "shopping cart",
+      "payment",
+      "order review",
+      "complete purchase"
+    ],
+    primaryKeywords: ["DeVeSheDreams checkout", "secure checkout"],
     author: "DeVeSheDreams",
-    robots: "noindex,follow",
+    robots: "noindex, nofollow",
+    og: {
+      title: "Checkout – DeVeSheDreams",
+      description:
+        "Finalize your DeVeSheDreams order securely. Review your items, select payment options, and complete your purchase."
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Checkout – DeVeSheDreams",
+      description:
+        "Securely complete your DeVeSheDreams order. Review items, choose payment method, and finish your purchase."
+    }
   };
-  try {
-    const cartId = params?.id || null;
-    const client = createApolloClient();
-    const { data: response } = await client.query({
-      query: CART_LIST,
-      variables: { cartId },
-    });
-    const data = response?.getCart || {};
-    return {
-      props: {
-        meta: meta,
-        initialCartData: data,
-      },
-    };
-  } catch (error) {
-    console.error("Error fetching data:", error.message);
-    return {
-      props: {
-        meta: meta,
-        initialCartData: {},
-      },
-    };
-  }
+  return {
+    props: {
+      meta: meta,
+    },
+  };
 }

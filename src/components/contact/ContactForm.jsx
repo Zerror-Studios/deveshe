@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import gsap from "gsap";
-import toast from "react-hot-toast";
+import { toast } from 'react-toastify';
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
 import { CREATE_CONTACT_FORM } from "@/graphql";
 import CommonButton from "../common/CommonButton";
 
