@@ -6,7 +6,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useMutation } from "@apollo/client/react";
 import { UPDATE_USER_PASSWORD } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const passwordSchema = z
   .object({

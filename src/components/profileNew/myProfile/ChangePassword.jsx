@@ -7,7 +7,7 @@ import { useMutation } from "@apollo/client/react";
 import { UPDATE_USER_PASSWORD } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
 import { AuthCookies } from "@/utils/AuthCookies";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 import CommonButton from "@/components/common/CommonButton";
 
 const passwordSchema = z

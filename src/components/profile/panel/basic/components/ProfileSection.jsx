@@ -9,7 +9,7 @@ import { PhoneInput } from "react-international-phone";
 import { useMutation } from "@apollo/client/react";
 import { UPDATE_USER_PROFILE } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 import "react-international-phone/style.css";
 
 const SignupSchema = z.object({

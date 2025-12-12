@@ -2,10 +2,9 @@
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai';
-// import toast, { Toaster } from "react-hot-toast";
 // import {Changepassword} from "../../../api_fetch/admin/User"
 
-const General = ({email}) => {
+const General = ({ email }) => {
 
   const [load, setLoad] = useState(false);
   const [visible, setVisible] = useState(false)
@@ -51,7 +50,7 @@ const General = ({email}) => {
       setLoad(false);
     } catch (error) {
       console.error("Error changing password:", error.message);
-    //   toast.error("Failed to change password");
+      //   toast.error("Failed to change password");
     }
   };
 
@@ -74,44 +73,44 @@ const General = ({email}) => {
         {/* <div className="myline-4"></div> */}
 
         <div className="form-secure" style={{ width: "50%" }}>
-          <div className="curr-pass" style={{position:'relative'}}>
-            <div className="eye-cont flex-all" style={{top:'-13px', color:'rgba(0,0,0,0.2)'}} onClick={()=>{setVisible(!visible)}}>{visible ? <AiOutlineEye/>:<AiOutlineEyeInvisible/>}</div>
+          <div className="curr-pass" style={{ position: 'relative' }}>
+            <div className="eye-cont flex-all" style={{ top: '-13px', color: 'rgba(0,0,0,0.2)' }} onClick={() => { setVisible(!visible) }}>{visible ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}</div>
             <input
               className="general__input"
-              type={visible ? "text":"password"}
+              type={visible ? "text" : "password"}
               placeholder="Enter Current Password"
               name="currentpass"
               value={userData.currentpass || ""}
               onChange={handleData}
             />
-            
+
           </div>
-          <div className="curr-pass" style={{position:'relative'}}>
-          <div className="eye-cont flex-all" style={{top:'-13px', color:'rgba(0,0,0,0.2)'}} onClick={()=>{setVisible2(!visible2)}}>{visible2 ? <AiOutlineEye/>:<AiOutlineEyeInvisible/>}</div>
-              {/* <label className="passguide">New Password</label> */}
-              <input
-                className="general__input"
-                type={visible2 ? "text":"password"}
-                placeholder="Enter New Password"
-                name="newpass"
-                value={userData.newpass || ""}
-                onChange={handleData}
-              />
-            </div>
-            <div className="curr-pass" style={{position:'relative'}}>
-            <div className="eye-cont flex-all" style={{top:'-13px', color:'rgba(0,0,0,0.2)'}} onClick={()=>{setVisible3(!visible3)}}>{visible3 ? <AiOutlineEye/>:<AiOutlineEyeInvisible/>}</div>
-              {/* <label className="passguide">Re-enter New Password</label> */}
-              <input
-                className="general__input"
-                type={visible3 ? "text":"password"}
-                placeholder="Enter Confirm Password"
-                name="renewpass"
-                value={userData.renewpass || ""}
-                onChange={handleData}
-              />
-            </div>
+          <div className="curr-pass" style={{ position: 'relative' }}>
+            <div className="eye-cont flex-all" style={{ top: '-13px', color: 'rgba(0,0,0,0.2)' }} onClick={() => { setVisible2(!visible2) }}>{visible2 ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}</div>
+            {/* <label className="passguide">New Password</label> */}
+            <input
+              className="general__input"
+              type={visible2 ? "text" : "password"}
+              placeholder="Enter New Password"
+              name="newpass"
+              value={userData.newpass || ""}
+              onChange={handleData}
+            />
+          </div>
+          <div className="curr-pass" style={{ position: 'relative' }}>
+            <div className="eye-cont flex-all" style={{ top: '-13px', color: 'rgba(0,0,0,0.2)' }} onClick={() => { setVisible3(!visible3) }}>{visible3 ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}</div>
+            {/* <label className="passguide">Re-enter New Password</label> */}
+            <input
+              className="general__input"
+              type={visible3 ? "text" : "password"}
+              placeholder="Enter Confirm Password"
+              name="renewpass"
+              value={userData.renewpass || ""}
+              onChange={handleData}
+            />
+          </div>
           <div className="secure-btn">
-            <div class="_btn_wrapper3 _btn_height _w-full" style={{width:'170px'}}>
+            <div class="_btn_wrapper3 _btn_height _w-full" style={{ width: '170px' }}>
               {load ? <div className="login-load"></div> : "Change Password"}
             </div>
           </div>
@@ -122,13 +121,13 @@ const General = ({email}) => {
 
       <div className="noti-main-div">
         <div className="security-left">
-        <h4>Delete Account</h4>
-          </div>
-        
+          <h4>Delete Account</h4>
+        </div>
+
         <div className="delete-info passguide">
           <p>To deactivate your account, first delete its resources. If you are the
-          only owner of any teams, either assign another owner or deactivate the
-          team.</p>
+            only owner of any teams, either assign another owner or deactivate the
+            team.</p>
           <div className="_btn_wrapper _btn_height _w-full de-btn">Deactivate Account</div>
         </div>
       </div>

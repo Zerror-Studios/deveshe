@@ -3,7 +3,7 @@ import OutsideClickHandler from "react-outside-click-handler";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 import { IoLocationOutline } from "react-icons/io5";
 import { PhoneInput } from "react-international-phone";
 import { useMutation } from "@apollo/client/react";
