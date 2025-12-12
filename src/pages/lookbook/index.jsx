@@ -20,13 +20,31 @@ export default Lookbook;
 
 export async function getServerSideProps() {
   const meta = {
-    title: "Lookbook – Explore DeVeSheDreams Collections",
+    title: "Lookbook – DeVeSheDreams",
     description:
-      "Browse the DeVeSheDreams lookbook to explore our bold, dream-inspired collections. Discover vibrant prints, artist-led designs, and wearable creativity.",
-    keywords:
-      "DeVeSheDreams lookbook, fashion capsule collection, artistic fashion photos, designer collection showcase",
+      "Explore the latest DeVeSheDreams fashion collections in our Lookbook. Get inspired by curated outfits, seasonal trends, and styling ideas.",
+    keywords: [
+      "DeVeSheDreams lookbook",
+      "fashion collections",
+      "style inspiration",
+      "outfit ideas",
+      "seasonal trends",
+      "fashion editorial"
+    ],
+    primaryKeywords: ["DeVeSheDreams lookbook", "fashion collections"],
     author: "DeVeSheDreams",
     robots: "index, follow",
+    og: {
+      title: "Lookbook – DeVeSheDreams",
+      description:
+        "Discover curated outfits and seasonal fashion trends in the DeVeSheDreams Lookbook for style inspiration."
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Lookbook – DeVeSheDreams",
+      description:
+        "Browse DeVeSheDreams Lookbook to explore fashion collections, outfit ideas, and seasonal styling inspiration."
+    }
   };
 
   try {

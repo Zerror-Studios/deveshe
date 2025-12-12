@@ -1,9 +1,10 @@
 import React from "react";
-import { ApolloProvider } from "@apollo/client";
-import { createApolloClient } from "@/lib/apolloClient";
-import { Toaster } from "react-hot-toast";
 import Layout from "@/components/layouts/Layout";
 import SmoothScroller from "@/components/common/SmoothScroller";
+import { ToastContainer } from "react-toastify";
+import { ApolloProvider } from "@apollo/client/react";
+import { createApolloClient } from "@/lib/apolloClient";
+import { AuthProvider } from "@/context/AuthContext";
 import "@/styles/globals.css";
 import "@/styles/home.css";
 import "@/styles/checkout.css";
@@ -28,7 +29,6 @@ import "@/styles/components/newPorfile.css";
 import "@/styles/components/common/polaroid.css";
 import "@/styles/components/common/productCard.css";
 import "@/styles/components/common/footer.css";
-import { AuthProvider } from "@/context/AuthContext";
 
 export default function App({ Component, pageProps }) {
   const client = createApolloClient();
@@ -41,7 +41,7 @@ export default function App({ Component, pageProps }) {
             <Component {...pageProps} />
           </Layout>
         </AuthProvider>
-        <Toaster position="top-right" reverseOrder={false} />
+        <ToastContainer position="top-right" />
       </ApolloProvider>
     </>
   );

@@ -98,11 +98,30 @@ export async function getStaticProps() {
   const meta = {
     title: "Privacy Policy – DeVeSheDreams",
     description:
-      "Learn how DeVeSheDreams collects, uses, and protects your personal information while shopping with us.",
-    keywords:
-      "privacy policy, personal data, data protection, DeVeSheDreams privacy",
+      "Read the DeVeSheDreams Privacy Policy to understand how we collect, use, and protect your personal information while using our platform.",
+    keywords: [
+      "DeVeSheDreams privacy policy",
+      "data protection",
+      "personal information",
+      "user privacy",
+      "GDPR compliance",
+      "security"
+    ],
+    primaryKeywords: ["DeVeSheDreams privacy policy", "user privacy"],
     author: "DeVeSheDreams",
-    robots: "index,follow",
+    robots: "index, follow",
+    og: {
+      title: "Privacy Policy – DeVeSheDreams",
+      description:
+        "Learn how DeVeSheDreams protects your personal data and ensures your privacy while using our services."
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Privacy Policy – DeVeSheDreams",
+      description:
+        "Understand DeVeSheDreams' commitment to your privacy and data protection by reading our Privacy Policy."
+    }
   };
+
   return { props: { meta } };
 }

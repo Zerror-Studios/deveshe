@@ -30,50 +30,6 @@ export const APPLY_CART_COUPON = gql`
       discountedPrice
       totalDiscount
       isFreeShippingEnabled
-      cart {
-        name
-        description
-        asset {
-          _id
-          path
-          type
-          isFeatured
-          altText
-          createdAt
-          updatedAt
-        }
-        qty
-        freeQty
-        price
-        variantDetail {
-          variantDetailId
-          selectedOptions
-          priceDifference
-          variantPrice
-          variantCostOfGoods
-          shippingWeight
-          sku
-          trackInventory
-          stockQuantity
-          stockStatus
-          status
-        }
-        finalPrice
-        customTexts
-        productId
-        categoryId
-        category {
-          _id
-          name
-          imgsrc
-          isDeleted
-          createdAt
-          updatedAt
-        }
-      }
-      nimbblOrderId
-      nimbblInvoiceId
-      nimbblTransanctionId
       createdAt
       updatedAt
     }

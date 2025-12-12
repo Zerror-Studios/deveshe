@@ -3,9 +3,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
 import { UPDATE_USER_PASSWORD } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
+import { AuthCookies } from "@/utils/AuthCookies";
 import { toast } from "react-hot-toast";
 import CommonButton from "@/components/common/CommonButton";
 
@@ -33,7 +34,7 @@ const ChangePassword = () => {
     renewPassword: false,
   });
   const [updatePassword, { loading }] = useMutation(UPDATE_USER_PASSWORD);
-  const { user, setToken } = useAuthStore((state) => state);
+  const { user } = useAuthStore((state) => state);
 
   const {
     register,
@@ -60,7 +61,7 @@ const ChangePassword = () => {
       });
       const { userToken } = response?.changeUserPassword || {};
       if (userToken) {
-        setToken(userToken);
+        AuthCookies.set(userToken);
         reset();
         toast.success("Password Updated successfully!");
       }

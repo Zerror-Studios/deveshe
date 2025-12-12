@@ -79,10 +79,9 @@ const OrderTable = ({ data, columns, loading }) => {
                               <p className="product-name">{cartItem?.name || ""}</p>
                               <p>Qty : {cartItem?.qty || ""}</p>
                               <p>Sku : {cartItem?.variantDetail?.sku || ""}</p>
-                              <p>{renderVariants(
-                                cartItem?.variantDetail?.selectedOptions ||
-                                []
-                              )}</p>
+                              <p>
+                                {renderVariants(cartItem?.product?.productOptions || [], cartItem?.variantDetail?.selectedOptions || [])}
+                              </p>
                             </div>
                           </div>
                         );

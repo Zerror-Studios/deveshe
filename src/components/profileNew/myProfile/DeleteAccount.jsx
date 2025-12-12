@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from 'react-toastify';
 import { useAuth } from "@/context/AuthContext";
-import { useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
 import { useAuthStore } from "@/store/auth-store";
 import { UserStatus } from "@/utils/Constant";
 import { UPDATE_USER_STATUS } from "@/graphql";

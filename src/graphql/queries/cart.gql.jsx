@@ -42,6 +42,21 @@ export const CART_LIST = gql`
         finalPrice
         customTexts
         productId
+        product {
+          _id
+          name
+          slug
+          productOptions {
+            optionName
+            choices {
+              name
+            }
+            showInProductPageAs
+          }
+        }
+      }
+      coupon {
+        couponId
       }
       nimbblOrderId
       nimbblInvoiceId

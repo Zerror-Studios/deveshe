@@ -12,35 +12,68 @@ export const GET_CLIENT_SIDE_CATEGORIES = gql`
         _id
         name
         imgsrc
-        products {
-          _id
-          name
-          description
-          assets {
-            path
-            type
-            altText
-            isFeatured
-            _id
-          }
-          discountedPrice
-          price
-        }
+        slug
       }
       totalCount
     }
   }
 `;
 
-export const GET_CLIENT_SIDE_CATEGORY = gql`
-  query GetClientSideCategory($getClientSideCategoryId: ID!) {
-    getClientSideCategory(id: $getClientSideCategoryId) {
+export const GET_CLIENT_SIDE_CATEGORY_BY_SLUG = gql`
+  query GetClientSideCategory($slug: String) {
+    getClientSideCategory(slug: $slug) {
       _id
       name
+      description
+      imgsrc
+      slug
+      meta {
+        title
+        description
+        keywords
+        primaryKeywords
+        author
+        robots
+        og {
+          title
+          description
+          image
+        }
+        twitter {
+          card
+          title
+          description
+          image
+        }
+      }
       products {
-        _id
+       _id
         name
         description
+        assets {
+          path
+          type
+          altText
+        }
+        price
+        discountedPrice
+        costOfGoods
+        productType
+        slug
+        status
+        variants {
+          selectedOptions
+          priceDifference
+          variantPrice
+          sku
+          variantCostOfGoods
+          shippingWeight
+          trackInventory
+          stockQuantity
+          status
+          stockStatus
+          visibility
+        }
       }
     }
   }

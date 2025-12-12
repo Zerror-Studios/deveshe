@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { useAuthStore } from "@/store/auth-store";
 import { ORDER_LIST } from "@/graphql";
 import OrderHeader from './OrderHeader'
@@ -18,12 +18,10 @@ const columns = [
 const OrderBlock = () => {
   const LIMIT = 100;
   const [offset, setOffset] = useState(0);
-  const {
-    user: { _id },
-  } = useAuthStore((state) => state);
+  const { user } = useAuthStore((state) => state);
 
   const payload = {
-    filter: { userId: _id },
+    filter: { userId: user?._id },
     limit: LIMIT,
     offset,
   };

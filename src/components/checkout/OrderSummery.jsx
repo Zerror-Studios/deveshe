@@ -1,29 +1,62 @@
 import React from "react";
+import z from "zod";
+import { renderVariants } from "@/utils/Util";
+import { useMutation } from "@apollo/client/react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { APPLY_CART_COUPON } from "@/graphql";
+import { toast } from "react-toastify";
+import { useAuthStore } from "@/store/auth-store";
+import { AuthCookies } from "@/utils/AuthCookies";
+import { useVisitor } from "@/hooks/useVisitor";
 
-const OrderSummery = ({ cartData, setCartData }) => {
+const couponSchema = z.object({ couponCode: z.string().min(1, "Current password is required") });
+const OrderSummery = ({ data, refetch }) => {
   const {
     totalprice = 0,
     itemcount = 0,
     isFreeShippingEnabled = false,
     discountedPrice = 0,
+    totalDiscount = 0,
     cart = [],
-  } = cartData || {};
-  const renderVariants = (variant) =>
-    variant.map((value, idx) => (
-      <div key={idx} className="varients-cart">
-        <div
-          style={{
-            position: "relative",
-            display: "flex",
-          }}
-          className="cart_item_det"
-        >
-          <p className="cart-p">
-            {idx === 0 ? 'Color:':'Size:'} <span>{value}</span>
-          </p>
-        </div>
-      </div>
-    ));
+    coupon: { couponId: isCouponApplied } = {}
+  } = data || {};
+  const token = AuthCookies.get();
+  const { visitorId } = useVisitor();
+  const { user, isLoggedIn } = useAuthStore((state) => state);
+  const [applyCoupon, { loading }] = useMutation(APPLY_CART_COUPON);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: zodResolver(couponSchema),
+  });
+
+  const onSubmit = async (data) => {
+    if (loading) return;
+    try {
+      const input = {
+        ...(isLoggedIn && token ? { token } : {}),
+        ...(!isLoggedIn && visitorId ? { guestId: visitorId } : {}),
+        couponCode: data?.couponCode || null,
+      };
+      const { data: response } = await applyCoupon({
+        variables: { ...input },
+      });
+      const { _id } = response?.applyCartCoupon || {};
+      if (_id) {
+        reset();
+        await refetch();
+        toast.success("Coupon Applied successfully!");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.message || "Failed to apply coupon");
+      reset();
+    }
+  };
   return (
     <div className="final-checkout-cont">
       <div className="checkout-t">Order Summary ({itemcount})</div>
@@ -55,8 +88,8 @@ const OrderSummery = ({ cartData, setCartData }) => {
                 </div>
                 <div className="summary-details">
                   <div className="summary-name">{item.name}</div>
-                   <div style={{ fontSize: "12px"  }}>
-                    {renderVariants(item?.variantDetail?.selectedOptions || [])}
+                  <div style={{ fontSize: "12px" }}>
+                    {renderVariants(item?.product?.productOptions || [], item?.variantDetail?.selectedOptions || [])}
                   </div>
                   <div style={{ fontSize: "12px" }}>
                     {" "}
@@ -67,16 +100,23 @@ const OrderSummery = ({ cartData, setCartData }) => {
             );
           })}
       </div>
-      <div className={`promo-cont t3`}>
-        <input
-          type="text"
-          className="promo-input"
-          placeholder="Discount Code or Gift Card"
-        />
-        <button className="_btn_wrapper _btn_height _w-full ApplyBtn">
-          Apply
-        </button>
-      </div>
+      {!isCouponApplied && (
+        <div className={`promo-cont t3`}>
+          <input
+            type="text"
+            className="promo-input"
+            placeholder="Discount Code or Gift Card"
+            disabled={loading}
+            {...register("couponCode")}
+          />
+          <button className="_btn_wrapper _btn_height _w-full ApplyBtn" onClick={handleSubmit(onSubmit)}>
+            Apply
+          </button>
+        </div>
+      )}
+      {errors.couponCode && (
+        <span className="error-text">{errors.couponCode.message}</span>
+      )}
       <div className="checkout-price-cont">
         <div className="cpp">
           Subtotal:
@@ -87,10 +127,19 @@ const OrderSummery = ({ cartData, setCartData }) => {
             <div className="cpp-p"> &#8377; {totalprice}</div>
           )}
         </div>
+        {totalDiscount && (
+          <div className="cpp">
+            Discount:
+            <div className="cpp-p">
+              {`- ${String.fromCharCode(8377)} ${totalDiscount}`}
+
+            </div>
+          </div>
+        )}
         <div className="cpp">
           Shipping:
           <div className="cpp-p">
-            {isFreeShippingEnabled ? "Free" : `${String.fromCharCode(8377)} 0.0`}
+            {isFreeShippingEnabled ? `${String.fromCharCode(8377)} 0.0` : "Free"}
 
           </div>
         </div>

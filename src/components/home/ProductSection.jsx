@@ -23,7 +23,7 @@ const ProductSection = ({ data, sectionRef }) => {
 
   const leftCard = (
     <ProductCard
-      href={"/product/" + (data[0]?._id || "")}
+      href={"/product/" + (data[0]?.slug || "")}
       src={getFirstAsset(data[0])}
       alt={data[0]?.name || ""}
       name={data[0]?.name || ""}
@@ -43,7 +43,7 @@ const ProductSection = ({ data, sectionRef }) => {
         {data.slice(1, 11).map((item, index) => (
           <ProductCard
             key={index}
-            href={"/product/" + (item?._id || "")}
+            href={"/product/" + (item?.slug || "")}
             src={getFirstAsset(item)}
             alt={item?.name || ""}
             name={item?.name || ""}

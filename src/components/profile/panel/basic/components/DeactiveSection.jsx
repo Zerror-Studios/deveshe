@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
 import { useAuthStore } from "@/store/auth-store";
 import { UserStatus } from "@/utils/Constant";
 import { UPDATE_USER_STATUS } from "@/graphql";
 import ModalComponent from "@/components/common/ModalComponent";
 import ConfirmModal from "./ui/ConfirmModal";
-import toast from "react-hot-toast";
+import { toast } from 'react-toastify';
 
 const DeactiveSection = () => {
   const { logout } = useAuth();

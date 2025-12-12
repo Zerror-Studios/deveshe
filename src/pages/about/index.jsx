@@ -11,9 +11,9 @@ export default function About({ meta }) {
       <SeoHeader meta={meta} />
       <main id="about-page">
         <AboutHeroSection />
-        <OurJourney/>
-        <OurProcess/>
-        <FrequentQue/>
+        <OurJourney />
+        <OurProcess />
+        <FrequentQue />
         <FounderSection />
       </main>
     </>
@@ -24,11 +24,30 @@ export async function getStaticProps() {
   const meta = {
     title: "About – The Story of DeVeSheDreams",
     description:
-      "Born from the mind of a passionate daydreamer, DeVeSheDreams is a Mumbai-based fashion brand shaped by global influences and creative collaborations. Learn about our vision, founder, and artistic journey.",
-    keywords:
-      "about DeVeSheDreams, fashion brand story, designer background, Parsons School of Design, Mumbai fashion",
+      "DeVeSheDreams is a Mumbai-based fashion brand born from a passion for creativity and global influences. Discover our vision, founder, and artistic journey through innovative fashion and collaborations.",
+    keywords: [
+      "DeVeSheDreams about",
+      "fashion brand story",
+      "Mumbai fashion",
+      "brand vision",
+      "founder journey",
+      "creative collaborations"
+    ],
+    primaryKeywords: ["DeVeSheDreams story", "fashion brand"],
     author: "DeVeSheDreams",
-    robots: "index,follow",
+    robots: "index, follow",
+    og: {
+      title: "About – The Story of DeVeSheDreams",
+      description:
+        "Explore the journey of DeVeSheDreams, a Mumbai-based fashion brand driven by creativity, global influences, and artistic collaborations."
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "About – The Story of DeVeSheDreams",
+      description:
+        "Learn about DeVeSheDreams, our vision, founder, and artistic journey as a creative and globally-inspired fashion brand."
+    }
   };
+
   return { props: { meta } };
 }

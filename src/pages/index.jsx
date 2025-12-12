@@ -58,18 +58,41 @@ const Home = ({ meta, productData }) => {
 
 export default Home;
 
-// getServerSideProps stays the same
-
 export async function getServerSideProps() {
   const meta = {
     title: "DeVeSheDreams – Wear Your Imagination",
     description:
-      "DeVeSheDreams is a fashion label that turns dreams into wearable art. Collaborating with artists from different disciplines, we create capsule collections that reflect vibrant expression and individuality.",
-    keywords:
-      "DeVeSheDreams, wearable art, capsule collections, fashion collaborations, expressive clothing, artistic fashion",
+      "DeVeSheDreams is a fashion label that transforms creativity into wearable art. Through collaborative capsule collections crafted with artists across diverse disciplines, we celebrate individuality, expression, and bold personal style.",
+    keywords: [
+      "DeVeSheDreams",
+      "wearable art",
+      "capsule collections",
+      "fashion collaborations",
+      "expressive clothing",
+      "artistic fashion",
+      "creative apparel",
+      "handcrafted fashion"
+    ],
+    primaryKeywords: [
+      "DeVeSheDreams",
+      "wearable art",
+      "capsule collections"
+    ],
     author: "DeVeSheDreams",
-    robots: "index,follow",
+    robots: "index, follow",
+    og: {
+      title: "DeVeSheDreams – Wear Your Imagination",
+      description:
+        "DeVeSheDreams collaborates with multi-disciplinary artists to create expressive, imaginative capsule collections that bring art to life through fashion."
+    },
+    twitter: {
+      title: "DeVeSheDreams – Wear Your Imagination",
+      description:
+        "Discover wearable art and expressive fashion with DeVeSheDreams. Crafted through creative collaborations and bold artistic vision.",
+      card: "summary_large_image"
+    }
   };
+
   try {
     const client = createApolloClient();
     const { data } = await client.query({

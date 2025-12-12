@@ -4,11 +4,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client/react";
 import { LOGIN_USER } from "@/graphql";
-import toast from "react-hot-toast";
+import { toast } from 'react-toastify';
 import { useAuthStore } from "@/store/auth-store";
 import CommonButton from "../common/CommonButton";
+import { AuthCookies } from "@/utils/AuthCookies";
 
 // Schema validation
 const LoginSchema = z.object({
@@ -19,7 +20,8 @@ const LoginSchema = z.object({
 const Login = ({ setToggle }) => {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
-  const { setToken, setUser, setIsLoggedIn } = useAuthStore((state) => state);
+  const { setUser, setIsLoggedIn } = useAuthStore((state) => state);
+  const [loginUser, { loading }] = useLazyQuery(LOGIN_USER, { fetchPolicy: "network-only" });
 
   const {
     register,
@@ -29,14 +31,15 @@ const Login = ({ setToggle }) => {
     resolver: zodResolver(LoginSchema),
   });
 
-  const [loginUser, { loading }] = useLazyQuery(LOGIN_USER, {
-    fetchPolicy: "network-only",
-    onCompleted: (response) => {
-      const { user, userToken } = response?.userLogin || {};
+  const onSubmit = async (formData) => {
+    try {
+      const { data } = await loginUser({ variables: formData });
+      const { user, userToken } = data?.userLogin || {};
       if (userToken && user) {
         localStorage.removeItem("visitorId");
         localStorage.removeItem("visitorExpire");
-        setToken(userToken);
+        AuthCookies.remove(); // clear previous
+        AuthCookies.set(userToken);
         setUser(user);
         setIsLoggedIn(true);
         toast.success("Login successful!");
@@ -44,16 +47,11 @@ const Login = ({ setToggle }) => {
       } else {
         toast.error("Invalid login credentials.");
       }
-    },
-    onError: (err) => {
+    } catch (error) {
       console.error("Login error:", err);
       const gqlMessage = err?.graphQLErrors?.[0]?.message;
       toast.error(gqlMessage || err.message || "Login failed");
-    },
-  });
-
-  const onSubmit = (formData) => {
-    loginUser({ variables: formData });
+    }
   };
 
   return (

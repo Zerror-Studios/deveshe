@@ -69,7 +69,7 @@ const ProductListGrid = ({
           return (
             <ProductCard
               key={idx}
-              href={`/product/${item?._id || ""}`}
+              href={`/product/${item?.slug || ""}`}
               src={item?.assets?.[0]?.path || ""}
               alt={item?.assets?.[0]?.altText || ""}
               name={item?.name || ""}

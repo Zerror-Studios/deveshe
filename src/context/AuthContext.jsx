@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from "react";
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient } from "@apollo/client/react";
 import { useAuthStore } from "@/store/auth-store";
 
 const AuthContext = createContext();

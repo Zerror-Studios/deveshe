@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FaUserEdit } from "react-icons/fa";
 import { MdOutlineDone } from "react-icons/md";
 import { PhoneInput } from "react-international-phone";
-import { useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
 import { UPDATE_USER_PROFILE } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
 import { toast } from "react-hot-toast";
@@ -181,13 +181,11 @@ const ProfileSection = () => {
                       className="phone-con2"
                       style={{ borderBottom: "none" }}
                       inputClassName="general__input__phone"
-                      value={`+${user?.countryCode?.replace("+", "") || "91"}${
-                        user?.phoneNumber || ""
-                      }`}
+                      value={`+${user?.countryCode?.replace("+", "") || "91"}${user?.phoneNumber || ""
+                        }`}
                       onChange={(value, metadata) => {
-                        const countryCode = `+${
-                          metadata?.country?.dialCode || 91
-                        }`;
+                        const countryCode = `+${metadata?.country?.dialCode || 91
+                          }`;
                         const numberOnly = value
                           ?.replace(countryCode, "")
                           .trim();
