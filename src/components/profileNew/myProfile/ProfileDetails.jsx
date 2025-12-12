@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client/react";
 import { UPDATE_USER_PROFILE } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import Image from "next/image";

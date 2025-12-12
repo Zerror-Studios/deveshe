@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Tooltip } from "react-tooltip";
 import OutsideClickHandler from "react-outside-click-handler";
 import { RxCross2 } from "react-icons/rx";
-// import toast, { Toaster } from "react-hot-toast";
 import { LiaCcVisa } from "react-icons/lia";
 import { IoIosArrowBack } from "react-icons/io";
 // import { Savecards } from "../../../api_fetch/admin/User";
@@ -539,7 +538,7 @@ const popupcard = ({
             <button
               className="_btn_wrapper _btn_height _w-full de-btn"
               style={{ width: "73px", marginTop: "0" }}
-              onClick={()=>{Setopen(false)}}
+              onClick={() => { Setopen(false) }}
             >
               Cancel
             </button>

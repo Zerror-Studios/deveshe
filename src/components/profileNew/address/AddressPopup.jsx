@@ -3,7 +3,7 @@ import PhoneInput from "react-phone-input-2";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 import { IoLocationOutline } from "react-icons/io5";
 import { useMutation } from "@apollo/client/react";
 import { USER_ADDRESS_SAVE_OR_UPDATE } from "@/graphql";

@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
 
 /**
  * Custom hook for handling GraphQL mutations with built-in error handling,
@@ -17,26 +17,26 @@ export const useMutationHandler = (mutation, options = {}) => {
     showErrorToast = true,
     successMessage = 'Operation completed successfully!',
     errorMessage = 'An error occurred. Please try again.',
-    
+
     // Custom handlers
     onSuccess,
     onError,
     onCompleted,
-    
+
     // Apollo options
     refetchQueries = [],
     updateCache,
     optimisticResponse,
-    
+
     // Loading state options
     resetOnSuccess = true,
-    
+
     // Error handling options
     logErrors = true,
-    
+
     // Custom toast options
     toastOptions = {},
-    
+
     ...apolloOptions
   } = options;
 
@@ -47,34 +47,34 @@ export const useMutationHandler = (mutation, options = {}) => {
     refetchQueries,
     optimisticResponse,
     update: updateCache,
-    
+
     onCompleted: (data) => {
       setIsCustomLoading(false);
       setCustomError(null);
-      
+
       // Show success toast
       if (showSuccessToast) {
-        const message = typeof successMessage === 'function' 
-          ? successMessage(data) 
+        const message = typeof successMessage === 'function'
+          ? successMessage(data)
           : successMessage;
-        
+
         toast.success(message, {
           duration: 4000,
           position: 'top-right',
           ...toastOptions.success
         });
       }
-      
+
       // Call custom success handler
       if (onSuccess) {
         onSuccess(data);
       }
-      
+
       // Call custom completed handler
       if (onCompleted) {
         onCompleted(data);
       }
-      
+
       // Reset state if configured
       if (resetOnSuccess) {
         setTimeout(() => {
@@ -82,35 +82,35 @@ export const useMutationHandler = (mutation, options = {}) => {
         }, 100);
       }
     },
-    
+
     onError: (error) => {
       setIsCustomLoading(false);
       setCustomError(error);
-      
+
       // Log errors if enabled
       if (logErrors) {
         console.error('Mutation Error:', error);
       }
-      
+
       // Show error toast
       if (showErrorToast) {
-        const message = typeof errorMessage === 'function' 
-          ? errorMessage(error) 
+        const message = typeof errorMessage === 'function'
+          ? errorMessage(error)
           : getErrorMessage(error, errorMessage);
-        
+
         toast.error(message, {
           duration: 6000,
           position: 'top-right',
           ...toastOptions.error
         });
       }
-      
+
       // Call custom error handler
       if (onError) {
         onError(error);
       }
     },
-    
+
     ...apolloOptions
   });
 
@@ -127,38 +127,38 @@ export const useMutationHandler = (mutation, options = {}) => {
       if (showLoading) {
         setIsCustomLoading(true);
       }
-      
+
       setCustomError(null);
 
       const result = await mutationFn({
         variables,
         onCompleted: skipToast ? undefined : (data) => {
           if (showSuccessToast && !skipToast) {
-            const message = customSuccessMessage || 
+            const message = customSuccessMessage ||
               (typeof successMessage === 'function' ? successMessage(data) : successMessage);
-            
+
             toast.success(message, {
               duration: 4000,
               position: 'top-right',
               ...toastOptions.success
             });
           }
-          
+
           if (onSuccess) onSuccess(data);
           if (onCompleted) onCompleted(data);
         },
         onError: skipToast ? undefined : (error) => {
           if (showErrorToast && !skipToast) {
-            const message = customErrorMessage || 
+            const message = customErrorMessage ||
               (typeof errorMessage === 'function' ? errorMessage(error) : getErrorMessage(error, errorMessage));
-            
+
             toast.error(message, {
               duration: 6000,
               position: 'top-right',
               ...toastOptions.error
             });
           }
-          
+
           if (onError) onError(error);
         }
       });
@@ -205,7 +205,7 @@ const getErrorMessage = (error, fallbackMessage) => {
   if (error.graphQLErrors && error.graphQLErrors.length > 0) {
     return error.graphQLErrors[0].message;
   }
-  
+
   if (error.networkError) {
     if (error.networkError.statusCode === 401) {
       return 'Authentication required. Please log in.';
@@ -218,7 +218,7 @@ const getErrorMessage = (error, fallbackMessage) => {
     }
     return error.networkError.message || 'Network error occurred.';
   }
-  
+
   return error.message || fallbackMessage;
 };
 

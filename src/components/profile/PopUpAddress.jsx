@@ -4,7 +4,6 @@ import { Tooltip } from "react-tooltip";
 import OutsideClickHandler from "react-outside-click-handler";
 import { RxCross2 } from "react-icons/rx";
 import { LiaCcVisa } from "react-icons/lia";
-// import toast, { Toaster } from "react-hot-toast";
 import { IoLocationOutline } from "react-icons/io5";
 import { IoIosArrowBack } from "react-icons/io";
 
@@ -297,7 +296,7 @@ const popupcard = ({
                 Your Address Details will be saved securely
               </div>
             </div>
-            <div className="card-details" style={{height:'356px'}}>
+            <div className="card-details" style={{ height: '356px' }}>
               <div className="twoinone2">
                 <div className="div-name card-info">
                   <label className="label-text text-sm font-bold">
@@ -451,22 +450,22 @@ const popupcard = ({
             </div>
 
             <div className="down-menu">
-            <button
-              className="_btn_wrapper _btn_height _w-full de-btn"
-              style={{ width: "73px", marginTop: "0" }}
-              onClick={()=>{Setopen(false)}}
-            >
-              Cancel
-            </button>
-            <button
-              className="_btn_wrapper3 _btn_height _w-full"
-              onClick={() => {
-                savecard(userData);
-              }}
-            >
-              Save
-            </button>
-          </div>
+              <button
+                className="_btn_wrapper _btn_height _w-full de-btn"
+                style={{ width: "73px", marginTop: "0" }}
+                onClick={() => { Setopen(false) }}
+              >
+                Cancel
+              </button>
+              <button
+                className="_btn_wrapper3 _btn_height _w-full"
+                onClick={() => {
+                  savecard(userData);
+                }}
+              >
+                Save
+              </button>
+            </div>
           </div>
         </OutsideClickHandler>
       </div>
