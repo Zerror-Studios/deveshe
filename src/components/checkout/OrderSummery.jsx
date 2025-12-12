@@ -108,6 +108,11 @@ const OrderSummery = ({ data, refetch }) => {
             placeholder="Discount Code or Gift Card"
             disabled={loading}
             {...register("couponCode")}
+            onChange={(e) => {
+              let value = e.target.value.replace(/[^a-zA-Z0-9]/g, "");
+              value = value.toUpperCase();
+              e.target.value = value;
+            }}
           />
           <button className="_btn_wrapper _btn_height _w-full ApplyBtn" onClick={handleSubmit(onSubmit)}>
             Apply
