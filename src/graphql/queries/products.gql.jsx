@@ -34,7 +34,7 @@ export const GET_PRODUCTS = gql`
         }
         productOptions {
           choices {
-            images
+            assetsId
             name
           }
           optionName
@@ -70,7 +70,7 @@ export const GET_PRODUCT_BY_ID = gql`
       productOptions {
         optionName
         choices {
-          images
+          assetsId
           name
         }
         showInProductPageAs
