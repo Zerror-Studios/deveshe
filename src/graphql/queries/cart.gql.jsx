@@ -20,8 +20,6 @@ export const CART_LIST = gql`
           type
           isFeatured
           altText
-          createdAt
-          updatedAt
         }
         qty
         freeQty
