@@ -70,7 +70,7 @@ export const GET_LOOKBOOK_BY_ID = gql`
         }
         productOptions {
           choices {
-            images
+            assetsId
             name
           }
           optionName
