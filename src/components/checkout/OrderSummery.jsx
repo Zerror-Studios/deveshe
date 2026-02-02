@@ -129,7 +129,7 @@ const OrderSummery = ({ data, refetch }) => {
             // <FinalpriceLoader2 />
             <></>
           ) : (
-            <div className="cpp-p"> &#8377; {totalprice}</div>
+            <div className="cpp-p"> &#8377; {data?.pricesIncludeTax ? (totalprice - (data?.totalTax || 0)).toFixed(2) : totalprice}</div>
           )}
         </div>
         {totalDiscount && (
@@ -144,14 +144,29 @@ const OrderSummery = ({ data, refetch }) => {
         <div className="cpp">
           Shipping:
           <div className="cpp-p">
-            {isFreeShippingEnabled ? `${String.fromCharCode(8377)} 0.0` : "Free"}
-
+            {isFreeShippingEnabled ? "Free" : `${String.fromCharCode(8377)} 0.0`}
           </div>
         </div>
-        <div className="cpp">
-          Taxes:
-          <div className="cpp-p"> &#8377; {0.0}</div>
-        </div>
+
+        {data?.taxBreakdown?.length > 0 && (
+          <div className="tax_breakdown_section">
+            {data.taxBreakdown.map((tax, index) => (
+              <div key={index} className="tax_row">
+                <span className="tax_name">{tax.name} ({tax.rate}%)</span>
+                <div className="tax_amount">&#8377; {tax.amount}</div>
+              </div>
+            ))}
+            <div className="total_tax_row">
+              <span className="total_tax_label">Total Tax</span>
+              <div className="total_tax_value">&#8377; {data.totalTax}</div>
+            </div>
+            {data.pricesIncludeTax && (
+              <div className="inclusive_tax_msg">
+                * Inclusive of all taxes
+              </div>
+            )}
+          </div>
+        )}
       </div>
       <div className="checkout-total">
         Total:
