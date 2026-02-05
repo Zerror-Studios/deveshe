@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { useAuthStore } from "@/store/auth-store";
-import { AuthCookies } from "@/utils/AuthCookies"
+import { TokenManager } from "@/utils/tokenManager";
 
 const tabs = [
   { id: 0, label: "My Profile" },
@@ -13,11 +13,11 @@ const ProfileHeader = ({ activeTab, setTab }) => {
   const router = useRouter();
   const { clearAuth } = useAuthStore();
   const handleSignout = () => {
-    AuthCookies.remove();
+    TokenManager.clearTokens();
     clearAuth();
-    localStorage.clear();
+    localStorage.removeItem("user-data");
     router.replace("/");
-  }
+  };
   return (
     <div id="profile_header">
       <div className="tab_container">

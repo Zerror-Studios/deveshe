@@ -9,7 +9,7 @@ import { LOGIN_USER } from "@/graphql";
 import { toast } from 'react-toastify';
 import { useAuthStore } from "@/store/auth-store";
 import CommonButton from "../common/CommonButton";
-import { AuthCookies } from "@/utils/AuthCookies";
+import { TokenManager } from "@/utils/tokenManager";
 
 // Schema validation
 const LoginSchema = z.object({
@@ -34,12 +34,12 @@ const Login = ({ setToggle }) => {
   const onSubmit = async (formData) => {
     try {
       const { data } = await loginUser({ variables: formData });
-      const { user, userToken } = data?.userLogin || {};
-      if (userToken && user) {
+      const { user, accessToken, refreshToken } = data?.userLogin || {};
+      if (accessToken && refreshToken && user) {
         localStorage.removeItem("visitorId");
         localStorage.removeItem("visitorExpire");
-        AuthCookies.remove(); // clear previous
-        AuthCookies.set(userToken);
+        TokenManager.clearTokens(); // clear previous
+        TokenManager.setTokens(accessToken, refreshToken);
         setUser(user);
         setIsLoggedIn(true);
         toast.success("Login successful!");
@@ -47,7 +47,7 @@ const Login = ({ setToggle }) => {
       } else {
         toast.error("Invalid login credentials.");
       }
-    } catch (error) {
+    } catch (err) {
       console.error("Login error:", err);
       const gqlMessage = err?.graphQLErrors?.[0]?.message;
       toast.error(gqlMessage || err.message || "Login failed");

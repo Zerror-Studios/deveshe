@@ -4,17 +4,19 @@
 }
 
 .checkout-left {
-    width: 40%;
-    margin: 0px 55px;
-    padding-left: 55px;
+	width: 40%;
+	margin: 0px 55px;
+	padding-left: 55px;
 }
-.cart_item_det{
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 3px;
+
+.cart_item_det {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 3px;
 }
-.add-box{
+
+.add-box {
 	margin-block: 4px;
 	margin-bottom: 20px;
 }
@@ -187,6 +189,7 @@
 	color: rgba(0, 0, 0, .8);
 	font-size: 12px;
 }
+
 .summary-qty {
 	position: absolute;
 	right: 15px;
@@ -196,13 +199,16 @@
 }
 
 .promo-cont {
-	height: 150px;
-	/* background-color: aqua; */
-	overflow: hidden;
+	/* margin: 20px 0px; */
+	display: flex;
+	gap: 10px;
+	align-items: center;
 }
 
-.min-promo {
-	height: 40px;
+.promo-cont .ApplyBtn,
+.promo-cont .RemoveBtn {
+	width: auto !important;
+	white-space: nowrap;
 }
 
 .promo-t {
@@ -260,22 +266,25 @@
 
 .cpp {
 	position: relative;
-	font-size: 13px;
-	margin: 20px 0px;
+	font-size: 14px;
+	margin: 12px 0px;
 }
 
-.billing{
+.billing {
 	margin-top: 20px;
 }
-.sameadd{
+
+.sameadd {
 	display: flex;
 	gap: 10px;
 	margin-top: 10px;
 	margin-bottom: 20px;
 }
-.payment-check{
+
+.payment-check {
 	margin-block: 20px;
 }
+
 .cpp-p {
 	position: absolute;
 	right: 0;
@@ -301,63 +310,129 @@
 	margin: 0 5px;
 }
 
-.address{
+.address {
 	margin-top: 3vh;
 	width: 100%;
 }
-.div-input{
-	margin-block:20px;
+
+.div-input {
+	margin-block: 20px;
 }
 
-.address-p{
+.address-p {
 	font-size: 18px;
 	font-weight: 600;
 	margin-block: 16px;
 }
-.placeorder{
+
+.placeorder {
 	width: 12vw;
 }
-.selbtn{
+
+.selbtn {
 	display: flex;
 	gap: 10px;
 	align-items: center;
 	margin-bottom: 10px;
 }
-.sel:hover{
+
+.sel:hover {
 	background-color: #3b82f6 !important;
 	color: white !important;
 }
-.address-input{
+
+.address-input {
 	width: 100%;
 	height: 40px;
 	padding: 4px;
 }
-.add-p{
+
+.add-p {
 	color: rgb(147, 144, 144);
 }
-.add-h{
+
+.add-h {
 	display: flex;
 	justify-content: space-between;
 }
-.edit-add{
-    z-index: 5;
+
+.edit-add {
+	z-index: 5;
 	text-decoration: underline;
 	cursor: pointer;
 }
-.error-checkout{
+
+.error-checkout {
 	color: red;
 }
-.error-sym{
+
+.error-sym {
 	font-size: 13px;
 }
-.add-sel{
+
+.add-sel {
 	width: 500px;
 	height: 35px;
 }
 
 
-@media (max-width: 576px){
-	.checkout-left{
+@media (max-width: 576px) {
+	.checkout-left {
 		margin: 0;
 	}
+}
+
+/* Tax Breakdown Styles */
+.tax_breakdown_section {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	padding-bottom: 1rem;
+	margin-bottom: 0.75rem;
+}
+
+.tax_row {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	align-items: center;
+}
+
+.tax_name {
+	color: rgba(0, 0, 0, 0.6);
+	font-size: 0.875rem;
+	text-transform: uppercase;
+	font-weight: 500;
+}
+
+.tax_amount,
+.total_tax_value {
+	color: rgba(0, 0, 0, 0.8);
+	font-size: 0.875rem;
+	font-weight: 600;
+}
+
+.total_tax_row {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	margin-top: 0.5rem;
+	padding-top: 0.5rem;
+	border-top: 1px dashed rgba(0, 0, 0, 0.2);
+}
+
+.total_tax_label {
+	color: rgba(0, 0, 0, 0.8);
+	font-size: 0.9rem;
+	font-weight: 600;
+}
+
+.inclusive_tax_msg {
+	font-size: 0.75rem;
+	color: rgba(0, 0, 0, 0.5);
+	margin-top: 0.125rem;
+	font-style: italic;
+	font-weight: 500;
+	text-align: right;
 }

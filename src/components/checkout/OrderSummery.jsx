@@ -4,14 +4,15 @@ import { renderVariants } from "@/utils/Util";
 import { useMutation } from "@apollo/client/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { APPLY_CART_COUPON } from "@/graphql";
-import { toast } from "react-toastify";
+import { TokenManager } from "@/utils/tokenManager";
 import { useAuthStore } from "@/store/auth-store";
-import { AuthCookies } from "@/utils/AuthCookies";
 import { useVisitor } from "@/hooks/useVisitor";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { APPLY_CART_COUPON, REMOVE_CART_COUPON } from "@/graphql";
 
-const couponSchema = z.object({ couponCode: z.string().min(1, "Current password is required") });
-const OrderSummery = ({ data, refetch }) => {
+const couponSchema = z.object({ couponCode: z.string().min(1, "Coupon code is required") });
+const OrderSummary = ({ data, refetch }) => {
   const {
     totalprice = 0,
     itemcount = 0,
@@ -19,20 +20,31 @@ const OrderSummery = ({ data, refetch }) => {
     discountedPrice = 0,
     totalDiscount = 0,
     cart = [],
-    coupon: { couponId: isCouponApplied } = {}
+    coupon: { couponId: isCouponApplied, couponCode } = {}
   } = data || {};
-  const token = AuthCookies.get();
+  const token = TokenManager.getAccessToken();
   const { visitorId } = useVisitor();
   const { user, isLoggedIn } = useAuthStore((state) => state);
   const [applyCoupon, { loading }] = useMutation(APPLY_CART_COUPON);
+  const [removeCoupon, { loading: removeLoading }] = useMutation(REMOVE_CART_COUPON);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm({
     resolver: zodResolver(couponSchema),
   });
+
+  useEffect(() => {
+    if (couponCode) {
+      setValue("couponCode", couponCode);
+    } else {
+      setValue("couponCode", "");
+    }
+  }, [couponCode, setValue]);
 
   const onSubmit = async (data) => {
     if (loading) return;
@@ -47,7 +59,7 @@ const OrderSummery = ({ data, refetch }) => {
       });
       const { _id } = response?.applyCartCoupon || {};
       if (_id) {
-        reset();
+        // reset(); // Don't reset, let it persist
         await refetch();
         toast.success("Coupon Applied successfully!");
       }
@@ -55,6 +67,22 @@ const OrderSummery = ({ data, refetch }) => {
       console.error(err);
       toast.error(err?.message || "Failed to apply coupon");
       reset();
+    }
+  };
+
+  const onRemoveCoupon = async () => {
+    if (removeLoading) return;
+    try {
+      const variables = {
+        ...(isLoggedIn && token ? { token } : {}),
+        ...(!isLoggedIn && visitorId ? { guestId: visitorId } : {}),
+      };
+      await removeCoupon({ variables });
+      await refetch();
+      toast.success("Coupon removed successfully!");
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.message || "Failed to remove coupon");
     }
   };
   return (
@@ -100,25 +128,38 @@ const OrderSummery = ({ data, refetch }) => {
             );
           })}
       </div>
-      {!isCouponApplied && (
-        <div className={`promo-cont t3`}>
-          <input
-            type="text"
-            className="promo-input"
-            placeholder="Discount Code or Gift Card"
-            disabled={loading}
-            {...register("couponCode")}
-            onChange={(e) => {
-              let value = e.target.value.replace(/[^a-zA-Z0-9]/g, "");
-              value = value.toUpperCase();
-              e.target.value = value;
-            }}
-          />
-          <button className="_btn_wrapper _btn_height _w-full ApplyBtn" onClick={handleSubmit(onSubmit)}>
-            Apply
+      <div className={`promo-cont t3`}>
+        <input
+          type="text"
+          className="promo-input"
+          placeholder="Discount Code or Gift Card"
+          disabled={loading || isCouponApplied}
+          {...register("couponCode")}
+          onChange={(e) => {
+            let value = e.target.value.replace(/[^a-zA-Z0-9]/g, "");
+            value = value.toUpperCase();
+            e.target.value = value;
+          }}
+        />
+        {isCouponApplied ? (
+          <button
+            className="_btn_wrapper _btn_height _w-full RemoveBtn"
+            onClick={onRemoveCoupon}
+            disabled={removeLoading}
+            style={{ backgroundColor: "#ff4d4d", color: "white" }}
+          >
+            {removeLoading ? "Removing..." : "Remove"}
           </button>
-        </div>
-      )}
+        ) : (
+          <button
+            className="_btn_wrapper _btn_height _w-full ApplyBtn"
+            onClick={handleSubmit(onSubmit)}
+            disabled={loading}
+          >
+            {loading ? "Applying..." : "Apply"}
+          </button>
+        )}
+      </div>
       {errors.couponCode && (
         <span className="error-text">{errors.couponCode.message}</span>
       )}
@@ -132,7 +173,7 @@ const OrderSummery = ({ data, refetch }) => {
             <div className="cpp-p"> &#8377; {data?.pricesIncludeTax ? (totalprice - (data?.totalTax || 0)).toFixed(2) : totalprice}</div>
           )}
         </div>
-        {totalDiscount && (
+        {totalDiscount > 0 && (
           <div className="cpp">
             Discount:
             <div className="cpp-p">
@@ -181,4 +222,4 @@ const OrderSummery = ({ data, refetch }) => {
   );
 };
 
-export default OrderSummery;
+export default OrderSummary;

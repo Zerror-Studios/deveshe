@@ -4,6 +4,8 @@ import { gql } from "@apollo/client";
 export const LOGIN_USER = gql`
   query UserLogin($email: String!, $password: String!) {
     userLogin(email: $email, password: $password) {
+      accessToken
+      refreshToken
       user {
         _id
         countryCode
@@ -37,7 +39,6 @@ export const LOGIN_USER = gql`
         emailSubscribedStatus
         status
       }
-      userToken
     }
   }
 `;

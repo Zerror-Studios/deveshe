@@ -10,13 +10,13 @@ import { formatePrice, getCartItemCount } from "@/utils/Util";
 import gsap from "gsap";
 import CartProduct from "@/components/cart/CartProduct";
 import CommonButton from "../common/CommonButton";
-import { AuthCookies } from "@/utils/AuthCookies";
+import { TokenManager } from "@/utils/tokenManager";
 
 const CartDrawer = ({ isOpen, closeCart }) => {
   const router = useRouter();
   const drawerRef = useRef(null);
   const backdropRef = useRef(null);
-  const token = AuthCookies.get();
+  const token = TokenManager.getAccessToken();
   const { visitorId } = useVisitor();
   const { user, isLoggedIn } = useAuthStore((state) => state);
 
@@ -39,7 +39,7 @@ const CartDrawer = ({ isOpen, closeCart }) => {
     loading,
     refetch,
   } = useQuery(CART_LIST, {
-    skip: !isOpen,
+    skip: !isOpen || (!isLoggedIn && !visitorId),
     variables: cartListPayload,
     fetchPolicy: "network-only",
     nextFetchPolicy: "cache-first",
@@ -53,12 +53,13 @@ const CartDrawer = ({ isOpen, closeCart }) => {
   } = cartResponse?.getCart || {};
 
   const count = getCartItemCount(cart);
-  const handleAddItem = async (productId, variantDetail) => {
+  const handleAddItem = async (productId, variantDetail, categoryId) => {
     try {
       const { __typename, ...variantWithoutTypename } = variantDetail;
       const payload = {
         input: {
           productId,
+          categoryId,
           variantDetail: variantWithoutTypename,
           ...(isLoggedIn && token ? { token } : {}),
         },

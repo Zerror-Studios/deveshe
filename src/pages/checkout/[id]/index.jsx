@@ -11,7 +11,7 @@ import ContactDetail from "@/components/checkout/ContactDetail";
 import Delivery from "@/components/checkout/Delivery";
 import Shipping from "@/components/checkout/Shipping";
 import BillingAddress from "@/components/checkout/BillingAddress";
-import OrderSummery from "@/components/checkout/OrderSummery";
+import OrderSummary from "@/components/checkout/OrderSummery";
 import { EmailSubscribedStatus, Sort } from "@/utils/Constant";
 import Checkout from "nimbbl_sonic";
 import { useRouter } from "next/router";
@@ -223,7 +223,7 @@ const CheckoutPage = ({ meta }) => {
           </form>
         </div>
         <div className="checkout-right" ref={rightRef}>
-          <OrderSummery data={cartData} refetch={() => refetch(cartListPayload)} />
+          <OrderSummary data={cartData} refetch={() => refetch(cartListPayload)} />
         </div>
       </div>
       <Loader isLoading={isPageLoading} />

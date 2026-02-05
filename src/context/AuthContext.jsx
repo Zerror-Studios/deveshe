@@ -1,5 +1,6 @@
 import React, { createContext, useContext } from "react";
 import { useApolloClient } from "@apollo/client/react";
+import { TokenManager } from "@/utils/tokenManager";
 import { useAuthStore } from "@/store/auth-store";
 
 const AuthContext = createContext();
@@ -9,8 +10,9 @@ export const AuthProvider = ({ children }) => {
   const { clearAuth } = useAuthStore((state) => state);
   const logout = async () => {
     try {
+      TokenManager.clearTokens();
       clearAuth();
-      localStorage.removeItem("user-auth");
+      localStorage.removeItem("user-data");
       await client.clearStore();
     } catch (err) {
       console.error("Logout error:", err);
