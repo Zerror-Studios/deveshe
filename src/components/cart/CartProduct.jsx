@@ -27,7 +27,7 @@ const CartProduct = ({
   const onAdd = async () => {
     try {
       setAdding(true);
-      await handleAddItem(item?.productId || null, item?.variantDetail || {});
+      await handleAddItem(item?.productId || null, item?.variantDetail || {}, item?.categoryId || null);
     } finally {
       setAdding(false);
     }

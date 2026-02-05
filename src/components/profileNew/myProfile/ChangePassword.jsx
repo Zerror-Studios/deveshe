@@ -6,7 +6,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useMutation } from "@apollo/client/react";
 import { UPDATE_USER_PASSWORD } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
-import { AuthCookies } from "@/utils/AuthCookies";
+import { TokenManager } from "@/utils/tokenManager";
 import { toast } from "react-toastify";
 import CommonButton from "@/components/common/CommonButton";
 
@@ -59,9 +59,9 @@ const ChangePassword = () => {
       const { data: response } = await updatePassword({
         variables: { ...input },
       });
-      const { userToken } = response?.changeUserPassword || {};
-      if (userToken) {
-        AuthCookies.set(userToken);
+      const { accessToken, refreshToken } = response?.changeUserPassword || {};
+      if (accessToken && refreshToken) {
+        TokenManager.setTokens(accessToken, refreshToken);
         reset();
         toast.success("Password Updated successfully!");
       }

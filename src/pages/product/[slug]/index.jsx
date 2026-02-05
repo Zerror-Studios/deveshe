@@ -14,7 +14,7 @@ import ProductContent from "@/components/product/ProductContent";
 import SizeAssistance from "@/components/product/SizeAssistance";
 import { toast } from 'react-toastify';
 import { Const, ProductStatus, StockStatus } from "@/utils/Constant";
-import { AuthCookies } from "@/utils/AuthCookies";
+import { TokenManager } from "@/utils/tokenManager";
 
 const ProductDetail = ({ meta, data, productList }) => {
   const router = useRouter();
@@ -31,7 +31,7 @@ const ProductDetail = ({ meta, data, productList }) => {
   const [cartBtn, setCartBtn] = useState(false);
   const { user, isLoggedIn } = useAuthStore((state) => state);
   const { openCart } = useCartStore((state) => state);
-  const token = AuthCookies.get();
+  const token = TokenManager.getAccessToken();
   const [addItemToCart, { loading }] = useMutation(ADD_ITEM_TO_CART);
   const [createNotifyRequest, { loading: notifyLoading }] = useMutation(CREATE_BACK_IN_STOCK_REQUEST);
   const handleAddToCart = async () => {
