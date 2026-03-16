@@ -99,7 +99,7 @@ export async function getServerSideProps() {
       query: GET_PRODUCTS,
       variables: {
         offset: 0,
-        limit: 11,
+        limit: 1000,
         filters: {
           categoryIds: ["6898b3cdddf0354e025da816"],
           status: ProductStatus.PUBLISHED,
