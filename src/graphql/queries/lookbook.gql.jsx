@@ -53,6 +53,7 @@ export const GET_LOOKBOOK_BY_ID = gql`
         discountedPrice
         costOfGoods
         productType
+        slug
         status
         isDeleted
         variants {

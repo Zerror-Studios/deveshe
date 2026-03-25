@@ -11,7 +11,7 @@ const ProductContainer = ({ data }) => {
         return (
           <ProductCard
             key={`product-${index}`}
-            href={"/product/" + item?._id || ""}
+            href={"/product/" + item?.slug || item?._id}
             src={path || ""}
             alt={altText}
             name={item?.name || ""}
