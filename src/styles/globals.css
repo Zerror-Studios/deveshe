@@ -2,21 +2,26 @@
   font-family: heading;
   src: url(/assets/fonts/cob/font-ea9181547d67e56abd65.woff2);
 }
+
 @font-face {
   font-family: paragraph;
   src: url(/assets/fonts/cob/font-69130470425c85950313.woff2);
 }
+
 @font-face {
   font-family: paragraphStyle;
   src: url(/assets/fonts/dd34dea82ffd23ec2838.woff);
 }
+
 @font-face {
   font-family: paragraphStyleB;
   src: url(/assets/fonts/bd8de66be4175fed48a7.woff);
 }
+
 body::-webkit-scrollbar {
   display: none;
 }
+
 * {
   margin: 0;
   padding: 0;
@@ -29,6 +34,7 @@ body {
   height: 100%;
   background-color: #fadcde;
 }
+
 a {
   text-decoration: none;
 }
@@ -38,6 +44,7 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 input[type="number"] {
   -moz-appearance: textfield;
 }
@@ -78,6 +85,7 @@ input[type="number"] {
   justify-content: center;
   padding: 0 1.5vw;
 }
+
 .loading_line_wrap {
   width: 100%;
   height: 100%;
@@ -86,6 +94,7 @@ input[type="number"] {
   justify-content: center;
   overflow: hidden;
 }
+
 .loading_line {
   width: 100%;
   height: 0.8px;
@@ -97,12 +106,15 @@ input[type="number"] {
   0% {
     transform: translateX(-100%);
   }
+
   45% {
     transform: translateX(0);
   }
+
   55% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(100%);
   }
@@ -140,25 +152,31 @@ input[type="number"] {
   justify-content: space-between;
   border-bottom: 1px solid #e8e8e8;
 }
+
 .css-1cgdl3v-MuiTabs-root {
   border: none !important;
 }
+
 #logout_btn {
   margin: 0 !important;
 }
+
 ._btn-width {
   width: 100%;
   /* max-width: 235px; */
 }
+
 .footer_nav_signup_btn_align ._btn_wrapper {
   justify-content: center;
   width: 100%;
   /* max-width: 235px; */
 }
+
 ._btn_wrapper:hover {
   background-color: #000;
   color: #fff;
 }
+
 /* Button */
 
 .flex-all {
@@ -174,6 +192,7 @@ input[type="number"] {
   display: flex;
   align-items: center;
 }
+
 ._btn_wrapper2 {
   font-family: paragraph;
   font-weight: 400;
@@ -194,6 +213,7 @@ input[type="number"] {
   cursor: pointer;
   height: 34px;
 }
+
 ._btn_wrapper3 {
   font-family: Centra No2, Helvetica, sans-serif;
   font-weight: 400;
@@ -214,13 +234,16 @@ input[type="number"] {
   cursor: pointer;
   height: 34px;
 }
+
 ._btn_wrapper2:hover {
   background-color: transparent;
   color: #000;
 }
+
 ._btn_wrapper3:hover {
   background-color: #4b4b4b;
 }
+
 .ani-wrap {
   width: 180px;
   margin-left: 20px;
@@ -234,12 +257,15 @@ input[type="number"] {
   0% {
     transform: translateX(-100%);
   }
+
   45% {
     transform: translateX(0);
   }
+
   55% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(100%);
   }
@@ -275,12 +301,15 @@ input[type="number"] {
   flex-direction: column;
   justify-content: space-between;
 }
+
 .line1m {
   top: 0px;
 }
+
 .line2m {
   top: 100%;
 }
+
 .linem {
   position: absolute;
   display: inline-block;
@@ -289,6 +318,7 @@ input[type="number"] {
   background-color: black;
   transform-origin: center;
 }
+
 .side-menu-links {
   user-select: none !important;
   width: 100%;
@@ -314,6 +344,7 @@ input[type="number"] {
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.35;
 }
+
 #side-navbar {
   width: 100%;
   height: 100dvh;
@@ -327,12 +358,14 @@ input[type="number"] {
   padding-top: 30px;
   clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
 }
+
 .nav-top {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 25px;
 }
+
 /* .nav-contact{
   margin-top: 15vh;
 } */
@@ -344,20 +377,24 @@ input[type="number"] {
   justify-content: space-between;
   align-items: flex-end;
 }
+
 .login-nav {
   display: flex;
   justify-content: center;
   width: 100%;
   margin-bottom: 20px;
 }
+
 .login-nav ._btn_wrapper {
   width: 100% !important;
 }
+
 .login-nav p {
   font-size: calc(14.81px - 0.22vw);
   font-weight: 500;
   font-family: paragraph;
 }
+
 .nav-contact p {
   font-size: calc(14.81px - 0.22vw);
   font-family: paragraph;
@@ -367,6 +404,7 @@ input[type="number"] {
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.35;
 }
+
 .nav-contact p:nth-child(1) {
   text-transform: capitalize;
   margin-bottom: 10px;
@@ -386,10 +424,12 @@ input[type="number"] {
   width: 100%;
   gap: 8px;
 }
+
 #nav-logo img {
   width: auto;
   height: 4vw;
 }
+
 .menu-icons {
   display: flex;
   align-items: center;
@@ -397,6 +437,7 @@ input[type="number"] {
   gap: 20px;
   position: relative;
 }
+
 .navbar-mobile-wrap {
   width: 100%;
   display: flex;
@@ -405,9 +446,11 @@ input[type="number"] {
   position: relative;
   z-index: 10;
 }
+
 .menu-icons a {
   line-height: 0;
 }
+
 #header-logo {
   font-family: paragraph;
   font-size: 30px;
@@ -428,6 +471,7 @@ input[type="number"] {
   color: #fff;
   mix-blend-mode: difference;
 }
+
 .header-links {
   display: flex;
   gap: 35px;
@@ -440,6 +484,7 @@ input[type="number"] {
   /* top: calc(100vh - 65px); */
   top: 80px;
 }
+
 .link-wp {
   height: 100%;
   display: flex;
@@ -448,6 +493,7 @@ input[type="number"] {
   background-color: #f7f7f7;
   padding: 0 30px;
 }
+
 /* #about-link {
   margin-left: 35px;
 } */
@@ -470,6 +516,7 @@ input[type="number"] {
   gap: 15px;
   flex-direction: column;
 }
+
 .nav-social-icons .nav-s-icon {
   width: 33px;
   display: flex;
@@ -479,11 +526,13 @@ input[type="number"] {
   border-radius: 50%;
   border: 1px solid black;
 }
+
 .nav-social-icons .nav-s-icon svg {
   fill: black !important;
   width: 12px;
   height: 12px;
 }
+
 .nav-social-icons .nav-s-icon svg path {
   fill: black;
 }
@@ -506,7 +555,7 @@ input[type="number"] {
 .swiper-slide img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -516,49 +565,62 @@ input[type="number"] {
     width: 100%;
     max-width: 100%;
   }
+
   .common_btn_loadin {
     padding: 0 8vw;
   }
+
   #menu-btn {
     width: 22px;
     height: 9px;
   }
+
   .bag-icon,
   .account-logo {
     width: 19px;
     height: 19px;
   }
+
   .linem {
     width: 22px;
     height: 1.2px;
   }
+
   #edit_profile {
     left: 88% !important;
   }
+
   .navbar-mobile {
     display: flex;
   }
+
   #about-link {
     margin-left: 0px;
   }
+
   #left h2 {
     font-size: 2.5rem;
   }
+
   .back {
     display: none;
   }
+
   .header-links a,
   .header-links span {
     font-size: 10px;
     font-weight: 600;
   }
+
   .Footer_wrapper {
     padding: 20px;
     padding-top: 40px;
   }
+
   ._list-links {
     margin: 6px 0;
   }
+
   .footer_nav_ul_list p {
     margin: 7px 0;
   }
@@ -570,6 +632,7 @@ input[type="number"] {
     display: flex;
     height: 60px;
   }
+
   #nav-logo img {
     width: auto;
     height: 3vw;
@@ -582,6 +645,7 @@ input[type="number"] {
     display: flex;
     height: 60px;
   }
+
   #nav-logo img {
     width: auto;
     height: 2.2vw;

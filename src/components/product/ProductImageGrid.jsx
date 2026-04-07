@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // import required modules
 import { Pagination } from "swiper/modules";
 
-const ProductImageGrid = ({ assets = [], setSelectedAsset }) => {
+const ProductImageGrid = ({ assets = [], setSelectedAsset, setIsPreviewOpen }) => {
   if (!assets && assets.length === 0) return;
   const [isMobile, setIsMobile] = useState(false);
 
@@ -33,12 +33,27 @@ const ProductImageGrid = ({ assets = [], setSelectedAsset }) => {
                       >
                         <div className="ProductDets_imgs_grid_cntr">
                           <div className="ProductDets_img_single_cntr">
-                            <Image
-                              width={1000}
-                              height={1000}
-                              src={item?.path || ""}
-                              alt={item?.altText || ""}
-                            />
+                            {item?.type === "VIDEO" ? (
+                              <video
+                                src={item?.path || ""}
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                style={{
+                                  width: "100%",
+                                  height: "100%",
+                                  objectFit: "cover",
+                                }}
+                              />
+                            ) : (
+                              <Image
+                                width={1000}
+                                height={1000}
+                                src={item?.path || ""}
+                                alt={item?.altText || ""}
+                              />
+                            )}
                           </div>
                         </div>
                       </button>
@@ -55,22 +70,40 @@ const ProductImageGrid = ({ assets = [], setSelectedAsset }) => {
             {assets &&
               assets?.map((item, index) => {
                 return (
-                  <button
-                    key={`product-image-${index}`}
-                    className="ProductDets_Big_img_cntr"
-                    onClick={() => setSelectedAsset(item)}
-                  >
-                    <div className="shop_card_img_bgcover">
-                      <div className="ProductDets_Big_card_img-main_cntr">
-                        <Image
-                          width={1000}
-                          height={1000}
-                          src={item?.path || ""}
-                          alt={item?.altText || ""}
-                        />
+                    <button
+                      key={`product-image-${index}`}
+                      className="ProductDets_Big_img_cntr"
+                      onClick={() => {
+                        setSelectedAsset(item);
+                        setIsPreviewOpen && setIsPreviewOpen(true);
+                      }}
+                    >
+                      <div className="shop_card_img_bgcover">
+                        <div className="ProductDets_Big_card_img-main_cntr">
+                          {item?.type === "VIDEO" ? (
+                            <video
+                              src={item?.path || ""}
+                              autoPlay
+                              muted
+                              loop
+                              playsInline
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                              }}
+                            />
+                          ) : (
+                            <Image
+                              width={1000}
+                              height={1000}
+                              src={item?.path || ""}
+                              alt={item?.altText || ""}
+                            />
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
                 );
               })}
           </div>
@@ -85,13 +118,35 @@ const ProductImageGrid = ({ assets = [], setSelectedAsset }) => {
             assets?.map((item, index) => {
               return (
                 <SwiperSlide key={index} className="skeleton-loading">
-                  <Image
-                    onClick={() => setSelectedAsset(item)}
-                    width={1000}
-                    height={1000}
-                    src={item?.path || ""}
-                    alt={item?.altText || ""}
-                  />
+                  {item?.type === "VIDEO" ? (
+                    <video
+                      onClick={() => {
+                        setSelectedAsset(item);
+                        setIsPreviewOpen && setIsPreviewOpen(true);
+                      }}
+                      src={item?.path || ""}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  ) : (
+                    <Image
+                      onClick={() => {
+                        setSelectedAsset(item);
+                        setIsPreviewOpen && setIsPreviewOpen(true);
+                      }}
+                      width={1000}
+                      height={1000}
+                      src={item?.path || ""}
+                      alt={item?.altText || ""}
+                    />
+                  )}
                 </SwiperSlide>
               );
             })}

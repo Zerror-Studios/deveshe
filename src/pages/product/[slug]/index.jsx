@@ -99,6 +99,7 @@ const ProductDetail = ({ meta, data, productList }) => {
             <ProductImageGrid
               assets={data?.assets || []}
               setSelectedAsset={setSelectedAsset}
+              setIsPreviewOpen={setIsPreviewOpen}
             />
             <ProductContent
               data={data || {}}
