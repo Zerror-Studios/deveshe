@@ -23,7 +23,28 @@ const ProductModalPreview = ({
           <div className="ReactModalPortal_img_cntr_grid">
             <div className="ReactModalPortal_img_cntr_grid_cover">
               <div className="ReactModalPortal_img_loader"></div>
-              <Image src={data?.path || ""} alt={data?.altText || ""} fill objectFit="contain"/>
+                {data?.type === "VIDEO" ? (
+                  <video
+                    src={data?.path || ""}
+                    autoPlay
+                    muted
+                    controls
+                    loop
+                    playsInline
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "contain",
+                    }}
+                  />
+                ) : (
+                  <Image
+                    src={data?.path || ""}
+                    alt={data?.altText || ""}
+                    fill
+                    objectFit="contain"
+                  />
+                )}
             </div>
           </div>
         </div>
