@@ -15,6 +15,7 @@ import SizeAssistance from "@/components/product/SizeAssistance";
 import { toast } from 'react-toastify';
 import { Const, ProductStatus, StockStatus } from "@/utils/Constant";
 import { TokenManager } from "@/utils/tokenManager";
+import { trackEcomEvent } from "@/utils/analytics";
 
 const ProductDetail = ({ meta, data, productList }) => {
   const router = useRouter();
@@ -34,6 +35,13 @@ const ProductDetail = ({ meta, data, productList }) => {
   const token = TokenManager.getAccessToken();
   const [addItemToCart, { loading }] = useMutation(ADD_ITEM_TO_CART);
   const [createNotifyRequest, { loading: notifyLoading }] = useMutation(CREATE_BACK_IN_STOCK_REQUEST);
+
+  useEffect(() => {
+    if (data) {
+      trackEcomEvent.viewItem(data, variantMatched);
+    }
+  }, [data]);
+
   const handleAddToCart = async () => {
     if (!cartBtn || variantMatched.stockStatus === Const.OUT_OF_STOCK) return;
 
@@ -52,6 +60,7 @@ const ProductDetail = ({ meta, data, productList }) => {
       };
 
       await addItemToCart({ variables: payload });
+      trackEcomEvent.addToCart(data, variantMatched);
       openCart();
     } catch (err) {
       console.error(err);

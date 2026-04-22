@@ -19,6 +19,7 @@ import { useAuthStore } from "@/store/auth-store";
 import Loader from "@/components/checkout/Loader";
 import gsap from "gsap";
 import CommonButton from "@/components/common/CommonButton";
+import { trackEcomEvent } from "@/utils/analytics";
 const CheckoutPage = ({ meta }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +41,12 @@ const CheckoutPage = ({ meta }) => {
   });
 
   const cartData = response?.getCart || {};
+
+  useEffect(() => {
+    if (cartData && Object.keys(cartData).length > 0) {
+      trackEcomEvent.beginCheckout(cartData.items, cartData.totalValue);
+    }
+  }, [cartData]);
 
   const {
     register,
