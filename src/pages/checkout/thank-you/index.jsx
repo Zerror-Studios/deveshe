@@ -3,10 +3,32 @@ import { useRouter } from "next/router";
 import SeoHeader from "@/components/seo/SeoHeader";
 import Image from "next/image";
 import CommonButton from "@/components/common/CommonButton";
+import { useQuery } from "@apollo/client/react";
+import { GET_ORDER_BY_ID } from "@/graphql";
+import { trackEcomEvent } from "@/utils/analytics";
 
 const ThankYou = ({ meta }) => {
   const router = useRouter();
   const [time, setTime] = useState(10);
+
+  const { data: orderData } = useQuery(GET_ORDER_BY_ID, {
+    variables: { getClientSidePaymentByOrderIdId: router.query.id },
+    skip: !router.query.id,
+  });
+
+  useEffect(() => {
+    if (orderData?.getClientSidePaymentByOrderId) {
+      const orderInfo = orderData.getClientSidePaymentByOrderId;
+      const order = orderInfo.order;
+      trackEcomEvent.purchase(
+        order._id,
+        order.totalprice,
+        order.cart || [],
+        order.shippingAmount || 0,
+        order.taxAmount || 0
+      );
+    }
+  }, [orderData]);
 
   useEffect(() => {
     const countdown = setInterval(() => {
