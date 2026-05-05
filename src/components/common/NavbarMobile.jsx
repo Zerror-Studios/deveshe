@@ -7,7 +7,7 @@ import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Button from "./Button";
 import { useAuthStore } from "@/store/auth-store";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import CommonButton from "./CommonButton";
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,6 +16,7 @@ const NavbarMobile = ({ openCart }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuTL = useRef(null);
   const router = useRouter();
+  const pathname = usePathname();
   const [percent, setPercent] = useState(0);
 
   useGSAP(() => {
@@ -105,7 +106,7 @@ const NavbarMobile = ({ openCart }) => {
   };
 
   useEffect(() => {
-    if (router.pathname !== "/" || window.location.hash === "#shop") {
+    if (pathname !== "/" || window.location.hash === "#shop") {
       gsap.set(".navbar-mobile-wrap", {
         y: "0%",
         opacity: 1,
@@ -143,7 +144,7 @@ const NavbarMobile = ({ openCart }) => {
           gsap.set("#loader_slider", { display: "none" });
         },
       });
-  }, [router.pathname]); // ✅ re-run if route changes
+  }, [pathname]); // ✅ re-run if route changes
 
   const handleLoginBtn = () => {
     router.push("/login");
@@ -160,12 +161,12 @@ const NavbarMobile = ({ openCart }) => {
 
       return () => window.removeEventListener("hashchange", handleHashChange);
     }
-  }, [router.pathname]);
+  }, [pathname]);
 
   return (
     <>
       <div className="navbar-mobile">
-        {router.pathname === "/" && hash !== "#shop" && (
+        {pathname === "/" && hash !== "#shop" && (
           <div id="loader_slider">
             <p>
               loading... <span>{percent}%</span>

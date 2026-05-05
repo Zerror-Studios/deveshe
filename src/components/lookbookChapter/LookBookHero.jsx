@@ -1,9 +1,11 @@
+"use client";
+
 import { htmlParser } from "@/utils/Util";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
 import React, { useRef, useEffect } from "react";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,7 +27,7 @@ const splitText = (element) => {
 };
 
 const LookBookHero = ({ title, subheading, description, asset }) => {
-  const router = useRouter();
+  const pathname = usePathname();
 
   const sectionRef = useRef(null);
   const headerImageRef = useRef(null);
@@ -80,7 +82,7 @@ const LookBookHero = ({ title, subheading, description, asset }) => {
     }, sectionRef);
 
     return () => ctx.revert(); // cleanup
-  }, [title, router.asPath]); // 🔁 rerun when title or route changes
+  }, [title, pathname]); // 🔁 rerun when title or route changes
 
   return (
     <>

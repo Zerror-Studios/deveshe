@@ -1,3 +1,5 @@
+"use client";
+
 import { htmlParser } from "@/utils/Util";
 import React, { useRef, useState } from "react";
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { htmlParser } from "@/utils/Util";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";

@@ -30,10 +30,19 @@
 .phone_container {
   position: absolute;
   left: 0;
-  top: 5%;
-  width: 49%;
+  top: 0;
+  width: 50%;
   height: 100%;
   z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phone_container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
 }
 #contact_form #left h2 {
   font-size: 6vw;

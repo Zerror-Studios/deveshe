@@ -1,5 +1,7 @@
-import { useRouter } from "next/router";
+"use client";
+
 import React from "react";
+import { useRouter } from "next/navigation";
 
 const CommonButton = ({ title, href, onClick, loading = false, type = "submit" }) => {
   const router = useRouter();

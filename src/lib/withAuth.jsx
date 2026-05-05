@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
 import { TokenManager } from "@/utils/tokenManager";
 

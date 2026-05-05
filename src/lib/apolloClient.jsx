@@ -1,4 +1,3 @@
-import Router from "next/router";
 import {
   ApolloClient,
   InMemoryCache,
@@ -18,7 +17,8 @@ const handleUnauthorized = () => {
     useAuthStore.getState().clearAuth();
     TokenManager.clearTokens();
     localStorage.removeItem("user-data");
-    Router.replace("/login");
+    // App Router-safe redirect (next/router isn't available)
+    window.location.replace("/login");
   }
 };
 

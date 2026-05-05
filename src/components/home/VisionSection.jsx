@@ -1,7 +1,7 @@
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger);

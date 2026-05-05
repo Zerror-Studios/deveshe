@@ -1,6 +1,5 @@
 // import ProfileLayout from "../../components/user_data/User_security";
 import { useState, useEffect } from "react";
-import { useRouter } from 'next/router';
 import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai';
 // import {Changepassword} from "../../../api_fetch/admin/User"
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from 'react-toastify';
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { RxCross2 } from "react-icons/rx";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { ADD_ITEM_TO_CART, CART_LIST, REMOVE_ITEM_FROM_CART } from "@/graphql";
@@ -104,7 +104,7 @@ const CartDrawer = ({ isOpen, closeCart }) => {
   const navigateCheckout = async () => {
     try {
       setIsBtnLoading(true);
-      await router.push(`/checkout/${_id}`);
+      router.push(`/checkout/${_id}`);
       closeCart();
     } catch (err) {
       console.error("Navigation failed:", err);
