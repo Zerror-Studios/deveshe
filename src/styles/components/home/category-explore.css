@@ -1,0 +1,53 @@
+/* CONTAINER */
+.category-container {
+    padding: 60px 40px;
+    text-align: center;
+  }
+  
+  /* HEADING */
+  .category-heading {
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+  }
+  
+  .category-heading span {
+    margin-left: 6px;
+  }
+  
+  /* ROW */
+  .category-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  /* CARD */
+  .category-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    background: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  
+  /* HOVER */
+  .category-card:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* IMAGE */
+  .category-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* TEXT */
+  .category-name {
+    font-size: 14px;
+  }

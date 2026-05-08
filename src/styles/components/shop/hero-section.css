@@ -1,0 +1,47 @@
+.shop_hero_section {
+    max-height: unset;
+    padding-top: 6rem;
+    position: relative;
+    height: 95svh;
+    z-index: 6;
+}
+
+.shop_hero_section_content {
+    width: 100%;
+    top: 6rem;
+    padding-bottom: 5rem;
+    position: sticky;
+    display: flex;
+    flex-direction: column;
+    -webkit-box-align: center;
+    align-items: center;
+    padding-bottom: 3.75rem;
+    text-align: center;
+}
+
+.shop_hero_section_content p {
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #fff;
+    text-align: center;
+    width: 45ch;
+
+}
+
+.shop_hero_section_inner {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    will-change: transform;
+}
+
+.shop_hero_section_inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}

@@ -1,0 +1,78 @@
+/* CONTAINER */
+.article-container {
+    padding: 40px 60px;
+  }
+
+  .article-heading {
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  /* IMAGE */
+  .article-imageWrapper {
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+  }
+  
+  .article-image {
+    object-fit: cover;
+    width: 100%;
+    height: auto;
+  }
+  
+  /* CONTENT */
+  .article-content {
+    max-width: 700px;
+    margin: 40px auto 0;
+    text-align: left;
+  }
+  
+  /* TITLE */
+  .article-title {
+    font-size: 32px;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  
+  .article-title span {
+    font-size: 12px;
+    color: orange;
+    margin-left: 8px;
+  }
+  
+  /* DESC */
+  .article-desc {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 15px;
+    line-height: 1.6;
+  }
+  
+  /* DATE */
+  .article-date {
+    font-size: 13px;
+    margin-bottom: 30px;
+  }
+  
+  /* BUTTON */
+  .article-btn {
+    display: block;
+    margin: 0 auto;
+    background: #000;
+    color: #fff;
+    padding: 14px 30px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    letter-spacing: 1px;
+    transition: opacity 0.3s ease;
+  }
+  
+  .article-btn:hover {
+    opacity: 0.8;
+  }
