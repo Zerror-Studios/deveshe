@@ -7,13 +7,12 @@ import "@/styles/home.css";
 import "@/styles/checkout.css";
 import "@/styles/checkout2.css";
 import "@/styles/address.css";
-import "@/styles/profile.css";
 import "@/styles/productLoader.css";
 import "swiper/css";
 import "swiper/css/pagination";
 
 import "@/styles/components/sizeAssistance.css";
-import "@/styles/components/navbar.css";
+import "@/styles/components/common/navbar.css";
 import "@/styles/components/login.css";
 import "@/styles/components/home.css";
 import "@/styles/components/about.css";

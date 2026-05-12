@@ -1,0 +1,259 @@
+/* ─── Nav Shell ──────────────────────────────────────────────────────────────── */
+
+#nav {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9;
+  padding: 1vw 3vw;
+}
+
+@media (max-width: 1000px) {
+  #nav { display: none; }
+}
+
+/* ─── Logo Group ─────────────────────────────────────────────────────────────── */
+
+#logo-container {
+  position: absolute;
+  left: 79%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  height: 30px;
+}
+
+#logo-container p {
+  font-size: 14px;
+  font-weight: 100;
+  font-family: paragraph;
+  color: #000;
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.logo {
+  height: 25px;
+  width: auto;
+  will-change: transform;
+  opacity: 0;
+  filter: invert(0);
+}
+
+.logo:nth-child(2) { top: 30px; }
+.logo:nth-child(3) { top: 60px; }
+.logo:nth-child(4) { top: 90px; }
+
+/* ─── Nav Links ──────────────────────────────────────────────────────────────── */
+
+.nav-link {
+  display: flex;
+  gap: 0.46875rem;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  opacity: 0;
+}
+
+.nav-link a {
+  color: #000;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 100;
+  font-family: paragraph;
+  cursor: pointer;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
+  height: fit-content;
+}
+
+#nav .nav-link a {
+  color: #000 !important;
+  background-color: #fff;
+  line-height: 1;
+  padding: 0.6875rem 1rem 0.59375rem;
+  font-size: calc(8px + 0.229167vw);
+  border-radius: 5px;
+  letter-spacing: 0.3px;
+}
+
+.menu_pill_svg {
+  width: 0.6rem;
+  height: 20px;
+  flex: 0 0 auto;
+  display: inline-block;
+  fill: white;
+  position: absolute;
+}
+
+.menu_pill_svg--left  { right: 99%; }
+.menu_pill_svg--right { left: 99%; }
+
+.nav-link a .hoverline {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: inline-block;
+  background-color: #000 !important;
+  width: 100%;
+  height: 1px;
+  transform: scaleX(0);
+  transform-origin: left;
+  opacity: 0;
+  transition: transform 0.3s ease;
+}
+
+.nav-link a.active .hoverline      { transform: scaleX(1) !important; }
+.nav-link a:hover .hoverline        { transform: scaleX(1); transform-origin: left; }
+.nav-link a:not(:hover) .hoverline  { transform: scaleX(0); transform-origin: right; }
+
+/* ─── Nav Buttons ────────────────────────────────────────────────────────────── */
+
+#nav-btns {
+  position: absolute;
+  right: 92%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.46875rem;
+}
+
+#nav-btns p {
+  font-size: 14px;
+  font-weight: 100;
+  font-family: paragraph;
+  color: #000;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.nav_btn_items {
+  color: #000 !important;
+  background-color: #fff;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  padding: 0.6875rem 1rem 0.59375rem;
+  font-size: calc(8px + 0.229167vw);
+  border-radius: 5px;
+  letter-spacing: 0.3px;
+  position: relative;
+  opacity: 0;
+  font-family: paragraph;
+}
+
+.menu_pill_btn_svg {
+  position: absolute;
+  top: 50%;
+  left: 99%;
+  transform: translateY(-50%);
+  fill: white;
+  stroke: none !important;
+  color: white;
+}
+
+#nav-line {
+  height: 1.1rem;
+  width: 1px;
+  background-color: #000;
+}
+
+#nav-btns svg:not(.menu_pill_btn_svg) {
+  display: block;
+  min-height: 1.1rem;
+  min-width: 1.1rem;
+  stroke: #000;
+  transition: scale 0.3s ease;
+}
+
+#nav-btns svg:not(.menu_pill_btn_svg):hover { scale: 1.1; }
+
+#nav-btns .menu_pill_btn_svg,
+#nav-btns .menu_pill_btn_svg path {
+  stroke: none !important;
+  fill: currentColor;
+}
+
+#nav .nav-link a::after                        { background-color: #000 !important; }
+#nav #nav-line                                 { background-color: #000 !important; }
+#nav #nav-btns svg:not(.menu_pill_btn_svg)     { stroke: #000 !important; }
+
+/* ─── Loader ─────────────────────────────────────────────────────────────────── */
+
+#loader_slider {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #fff;
+  z-index: 100;
+  overflow: hidden;
+}
+
+/* "looking for" — top left */
+#loader_looking {
+  position: absolute;
+  top: 1.2vw;        /* matches #nav padding-top */
+  left: 3vw;         /* matches #nav padding-left */
+  font-size: 14px;
+  font-weight: 100;
+  font-family: paragraph;
+  color: #000;
+  text-transform: uppercase;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+/* "new emotions?" — top right */
+#loader_emotions {
+  position: absolute;
+  top: 1.2vw;
+  right: 3vw;
+  font-size: 14px;
+  font-weight: 100;
+  font-family: paragraph;
+  color: #000;
+  text-transform: uppercase;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+/* "loading... XX%" — centered */
+#loader_percent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  font-weight: 100;
+  font-family: paragraph;
+  color: #000;
+  text-transform: uppercase;
+  white-space: nowrap;
+  will-change: transform;
+}

@@ -6,291 +6,303 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { useAuthStore } from "@/store/auth-store";
 import { MenuData } from "@/helpers/MenuData";
+
 gsap.registerPlugin(ScrollTrigger);
+
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const LOGO_SRCS = [
+  { src: "/assets/images/logo/d.webp", alt: "D" },
+  { src: "/assets/images/logo/v.webp", alt: "V" },
+  { src: "/assets/images/logo/s.webp", alt: "S" },
+  { src: "/assets/images/logo/m.webp", alt: "M" },
+];
+
+const PILL_PATH =
+  "M10.21 4V0a4.09 4.09 0 0 1-4 4H4a4.09 4.09 0 0 1-4-4v24a4.09 4.09 0 0 1 4-4h2.21a4.09 4.09 0 0 1 4 4V4Z";
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+const PillSvg = ({ className }) => (
+  <svg
+    viewBox="0 0 10.21 24"
+    className={`menu_pill_svg ${className}`}
+    preserveAspectRatio="none"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d={PILL_PATH} />
+  </svg>
+);
+
+/**
+ * Full-screen white loader.
+ *
+ * Layout inside:
+ *   #loader_looking  — top-left  "looking for"   (slides down on exit)
+ *   #loader_emotions — top-right "new emotions?"  (swipes left on exit)
+ *   #loader_percent  — center    "loading... XX%" (slides down during count)
+ */
+const NavLoader = ({ percent }) => (
+  <div id="loader_slider">
+    <span id="loader_looking">looking for</span>
+    <span id="loader_emotions">new emotions?</span>
+    <p id="loader_percent">
+      loading... <span>{percent}%</span>
+    </p>
+  </div>
+);
+
+const LogoGroup = () => (
+  <Link href="/" id="logo-container">
+    <p>new emotions?</p>
+    {LOGO_SRCS.map(({ src, alt }) => (
+      <Image
+        key={alt}
+        width={1000}
+        height={1000}
+        src={src}
+        alt={alt}
+        className="logo"
+      />
+    ))}
+  </Link>
+);
+
+const NavLinks = ({ pathname }) => (
+  <div className="nav-link">
+    {MenuData.map((link, idx) => {
+      const isPill = idx === 1;
+      return (
+        <Link
+          key={idx}
+          href={link.link}
+          className={pathname === link.link ? "active" : ""}
+        >
+          {isPill && <PillSvg className="menu_pill_svg--left" />}
+          <span className={isPill ? "menu_pill_text" : undefined}>
+            {link.name}
+          </span>
+          {isPill && <PillSvg className="menu_pill_svg--right" />}
+          <div className="hoverline" />
+        </Link>
+      );
+    })}
+  </div>
+);
+
+const NavButtons = ({ openCart, isLoggedIn }) => (
+  <div id="nav-btns">
+    <p>looking for</p>
+    <button className="nav_btn_items" onClick={openCart}>
+      BAG
+      <svg
+        viewBox="0 0 10.21 24"
+        className="menu_pill_svg menu_pill_btn_svg"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path d={PILL_PATH} />
+      </svg>
+    </button>
+    <Link className="nav_btn_items" href={isLoggedIn ? "/profile" : "/login"}>
+      {isLoggedIn ? "ACCOUNT" : "LOG IN"}
+    </Link>
+  </div>
+);
+
+// ─── GSAP Helpers ─────────────────────────────────────────────────────────────
+
+const waitForImages = (imgs) =>
+  Promise.all(
+    Array.from(imgs).map((img) =>
+      img.complete
+        ? Promise.resolve()
+        : new Promise((res) => { img.onload = img.onerror = res; })
+    )
+  );
+
+const calcXPositions = (logos, spacing = 10) => {
+  const xPositions = [];
+  let x = 0;
+  logos.forEach((logo) => {
+    xPositions.push(x);
+    x += logo.getBoundingClientRect().width + spacing;
+  });
+  return { xPositions, totalWidth: x };
+};
+
+const setNavTransparent = () =>
+  gsap.set("#nav", {
+    backgroundColor: "rgba(255,255,255,0)",
+    backdropFilter: "blur(0px)",
+    WebkitBackdropFilter: "blur(0px)",
+  });
+
+const setNavWhite = () => {
+  gsap.set("#logo-container img", { filter: "invert(1)" });
+  gsap.set(".nav-link a", { color: "#fff" });
+  gsap.set("#nav-btns svg:not(.menu_pill_btn_svg)", { stroke: "#fff" });
+  gsap.set("#nav-line", { backgroundColor: "#fff" });
+  gsap.set(".hoverline", { backgroundColor: "#fff" });
+  setNavTransparent();
+};
+
+const setNavBlack = () => {
+  gsap.set("#logo-container img", { filter: "invert(0)" });
+  gsap.set(".nav-link a", { color: "#000" });
+  gsap.set("#nav-btns svg:not(.menu_pill_btn_svg)", { stroke: "#000" });
+  gsap.set("#nav-line", { backgroundColor: "#000" });
+  gsap.set(".hoverline", { backgroundColor: "#000" });
+  setNavTransparent();
+};
+
+const setStaticLayout = () => {
+  gsap.set("html,body", { overflow: "visible" });
+  gsap.set(".logo", { position: "static", transform: "translate(0,0)" });
+  gsap.set("#logo-container", { gap: "13px", left: "2%" });
+  gsap.set("#nav-btns", { right: "2%" });
+  gsap.set("#loader_slider", { opacity: 0, display: "none" });
+  gsap.set(".nav-link", { opacity: 1 });
+  gsap.set("#logo-container p, #nav-btns p", { opacity: 0 });
+  gsap.set("#logo-container .logo, .nav_btn_items", { opacity: 1 });
+};
+
+const addLogoScrollTrigger = (start, end) => {
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: document.documentElement,
+      start,
+      end,
+      scrub: 1,
+    },
+  }).to("#logo-container img, .logo", {
+    filter: "invert(0)",
+    ease: "power1.out",
+    duration: 0.3,
+  });
+};
+
+// ─── Page Init Functions ──────────────────────────────────────────────────────
+
+const initShopPage = () => {
+  setStaticLayout();
+  setNavWhite();
+  addLogoScrollTrigger("100vh top", "calc(100vh + 80px) top");
+};
+
+const initOtherPage = () => {
+  setStaticLayout();
+  setNavBlack();
+};
+
+const initHomePage = (logos, xPositions, totalWidth, logoContainer, setPercent) => {
+  // ── Initial state ──
+  logos.forEach((logo, i) => gsap.set(logo, { x: xPositions[i], top: 0 }));
+
+  gsap.set("html,body", { overflow: "hidden" });
+  gsap.set(".logo", { position: "absolute" });
+  gsap.set("#logo-container", { left: "79%" });
+  gsap.set("#nav-btns", { right: "92%" });
+  gsap.set("#loader_slider", { opacity: 1, display: "block" });
+  gsap.set(".nav-link", { opacity: 0 });
+  gsap.set("#logo-container p, #nav-btns p", { opacity: 1 });
+  gsap.set("#logo-container .logo, .nav_btn_items", { opacity: 0 });
+
+  // Loader text: visible at top corners, percent centered
+  gsap.set("#loader_looking", { opacity: 1, x: 0, y: 0 });
+  gsap.set("#loader_emotions", { opacity: 1, x: 0, y: 0 });
+  gsap.set("#loader_percent", { opacity: 1, y: 0 });
+
+  setNavWhite();
+  logoContainer.style.width = `${xPositions[3] || totalWidth}px`;
+
+  // ── Counter ──
+  const startLoader = () => {
+    let count = 0;
+    const interval = setInterval(() => {
+      count++;
+      setPercent(count);
+      if (count >= 100) clearInterval(interval);
+    }, 10);
+  };
+
+  // ── Master timeline ──
+  gsap
+    .timeline()
+    .call(startLoader)
+
+    // While counting: percent text slides down out of view
+    .to("#loader_percent", {
+      y: "120%",
+      duration: 0.8,
+      delay: 0.8,
+      ease: "power2.in",
+    })
+
+    // "looking for" (top-left) swipes right off screen
+    .to(
+      "#loader_looking",
+      { x: "110vw", duration: 0.7, ease: "power2.in" },
+      "exit"
+    )
+    // "new emotions?" (top-right) swipes left off screen
+    .to(
+      "#loader_emotions",
+      { x: "-110vw", duration: 0.7, ease: "power2.in" },
+      "exit"
+    )
+
+    // Nav elements slide into position
+    .to("#logo-container", { left: "2%", duration: 0.5, ease: "power2.in" }, "move")
+    .to("#nav-btns", { right: "2%", duration: 0.5, ease: "power2.in" }, "move")
+    .to("#logo-container p, #nav-btns p", { opacity: 0, duration: 0.2, ease: "power3.in" }, "move")
+    .to("#logo-container .logo, .nav_btn_items", { opacity: 1, duration: 0.2, ease: "power3.in" }, "move")
+    .to(".nav-link", { opacity: 1, duration: 0.3, ease: "power2.in" })
+
+    // Logo stack collapses into nav
+    .to(".logo", { top: (i) => i * 30, x: 0, duration: 0.8, ease: "power2.inOut", stagger: 0.1 })
+
+    // Loader fades out
+    .to(
+      "#loader_slider",
+      {
+        opacity: 0,
+        duration: 0.3,
+        ease: "power1.out",
+        onComplete: () => {
+          setTimeout(() => {
+            gsap.set("#loader_slider", { display: "none" });
+            gsap.set("html,body", { overflow: "visible" });
+          }, 1600);
+        },
+      },
+      "-=1.6"
+    );
+
+  // ── Scroll: collapse logo stack + logos turn black ──
+  gsap
+    .timeline({
+      scrollTrigger: {
+        trigger: document.documentElement,
+        start: "top top",
+        end: "400px 20%",
+        scrub: 1,
+      },
+    })
+    .to(".logo", { top: 0, x: (i) => xPositions[i], ease: "sine.out", duration: 0.3 }, "collapse")
+    .to("#logo-container", { width: `${totalWidth}px`, ease: "sine.out" }, "collapse")
+    .to(".logo", { filter: "invert(0)", ease: "power1.out", duration: 0.3 }, "collapse");
+};
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 
 const Navbar = ({ openCart }) => {
   const pathname = usePathname();
   const { isLoggedIn } = useAuthStore((state) => state);
   const [percent, setPercent] = useState(0);
   const [hash, setHash] = useState("");
-
-  useEffect(() => {
-    if (window.innerWidth < 1000) return;
-
-    const init = async () => {
-      const logos = document.querySelectorAll(".logo");
-      const logoContainer = document.querySelector("#logo-container");
-      const nav = document.querySelector("#nav");
-
-      if (!logos.length || !logoContainer || !nav) return;
-
-      // Wait for all logos to load
-      await Promise.all(
-        Array.from(logos).map((img) =>
-          img.complete
-            ? Promise.resolve()
-            : new Promise((res) => {
-                img.onload = img.onerror = res;
-              })
-        )
-      );
-
-      // Calculate positions
-      const spacing = 10;
-      const xPositions = [];
-      let currentX = 0;
-
-      logos.forEach((logo) => {
-        const width = logo.getBoundingClientRect().width;
-        xPositions.push(currentX);
-        currentX += width + spacing;
-      });
-
-      if (pathname !== "/" || window.location.hash === "#shop") {
-        gsap.set("html,body", { overflow: "visible" });
-        gsap.set("#logo-container img", { filter: "invert(0)" });
-        gsap.set(".nav-link a", { color: "#000" });
-        gsap.set("#nav", {
-          backgroundColor: "rgba(255, 255, 255, 0.1)", // semi-transparent white
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)", // for Safari support
-        });
-        gsap.set("#nav-btns svg", { stroke: "#000" });
-        gsap.set("#nav-line", { backgroundColor: "#000" });
-        gsap.set(".logo", { position: "static",transform:"translate(0,0)" });
-        gsap.set("#logo-container", { gap: "13px" });
-        gsap.set(".hoverline", { backgroundColor: "#000" });
-        gsap.set("#logo-container", { left: "2%" });
-        gsap.set("#nav-btns", { right: "2%" });
-        gsap.set("#loader_slider", { opacity: "0", display: "none" });
-        gsap.set(".nav-link", { opacity: 1 });
-
-        gsap.set("#logo-container p,#nav-btns p", {
-          opacity: 0,
-        });
-        gsap.set("#logo-container .logo,.nav_btn_items", {
-          opacity: 1,
-        });
-        return;
-      }
-      logos.forEach((logo, i) => {
-        gsap.set(logo, { x: xPositions[i], top: 0 });
-      });
-
-      gsap.set("html,body", { overflow: "hidden" });
-
-      gsap.set("#logo-container img", { filter: "invert(1)" });
-      gsap.set(".nav-link a", { color: "#fff" });
-      gsap.set("#nav", {
-        backgroundColor: "rgba(255, 255, 255, 0)",
-        backdropFilter: "blur(0px)",
-        WebkitBackdropFilter: "blur(0px)",
-      });
-      gsap.set("#nav-btns svg", { stroke: "#fff" });
-      gsap.set("#nav-line", { backgroundColor: "#fff" });
-      gsap.set(".logo", { position: "absolute" });
-      gsap.set(".hoverline", { backgroundColor: "#fff" });
-      gsap.set("#logo-container", { left: "79%" });
-      gsap.set("#nav-btns", { right: "92%" });
-      gsap.set("#loader_slider", { opacity: "1", display: "block" });
-      gsap.set(".nav-link", { opacity: 0 });
-      gsap.set("#loader_slider p", { top: "50%" });
-      gsap.set("#logo-container p,#nav-btns p", {
-        opacity: 1,
-      });
-      gsap.set("#logo-container .logo,.nav_btn_items", {
-        opacity: 0,
-      });
-
-      const finalWidth = currentX;
-      logoContainer.style.width = `${xPositions[3] || finalWidth}px`;
-
-      const startLoader = () => {
-        let current = 0;
-        const interval = setInterval(() => {
-          current++;
-          setPercent(current);
-
-          if (current >= 100) {
-            clearInterval(interval);
-          }
-        }, 10);
-      };
-      var tl = gsap.timeline();
-
-      // Move logo and nav buttons smoothly at the same time
-      tl.call(startLoader)
-        .to("#loader_slider p", {
-          y: "95%",
-          duration: 0.8,
-          delay: 0.8,
-          ease: "power2.out",
-        })
-        .to(
-          "#logo-container",
-          {
-            left: "2%",
-            duration: 0.5,
-            ease: "power2.in",
-          },
-          "start"
-        )
-        .to(
-          "#nav-btns",
-          {
-            right: "2%",
-            duration: 0.5,
-            ease: "power2.in",
-          },
-          "start"
-        )
-        .to(
-          "#logo-container p,#nav-btns p",
-          {
-            opacity: 0,
-            duration: 0.2,
-            delay: 0.4,
-            ease: "power3.in",
-          },
-          "start"
-        )
-
-        .to(
-          "#logo-container .logo,.nav_btn_items",
-          {
-            opacity: 1,
-            duration: 0.2,
-            delay: 0.4,
-            ease: "power3.in",
-          },
-          "start"
-        )
-        // Move nav links in a fluid way
-        .to(".nav-link", {
-          opacity: 1,
-          duration: 0.3,
-          ease: "power2.in",
-        })
-
-        .to(".logo", {
-          top: (i) => i * 30, // 0px for first, 30px for second, 60px for third...
-          x: 0,
-          duration: 0.8,
-          ease: "power2.inOut",
-          stagger: 0.1, // small delay between each logo
-        })
-        // Fade out loader, then hide it completely
-        .to(
-          "#loader_slider",
-          {
-            opacity: 0,
-            duration: 0.3,
-            ease: "power1.out",
-            onComplete: () => {
-              setTimeout(() => {
-                gsap.set("#loader_slider", { display: "none" });
-                gsap.set("html,body", { overflow: "visible" });
-              }, 1600);
-            },
-          },
-          "-=1.6"
-        );
-
-      // GSAP Timeline
-      gsap
-        .timeline({
-          scrollTrigger: {
-            trigger: document.documentElement,
-            start: "top top",
-            end: "400px 20%",
-            scrub: 1,
-            // markers: true,
-          },
-        })
-        .to(
-          ".logo",
-          {
-            top: 0,
-            x: (i) => xPositions[i],
-            ease: "sine.out",
-            duration: 0.3,
-          },
-          "start"
-        )
-        .to(
-          "#logo-container",
-          {
-            width: `${finalWidth}px`,
-            ease: "sine.out",
-          },
-          "start"
-        )
-        .to(
-          "#nav",
-          {
-            backgroundColor: "rgba(255, 255, 255, 0.1)", // semi-transparent white
-            backdropFilter: "blur(8px)",
-            WebkitBackdropFilter: "blur(8px)", // for Safari support
-            ease: "power1.out",
-            duration: 0.3,
-          },
-          "s"
-        )
-        .to(
-          ".hoverline",
-          {
-            backgroundColor: "#000",
-            ease: "power1.out",
-            duration: 0.3,
-          },
-          "s"
-        )
-        .to(
-          ".logo",
-          {
-            filter: "invert(0)",
-            ease: "power1.out",
-            duration: 0.3,
-          },
-          "s"
-        )
-        .to(
-          ".nav-link a",
-          {
-            color: "black",
-            ease: "power1.out",
-            duration: 0.3,
-          },
-          "s"
-        )
-        .to(
-          "#nav-line",
-          {
-            backgroundColor: "black",
-            ease: "power1.out",
-            duration: 0.3,
-          },
-          "s"
-        )
-        .to(
-          "#nav-btns svg",
-          {
-            stroke: "black",
-            ease: "power1.out",
-            duration: 0.3,
-          },
-          "s"
-        );
-    };
-
-    const timeout = setTimeout(() => requestAnimationFrame(init), 30);
-
-    return () => {
-      clearTimeout(timeout);
-      ScrollTrigger.killAll();
-      gsap.globalTimeline.clear();
-    };
-  }, [pathname, hash]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -300,113 +312,41 @@ const Navbar = ({ openCart }) => {
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
 
+  useEffect(() => {
+    if (window.innerWidth < 1000) return;
+
+    const init = async () => {
+      const logos = document.querySelectorAll(".logo");
+      const logoContainer = document.querySelector("#logo-container");
+      const nav = document.querySelector("#nav");
+      if (!logos.length || !logoContainer || !nav) return;
+
+      await waitForImages(logos);
+      const { xPositions, totalWidth } = calcXPositions(logos);
+
+      const isHome = pathname === "/" && window.location.hash !== "#shop";
+      const isShop = pathname === "/shop";
+
+      if (isShop)       initShopPage();
+      else if (isHome)  initHomePage(logos, xPositions, totalWidth, logoContainer, setPercent);
+      else              initOtherPage();
+    };
+
+    const timeout = setTimeout(() => requestAnimationFrame(init), 30);
+    return () => {
+      clearTimeout(timeout);
+      ScrollTrigger.killAll();
+      gsap.globalTimeline.clear();
+    };
+  }, [pathname, hash]);
+
   return (
-    <>
-      <div id="nav">
-        {pathname === "/" && (
-          <div id="loader_slider">
-            <p>
-              loading... <span>{percent}%</span>
-            </p>
-          </div>
-        )}
-        <Link href="/" id="logo-container">
-          <p>new emotions?</p>
-          <Image
-            width={1000}
-            height={1000}
-            src="/assets/images/logo/d.webp"
-            alt="D"
-            className="logo"
-          />
-          <Image
-            width={1000}
-            height={1000}
-            src="/assets/images/logo/v.webp"
-            alt="V"
-            className="logo"
-          />
-          <Image
-            width={1000}
-            height={1000}
-            src="/assets/images/logo/s.webp"
-            alt="S"
-            className="logo"
-          />
-          <Image
-            width={1000}
-            height={1000}
-            src="/assets/images/logo/m.webp"
-            alt="M"
-            className="logo"
-          />
-        </Link>
-        <div className="nav-link">
-          {MenuData.map((link, idx) => (
-            <Link
-              key={idx}
-              href={link.link}
-              className={`${pathname === link.link ? "active" : ""}`}
-            >
-              {link.name}
-              <div className="hoverline"></div>
-            </Link>
-          ))}
-        </div>
-        <div id="nav-btns">
-          <p>looking for</p>
-          <button className="nav_btn_items" onClick={openCart}>
-            <svg
-              className="icon-cart"
-              width="15"
-              height="18"
-              viewBox="0 0 15 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              data-v-f756b3ad=""
-            >
-              <path
-                d="M1.19891 5.8049C1.2448 5.02484 1.89076 4.41576 2.67216 4.41576H12.0298C12.8112 4.41576 13.4572 5.02485 13.5031 5.8049L14.0884 15.7547C14.1382 16.6023 13.4643 17.3171 12.6151 17.3171H2.08688C1.23775 17.3171 0.563767 16.6023 0.61363 15.7547L1.19891 5.8049Z"
-                strokeWidth="1.2"
-              ></path>
-              <path
-                d="M11.4354 6.3737C11.4354 3.21604 9.60694 0.65625 7.35147 0.65625C5.096 0.65625 3.26758 3.21604 3.26758 6.3737"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-              ></path>
-            </svg>
-          </button>
-          <div className="nav_btn_items" id="nav-line"></div>
-          <Link
-            className="nav_btn_items"
-            href={isLoggedIn ? "/profile" : "/login"}
-          >
-            <svg
-              className="icon-account"
-              width="16"
-              height="18"
-              viewBox="0 0 16 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              data-v-f756b3ad=""
-            >
-              <path
-                d="M15.024 17.0559V15.3068C15.024 14.379 14.6555 13.4892 13.9994 12.8332C13.3434 12.1772 12.4536 11.8086 11.5258 11.8086H4.52944C3.60166 11.8086 2.71188 12.1772 2.05585 12.8332C1.39981 13.4892 1.03125 14.379 1.03125 15.3068V17.0559"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></path>
-              <path
-                d="M8.02798 8.30986C9.95997 8.30986 11.5262 6.74367 11.5262 4.81167C11.5262 2.87967 9.95997 1.31348 8.02798 1.31348C6.09598 1.31348 4.52979 2.87967 4.52979 4.81167C4.52979 6.74367 6.09598 8.30986 8.02798 8.30986Z"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></path>
-            </svg>
-          </Link>
-        </div>
-      </div>
-    </>
+    <div id="nav">
+      {pathname === "/" && <NavLoader percent={percent} />}
+      <LogoGroup />
+      <NavLinks pathname={pathname} />
+      <NavButtons openCart={openCart} isLoggedIn={isLoggedIn} />
+    </div>
   );
 };
 
