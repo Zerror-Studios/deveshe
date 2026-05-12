@@ -10,6 +10,7 @@ const HeroSection = () => {
   const sectionRef = useRef(null);
   const innerRef = useRef(null);
   const imgRef = useRef(null);
+  const paragraphRef = useRef(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -47,6 +48,17 @@ const HeroSection = () => {
           scrub: true,
         },
       });
+      gsap.to(paragraphRef.current, {
+        color: "black",
+        duration: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "bottom 60%",
+          end: "bottom 50%",
+          scrub: true,
+        },
+      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -55,7 +67,7 @@ const HeroSection = () => {
   return (
     <div ref={sectionRef} className="shop_hero_section">
       <div className="shop_hero_section_content">
-        <p>
+        <p ref={paragraphRef}>
           Discover our latest collection of outerwear. Carefully crafted from
           the finest fabrics and premium hardware.
         </p>

@@ -4,15 +4,11 @@ export const MenuData = [
     link: "/shop",
   },
   {
-    name: "Lookbook",
+    name: "Collections",
     link: "/lookbook",
   },
   {
-    name: "About",
+    name: "Explore",
     link: "/about",
-  },
-  {
-    name: "Contact",
-    link: "/contact",
   },
 ];
