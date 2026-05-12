@@ -1,5 +1,6 @@
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
+import BracketSlideCta from "@/components/common/BracketSlideCta";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef } from "react";
@@ -81,27 +82,6 @@ const VisionSection = () => {
     };
   }, []);
 
-  const enterHandler = () => {
-    gsap.fromTo(
-      ".text1-btn span",
-      { y: "0%" },
-      {
-        y: "-100%",
-        duration: 0.5,
-        stagger: { amount: 0.2 },
-      }
-    );
-    gsap.fromTo(
-      ".text2-btn span",
-      { y: "0%" },
-      {
-        y: "-100%",
-        duration: 0.5,
-        stagger: { amount: 0.2 },
-      }
-    );
-  };
-
   const handleClick = () => {
     router.push("/about");
   };
@@ -129,18 +109,7 @@ const VisionSection = () => {
           <strong> limited-edition pieces made with purpose</strong> and
           personality.
         </p>
-        <div
-          onClick={handleClick}
-          onMouseEnter={enterHandler}
-          className="explore_inspired_button"
-        >
-          [
-          <div className="inspired_button_wrap" id="btn-text-wrap">
-            <h4 className="text1-btn">Read More</h4>
-            <h4 className="text2-btn">Read More</h4>
-          </div>
-          ]
-        </div>
+        <BracketSlideCta label="Read more" onClick={handleClick} />
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ export default function CategoryExplore() {
   return (
     <section className="category-container">
       <p className="category-heading">
-        EXPLORE <span>ARK / 8</span>
+      Featured Collection
       </p>
 
       <div className="category-row">

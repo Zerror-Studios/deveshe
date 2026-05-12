@@ -13,7 +13,9 @@ const nextConfig = {
       "localhost",
       "cdn.deveshedreams.com",
       "assets.deveshedreams.com",
-      "avatar.iran.liara.run"
+      "avatar.iran.liara.run",
+      "saint-laurent.dam.kering.com",
+      "images.unsplash.com"
     ],
   },
 };

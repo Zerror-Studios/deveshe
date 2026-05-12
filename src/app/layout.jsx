@@ -26,6 +26,11 @@ import "@/styles/components/newPorfile.css";
 import "@/styles/components/common/polaroid.css";
 import "@/styles/components/common/productCard.css";
 import "@/styles/components/common/footer.css";
+import "@/styles/components/common/bracket-slide-cta.css";
+import "@/styles/components/home/curated-products.css";
+import "@/styles/components/home/category-explore.css";
+import "@/styles/components/home/featured-article.css";
+import "@/styles/components/shop/hero-section.css";
 
 export const metadata = {
   title: "DeVeSheDreams",
@@ -77,4 +82,3 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
-

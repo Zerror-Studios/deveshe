@@ -1,12 +1,17 @@
 /* CONTAINER */
 .curated-container {
-  padding: 40px 60px;
+  padding: 40px;
+  font-family: paragraph;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* matches .category-heading / .article-heading — one eyebrow style sitewide */
 .curated-heading {
-  font-size: 20px;
-  font-weight: 500;
-  margin-bottom: 25px;
+  font-family: heading;
+    font-size: 2vw;
+    line-height: 0.9;
+    margin-bottom: 2vw;
 }
 
 /* GRID */
@@ -18,6 +23,9 @@
 
 /* CARD */
 .curated-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
   cursor: pointer;
 }
 
@@ -39,6 +47,12 @@
   transform: scale(1.05);
 }
 
+.curated-imagePlaceholder {
+  position: absolute;
+  inset: 0;
+  background: #e8e8e8;
+}
+
 /* 🔥 OVERLAY (TOP LEFT) */
 .curated-overlay {
   position: absolute;
@@ -51,14 +65,20 @@
 
 /* TEXT */
 .curated-name {
-  font-size: 13px;
-  color: #000;
+  font-family: paragraph;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.35;
+  color: white;
   margin-bottom: 2px;
 }
 
 .curated-price {
-  font-size: 13px;
+  font-family: paragraph;
+  font-size: 14px;
   font-weight: 500;
+  line-height: 1.35;
+  color: white;
 }
 
 /* RESPONSIVE */

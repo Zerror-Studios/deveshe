@@ -7,6 +7,10 @@ import ExploreSection from "@/components/home/ExploreSection";
 import VisionSection from "@/components/home/VisionSection";
 import ProductSection from "@/components/home/ProductSection";
 import ReviewSection from "@/components/home/ReviewSection";
+import HeroSectionHome from "@/components/home/HeroSectionHome";
+import CuratedProducts from "@/components/home/CuratedProducts";
+import CategoryExplore from "@/components/home/CategoryExplore";
+import FeaturedArticle from "@/components/home/FeaturedArticle";
 
 export default function HomeClient({ productData }) {
   const sectionRef = useRef(null);
@@ -30,9 +34,13 @@ export default function HomeClient({ productData }) {
 
   return (
     <>
-      <HeroSection />
-      <ExploreSection sectionRef={sectionRef} />
-      <ProductSection sectionRef={sectionRef} data={productData} />
+      <HeroSectionHome />
+      <CuratedProducts products={productData.slice(0, 8)} />
+      <CategoryExplore />
+      <FeaturedArticle />
+      {/* <HeroSection /> */}
+      {/* <ExploreSection sectionRef={sectionRef} /> */}
+      {/* <ProductSection sectionRef={sectionRef} data={productData} /> */}
       <VisionSection />
       <ReviewSection />
     </>

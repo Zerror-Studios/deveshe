@@ -1,16 +1,34 @@
+import { GET_PRODUCTS } from '@/graphql';
+import { createApolloClientServer } from '@/lib/apolloClient.server';
+import { ProductStatus } from '@/utils/Constant';
+import ShopClient from './ShopClient';
 import React from 'react'
-import CategoryExplore from '@/components/home/CategoryExplore'
-import HeroSection from '@/components/shop/HeroSection'
-import CuratedProducts from '@/components/home/CuratedProducts'
 
-const ShopPage = () => {
+export const dynamic = "force-dynamic";
+const ShopPage = async () => {
+
+  const client = createApolloClientServer();
+  let productData = [];
+
+  try {
+    const { data } = await client.query({
+      query: GET_PRODUCTS,
+      variables: {
+        offset: 0,
+        limit: 1000,
+        filters: {
+          categoryIds: ["6898b3cdddf0354e025da816"],
+          status: ProductStatus.PUBLISHED,
+        },
+      },
+    });
+    productData = data?.getClientSideProducts?.products || [];
+  } catch (error) {
+    console.error("Error fetching home products:", error?.message);
+  }
+  
   return (
-    <>
-    <HeroSection />
-    <CuratedProducts />
-    <CategoryExplore />
-    </>
+    <ShopClient productData={productData} />
   )
 }
-
 export default ShopPage

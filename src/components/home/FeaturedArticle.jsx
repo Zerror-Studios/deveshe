@@ -1,10 +1,11 @@
+import BracketSlideCta from "@/components/common/BracketSlideCta";
 import Image from "next/image";
 
 export default function FeaturedArticle() {
     return (
         <section className="article-container">
             <p className="article-heading">
-            Latest journal entries
+            Latest Blogs
             </p>
             {/* 🔥 HERO IMAGE */}
             <div className="article-imageWrapper">
@@ -30,7 +31,11 @@ export default function FeaturedArticle() {
 
                 <p className="article-date">[9.26.2025]</p>
 
-                <button className="article-btn">VIEW ALL ARTICLES</button>
+                <BracketSlideCta
+                    label="View all articles"
+                    href="/lookbook"
+                    ariaLabel="View all articles"
+                />
             </div>
         </section>
     );
