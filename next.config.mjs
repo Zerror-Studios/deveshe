@@ -15,7 +15,8 @@ const nextConfig = {
       "assets.deveshedreams.com",
       "avatar.iran.liara.run",
       "saint-laurent.dam.kering.com",
-      "images.unsplash.com"
+      "images.unsplash.com",
+      "api.dicebear.com"
     ],
   },
 };

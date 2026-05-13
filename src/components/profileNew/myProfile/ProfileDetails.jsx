@@ -26,6 +26,17 @@ const ProfileDetails = () => {
   const [updateUser, { loading }] = useMutation(UPDATE_USER_PROFILE);
   const { user, setUser } = useAuthStore((state) => state);
 
+  const nameSeed = [user?.firstName, user?.lastName].filter(Boolean).join(" ").trim();
+  const fallbackAvatarSrc = `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
+    nameSeed || user?.email?.split("@")[0] || "User"
+  )}`;
+  const rawProfileImg = typeof user?.profileImg === "string" ? user.profileImg.trim() : "";
+  const avatarSrc = rawProfileImg || fallbackAvatarSrc;
+  const avatarUnoptimized =
+    /\.svg(\?|$)/i.test(avatarSrc) ||
+    avatarSrc.includes("api.dicebear.com") ||
+    avatarSrc.startsWith("data:");
+
   const {
     register,
     handleSubmit,
@@ -75,14 +86,12 @@ const ProfileDetails = () => {
       <div className="profile_right_container">
         <div className="profile_avatar">
           <Image
-            src={
-              user?.profileImg ||
-              `https://avatar.iran.liara.run/username?username=${user?.firstName}+${user?.lastName}`
-            }
+            src={avatarSrc}
             alt="avatar"
-            width={100}
-            height={100}
-            layout="responsive"
+            fill
+            sizes="140px"
+            unoptimized={avatarUnoptimized}
+            priority
           />
         </div>
         <CommonButton title="Upload Avatar" />

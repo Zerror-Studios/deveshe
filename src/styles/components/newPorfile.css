@@ -118,6 +118,7 @@
 }
 
 .profile_avatar {
+  position: relative;
   width: 140px;
   height: 140px;
   background-color: #d6a3ff;
@@ -137,6 +138,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 50%;
 }
 
 .user_form {
