@@ -8,14 +8,12 @@
 
 .shop_hero_section_content {
     width: 100%;
-    top: 6rem;
-    padding-bottom: 5rem;
+    top: 8rem;
     position: sticky;
     display: flex;
     flex-direction: column;
     -webkit-box-align: center;
     align-items: center;
-    padding-bottom: 3.75rem;
     text-align: center;
 }
 
@@ -26,7 +24,7 @@
     color: #fff;
     text-align: center;
     width: 45ch;
-
+    padding-bottom: 3rem;
 }
 
 .shop_hero_section_inner {

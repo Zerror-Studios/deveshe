@@ -41,7 +41,7 @@ export default function HomeClient({ productData }) {
       {/* <HeroSection /> */}
       {/* <ExploreSection sectionRef={sectionRef} /> */}
       {/* <ProductSection sectionRef={sectionRef} data={productData} /> */}
-      <VisionSection />
+      {/* <VisionSection /> */}
       <ReviewSection />
     </>
   );

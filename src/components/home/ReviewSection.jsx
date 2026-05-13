@@ -27,8 +27,8 @@ const ReviewSection = () => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: "#review_section",
-          start: "top 30%",
-          end: "top 0%",
+          start: "top 95%",
+          end: "top 55%",
           // scrub: true,
           // markers: true,
         },

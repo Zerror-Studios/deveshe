@@ -28,6 +28,7 @@
   align-items: flex-start;
   gap: 15px;
   height: 30px;
+  z-index: 9;
 }
 
 #logo-container p {
@@ -68,9 +69,18 @@
   transform: translate(-50%, -50%);
   will-change: transform;
   opacity: 0;
+  padding: 0.4vw 3vw;
+  z-index: 9;
 }
 
-.nav-link a {
+.nav-link-item {
+  position: static;
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav-link a,
+.nav-link .nav-link-trigger {
   color: #000;
   text-decoration: none;
   text-transform: uppercase;
@@ -85,7 +95,8 @@
   height: fit-content;
 }
 
-#nav .nav-link a {
+#nav .nav-link a,
+#nav .nav-link .nav-link-trigger {
   color: #000 !important;
   background-color: #fff;
   line-height: 1;
@@ -93,6 +104,13 @@
   font-size: calc(8px + 0.229167vw);
   border-radius: 5px;
   letter-spacing: 0.3px;
+  z-index: 10;
+}
+
+.nav-link .nav-link-trigger {
+  border: none;
+  outline: none;
+  appearance: none;
 }
 
 .menu_pill_svg {
@@ -107,23 +125,86 @@
 .menu_pill_svg--left  { right: 99%; }
 .menu_pill_svg--right { left: 99%; }
 
-.nav-link a .hoverline {
-  position: absolute;
+
+/* ─── Overlay ─────────────────────────────────────────────────────────────── */
+
+.nav-overlay {
+  position: fixed;
+  top: 0;
   left: 0;
-  bottom: 0;
-  display: inline-block;
-  background-color: #000 !important;
   width: 100%;
-  height: 1px;
-  transform: scaleX(0);
-  transform-origin: left;
+  height: 100vh;
+  background-color: rgba(148, 148, 148, 0.437);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 4;
   opacity: 0;
-  transition: transform 0.3s ease;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
 }
 
-.nav-link a.active .hoverline      { transform: scaleX(1) !important; }
-.nav-link a:hover .hoverline        { transform: scaleX(1); transform-origin: left; }
-.nav-link a:not(:hover) .hoverline  { transform: scaleX(0); transform-origin: right; }
+.nav-overlay--visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ─── Dropdown Wrapper ────────────────────────────────────────────────────── */
+
+.nav-link-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  min-height: 400px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding: 2vw 2rem;
+  z-index: 5;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+  pointer-events: none;
+  
+}
+
+.nav-link-wrapper--open {
+  clip-path: inset(0 0 0% 0);
+  pointer-events: all;
+}
+
+/* Override global #nav .nav-link a styles for dropdown links */
+.nav-link-wrapper a,
+#nav .nav-link-wrapper a {
+  display: block !important;
+  font-size: 16px !important;
+  font-family: paragraphStyleB !important;
+  font-weight: 100 !important;
+  letter-spacing: 1px !important;
+  color: #000 !important;
+  text-transform: capitalize !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  text-decoration: none !important;
+  line-height: 1.4 !important;
+  width: fit-content !important;
+  transition: opacity 0.2s ease !important;
+  z-index: unset !important;
+}
+
+.nav-link-wrapper a:hover,
+#nav .nav-link-wrapper a:hover {
+  color: red !important;
+}
+
+.nav-link-wrapper a .hoverline,
+#nav .nav-link-wrapper a .hoverline {
+  display: none !important;
+}
 
 /* ─── Nav Buttons ────────────────────────────────────────────────────────────── */
 
@@ -135,6 +216,7 @@
   display: flex;
   align-items: center;
   gap: 0.46875rem;
+  z-index: 9;
 }
 
 #nav-btns p {
@@ -215,11 +297,10 @@
   overflow: hidden;
 }
 
-/* "looking for" — top left */
 #loader_looking {
   position: absolute;
-  top: 1.2vw;        /* matches #nav padding-top */
-  left: 3vw;         /* matches #nav padding-left */
+  top: 1.2vw;
+  left: 3vw;
   font-size: 14px;
   font-weight: 100;
   font-family: paragraph;
@@ -229,7 +310,6 @@
   will-change: transform;
 }
 
-/* "new emotions?" — top right */
 #loader_emotions {
   position: absolute;
   top: 1.2vw;
@@ -243,7 +323,6 @@
   will-change: transform;
 }
 
-/* "loading... XX%" — centered */
 #loader_percent {
   position: absolute;
   top: 50%;

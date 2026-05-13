@@ -1,24 +1,27 @@
 /* CONTAINER */
 
 .article-container {
-
-  padding: 40px;
-
+  padding: 80px 40px 40px;
   -webkit-font-smoothing: antialiased;
-
   -moz-osx-font-smoothing: grayscale;
-
 }
 
 
 
 .article-heading {
   font-family: heading;
-  font-size: 2vw;
+  font-size: 8vw;
   line-height: 0.9;
-  margin-bottom: 1vw;
-  text-align: center;
   text-transform: uppercase;
+  white-space: nowrap;
+  text-align: center;
+  margin-bottom: 4vw;
+  perspective: 800px;
+}
+
+.article-heading .split>span {
+  display: inline-block;
+  transform-origin: top;
 }
 
 

@@ -7,14 +7,15 @@
     -moz-osx-font-smoothing: grayscale;
   }
   
-  /* HEADING */
+  /* HEADING — same as footer Quicklinks label (.footer_link_wrap p) */
   .category-heading {
     font-family: heading;
-    font-size: 2vw;
-    line-height: 0.9;
-    margin-bottom: 2vw;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.35;
+    letter-spacing: 0.3px;
+    margin-bottom: 5px;
     text-align: center;
-    text-transform: uppercase;
   }
   
   .category-heading span {
@@ -27,6 +28,7 @@
     justify-content: center;
     gap: 20px;
     flex-wrap: wrap;
+    margin-top: 16px;
   }
   
   /* CARD */

@@ -4,8 +4,11 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
+import { useQuery } from "@apollo/client/react";
 import { useAuthStore } from "@/store/auth-store";
 import { MenuData } from "@/helpers/MenuData";
+import { GET_LOOKBOOKS } from "@/graphql";
+import { ProductStatus } from "@/utils/Constant";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -35,14 +38,6 @@ const PillSvg = ({ className }) => (
   </svg>
 );
 
-/**
- * Full-screen white loader.
- *
- * Layout inside:
- *   #loader_looking  — top-left  "looking for"   (slides down on exit)
- *   #loader_emotions — top-right "new emotions?"  (swipes left on exit)
- *   #loader_percent  — center    "loading... XX%" (slides down during count)
- */
 const NavLoader = ({ percent }) => (
   <div id="loader_slider">
     <span id="loader_looking">looking for</span>
@@ -69,27 +64,92 @@ const LogoGroup = () => (
   </Link>
 );
 
-const NavLinks = ({ pathname }) => (
-  <div className="nav-link">
-    {MenuData.map((link, idx) => {
-      const isPill = idx === 1;
-      return (
-        <Link
-          key={idx}
-          href={link.link}
-          className={pathname === link.link ? "active" : ""}
-        >
-          {isPill && <PillSvg className="menu_pill_svg--left" />}
-          <span className={isPill ? "menu_pill_text" : undefined}>
-            {link.name}
-          </span>
-          {isPill && <PillSvg className="menu_pill_svg--right" />}
-          <div className="hoverline" />
-        </Link>
-      );
-    })}
-  </div>
-);
+const NavLinks = ({ pathname }) => {
+  const [activeMenu, setActiveMenu] = useState(null);
+
+  const { data: lookbookData } = useQuery(GET_LOOKBOOKS, {
+    variables: {
+      offset: 0,
+      limit: 20,
+      filter: { status: ProductStatus.PUBLISHED },
+    },
+    fetchPolicy: "cache-first",
+  });
+
+  const lookbookLinks =
+    lookbookData?.getClientSideLookBooks?.lookBooks?.map((lb) => ({
+      name: lb?.name || "Lookbook",
+      link: `/lookbook/${lb?._id}`,
+    })) || [];
+
+  const getDropdownLinks = (menuItem) => {
+    if (menuItem?.dropdownType === "lookbooks") return lookbookLinks;
+    return menuItem?.dropdownLinks || [];
+  };
+
+  const activeMenuHasDropdown =
+    activeMenu !== null && getDropdownLinks(MenuData[activeMenu]).length > 0;
+
+  return (
+    <>
+      <div
+        className={`nav-overlay ${activeMenuHasDropdown ? "nav-overlay--visible" : ""}`}
+        onMouseEnter={() => setActiveMenu(null)}
+      />
+
+      <div
+        className="nav-link"
+        onMouseLeave={() => setActiveMenu(null)}
+      >
+        {MenuData.map((link, idx) => {
+          const isPill = idx === 1;
+          const dropdownLinks = getDropdownLinks(link);
+          const hasDropdown = dropdownLinks.length > 0;
+          const isActive = !hasDropdown && pathname === link.link;
+          return (
+            <div
+              key={link?.name || idx}
+              className="nav-link-item"
+              onMouseEnter={() => setActiveMenu(hasDropdown ? idx : null)}
+            >
+              {hasDropdown ? (
+                <button type="button" className="nav-link-trigger">
+                  {isPill && <PillSvg className="menu_pill_svg--left" />}
+                  <span className={isPill ? "menu_pill_text" : undefined}>
+                    {link.name}
+                  </span>
+                  {isPill && <PillSvg className="menu_pill_svg--right" />}
+                  <div className="hoverline" />
+                </button>
+              ) : (
+                <Link href={link.link} className={isActive ? "active" : ""}>
+                  {isPill && <PillSvg className="menu_pill_svg--left" />}
+                  <span className={isPill ? "menu_pill_text" : undefined}>
+                    {link.name}
+                  </span>
+                  {isPill && <PillSvg className="menu_pill_svg--right" />}
+                  <div className="hoverline" />
+                </Link>
+              )}
+
+              {dropdownLinks.length > 0 && (
+                <div
+                  className={`nav-link-wrapper ${activeMenu === idx ? "nav-link-wrapper--open" : ""}`}
+                >
+                  {dropdownLinks.map((item) => (
+                    <Link key={`${item.link}-${item.name}`} href={item.link}>
+                      <span>{item.name}</span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+};
 
 const NavButtons = ({ openCart, isLoggedIn }) => (
   <div id="nav-btns">
@@ -198,7 +258,6 @@ const initOtherPage = () => {
 };
 
 const initHomePage = (logos, xPositions, totalWidth, logoContainer, setPercent) => {
-  // ── Initial state ──
   logos.forEach((logo, i) => gsap.set(logo, { x: xPositions[i], top: 0 }));
 
   gsap.set("html,body", { overflow: "hidden" });
@@ -210,7 +269,6 @@ const initHomePage = (logos, xPositions, totalWidth, logoContainer, setPercent) 
   gsap.set("#logo-container p, #nav-btns p", { opacity: 1 });
   gsap.set("#logo-container .logo, .nav_btn_items", { opacity: 0 });
 
-  // Loader text: visible at top corners, percent centered
   gsap.set("#loader_looking", { opacity: 1, x: 0, y: 0 });
   gsap.set("#loader_emotions", { opacity: 1, x: 0, y: 0 });
   gsap.set("#loader_percent", { opacity: 1, y: 0 });
@@ -218,7 +276,6 @@ const initHomePage = (logos, xPositions, totalWidth, logoContainer, setPercent) 
   setNavWhite();
   logoContainer.style.width = `${xPositions[3] || totalWidth}px`;
 
-  // ── Counter ──
   const startLoader = () => {
     let count = 0;
     const interval = setInterval(() => {
@@ -228,43 +285,23 @@ const initHomePage = (logos, xPositions, totalWidth, logoContainer, setPercent) 
     }, 10);
   };
 
-  // ── Master timeline ──
   gsap
     .timeline()
     .call(startLoader)
-
-    // While counting: percent text slides down out of view
     .to("#loader_percent", {
       y: "120%",
       duration: 0.8,
       delay: 0.8,
       ease: "power2.in",
     })
-
-    // "looking for" (top-left) swipes right off screen
-    .to(
-      "#loader_looking",
-      { x: "110vw", duration: 0.7, ease: "power2.in" },
-      "exit"
-    )
-    // "new emotions?" (top-right) swipes left off screen
-    .to(
-      "#loader_emotions",
-      { x: "-110vw", duration: 0.7, ease: "power2.in" },
-      "exit"
-    )
-
-    // Nav elements slide into position
+    .to("#loader_looking", { x: "110vw", duration: 0.7, ease: "power2.in" }, "exit")
+    .to("#loader_emotions", { x: "-110vw", duration: 0.7, ease: "power2.in" }, "exit")
     .to("#logo-container", { left: "2%", duration: 0.5, ease: "power2.in" }, "move")
     .to("#nav-btns", { right: "2%", duration: 0.5, ease: "power2.in" }, "move")
     .to("#logo-container p, #nav-btns p", { opacity: 0, duration: 0.2, ease: "power3.in" }, "move")
     .to("#logo-container .logo, .nav_btn_items", { opacity: 1, duration: 0.2, ease: "power3.in" }, "move")
     .to(".nav-link", { opacity: 1, duration: 0.3, ease: "power2.in" })
-
-    // Logo stack collapses into nav
     .to(".logo", { top: (i) => i * 30, x: 0, duration: 0.8, ease: "power2.inOut", stagger: 0.1 })
-
-    // Loader fades out
     .to(
       "#loader_slider",
       {
@@ -281,7 +318,6 @@ const initHomePage = (logos, xPositions, totalWidth, logoContainer, setPercent) 
       "-=1.6"
     );
 
-  // ── Scroll: collapse logo stack + logos turn black ──
   gsap
     .timeline({
       scrollTrigger: {
@@ -327,9 +363,9 @@ const Navbar = ({ openCart }) => {
       const isHome = pathname === "/" && window.location.hash !== "#shop";
       const isShop = pathname === "/shop";
 
-      if (isShop)       initShopPage();
-      else if (isHome)  initHomePage(logos, xPositions, totalWidth, logoContainer, setPercent);
-      else              initOtherPage();
+      if (isShop) initShopPage();
+      else if (isHome) initHomePage(logos, xPositions, totalWidth, logoContainer, setPercent);
+      else initOtherPage();
     };
 
     const timeout = setTimeout(() => requestAnimationFrame(init), 30);

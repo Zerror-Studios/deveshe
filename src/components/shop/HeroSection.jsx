@@ -1,10 +1,10 @@
-
 "use client";
 
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
+import CuratedFilterStrip from "@/components/home/CuratedFilterStrip";
 
 const HeroSection = () => {
   const sectionRef = useRef(null);
@@ -59,6 +59,7 @@ const HeroSection = () => {
           scrub: true,
         },
       });
+      
     }, sectionRef);
 
     return () => ctx.revert();
@@ -71,6 +72,7 @@ const HeroSection = () => {
           Discover our latest collection of outerwear. Carefully crafted from
           the finest fabrics and premium hardware.
         </p>
+        <CuratedFilterStrip />
       </div>
       <div ref={innerRef} className="shop_hero_section_inner">
         <Image
