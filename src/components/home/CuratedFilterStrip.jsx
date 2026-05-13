@@ -43,8 +43,7 @@ const FILTER_MENUS = [
 const PILL_IDX = [1, 2];
 
 function getNavOffset() {
-  if (typeof window === "undefined") return 0;
-  return window.innerWidth > 1000 ? 60 : 0;
+  return 0;
 }
 
 export default function CuratedFilterStrip() {

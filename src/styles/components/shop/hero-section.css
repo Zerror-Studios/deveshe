@@ -27,6 +27,14 @@
     padding-bottom: 3rem;
 }
 
+.shop_hero_filter_wrap {
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    will-change: opacity;
+}
+
 .shop_hero_section_inner {
     position: absolute;
     top: 0px;
@@ -42,4 +50,17 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
+}
+
+@media (max-width: 768px) {
+    .shop_hero_section_content {
+        top: 6rem;
+        padding: 0 20px;
+    }
+
+    .shop_hero_section_content p {
+        width: min(100%, 34ch);
+        font-size: 1.15rem;
+        padding-bottom: 2rem;
+    }
 }

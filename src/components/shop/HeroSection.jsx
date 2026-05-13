@@ -11,6 +11,7 @@ const HeroSection = () => {
   const innerRef = useRef(null);
   const imgRef = useRef(null);
   const paragraphRef = useRef(null);
+  const filterWrapRef = useRef(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -18,12 +19,18 @@ const HeroSection = () => {
     if (!sectionRef.current || !innerRef.current || !imgRef.current) return;
 
     const ctx = gsap.context(() => {
+      const nav = document.querySelector("#nav");
+
       gsap.set(innerRef.current, { yPercent: 0, force3D: true });
       gsap.set(imgRef.current, {
         yPercent: 0,
         scale: 1,
         transformOrigin: "50% 0%",
         force3D: true,
+      });
+      gsap.set(filterWrapRef.current, {
+        autoAlpha: 0,
+        pointerEvents: "none",
       });
 
       gsap.to(innerRef.current, {
@@ -48,8 +55,33 @@ const HeroSection = () => {
           scrub: true,
         },
       });
+      if (nav) {
+        gsap.set(nav, { yPercent: 0 });
+        gsap.to(nav, {
+          yPercent: -110,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "140px top",
+            scrub: true,
+          },
+        });
+      }
       gsap.to(paragraphRef.current, {
         color: "black",
+        duration: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "bottom 60%",
+          end: "bottom 50%",
+          scrub: true,
+        },
+      });
+      gsap.to(filterWrapRef.current, {
+        autoAlpha: 1,
+        pointerEvents: "auto",
         duration: 1,
         ease: "none",
         scrollTrigger: {
@@ -72,7 +104,9 @@ const HeroSection = () => {
           Discover our latest collection of outerwear. Carefully crafted from
           the finest fabrics and premium hardware.
         </p>
-        <CuratedFilterStrip />
+        <div ref={filterWrapRef} className="shop_hero_filter_wrap">
+          <CuratedFilterStrip />
+        </div>
       </div>
       <div ref={innerRef} className="shop_hero_section_inner">
         <Image
