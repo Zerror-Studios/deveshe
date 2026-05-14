@@ -6,12 +6,14 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import CuratedFilterStrip from "@/components/home/CuratedFilterStrip";
 
-const HeroSection = () => {
+const HeroSection = ({ heroImageSrc, categoryName, isDefault = false }) => {
+  const resolvedSrc = isDefault ? heroImageSrc : encodeURI(heroImageSrc);
   const sectionRef = useRef(null);
   const innerRef = useRef(null);
   const imgRef = useRef(null);
   const paragraphRef = useRef(null);
   const filterWrapRef = useRef(null);
+  const categoryNameRef = useRef(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -68,7 +70,7 @@ const HeroSection = () => {
           },
         });
       }
-      gsap.to(paragraphRef.current, {
+      gsap.to([paragraphRef.current, categoryNameRef.current], {
         color: "black",
         duration: 1,
         ease: "none",
@@ -91,15 +93,18 @@ const HeroSection = () => {
           scrub: true,
         },
       });
-      
+
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [resolvedSrc]);
 
   return (
     <div ref={sectionRef} className="shop_hero_section">
       <div className="shop_hero_section_content">
+        {categoryName && (
+          <span ref={categoryNameRef} className="shop_hero_section_category_name">{categoryName}</span>
+        )}
         <p ref={paragraphRef}>
           Discover our latest collection of outerwear. Carefully crafted from
           the finest fabrics and premium hardware.
@@ -109,11 +114,9 @@ const HeroSection = () => {
         </div>
       </div>
       <div ref={innerRef} className="shop_hero_section_inner">
-        <Image
-          src="https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F2250x1266%2Ffe9b1c412b%2Fjacket-ban-2.jpg&w=1920&q=90"
+        <img
+          src={resolvedSrc}
           alt="hero_section"
-          width={1000}
-          height={1000}
           ref={imgRef}
         />
       </div>

@@ -366,6 +366,33 @@ input[type="number"] {
   gap: 25px;
 }
 
+.side-menu-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.side-menu-group-label {
+  font-size: calc(12px + 0.2vw);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.side-menu-sub {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.side-menu-sub a {
+  font-size: calc(14px + 0.15vw);
+}
+
 /* .nav-contact{
   margin-top: 15vh;
 } */

@@ -17,6 +17,16 @@
     text-align: center;
 }
 
+.shop_hero_section_category_name {
+    font-size: 14px;
+    font-weight: 100;
+    font-family: paragraph;
+    color: #fff;
+    white-space: nowrap;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
 .shop_hero_section_content p {
     font-size: 1.5rem;
     font-weight: 500;

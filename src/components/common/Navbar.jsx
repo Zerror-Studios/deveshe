@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -7,7 +7,7 @@ import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { useQuery } from "@apollo/client/react";
 import { useAuthStore } from "@/store/auth-store";
 import { MenuData } from "@/helpers/MenuData";
-import { GET_LOOKBOOKS } from "@/graphql";
+import { GET_CLIENT_SIDE_CATEGORIES, GET_LOOKBOOKS } from "@/graphql";
 import { ProductStatus } from "@/utils/Constant";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -70,20 +70,40 @@ const NavLinks = ({ pathname }) => {
   const { data: lookbookData } = useQuery(GET_LOOKBOOKS, {
     variables: {
       offset: 0,
-      limit: 20,
+      limit: 100,
       filter: { status: ProductStatus.PUBLISHED },
     },
     fetchPolicy: "cache-first",
+    nextFetchPolicy: "cache-first",
   });
 
-  const lookbookLinks =
-    lookbookData?.getClientSideLookBooks?.lookBooks?.map((lb) => ({
-      name: lb?.name || "Lookbook",
-      link: `/lookbook/${lb?._id}`,
-    })) || [];
+  const { data: categoriesData } = useQuery(GET_CLIENT_SIDE_CATEGORIES, {
+    variables: { offset: 0, limit: 100 },
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "cache-first",
+  });
+
+  const lookbookLinks = useMemo(() => {
+    const fromApi =
+      lookbookData?.getClientSideLookBooks?.lookBooks?.map((lb) => ({
+        name: lb?.name || "Lookbook",
+        link: `/lookbook/${lb?._id}`,
+      })) || [];
+    return [{ name: "All lookbooks", link: "/lookbook" }, ...fromApi];
+  }, [lookbookData]);
+
+  const shopCategoryLinks = useMemo(() => {
+    const fromApi =
+      categoriesData?.getClientSideCategories?.categories?.map((cat) => ({
+        name: cat?.name || "Category",
+        link: cat?.slug ? `/shop/${cat.slug}` : "/shop",
+      })) || [];
+    return [{ name: "See all", link: "/shop" }, ...fromApi];
+  }, [categoriesData]);
 
   const getDropdownLinks = (menuItem) => {
     if (menuItem?.dropdownType === "lookbooks") return lookbookLinks;
+    if (menuItem?.dropdownType === "categories") return shopCategoryLinks;
     return menuItem?.dropdownLinks || [];
   };
 
@@ -104,7 +124,10 @@ const NavLinks = ({ pathname }) => {
         {MenuData.map((link, idx) => {
           const isPill = idx === 1;
           const dropdownLinks = getDropdownLinks(link);
-          const hasDropdown = dropdownLinks.length > 0;
+          const hasDropdown =
+            link?.dropdownType === "lookbooks" ||
+            link?.dropdownType === "categories" ||
+            dropdownLinks.length > 0;
           const isActive = !hasDropdown && pathname === link.link;
           return (
             <div

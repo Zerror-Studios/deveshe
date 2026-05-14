@@ -14,19 +14,21 @@ function getFirstAsset(product) {
   return product?.assets?.length ? product.assets[0].path : "";
 }
 
-export default function CuratedProducts({ products = [] }) {
+export default function CuratedProducts({
+  products = [],
+  categoryName,
+}) {
   useEffect(() => {
     const splitText = (selector) => {
       document.querySelectorAll(selector).forEach((el) => {
-        if (!el.dataset.split) {
-          const letters = (el.textContent || "")
-            .split("")
-            .map((char) =>
-              char === " " ? `<span>&nbsp;</span>` : `<span>${char}</span>`
-            );
-          el.innerHTML = letters.join("");
-          el.dataset.split = "true";
-        }
+        el.removeAttribute("data-split");
+        const letters = (el.textContent || "")
+          .split("")
+          .map((char) =>
+            char === " " ? `<span>&nbsp;</span>` : `<span>${char}</span>`
+          );
+        el.innerHTML = letters.join("");
+        el.dataset.split = "true";
       });
     };
 
@@ -56,10 +58,12 @@ export default function CuratedProducts({ products = [] }) {
     });
 
     return () => ctx.revert();
-  }, []);
+  }, [categoryName]);
 
   return (
-    <section className="curated-container">
+    <section
+      className="curated-container"
+    >
       <h2 className="curated-heading">
         <span className="split">Latest / </span>
         <span className="split heading-accent">Curated</span>

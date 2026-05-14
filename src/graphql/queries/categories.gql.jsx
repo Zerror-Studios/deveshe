@@ -11,8 +11,8 @@ export const GET_CLIENT_SIDE_CATEGORIES = gql`
       categories {
         _id
         name
-        imgsrc
         slug
+        imgsrc
       }
       totalCount
     }

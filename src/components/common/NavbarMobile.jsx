@@ -1,14 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
-import Button from "./Button";
+import { useQuery } from "@apollo/client/react";
 import { useAuthStore } from "@/store/auth-store";
 import { usePathname, useRouter } from "next/navigation";
 import CommonButton from "./CommonButton";
+import { GET_CLIENT_SIDE_CATEGORIES, GET_LOOKBOOKS } from "@/graphql";
+import { ProductStatus } from "@/utils/Constant";
 gsap.registerPlugin(ScrollTrigger);
 
 const NavbarMobile = ({ openCart }) => {
@@ -18,6 +20,40 @@ const NavbarMobile = ({ openCart }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [percent, setPercent] = useState(0);
+
+  const { data: lookbookData } = useQuery(GET_LOOKBOOKS, {
+    variables: {
+      offset: 0,
+      limit: 100,
+      filter: { status: ProductStatus.PUBLISHED },
+    },
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "cache-first",
+  });
+
+  const { data: categoriesData } = useQuery(GET_CLIENT_SIDE_CATEGORIES, {
+    variables: { offset: 0, limit: 100 },
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "cache-first",
+  });
+
+  const lookbookLinks = useMemo(() => {
+    const fromApi =
+      lookbookData?.getClientSideLookBooks?.lookBooks?.map((lb) => ({
+        name: lb?.name || "Lookbook",
+        href: `/lookbook/${lb?._id}`,
+      })) || [];
+    return [{ name: "All lookbooks", href: "/lookbook" }, ...fromApi];
+  }, [lookbookData]);
+
+  const shopCategoryLinks = useMemo(() => {
+    const fromApi =
+      categoriesData?.getClientSideCategories?.categories?.map((cat) => ({
+        name: cat?.name || "Category",
+        href: cat?.slug ? `/shop/${cat.slug}` : "/shop",
+      })) || [];
+    return [{ name: "See all", href: "/shop" }, ...fromApi];
+  }, [categoriesData]);
 
   useGSAP(() => {
     menuTL.current = gsap
@@ -230,8 +266,26 @@ const NavbarMobile = ({ openCart }) => {
                   onClick={handleLoginBtn}
                 />
               )}
-              <Link href="/#shop">shop</Link>
-              <Link href="/lookbook">lookbook</Link>
+              <div className="side-menu-group">
+                <span className="side-menu-group-label">Shop</span>
+                <div className="side-menu-sub">
+                  {shopCategoryLinks.map((item) => (
+                    <Link key={`shop-${item.href}-${item.name}`} href={item.href}>
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+              <div className="side-menu-group">
+                <span className="side-menu-group-label">Lookbook</span>
+                <div className="side-menu-sub">
+                  {lookbookLinks.map((item) => (
+                    <Link key={`lb-${item.href}-${item.name}`} href={item.href}>
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
               <Link href="/about">about</Link>
               <Link href="/contact">contact</Link>
             </div>

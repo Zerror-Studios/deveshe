@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import { createApolloClient } from "@/lib/apolloClient";
 import { AuthProvider } from "@/context/AuthContext";
 import Layout from "@/components/layouts/Layout";
+import NavApolloWarmup from "@/components/layouts/NavApolloWarmup";
 import SmoothScroller from "@/components/common/SmoothScroller";
 
 export default function Providers({ children }) {
@@ -13,6 +14,7 @@ export default function Providers({ children }) {
 
   return (
     <ApolloProvider client={client}>
+      <NavApolloWarmup />
       <AuthProvider>
         <Layout>
           <Suspense fallback={null}>

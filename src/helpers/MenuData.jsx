@@ -2,15 +2,7 @@ export const MenuData = [
   {
     name: "Shop",
     link: "/shop",
-    dropdownLinks: [
-      { name: "New Arrival", link: "/shop" },
-      { name: "Clothing", link: "/shop/clothing" },
-      { name: "Coats & Jackets", link: "/shop/coats-jackets" },
-      { name: "Dresses & Skirts", link: "/shop/dresses-skirts" },
-      { name: "Tops & T-shirts", link: "/shop/tops-tshirts" },
-      { name: "Sweatshirts & Hoodies", link: "/shop/sweatshirts-hoodies" },
-      { name: "See all", link: "/shop" },
-    ],
+    dropdownType: "categories",
   },
   {
     name: "Lookbook",
