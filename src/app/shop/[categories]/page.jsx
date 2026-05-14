@@ -69,6 +69,7 @@ export default async function CategoriesPage({ params }) {
       productData={productData}
       heroImageSrc={category?.imgsrc || undefined}
       categoryName={category?.name || "Shop"}
+      currentCategorySlug={slug}
     />
   );
 }

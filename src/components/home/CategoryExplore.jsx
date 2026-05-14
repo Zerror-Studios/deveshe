@@ -14,14 +14,17 @@ const CATEGORY_IMAGE_FALLBACKS = [
   "https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F240x320%2F594975e2e1%2Fsweatshirts.png&w=3840&q=90",
 ];
 
-export default function CategoryExplore({ headingtitle }) {
+export default function CategoryExplore({ headingtitle, excludeSlug }) {
   const { data } = useQuery(GET_CLIENT_SIDE_CATEGORIES, {
     variables: { offset: 0, limit: 50 },
     fetchPolicy: "cache-first",
     nextFetchPolicy: "cache-first",
   });
 
-  const categories = data?.getClientSideCategories?.categories ?? [];
+  const raw = data?.getClientSideCategories?.categories ?? [];
+  const categories = excludeSlug
+    ? raw.filter((c) => c?.slug !== excludeSlug)
+    : raw;
 
   return (
     <section className="category-container">

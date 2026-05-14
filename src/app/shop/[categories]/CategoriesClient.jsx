@@ -7,6 +7,7 @@ const CategoriesClient = ({
   productData,
   heroImageSrc,
   categoryName,
+  currentCategorySlug,
 }) => {
   return (
     <>
@@ -16,7 +17,10 @@ const CategoriesClient = ({
         categoryName={categoryName}
         isShop={true}
       />
-      <CategoryExplore headingtitle={"Are you looking for something else?"} />
+      <CategoryExplore
+        headingtitle={"Are you looking for something else?"}
+        excludeSlug={currentCategorySlug}
+      />
     </>
   );
 };
