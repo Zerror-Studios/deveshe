@@ -14,7 +14,7 @@ const CATEGORY_IMAGE_FALLBACKS = [
   "https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F240x320%2F594975e2e1%2Fsweatshirts.png&w=3840&q=90",
 ];
 
-export default function CategoryExplore() {
+export default function CategoryExplore({ headingtitle }) {
   const { data } = useQuery(GET_CLIENT_SIDE_CATEGORIES, {
     variables: { offset: 0, limit: 50 },
     fetchPolicy: "cache-first",
@@ -25,7 +25,7 @@ export default function CategoryExplore() {
 
   return (
     <section className="category-container">
-      <p className="category-heading">Featured Collection</p>
+      <p className="category-heading">{headingtitle ?? "Featured Collection"}</p>
 
       <div className="category-row">
         {categories.map((cat, index) => {

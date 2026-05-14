@@ -14,8 +14,9 @@ const CategoriesClient = ({
       <CuratedProducts
         products={productData}
         categoryName={categoryName}
+        isShop={true}
       />
-      <CategoryExplore />
+      <CategoryExplore headingtitle={"Are you looking for something else?"} />
     </>
   );
 };

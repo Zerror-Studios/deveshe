@@ -17,6 +17,7 @@ function getFirstAsset(product) {
 export default function CuratedProducts({
   products = [],
   categoryName,
+  isShop = false,
 }) {
   useEffect(() => {
     const splitText = (selector) => {
@@ -62,7 +63,7 @@ export default function CuratedProducts({
 
   return (
     <section
-      className="curated-container"
+      className={`curated-container ${isShop ? "is-shop" : ""}`}
     >
       <h2 className="curated-heading">
         <span className="split">Latest / </span>

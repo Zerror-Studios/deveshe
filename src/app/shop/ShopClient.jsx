@@ -12,7 +12,7 @@ const ShopClient = ({ productData }) => {
   return (
     <>
       <HeroSection heroImageSrc={SHOP_DEFAULT_HERO_IMAGE} isDefault={true}/>
-      <CuratedProducts products={productData} />
+      <CuratedProducts products={productData} isShop={true} />
       <CategoryExplore />
     </>
   );
