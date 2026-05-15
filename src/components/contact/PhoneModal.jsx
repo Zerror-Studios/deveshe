@@ -60,9 +60,9 @@ const PhoneModal = () => {
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
 
-      modelGroup.scale.setScalar(isMobile ? 2.3 : 1.1);
-      // Slight downward nudge for better visual centering in the left panel.
-      modelGroup.position.set(0, isMobile ? -17 : -3, 0);
+      modelGroup.scale.setScalar(isMobile ? 2.75 : 1.38);
+      // Slight downward nudge for better visual centering in the phone panel.
+      modelGroup.position.set(0, isMobile ? -19 : -5, 0);
     };
 
     const addMesh = (parent, nodes, name, material, position, rotation, scale) => {

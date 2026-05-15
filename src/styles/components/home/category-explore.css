@@ -1,64 +1,86 @@
 /* CONTAINER */
 .category-container {
-    padding:40px;
-    text-align: center;
-    font-family: paragraph;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  padding: 40px;
+  text-align: center;
+  font-family: paragraph;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* HEADING — same as footer Quicklinks label (.footer_link_wrap p) */
+.category-heading {
+  font-family: heading;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.35;
+  letter-spacing: 0.3px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.category-heading span {
+  margin-left: 6px;
+}
+
+/* ROW */
+.category-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+/* CARD */
+.category-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* HOVER */
+.category-card:hover {
+  transform: translateY(-2px);
+}
+
+/* IMAGE */
+.category-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* TEXT */
+.category-name {
+  font-family: paragraph;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+
+@media (max-width: 480px) {
+  .category-container {
+    padding: 30px 20px;
   }
-  
-  /* HEADING — same as footer Quicklinks label (.footer_link_wrap p) */
-  .category-heading {
-    font-family: heading;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 1.35;
-    letter-spacing: 0.3px;
-    margin-bottom: 5px;
-    text-align: center;
-  }
-  
-  .category-heading span {
-    margin-left: 6px;
-  }
-  
-  /* ROW */
+
   .category-row {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-top: 16px;
-  }
-  
-  /* CARD */
-  .category-card {
-    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
     align-items: center;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
     gap: 10px;
-    padding: 14px 20px;
-    background: #fff;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.25s ease;
+    flex-wrap: wrap;
+    margin-top: 10px;
   }
-  
-  /* HOVER */
-  .category-card:hover {
-    transform: translateY(-2px);
+
+  .category-card {
+    flex-shrink: 0;
   }
-  
-  /* IMAGE */
-  .category-image {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  /* TEXT */
-  .category-name {
-    font-family: paragraph;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.35;
-  }
+}

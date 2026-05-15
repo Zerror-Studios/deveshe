@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { toast } from 'react-toastify';
 import { useForm } from "react-hook-form";
@@ -26,45 +26,62 @@ const contactSchema = z.object({
   message: z.string().min(5, "Message must be at least 5 characters"),
 });
 const ContactForm = () => {
+  const formRef = useRef(null);
   const [createContact, { loading }] = useMutation(CREATE_CONTACT_FORM);
   useEffect(() => {
+    const form = formRef.current;
+    if (!form) return undefined;
+    const cleanup = [];
+
     // Handle input focus and blur
-    document.querySelectorAll("#right form .input").forEach((i) => {
+    form.querySelectorAll(".input").forEach((i) => {
       const input = i.querySelector("input");
-      input.addEventListener("focus", () => {
+      const handleFocus = () => {
         i.classList.add("active");
-      });
-      input.addEventListener("blur", function () {
+      };
+      const handleBlur = function () {
         if (this.value === "") {
           i.classList.remove("active");
         }
+      };
+      input.addEventListener("focus", handleFocus);
+      input.addEventListener("blur", handleBlur);
+      cleanup.push(() => {
+        input.removeEventListener("focus", handleFocus);
+        input.removeEventListener("blur", handleBlur);
       });
     });
 
     // Handle textarea focus and blur
-    document.querySelectorAll("#right form .textarea").forEach((i) => {
+    form.querySelectorAll(".textarea").forEach((i) => {
       const textarea = i.querySelector("textarea");
-      textarea.addEventListener("focus", () => {
+      const handleFocus = () => {
         i.classList.add("active");
-      });
-      textarea.addEventListener("blur", function () {
+      };
+      const handleBlur = function () {
         if (this.value === "") {
           i.classList.remove("active");
         }
+      };
+      textarea.addEventListener("focus", handleFocus);
+      textarea.addEventListener("blur", handleBlur);
+      cleanup.push(() => {
+        textarea.removeEventListener("focus", handleFocus);
+        textarea.removeEventListener("blur", handleBlur);
       });
     });
 
     // Handle line animation
-    document.querySelectorAll(".lineanime").forEach((i) => {
-      i.addEventListener("mouseenter", () => {
+    form.querySelectorAll(".lineanime").forEach((i) => {
+      const handleMouseEnter = () => {
         gsap.to(i.querySelector(".linei"), {
           scaleX: 1,
           duration: 0.3,
           ease: "power1.out",
         });
-      });
+      };
 
-      i.addEventListener("mouseleave", () => {
+      const handleMouseLeave = () => {
         gsap.set(i.querySelector(".linei"), { transformOrigin: "right" });
         gsap.to(i.querySelector(".linei"), {
           scaleX: 0,
@@ -74,8 +91,17 @@ const ContactForm = () => {
             gsap.set(i.querySelector(".linei"), { transformOrigin: "left" });
           },
         });
+      };
+
+      i.addEventListener("mouseenter", handleMouseEnter);
+      i.addEventListener("mouseleave", handleMouseLeave);
+      cleanup.push(() => {
+        i.removeEventListener("mouseenter", handleMouseEnter);
+        i.removeEventListener("mouseleave", handleMouseLeave);
       });
     });
+
+    return () => cleanup.forEach((removeListener) => removeListener());
   }, []);
 
   const {
@@ -107,10 +133,9 @@ const ContactForm = () => {
   };
 
   return (
-    <div id="form">
-      <div id="left"></div>
+    <div id="form" className="contact-form-panel">
       <div id="right">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
           <div className="input lineanime">
             <input type="text" {...register("name")} />
             <h6>name*</h6>

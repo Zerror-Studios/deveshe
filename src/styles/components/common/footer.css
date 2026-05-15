@@ -139,19 +139,6 @@
   }
 }
 
-@media (min-width: 769px) and (max-width: 890px) {
-  #contact_form #address {
-    height: auto;
-    flex-direction: column;
-    gap: 2vw;
-  }
-  #contact_form #address .elem {
-    width: 100%;
-}
-  #contact_form .elem-lf h5 {
-    width: 50%;
-  }
-}
 @media (min-width: 769px) and (max-width: 992px) {
   #footer {
     padding: 25px;
