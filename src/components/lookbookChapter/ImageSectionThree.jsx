@@ -50,7 +50,7 @@ const ImageSectionThree = ({ leftData, rightData }) => {
     <div id="lb-section5">
       {leftData && (
         <div className="lb-section5-ig-wrap parallex skeleton-loading">
-          <Image
+            <img
             width={1000}
             height={1000}
             src={leftData?.imageUrl || ""}
@@ -60,12 +60,13 @@ const ImageSectionThree = ({ leftData, rightData }) => {
       )}
       {rightData && (
         <div className="lb-section5-ig-wrap scroll-section ">
-          <Image
+          <img
           className="skeleton-loading"
             width={1000}
             height={1000}
             src={rightData?.imageUrl || ""}
             alt="image"
+            loading='lazy'
           />
         </div>
       )}

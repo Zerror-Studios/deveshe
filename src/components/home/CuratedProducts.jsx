@@ -66,8 +66,8 @@ export default function CuratedProducts({
       className={`curated-container ${isShop ? "is-shop" : ""}`}
     >
       <h2 className="curated-heading">
-        <span className="split">Latest </span>
-        <span className="split heading-accent">Collection</span>
+        <span className="split">Top </span>
+        <span className="split heading-accent">Picks</span>
       </h2>
       {!products || products.length === 0 ? (
         <ProductLoader />

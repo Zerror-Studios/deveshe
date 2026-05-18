@@ -988,7 +988,7 @@
 
 #founder_title h2 {
   font-family: heading;
-  font-size: 8vw;
+  font-size: 6.5vw;
   line-height: 0.9;
   text-transform: uppercase;
   white-space: nowrap;
@@ -1021,7 +1021,7 @@
   font-family: heading;
   font-size: 1.9vw;
   text-transform: capitalize;
-  color: rgb(246, 178, 183);
+  color:#fe0000;
   margin-top: 1vw;
 }
 

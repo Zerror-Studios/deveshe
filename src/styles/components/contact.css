@@ -67,7 +67,7 @@
 
 #contact_form .contact-intro h2 {
   font-family: heading;
-  font-size: 8vw;
+  font-size: 6.5vw;
   line-height: 0.9;
   text-transform: uppercase;
   perspective: 800px;
@@ -164,7 +164,7 @@
 }
 .contact-form-drawer-header-title{
   font-family: heading;
-  font-size: 6vw;
+  font-size: 6.5vw;
   line-height: 0.9;
   perspective: 800px;
   text-transform: uppercase;
