@@ -96,10 +96,8 @@ const LookBookHero = ({ title, subheading, description, asset }) => {
           </div>
         </div>
         <div className="lb-header-image" ref={headerImageRef}>
-          <Image
+          <img
             ref={imgRef}
-            width={1000}
-            height={1000}
             src={asset?.path || ""}
             alt={asset?.altText || ""}
           />

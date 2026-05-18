@@ -38,8 +38,6 @@ const ImageSectionOne = ({ data }) => {
     <div id="lb-section3">
       <div id="lb-section3-ig" className="skeleton-loading">
         <img
-          width={1000}
-          height={1000}
           src={data?.imageUrl || ""}
           alt="image"
           loading='lazy'

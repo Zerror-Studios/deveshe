@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useQuery } from "@apollo/client/react";
-import { GET_CLIENT_SIDE_CATEGORIES } from "@/graphql";
+import { SHOP_NAV_LINKS } from "@/helpers/MenuData";
 
 /** Temporary fallbacks when `imgsrc` is missing from the API (rotate by row). */
 const CATEGORY_IMAGE_FALLBACKS = [
@@ -15,16 +14,12 @@ const CATEGORY_IMAGE_FALLBACKS = [
 ];
 
 export default function CategoryExplore({ headingtitle, excludeSlug }) {
-  const { data } = useQuery(GET_CLIENT_SIDE_CATEGORIES, {
-    variables: { offset: 0, limit: 50 },
-    fetchPolicy: "cache-first",
-    nextFetchPolicy: "cache-first",
+  const categories = SHOP_NAV_LINKS.filter((item) => {
+    if (item.link === "/shop") return false;
+    if (!excludeSlug) return true;
+    const slug = item.link.replace("/shop/", "");
+    return slug !== excludeSlug;
   });
-
-  const raw = data?.getClientSideCategories?.categories ?? [];
-  const categories = excludeSlug
-    ? raw.filter((c) => c?.slug !== excludeSlug)
-    : raw;
 
   return (
     <section className="category-container">
@@ -33,23 +28,22 @@ export default function CategoryExplore({ headingtitle, excludeSlug }) {
       <div className="category-row">
         {categories.map((cat, index) => {
           const src = CATEGORY_IMAGE_FALLBACKS[index % CATEGORY_IMAGE_FALLBACKS.length];
-          const href = cat?.slug ? `/shop/${cat.slug}` : "/shop";
           return (
             <Link
-              key={cat._id}
-              href={href}
+              key={cat.link}
+              href={cat.link}
               className="category-card category-card-link"
             >
               <div className="category-image">
                 <Image
                   src={src}
-                  alt={cat?.name || "Category"}
+                  alt={cat.name}
                   width={40}
                   height={52}
                   className="category-image-img"
                 />
               </div>
-              <p className="category-name">{cat?.name}</p>
+              <p className="category-name">{cat.name}</p>
             </Link>
           );
         })}

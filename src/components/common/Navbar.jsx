@@ -6,8 +6,8 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { useQuery } from "@apollo/client/react";
 import { useAuthStore } from "@/store/auth-store";
-import { MenuData } from "@/helpers/MenuData";
-import { GET_CLIENT_SIDE_CATEGORIES, GET_LOOKBOOKS } from "@/graphql";
+import { MenuData, SHOP_NAV_LINKS } from "@/helpers/MenuData";
+import { GET_LOOKBOOKS } from "@/graphql";
 import { ProductStatus } from "@/utils/Constant";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -66,12 +66,6 @@ const NavLinks = ({ pathname }) => {
     nextFetchPolicy: "cache-first",
   });
 
-  const { data: categoriesData } = useQuery(GET_CLIENT_SIDE_CATEGORIES, {
-    variables: { offset: 0, limit: 100 },
-    fetchPolicy: "cache-first",
-    nextFetchPolicy: "cache-first",
-  });
-
   const lookbookLinks = useMemo(() => {
     const fromApi =
       lookbookData?.getClientSideLookBooks?.lookBooks?.map((lb) => ({
@@ -81,18 +75,9 @@ const NavLinks = ({ pathname }) => {
     return [...fromApi];
   }, [lookbookData]);
 
-  const shopCategoryLinks = useMemo(() => {
-    const fromApi =
-      categoriesData?.getClientSideCategories?.categories?.map((cat) => ({
-        name: cat?.name || "Category",
-        link: cat?.slug ? `/shop/${cat.slug}` : "/shop",
-      })) || [];
-    return [{ name: "See all", link: "/shop" }, ...fromApi];
-  }, [categoriesData]);
-
   const getDropdownLinks = (menuItem) => {
     if (menuItem?.dropdownType === "lookbooks") return lookbookLinks;
-    if (menuItem?.dropdownType === "categories") return shopCategoryLinks;
+    if (menuItem?.dropdownType === "categories") return SHOP_NAV_LINKS;
     return menuItem?.dropdownLinks || [];
   };
 

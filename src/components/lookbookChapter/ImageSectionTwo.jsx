@@ -37,12 +37,12 @@ const ImageSectionTwo = ({ leftData, rightData }) => {
     <div id='lb-section4'>
       {leftData && (
         <div className='lb-sec4-img skeleton-loading'>
-            <img width={1000} height={1000} loading='lazy' src={leftData?.imageUrl || ""} alt="" />
+            <img loading='lazy' src={leftData?.imageUrl || ""} alt="" />
         </div>
       )}
       {rightData && (
         <div className='lb-sec4-img skeleton-loading'>
-            <img width={1000}  height={1000} loa src={rightData?.imageUrl || ""} alt="" />
+            <img loading='lazy' src={rightData?.imageUrl || ""} alt="" />
         </div>
       )}
     </div>

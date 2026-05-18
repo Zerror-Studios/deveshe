@@ -62,8 +62,6 @@ const ImageSectionThree = ({ leftData, rightData }) => {
         <div className="lb-section5-ig-wrap scroll-section ">
           <img
           className="skeleton-loading"
-            width={1000}
-            height={1000}
             src={rightData?.imageUrl || ""}
             alt="image"
             loading='lazy'

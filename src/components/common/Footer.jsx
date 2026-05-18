@@ -1,4 +1,4 @@
-import { MenuData } from "@/helpers/MenuData";
+import { FOOTER_QUICK_LINKS } from "@/helpers/MenuData";
 import Link from "next/link";
 import React from "react";
 import CommonButton from "./CommonButton";
@@ -10,8 +10,8 @@ const Footer = () => {
         <div id="footer_links">
           <div className="footer_link_wrap">
             <p>Quicklinks</p>
-            {MenuData.map((link, idx) => (
-              <Link key={idx} href={link.link}>
+            {FOOTER_QUICK_LINKS.map((link) => (
+              <Link key={link.link} href={link.link}>
                 {link.name}
               </Link>
             ))}

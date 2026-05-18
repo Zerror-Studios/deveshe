@@ -4,21 +4,25 @@ import React, { useEffect } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 
-import CuratedProductCard from "@/components/common/card/CuratedProductCard";
-import { getProductPriceLabel } from "@/utils/Util";
+import ProductGridCard from "@/components/common/card/ProductGridCard";
 import ProductLoader from "@/components/loaders/ProductLoader";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function getFirstAsset(product) {
-  return product?.assets?.length ? product.assets[0].path : "";
-}
+const DEFAULT_DESCRIPTION =
+  "Discover handpicked pieces designed to elevate your everyday wardrobe.";
 
 export default function CuratedProducts({
   products = [],
   categoryName,
   isShop = false,
+  description,
 }) {
+  const descriptionText =
+    description ??
+    (isShop && categoryName
+      ? `Explore our curated ${categoryName} selection.`
+      : DEFAULT_DESCRIPTION);
   useEffect(() => {
     const splitText = (selector) => {
       document.querySelectorAll(selector).forEach((el) => {
@@ -65,25 +69,23 @@ export default function CuratedProducts({
     <section
       className={`curated-container ${isShop ? "is-shop" : ""}`}
     >
-      <h2 className="curated-heading">
-        <span className="split">Top </span>
-        <span className="split heading-accent">Picks</span>
-      </h2>
+      <div className="curated-header">
+        <h2 className="curated-heading">
+          <span className="split">Top </span>
+          <span className="split heading-accent">Picks</span>
+        </h2>
+        {descriptionText ? (
+          <p className="curated-description">{descriptionText}</p>
+        ) : null}
+      </div>
       {!products || products.length === 0 ? (
         <ProductLoader />
       ) : (
         <div className="curated-grid">
           {products.map((product) => (
-            <CuratedProductCard
+            <ProductGridCard
               key={product?._id || product?.slug}
-              href={"/product/" + (product?.slug || "")}
-              src={getFirstAsset(product)}
-              alt={product?.name || ""}
-              name={product?.name || ""}
-              price={getProductPriceLabel(
-                product?.variants,
-                product?.discountedPrice
-              )}
+              product={product}
             />
           ))}
         </div>
