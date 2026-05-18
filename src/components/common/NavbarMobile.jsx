@@ -10,6 +10,7 @@ import { useAuthStore } from "@/store/auth-store";
 import { usePathname, useRouter } from "next/navigation";
 import CommonButton from "./CommonButton";
 import { GET_CLIENT_SIDE_CATEGORIES, GET_LOOKBOOKS } from "@/graphql";
+import { MenuData } from "@/helpers/MenuData";
 import { ProductStatus } from "@/utils/Constant";
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,8 +20,6 @@ const NavbarMobile = ({ openCart }) => {
   const menuTL = useRef(null);
   const router = useRouter();
   const pathname = usePathname();
-  const [percent, setPercent] = useState(0);
-
   const { data: lookbookData } = useQuery(GET_LOOKBOOKS, {
     variables: {
       offset: 0,
@@ -43,7 +42,7 @@ const NavbarMobile = ({ openCart }) => {
         name: lb?.name || "Lookbook",
         href: `/lookbook/${lb?._id}`,
       })) || [];
-    return [{ name: "All lookbooks", href: "/lookbook" }, ...fromApi];
+    return [...fromApi];
   }, [lookbookData]);
 
   const shopCategoryLinks = useMemo(() => {
@@ -54,6 +53,16 @@ const NavbarMobile = ({ openCart }) => {
       })) || [];
     return [{ name: "See all", href: "/shop" }, ...fromApi];
   }, [categoriesData]);
+
+  const exploreLinks = useMemo(() => {
+    const explore = MenuData.find((item) => item.name === "Explore");
+    return (
+      explore?.dropdownLinks?.map((item) => ({
+        name: item.name,
+        href: item.link,
+      })) ?? []
+    );
+  }, []);
 
   useGSAP(() => {
     menuTL.current = gsap
@@ -129,86 +138,14 @@ const NavbarMobile = ({ openCart }) => {
       return newState;
     });
   };
-  const startLoader = () => {
-    let current = 0;
-    const interval = setInterval(() => {
-      current++;
-      setPercent(current);
-
-      if (current >= 100) {
-        clearInterval(interval);
-      }
-    }, 10);
-  };
-
-  useEffect(() => {
-    if (pathname !== "/" || window.location.hash === "#shop") {
-      gsap.set(".navbar-mobile-wrap", {
-        y: "0%",
-        opacity: 1,
-      });
-      return;
-    } // ✅ only run on homepage
-
-    var tl = gsap.timeline();
-
-    tl.call(startLoader)
-      .to("#loader_slider p", {
-        top: "95%",
-        duration: 0.8,
-        delay: 1,
-        ease: "power4.Out",
-      })
-      .fromTo(
-        ".navbar-mobile-wrap",
-        {
-          y: "-100%",
-          opacity: 0,
-        },
-        {
-          y: "0%",
-          opacity: 1,
-          duration: 0.8,
-          ease: "power4.Out",
-        }
-      )
-      .to("#loader_slider", {
-        opacity: 0,
-        duration: 0.8,
-        ease: "power4.Out",
-        onComplete: () => {
-          gsap.set("#loader_slider", { display: "none" });
-        },
-      });
-  }, [pathname]); // ✅ re-run if route changes
-
   const handleLoginBtn = () => {
     router.push("/login");
     toggleMenu();
   };
-  const [hash, setHash] = useState("");
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setHash(window.location.hash);
-
-      const handleHashChange = () => setHash(window.location.hash);
-      window.addEventListener("hashchange", handleHashChange);
-
-      return () => window.removeEventListener("hashchange", handleHashChange);
-    }
-  }, [pathname]);
 
   return (
     <>
       <div className="navbar-mobile">
-        {pathname === "/" && hash !== "#shop" && (
-          <div id="loader_slider">
-            <p>
-              loading... <span>{percent}%</span>
-            </p>
-          </div>
-        )}
         <div className="navbar-mobile-wrap">
           <Link href="/" id="nav-logo">
             <Image
@@ -286,8 +223,19 @@ const NavbarMobile = ({ openCart }) => {
                   ))}
                 </div>
               </div>
-              <Link href="/about">about</Link>
-              <Link href="/contact">contact</Link>
+              <div className="side-menu-group">
+                <span className="side-menu-group-label">Explore</span>
+                <div className="side-menu-sub">
+                  {exploreLinks.map((item) => (
+                    <Link
+                      key={`explore-${item.href}-${item.name}`}
+                      href={item.href}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
             <div className="nav-wrapper">
               <div className="nav-contact">

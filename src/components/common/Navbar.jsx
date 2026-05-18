@@ -38,19 +38,8 @@ const PillSvg = ({ className }) => (
   </svg>
 );
 
-const NavLoader = ({ percent }) => (
-  <div id="loader_slider">
-    <span id="loader_looking">looking for</span>
-    <span id="loader_emotions">new emotions?</span>
-    <p id="loader_percent">
-      loading... <span>{percent}%</span>
-    </p>
-  </div>
-);
-
 const LogoGroup = () => (
   <Link href="/" id="logo-container">
-    <p>new emotions?</p>
     {LOGO_SRCS.map(({ src, alt }) => (
       <Image
         key={alt}
@@ -89,7 +78,7 @@ const NavLinks = ({ pathname }) => {
         name: lb?.name || "Lookbook",
         link: `/lookbook/${lb?._id}`,
       })) || [];
-    return [{ name: "All lookbooks", link: "/lookbook" }, ...fromApi];
+    return [...fromApi];
   }, [lookbookData]);
 
   const shopCategoryLinks = useMemo(() => {
@@ -129,14 +118,18 @@ const NavLinks = ({ pathname }) => {
             link?.dropdownType === "categories" ||
             dropdownLinks.length > 0;
           const isActive = !hasDropdown && pathname === link.link;
+          const isDropdownOpen = hasDropdown && activeMenu === idx;
           return (
             <div
               key={link?.name || idx}
-              className="nav-link-item"
+              className={`nav-link-item${isDropdownOpen ? " nav-link-item--open" : ""}`}
               onMouseEnter={() => setActiveMenu(hasDropdown ? idx : null)}
             >
               {hasDropdown ? (
-                <button type="button" className="nav-link-trigger">
+                <button
+                  type="button"
+                  className={`nav-link-trigger${isDropdownOpen ? " nav-link-trigger--open" : ""}`}
+                >
                   {isPill && <PillSvg className="menu_pill_svg--left" />}
                   <span className={isPill ? "menu_pill_text" : undefined}>
                     {link.name}
@@ -176,7 +169,6 @@ const NavLinks = ({ pathname }) => {
 
 const NavButtons = ({ openCart, isLoggedIn }) => (
   <div id="nav-btns">
-    <p>looking for</p>
     <button className="nav_btn_items" onClick={openCart}>
       BAG
       <svg
@@ -246,7 +238,6 @@ const setStaticLayout = () => {
   gsap.set(".logo", { position: "static", transform: "translate(0,0)" });
   gsap.set("#logo-container", { gap: "13px", left: "2%" });
   gsap.set("#nav-btns", { right: "2%" });
-  gsap.set("#loader_slider", { opacity: 0, display: "none" });
   gsap.set(".nav-link", { opacity: 1 });
   gsap.set("#logo-container p, #nav-btns p", { opacity: 0 });
   gsap.set("#logo-container .logo, .nav_btn_items", { opacity: 1 });
@@ -280,66 +271,18 @@ const initOtherPage = () => {
   setNavBlack();
 };
 
-const initHomePage = (logos, xPositions, totalWidth, logoContainer, setPercent) => {
-  logos.forEach((logo, i) => gsap.set(logo, { x: xPositions[i], top: 0 }));
-
-  gsap.set("html,body", { overflow: "hidden" });
+const initHomePage = (logos, xPositions, totalWidth, logoContainer) => {
+  gsap.set("html,body", { overflow: "visible" });
   gsap.set(".logo", { position: "absolute" });
-  gsap.set("#logo-container", { left: "79%" });
-  gsap.set("#nav-btns", { right: "92%" });
-  gsap.set("#loader_slider", { opacity: 1, display: "block" });
-  gsap.set(".nav-link", { opacity: 0 });
-  gsap.set("#logo-container p, #nav-btns p", { opacity: 1 });
-  gsap.set("#logo-container .logo, .nav_btn_items", { opacity: 0 });
-
-  gsap.set("#loader_looking", { opacity: 1, x: 0, y: 0 });
-  gsap.set("#loader_emotions", { opacity: 1, x: 0, y: 0 });
-  gsap.set("#loader_percent", { opacity: 1, y: 0 });
+  gsap.set("#logo-container", { left: "2%" });
+  gsap.set("#nav-btns", { right: "2%" });
+  gsap.set(".nav-link", { opacity: 1 });
+  gsap.set("#logo-container p, #nav-btns p", { opacity: 0 });
+  gsap.set("#logo-container .logo, .nav_btn_items", { opacity: 1 });
+  gsap.set(".logo", { top: (i) => i * 30, x: 0 });
 
   setNavWhite();
   logoContainer.style.width = `${xPositions[3] || totalWidth}px`;
-
-  const startLoader = () => {
-    let count = 0;
-    const interval = setInterval(() => {
-      count++;
-      setPercent(count);
-      if (count >= 100) clearInterval(interval);
-    }, 10);
-  };
-
-  gsap
-    .timeline()
-    .call(startLoader)
-    .to("#loader_percent", {
-      y: "120%",
-      duration: 0.8,
-      delay: 0.8,
-      ease: "power2.in",
-    })
-    .to("#loader_looking", { x: "110vw", duration: 0.7, ease: "power2.in" }, "exit")
-    .to("#loader_emotions", { x: "-110vw", duration: 0.7, ease: "power2.in" }, "exit")
-    .to("#logo-container", { left: "2%", duration: 0.5, ease: "power2.in" }, "move")
-    .to("#nav-btns", { right: "2%", duration: 0.5, ease: "power2.in" }, "move")
-    .to("#logo-container p, #nav-btns p", { opacity: 0, duration: 0.2, ease: "power3.in" }, "move")
-    .to("#logo-container .logo, .nav_btn_items", { opacity: 1, duration: 0.2, ease: "power3.in" }, "move")
-    .to(".nav-link", { opacity: 1, duration: 0.3, ease: "power2.in" })
-    .to(".logo", { top: (i) => i * 30, x: 0, duration: 0.8, ease: "power2.inOut", stagger: 0.1 })
-    .to(
-      "#loader_slider",
-      {
-        opacity: 0,
-        duration: 0.3,
-        ease: "power1.out",
-        onComplete: () => {
-          setTimeout(() => {
-            gsap.set("#loader_slider", { display: "none" });
-            gsap.set("html,body", { overflow: "visible" });
-          }, 1600);
-        },
-      },
-      "-=1.6"
-    );
 
   gsap
     .timeline({
@@ -360,7 +303,6 @@ const initHomePage = (logos, xPositions, totalWidth, logoContainer, setPercent) 
 const Navbar = ({ openCart }) => {
   const pathname = usePathname();
   const { isLoggedIn } = useAuthStore((state) => state);
-  const [percent, setPercent] = useState(0);
   const [hash, setHash] = useState("");
 
   useEffect(() => {
@@ -387,7 +329,7 @@ const Navbar = ({ openCart }) => {
       const isShop = pathname === "/shop";
 
       if (isShop) initShopPage();
-      else if (isHome) initHomePage(logos, xPositions, totalWidth, logoContainer, setPercent);
+      else if (isHome) initHomePage(logos, xPositions, totalWidth, logoContainer);
       else initOtherPage();
     };
 
@@ -401,7 +343,6 @@ const Navbar = ({ openCart }) => {
 
   return (
     <div id="nav">
-      {pathname === "/" && <NavLoader percent={percent} />}
       <LogoGroup />
       <NavLinks pathname={pathname} />
       <NavButtons openCart={openCart} isLoggedIn={isLoggedIn} />

@@ -168,13 +168,15 @@ export default function CuratedFilterStrip() {
             return (
               <div
                 key={menu.id}
-                className="curated-filter-strip__item"
+                className={`curated-filter-strip__item${
+                  isOpen ? " curated-filter-strip__item--open" : ""
+                }`}
                 onMouseEnter={() => setActiveMenu(menu.id)}
               >
                 <button
                   type="button"
-                  className={`curated-filter-strip__trigger ${
-                    isOpen ? "curated-filter-strip__trigger--open" : ""
+                  className={`curated-filter-strip__trigger${
+                    isOpen ? " curated-filter-strip__trigger--open" : ""
                   }`}
                   aria-expanded={isOpen}
                   aria-haspopup="listbox"
@@ -187,8 +189,6 @@ export default function CuratedFilterStrip() {
                   <span>{menu.label}</span>
 
                   {isPill && <PillSvg className="cfs-pill-svg--right" />}
-
-                  <div className="curated-filter-strip__hoverline" />
                 </button>
               </div>
             );

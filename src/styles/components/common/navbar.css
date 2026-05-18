@@ -113,6 +113,11 @@
   appearance: none;
 }
 
+#nav .nav-link-item--open .nav-link-trigger,
+#nav .nav-link-item--open .nav-link-trigger .menu_pill_text {
+  font-weight: 600 !important;
+}
+
 .menu_pill_svg {
   width: 0.6rem;
   height: 20px;
@@ -283,56 +288,3 @@
 #nav .nav-link a::after                        { background-color: #000 !important; }
 #nav #nav-line                                 { background-color: #000 !important; }
 #nav #nav-btns svg:not(.menu_pill_btn_svg)     { stroke: #000 !important; }
-
-/* ─── Loader ─────────────────────────────────────────────────────────────────── */
-
-#loader_slider {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: #fff;
-  z-index: 100;
-  overflow: hidden;
-}
-
-#loader_looking {
-  position: absolute;
-  top: 1.2vw;
-  left: 3vw;
-  font-size: 14px;
-  font-weight: 100;
-  font-family: paragraph;
-  color: #000;
-  text-transform: uppercase;
-  white-space: nowrap;
-  will-change: transform;
-}
-
-#loader_emotions {
-  position: absolute;
-  top: 1.2vw;
-  right: 3vw;
-  font-size: 14px;
-  font-weight: 100;
-  font-family: paragraph;
-  color: #000;
-  text-transform: uppercase;
-  white-space: nowrap;
-  will-change: transform;
-}
-
-#loader_percent {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 14px;
-  font-weight: 100;
-  font-family: paragraph;
-  color: #000;
-  text-transform: uppercase;
-  white-space: nowrap;
-  will-change: transform;
-}

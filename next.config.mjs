@@ -16,7 +16,8 @@ const nextConfig = {
       "avatar.iran.liara.run",
       "saint-laurent.dam.kering.com",
       "images.unsplash.com",
-      "api.dicebear.com"
+      "api.dicebear.com",
+      
     ],
   },
 };

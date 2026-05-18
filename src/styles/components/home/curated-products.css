@@ -273,24 +273,9 @@
   left: 99%;
 }
 
-/* ─── Hoverline ───────────────────────────────────────────────────────────── */
-
-.curated-filter-strip__hoverline {
-  position: absolute;
-  left: 0.65rem;
-  right: 0.65rem;
-  bottom: 0.35rem;
-  height: 1px;
-  background-color: #000;
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.3s ease;
-  pointer-events: none;
-}
-
-.curated-filter-strip__trigger:hover .curated-filter-strip__hoverline,
-.curated-filter-strip__trigger--open .curated-filter-strip__hoverline {
-  transform: scaleX(1);
+.curated-filter-strip__item--open .curated-filter-strip__trigger,
+.curated-filter-strip__item--open .curated-filter-strip__trigger span {
+  font-weight: 600 !important;
 }
 
 /* ─── Dropdown — single global menu ───────────────────────── */
@@ -355,7 +340,6 @@
 
 @media (prefers-reduced-motion: reduce) {
 
-  .curated-filter-strip__hoverline,
   .curated-filter-strip__menu,
   .curated-filter-strip__option {
     transition: none !important;
