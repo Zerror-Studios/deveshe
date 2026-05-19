@@ -29,6 +29,7 @@ const PhoneModal = () => {
     let animationFrameId = 0;
     let isDisposed = false;
     let isMobile = window.innerWidth <= 768;
+    let isSmallMobile = window.innerWidth <= 576;
     let handset = null;
     let isHoveringDialer = false;
 
@@ -55,14 +56,16 @@ const PhoneModal = () => {
       const width = container.clientWidth || 1;
       const height = container.clientHeight || 1;
       isMobile = window.innerWidth <= 768;
+      isSmallMobile = window.innerWidth <= 576;
 
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
 
-      modelGroup.scale.setScalar(isMobile ? 2.75 : 1.38);
-      // Slight downward nudge for better visual centering in the phone panel.
-      modelGroup.position.set(0, isMobile ? -19 : -5, 0);
+      const scale = isSmallMobile ? 1.35 : isMobile ? 1.65 : 1.58;
+      const offsetY = isSmallMobile ? -8 : isMobile ? -12 : -12;
+      modelGroup.scale.setScalar(scale);
+      modelGroup.position.set(0, offsetY, 0);
     };
 
     const addMesh = (parent, nodes, name, material, position, rotation, scale) => {
@@ -187,8 +190,8 @@ const PhoneModal = () => {
       if (!handset) return;
 
       gsap.to(handset.position, {
-        x: isMobile ? -4 : -6,
-        y: isMobile ? 15 : 23,
+        x: isSmallMobile ? -3 : isMobile ? -4 : -6,
+        y: isSmallMobile ? 12 : isMobile ? 15 : 23,
         z: -10.402,
         duration: 0.5,
       });

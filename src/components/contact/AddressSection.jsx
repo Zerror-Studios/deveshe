@@ -1,7 +1,6 @@
 import React from "react";
-import CommonButton from "../common/CommonButton";
 
-const AddressSection = ({ onOpenForm }) => {
+const AddressSection = () => {
   return (
     <div id="address">
       <div className="elem elem-lf contact-intro">
@@ -29,11 +28,6 @@ const AddressSection = ({ onOpenForm }) => {
                   Tardeo, Mumbai-400 034
                 </h5>
               </div>
-              <CommonButton
-                title="Use a form here"
-                type="button"
-                onClick={onOpenForm}
-              />
             </div>
           </div>
 

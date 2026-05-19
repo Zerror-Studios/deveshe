@@ -7,6 +7,7 @@ import gsap from "gsap";
 import { RxCross2 } from "react-icons/rx";
 import ContactForm from "@/components/contact/ContactForm";
 import AddressSection from "@/components/contact/AddressSection";
+import CommonButton from "@/components/common/CommonButton";
 
 const PhoneModal = dynamic(() => import("@/components/contact/PhoneModal"), {
   ssr: false,
@@ -95,10 +96,17 @@ export default function ContactClient() {
       <section id="contact_form" ref={sectionRef}>
         <div className="contact-hero">
           <div className="animate-item contact-copy">
-            <AddressSection onOpenForm={() => setIsFormOpen(true)} />
+            <AddressSection />
           </div>
           <div className="animate-item contact-phone">
             <PhoneModal />
+            <div className="contact-phone-cta">
+              <CommonButton
+                title="Use a form here"
+                type="button"
+                onClick={() => setIsFormOpen(true)}
+              />
+            </div>
           </div>
         </div>
       </section>
