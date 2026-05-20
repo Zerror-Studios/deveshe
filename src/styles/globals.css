@@ -698,13 +698,24 @@ input[type="number"] {
   }
 }
 
-  .noise {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    will-change: transform;
-    z-index: 9;
-  }
+.noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  will-change: transform;
+  z-index: 9;
+}
+
+.noise--footer,
+.noise--drawer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.noise--drawer {
+  z-index: 3;
+}
 
 .noise:before {
   animation: noise 1s steps(2) infinite;

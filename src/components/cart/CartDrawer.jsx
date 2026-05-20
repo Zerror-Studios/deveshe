@@ -9,6 +9,8 @@ import { useVisitor } from "@/hooks/useVisitor";
 import { formatePrice, getCartItemCount } from "@/utils/Util";
 import gsap from "gsap";
 import CartProduct from "@/components/cart/CartProduct";
+import CartEmptyState from "@/components/cart/CartEmptyState";
+import NoiseOverlay from "@/components/common/NoiseOverlay";
 import CommonButton from "../common/CommonButton";
 import { TokenManager } from "@/utils/tokenManager";
 
@@ -53,6 +55,7 @@ const CartDrawer = ({ isOpen, closeCart }) => {
   } = cartResponse?.getCart || {};
 
   const count = getCartItemCount(cart);
+  const isEmpty = !cart?.length;
   const handleAddItem = async (productId, variantDetail, categoryId) => {
     try {
       const { __typename, ...variantWithoutTypename } = variantDetail;
@@ -142,6 +145,7 @@ const CartDrawer = ({ isOpen, closeCart }) => {
   return (
     <div id="card_drawer" onClick={closeCart} ref={backdropRef}>
       <div id="drawer" onClick={(e) => e.stopPropagation()} ref={drawerRef}>
+        <NoiseOverlay className="noise--drawer" />
         <div id="drawer_header">
           <span>
             Bag <sup>({count})</sup>
@@ -151,8 +155,12 @@ const CartDrawer = ({ isOpen, closeCart }) => {
           </button>
         </div>
 
-        <div id="drawer_products" data-lenis-prevent>
-          {cart?.length > 0 ? (
+        <div
+          id="drawer_products"
+          className={isEmpty ? "is-empty" : ""}
+          data-lenis-prevent
+        >
+          {!isEmpty ? (
             cart.map((item, i) => (
               <CartProduct
                 key={`cart-product-item-${i}`}
@@ -163,10 +171,11 @@ const CartDrawer = ({ isOpen, closeCart }) => {
               />
             ))
           ) : (
-            <span id="no_item">There are currently no items in your bag.</span>
+            <CartEmptyState active={isOpen} />
           )}
         </div>
 
+        {!isEmpty && (
         <div id="drawer_bottom">
           <div className="total_price">
             <span>Total</span>
@@ -187,6 +196,7 @@ const CartDrawer = ({ isOpen, closeCart }) => {
             />
           </div>
         </div>
+        )}
       </div>
     </div>
   );
