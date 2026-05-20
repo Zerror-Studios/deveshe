@@ -601,6 +601,8 @@
 .ProductDetails_wrapper {
   display: flex;
   flex-direction: column;
+  z-index: 10;
+  position: relative;
 }
 
 .ProductDetails_cntr {
@@ -615,7 +617,6 @@
 .ProductDets_grid {
   display: grid;
   /* transition: filter 0.3s ease; */
-  background: #ffffff;
   filter: blur(0px);
 }
 
@@ -796,11 +797,6 @@ button {
   padding-top: 24px;
   padding-bottom: 40px;
   position: relative;
-  background-color: #fadcde;
-  background-image: url(/grainy-bg.svg);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: top;
   top: 0;
 }
 
