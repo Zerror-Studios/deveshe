@@ -183,16 +183,7 @@ footer {
 
   .footer-hero-headline {
     max-width: 100%;
-    font-size: clamp(32px, 11vw, 64px);
     white-space: normal;
-  }
-
-  .footer-copyright-badge {
-    font-size: clamp(32px, 11vw, 64px);
-  }
-
-  .footer-copyright-badge .copy-symbol {
-    font-size: clamp(32px, 11vw, 64px);
   }
 
   .footer-description {
@@ -215,15 +206,6 @@ footer {
 @media (max-width: 480px) {
   .footer-hero {
     padding: 24px 16px 40px;
-  }
-
-  .footer-hero-headline {
-    font-size: clamp(28px, 12vw, 48px);
-  }
-
-  .footer-copyright-badge,
-  .footer-copyright-badge .copy-symbol {
-    font-size: clamp(28px, 12vw, 48px);
   }
 
   .footer-description {
