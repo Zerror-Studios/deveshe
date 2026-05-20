@@ -5,13 +5,6 @@ import CommonButton from "@/components/common/CommonButton";
 export default function NotFoundPage() {
   return (
     <div id="status_section">
-      <Image
-        width={1000}
-        height={1000}
-        src="/fail.gif"
-        className="fail_gif"
-        alt="payment failed"
-      />
       <h2>
       Oops! Page Not Found
       </h2>
