@@ -7,16 +7,18 @@ const COOKIE_VALUE = "granted";
 export async function GET() {
   const cookieStore = await cookies();
   const granted = cookieStore.get(COOKIE_NAME)?.value === COOKIE_VALUE;
-
   return NextResponse.json({ granted });
 }
 
 export async function POST(request) {
-  const { password } = await request.json();
+  const { password } = await request.json().catch(() => ({}));
   const expected = process.env.SITE_PASSWORD || "deveshe@#2026";
 
   if (!password || password !== expected) {
-    return NextResponse.json({ ok: false, message: "Incorrect password" }, { status: 401 });
+    return NextResponse.json(
+      { ok: false, message: "Incorrect password" },
+      { status: 401 }
+    );
   }
 
   const response = NextResponse.json({ ok: true });
@@ -30,3 +32,4 @@ export async function POST(request) {
 
   return response;
 }
+

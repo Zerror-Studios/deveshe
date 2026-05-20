@@ -72,7 +72,11 @@ export default function SiteGate({ children }) {
               disabled={loading}
             />
             {error ? <p className="site-gate__error">{error}</p> : null}
-            <button type="submit" className="site-gate__submit" disabled={loading}>
+            <button
+              type="submit"
+              className="site-gate__submit"
+              disabled={loading}
+            >
               {loading ? "Checking..." : "Enter"}
             </button>
           </form>
@@ -83,3 +87,4 @@ export default function SiteGate({ children }) {
 
   return children;
 }
+

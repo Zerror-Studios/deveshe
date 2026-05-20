@@ -38,6 +38,7 @@
   font-weight: 600;
   text-transform: none;
   margin-bottom: 20px;
+  color: #000;
 }
 
 .site-gate__message {
@@ -49,21 +50,17 @@
 }
 
 .site-gate__form {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  width: 100%;
-  max-width: 320px;
-  margin: 0 auto;
 }
 
-.site-gate__label {
-  font-family: subTitleFont, paragraph, sans-serif;
-  font-size: 12px;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
-  align-self: flex-start;
+.site-gate__input::placeholder {
+  color: rgba(0, 0, 0, 0.45);
 }
 
 .site-gate__input {
@@ -77,10 +74,6 @@
   font-size: 14px;
   color: #000;
   outline: none;
-}
-
-.site-gate__input::placeholder {
-  color: rgba(0, 0, 0, 0.45);
 }
 
 .site-gate__input:focus {
@@ -127,3 +120,4 @@
     margin-bottom: 32px;
   }
 }
+
