@@ -1,0 +1,123 @@
+.site-gate {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  background-color: #fadcde;
+  background-image: url(/grainy-lg-bg.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom;
+  color: #000;
+}
+
+.site-gate--loading {
+  background-color: #fadcde;
+}
+
+.site-gate__inner {
+  width: 100%;
+  max-width: 520px;
+  text-align: center;
+}
+
+.site-gate__eyebrow {
+  font-family: subTitleFont, paragraph, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.site-gate__title {
+  font-family: titleFont, heading, sans-serif;
+  font-size: clamp(36px, 8vw, 72px);
+  line-height: 0.95;
+  font-weight: 600;
+  text-transform: none;
+  margin-bottom: 20px;
+  color: #000;
+}
+
+.site-gate__message {
+  font-family: paragraph, sans-serif;
+  font-size: clamp(14px, 2vw, 18px);
+  line-height: 1.5;
+  max-width: 380px;
+  margin: 0 auto 40px;
+}
+
+.site-gate__form {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.site-gate__input::placeholder {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.site-gate__input {
+  width: 100%;
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid #000;
+  border-radius: 50px;
+  background: transparent;
+  font-family: paragraph, sans-serif;
+  font-size: 14px;
+  color: #000;
+  outline: none;
+}
+
+.site-gate__input:focus {
+  box-shadow: 0 0 0 1px #000;
+}
+
+.site-gate__submit {
+  width: 100%;
+  height: 44px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 50px;
+  background: #000;
+  color: #fff;
+  font-family: paragraph, sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.site-gate__submit:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.site-gate__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.site-gate__error {
+  width: 100%;
+  font-family: paragraph, sans-serif;
+  font-size: 13px;
+  color: #b00020;
+  text-align: left;
+}
+
+@media (max-width: 576px) {
+  .site-gate {
+    padding: 32px 20px;
+  }
+
+  .site-gate__message {
+    margin-bottom: 32px;
+  }
+}
+

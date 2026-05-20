@@ -31,6 +31,7 @@ import "@/styles/components/home/category-explore.css";
 import "@/styles/components/home/featured-article.css";
 import "@/styles/components/shop/hero-section.css";
 import "@/styles/components/fonts.css";
+import "@/styles/components/site-gate.css";
 
 export const metadata = {
   title: "DeVeSheDreams",
