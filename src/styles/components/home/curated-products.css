@@ -439,9 +439,9 @@
 .cfs-mobile-popup {
   width: 100%;
   max-width: 420px;
-  height: 96vh;
-  min-height: 96vh;
-  max-height: 96vh;
+  height: 90vh;
+  min-height: 90vh;
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
   background: #fff;
@@ -449,6 +449,9 @@
   font-family: paragraph;
   text-transform: uppercase;
   animation: cfs-popup-in 0.45s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.cfs-mobile-popup footer{
+  background-color: #ffffff;
 }
 
 @keyframes cfs-popup-in {
@@ -640,11 +643,6 @@
     padding: 8px;
   }
 
-  .cfs-mobile-popup {
-    height: 94vh;
-    min-height: 94vh;
-    max-height: 94vh;
-  }
 
   .cfs-mobile-popup__header {
     padding: 24px 20px 40px;
