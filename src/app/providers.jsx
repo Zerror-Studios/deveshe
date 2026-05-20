@@ -8,6 +8,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import Layout from "@/components/layouts/Layout";
 import NavApolloWarmup from "@/components/layouts/NavApolloWarmup";
 import SmoothScroller from "@/components/common/SmoothScroller";
+import SiteGate from "@/components/common/SiteGate";
 
 export default function Providers({ children }) {
   const client = useMemo(() => createApolloClient(), []);
@@ -16,12 +17,14 @@ export default function Providers({ children }) {
     <ApolloProvider client={client}>
       <NavApolloWarmup />
       <AuthProvider>
-        <Layout>
-          <Suspense fallback={null}>
-            <SmoothScroller />
-          </Suspense>
-          {children}
-        </Layout>
+        <SiteGate>
+          <Layout>
+            <Suspense fallback={null}>
+              <SmoothScroller />
+            </Suspense>
+            {children}
+          </Layout>
+        </SiteGate>
       </AuthProvider>
       <ToastContainer position="top-right" />
     </ApolloProvider>
