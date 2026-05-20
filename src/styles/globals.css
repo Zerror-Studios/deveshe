@@ -18,6 +18,25 @@
   src: url(/assets/fonts/bd8de66be4175fed48a7.woff);
 }
 
+@font-face {
+  font-family: titleFont;
+  src: url(/fonts/NeueHaasGroteskDisplay-600.woff2);
+  font-display: auto;
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: normal;
+}
+@font-face {
+  font-family: subTitleFont;
+  src: url(/fonts/SuisseReg.woff2);
+  font-display: swap;
+}
+@font-face {
+  font-family: paraTitleFont;
+  src: url(/fonts/UnDbold.woff2);
+  font-display: swap;
+}
+
 body::-webkit-scrollbar {
   display: none;
 }
@@ -284,7 +303,7 @@ input[type="number"] {
   background-color: #fff;
   position: fixed;
   top: 0;
-  z-index: 9;
+  z-index: 12;
   height: 65px;
   padding: 0 20px;
   display: none;
@@ -676,5 +695,61 @@ input[type="number"] {
   #nav-logo img {
     width: auto;
     height: 2.2vw;
+  }
+}
+
+  .noise {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    will-change: transform;
+    z-index: 9;
+  }
+
+.noise:before {
+  animation: noise 1s steps(2) infinite;
+  background-image: url("/noise2.jpeg");
+  content: "";
+  height: calc(100% + 20rem);
+  left: -10rem;
+  opacity: 0.2;
+  pointer-events: none;
+  position: absolute;
+  top: -10rem;
+  width: calc(100% + 20rem);
+}
+@keyframes noise {
+  0% {
+    transform: translate3d(0, 9rem, 0);
+  }
+  10% {
+    transform: translate3d(-1rem, -4rem, 0);
+  }
+  20% {
+    transform: translate3d(-8rem, 2rem, 0);
+  }
+  30% {
+    transform: translate3d(9rem, -9rem, 0);
+  }
+  40% {
+    transform: translate3d(-2rem, 7rem, 0);
+  }
+  50% {
+    transform: translate3d(-9rem, -4rem, 0);
+  }
+  60% {
+    transform: translate3d(2rem, 6rem, 0);
+  }
+  70% {
+    transform: translate3d(7rem, -8rem, 0);
+  }
+  80% {
+    transform: translate3d(-9rem, 1rem, 0);
+  }
+  90% {
+    transform: translate3d(6rem, -5rem, 0);
+  }
+  100% {
+    transform: translate3d(-7rem, 0, 0);
   }
 }

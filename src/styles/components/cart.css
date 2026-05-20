@@ -17,10 +17,6 @@
   width: 50%;
   height: 100%;
   background-color: #fadcde;
-  background-image: url(/grainy-bg.svg);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: top;
   position: absolute;
   right: 0;
   transform: translateX(100%);

@@ -38,11 +38,10 @@ export default function ProductGridCard({ product, href, src, alt, name, price }
         ) : (
           <div className="curated-imagePlaceholder" aria-hidden />
         )}
-
-        <div className="curated-overlay">
-          <p className="curated-name">{card.name}</p>
-          <p className="curated-price">{card.price}</p>
-        </div>
+      </div>
+      <div className="curated-meta">
+        <p className="curated-name">{card.name}</p>
+        <p className="curated-price">{card.price}</p>
       </div>
     </Link>
   );

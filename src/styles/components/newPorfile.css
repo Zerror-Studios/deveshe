@@ -1,12 +1,9 @@
 #profile_section {
   width: 100%;
-  background-color: #fadcde;
-  background-image: url(/grainy-lg-bg.svg);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: bottom;
   padding: 160px;
   padding-bottom: 100px;
+  position: relative;
+  z-index: 10;
   position: relative;
 }
 

@@ -6,6 +6,8 @@
   background-size: cover;
   background-repeat: no-repeat;
   overflow: hidden;
+  z-index: 10;
+  position: relative;
 }
 
 .horizontal-scroll {
@@ -416,6 +418,7 @@
   width: 100%;
   height: 185vh;
   position: relative;
+  z-index: 10;
 }
 
 .rainbox-sides {
@@ -624,6 +627,7 @@
   padding-bottom: 10vw;
   position: relative;
   overflow: hidden;
+  z-index: 10;
 }
 .process_container {
   width: 100%;
@@ -770,7 +774,6 @@
   width: 100%;
   height: auto;
   overflow: hidden;
-  background-color: #fadcde;
   border-top: 2px solid black;
   display: flex;
   flex-direction: column;
@@ -778,6 +781,8 @@
   padding: 6vw 3vw;
   gap: 4vw;
   text-align: center;
+  z-index: 10;
+  position: relative;
 }
 #faq_section h2 {
   font-size: 6.5vw;
@@ -961,6 +966,8 @@
   height: 270vh;
   position: relative;
   overflow: hidden;
+  z-index: 10;
+  position: relative;
 }
 #founder_section > img {
   width: 100%;

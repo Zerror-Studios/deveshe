@@ -1,50 +1,69 @@
-import { FOOTER_QUICK_LINKS } from "@/helpers/MenuData";
 import Link from "next/link";
 import React from "react";
-import CommonButton from "./CommonButton";
 
 const Footer = () => {
   return (
-    <footer id="footer">
-      <div id="footer_top">
-        <div id="footer_links">
-          <div className="footer_link_wrap">
-            <p>Quicklinks</p>
-            {FOOTER_QUICK_LINKS.map((link) => (
-              <Link key={link.link} href={link.link}>
-                {link.name}
-              </Link>
-            ))}
-          </div>
-          <div className="footer_link_wrap">
-            <p>Customer Care</p>
-            <Link href="/privacy-policy">Privacy Policy</Link>
-            <Link href="/shipping-returns">Shipping & Returns</Link>
-            <Link href="/terms-of-service">Terms Of Service</Link>
-          </div>
-          <div className="footer_link_wrap">
-            <p>Social</p>
-            <a
-              target="_blank"
-              href="https://www.instagram.com/de_ve_she_dreams"
-            >
-              Instagram
-            </a>
-          </div>
-        </div>
-        <div id="footer_btn">
-          <CommonButton title={"Sign up to the newsletter"} href={"/"} />
+    <footer>
+
+      {/* Hero */}
+      <div className="footer-hero">
+        <h2 className="footer-hero-headline">
+          Made to be worn.<br />
+          Or judged. Or both.
+        </h2>
+        <div className="footer-copyright-badge">
+          <span className="copy-symbol">©</span>26
         </div>
       </div>
-      <div id="footer_bottom">
-        <div>
-          Developed by{" "}
-          <a target="_black" href="https://www.zerrorstudios.com/">
-            Zerror Studios
+
+      {/* Description */}
+      <p className="footer-description para-small">
+        Created by the DeVeSheDreams team, this store and signature collection
+        celebrates our collective creativity and passion for apparel. Carefully designed.
+      </p>
+
+      {/* Divider */}
+      <hr className="footer-divider" />
+
+      {/* Bottom grid */}
+      <div className="footer-bottom">
+
+        {/* Brand */}
+        <div className="footer-brand">
+          <p>DeVeSheDreams</p>
+          <p>All rights reserved © 2026</p>
+        </div>
+
+        {/* Policy */}
+        <div className="footer-policy">
+          <Link href="/privacy-policy">Privacy Policy</Link>
+          <Link href="/shipping-returns">Shipping & Returns</Link>
+          <Link href="/terms-of-service">Terms of Service</Link>
+        </div>
+
+        {/* Nav */}
+        <div className="footer-links">
+          <Link href="/shop">Shop</Link>
+          <Link href="/about">About</Link>
+          <Link href="/blogs">Blogs</Link>
+          <Link href="/contact">Customer Support</Link>
+          <Link href="/material-index">Material Index</Link>
+        </div>
+
+        {/* Social */}
+        <div className="footer-social">
+          <a
+            href="https://www.instagram.com/de_ve_she_dreams"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Instagram
           </a>
         </div>
-        <p>© 2025. All rights reserved.</p>
+        
+
       </div>
+
     </footer>
   );
 };

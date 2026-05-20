@@ -1,16 +1,17 @@
 /* CONTAINER */
 .category-container {
-  padding: 40px;
+  padding: 0 40px 40px;
   text-align: center;
   font-family: paragraph;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  z-index: 10;
+  position: relative;
 }
 
 /* HEADING — same as footer Quicklinks label (.footer_link_wrap p) */
 .category-heading {
-  font-family: heading;
-  font-weight: 400;
+  font-family: titleFont;
   font-size: 14px;
   line-height: 1.35;
   letter-spacing: 0.3px;

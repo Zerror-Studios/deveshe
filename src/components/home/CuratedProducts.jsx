@@ -10,7 +10,7 @@ import ProductLoader from "@/components/loaders/ProductLoader";
 gsap.registerPlugin(ScrollTrigger);
 
 const DEFAULT_DESCRIPTION =
-  "Discover handpicked pieces designed to elevate your everyday wardrobe.";
+  "Handpicked styles to elevate your everyday look.";
 
 export default function CuratedProducts({
   products = [],

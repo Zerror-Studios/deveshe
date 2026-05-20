@@ -4,12 +4,14 @@ import Navbar from "@/components/common/Navbar";
 import NavbarMobile from "@/components/common/NavbarMobile";
 import CartDrawer from "../cart/CartDrawer";
 import Footer from "../common/Footer";
+import NoiseOverlay from "../common/NoiseOverlay";
 const Layout = ({ children }) => {
   const { isCartOpen, openCart, closeCart } = useCartStore((state) => state);
 
   return (
     <>
       <div className="home-wrapper">
+        <NoiseOverlay />
         <Navbar openCart={openCart} />
         <NavbarMobile openCart={openCart} />
         {children}

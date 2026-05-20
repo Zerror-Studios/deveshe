@@ -6,11 +6,8 @@
   position: relative;
   overflow: hidden;
   color: black;
-  background-color: #fadcde;
-  background-image: url(/grainy-lg-bg.svg);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: bottom;
+  z-index: 10;
+  position: relative;
 }
 
 #contact_form .contact-hero {

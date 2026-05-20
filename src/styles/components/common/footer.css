@@ -1,146 +1,242 @@
-#footer {
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 50px;
-  border-top: 1px solid lightgray;
+/* ── FOOTER WRAPPER ── */
+footer {
+  padding: 0;
+  z-index: 10;
   position: relative;
-  background-color: #fadcde;
 }
 
-#footer_top {
-  width: 100%;
+/* ── HERO SECTION ── */
+.footer-hero {
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
-}
-
-#footer_links {
-  width: 50%;
-  display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
+  padding: 20px 32px 80px;
   gap: 24px;
 }
-.footer_link_wrap {
-  width: 100%;
-  max-width: 200px;
-  display: flex;
-  flex-direction: column;
-}
-.footer_link_wrap p {
+
+.footer-hero-headline {
+  color: #000;
+  max-width: 65%;
   font-family: heading;
-  font-weight: 400;
-  font-size: 14px;
-  margin-bottom: 5px;
-  letter-spacing: 0.3px;
-}
-.footer_link_wrap a {
-  position: relative;
-  font-family: paragraph;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.35;
-  margin-top: 4px;
-}
-.footer_link_wrap a::before {
-  content: "";
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background-color: #000;
-  border-radius: 50px;
-  left: -5px;
-  top: 50%;
-  transform: translateY(-50%);
-  opacity: 0;
-  transition: all ease 0.3s;
-}
-.footer_link_wrap a:hover:before {
-  left: -12px;
-  opacity: 1;
-}
-#footer_btn {
-  width: 50%;
-  display: flex;
-  justify-content: flex-end;
+  font-size: 6.5vw;
+  line-height: 0.9;
+  text-transform: uppercase;
 }
 
-#footer_bottom {
-  width: 100%;
+.footer-copyright-badge {
+  color: #000;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  font-family: heading;
+  font-size: 6.5vw;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.footer-copyright-badge .copy-symbol {
+  margin-right: 4px;
+  font-family: heading;
+  font-size: 6.5vw;
+  line-height: 0.9;
+}
+
+/* ── DESCRIPTION ── */
+.footer-description {
+  padding: 0 32px 32px;
+  font-size: clamp(14px, 1.5vw, 20px);
+  font-weight: 400;
+  line-height: 1.45;
+  color: #000;
+  max-width: 680px;
+}
+
+/* ── DIVIDER ── */
+.footer-divider {
+  border: none;
+  border-top: 1.5px solid #000;
+  margin: 0 32px;
+}
+
+/* ── BOTTOM ROW ── */
+.footer-bottom {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 24px;
+  padding: 28px 32px 40px;
+  align-items: start;
+  font-family: subTitleFont;
+}
+
+/* Column 1 – Brand */
+.footer-brand {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  text-align: right;
-  gap: 5px;
-  font-family: paragraph;
+  gap: 4px;
+}
+
+.footer-brand p {
+  font-size: clamp(12px, 1vw, 14px);
   font-weight: 400;
-  font-size: 14px;
+  color: #000;
+  line-height: 1.6;
+  margin: 0;
 }
 
-#footer_bottom a {
-  font-weight: 600;
-  position: relative;
-}
-#footer_bottom a::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 0.1vw;
-  background-color: black;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform ease 0.3s;
-}
-#footer_bottom a:hover::before {
-  transform: scaleX(1);
-  transform-origin: left;
+.footer-brand p:first-child {
+  font-weight: 700;
+  font-size: clamp(13px, 1.1vw, 15px);
 }
 
-@media (max-width: 576px) {
-  #footer {
-    gap: 40px;
-    padding: 30px 20px;
+.footer-dev-credit {
+  margin-top: 8px !important;
+  font-size: clamp(11px, 0.9vw, 12px) !important;
+  color: #888 !important;
+}
+
+.footer-dev-credit a {
+  color: #000;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-dev-credit a:hover {
+  opacity: 0.5;
+}
+
+/* Column 2 – Policy */
+.footer-policy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-policy a {
+  font-size: clamp(12px, 1vw, 14px);
+  font-weight: 400;
+  color: #000;
+  text-decoration: none;
+}
+
+.footer-policy a:hover {
+  text-decoration: underline;
+}
+
+/* Column 3 – Nav Links */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-links a {
+  font-size: clamp(12px, 1vw, 14px);
+  font-weight: 400;
+  color: #000;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+/* Column 4 – Social */
+.footer-social {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-social a {
+  font-size: clamp(12px, 1vw, 14px);
+  font-weight: 400;
+  color: #000;
+  text-decoration: none;
+}
+
+.footer-social a:hover {
+  text-decoration: underline;
+}
+
+/* ── TABLET (≤1024px) ── */
+@media (max-width: 1024px) {
+  .footer-hero-headline {
+    max-width: 60%;
   }
-  #footer_top {
+
+  .footer-bottom {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 24px;
+  }
+}
+
+/* ── MOBILE LANDSCAPE / LARGE PHONE (≤768px) ── */
+@media (max-width: 768px) {
+  .footer-hero {
     flex-direction: column;
-    gap: 15px;
-  }
-  #footer_links {
-    width: 100%;
-    flex-wrap: wrap;
-    gap: 0;
-  }
-  .footer_link_wrap {
-    width: 50%;
-    max-width: 50%;
-    margin-bottom: 25px;
-  }
-  #footer_bottom {
-    text-align: left;
     align-items: flex-start;
+    padding: 32px 20px 48px;
+    gap: 16px;
   }
-  #footer_btn {
-    width: 100%;
+
+  .footer-hero-headline {
+    max-width: 100%;
+    font-size: clamp(32px, 11vw, 64px);
+    white-space: normal;
+  }
+
+  .footer-copyright-badge {
+    font-size: clamp(32px, 11vw, 64px);
+  }
+
+  .footer-copyright-badge .copy-symbol {
+    font-size: clamp(32px, 11vw, 64px);
+  }
+
+  .footer-description {
+    padding: 0 20px 28px;
+    font-size: clamp(13px, 3.5vw, 17px);
+  }
+
+  .footer-divider {
+    margin: 0 20px;
+  }
+
+  .footer-bottom {
+    grid-template-columns: 1fr 1fr;
+    padding: 24px 20px 36px;
+    gap: 28px 20px;
   }
 }
 
-/* Tablets (portrait) */
-@media (min-width: 577px) and (max-width: 768px) {
-  #footer {
-    padding: 25px;
+/* ── SMALL PHONE (≤480px) ── */
+@media (max-width: 480px) {
+  .footer-hero {
+    padding: 24px 16px 40px;
   }
-  #footer_links {
-    flex-wrap: wrap;
-  }
-  .footer_link_wrap {
-    width: 45%;
-  }
-}
 
-@media (min-width: 769px) and (max-width: 992px) {
-  #footer {
-    padding: 25px;
+  .footer-hero-headline {
+    font-size: clamp(28px, 12vw, 48px);
+  }
+
+  .footer-copyright-badge,
+  .footer-copyright-badge .copy-symbol {
+    font-size: clamp(28px, 12vw, 48px);
+  }
+
+  .footer-description {
+    padding: 0 16px 24px;
+    font-size: 14px;
+  }
+
+  .footer-divider {
+    margin: 0 16px;
+  }
+
+  .footer-bottom {
+    grid-template-columns: 1fr 1fr;
+    padding: 20px 16px 32px;
+    gap: 24px 16px;
   }
 }

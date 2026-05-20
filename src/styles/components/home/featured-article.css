@@ -4,6 +4,8 @@
   padding: 120px 40px 40px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  z-index: 10;
+  position: relative;
 }
 
 

@@ -10,7 +10,7 @@
   background: none;
   cursor: pointer;
   font-family: heading;
-  color: red;
+  color: #fe0000;
   text-transform: uppercase;
   text-decoration: none;
   font-size: clamp(16px, 2.4vw, 26px);
@@ -18,7 +18,7 @@
 }
 
 .bracketSlideCta:focus-visible {
-  outline: 2px solid red;
+  outline: 2px solid #fe0000;
   outline-offset: 4px;
 }
 
@@ -45,7 +45,7 @@
   white-space: nowrap;
   line-height: 1;
   font-family: heading;
-  color: red;
+  color: #fe0000;
 }
 
 .bracketSlideCta:hover .bracketSlideCta__rail,

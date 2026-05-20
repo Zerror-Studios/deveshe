@@ -1,7 +1,8 @@
 #lookbook-Sec1 {
   width: 100%;
   height: auto;
-  background-color: #fadcde;
+  z-index: 10;
+  position: relative;
 }
 .lb-header-wrapper {
   width: 100%;
@@ -18,8 +19,6 @@
   z-index: 5;
   padding: 1.5rem 3vw;
   text-align: center;
-  mix-blend-mode: difference;
-  color: #fadcde;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -72,13 +71,15 @@
   font-size: 2.2vw;
   color: black;
   font-weight: 500;
-  background-color: #fadcde;
+  z-index: 10;
+  position: relative;
 }
 
 #lb-video-container {
   width: 100%;
   height: 105vh;
   position: relative;
+  z-index: 10;
 }
 #lb-video-overlay {
   position: absolute;
@@ -120,8 +121,8 @@
 #lb-banner2 {
   width: 100%;
   height: 200vh;
-  background-color: #fadcde;
   position: relative;
+  z-index: 10;
 }
 
 #main-banner-container {
@@ -178,7 +179,8 @@
   width: 100%;
   padding: 15vh 0;
   padding-left: 16.388vw;
-  background-color: #fadcde;
+  z-index: 10;
+  position: relative;
 }
 #lb-section3-ig {
   width: 46.666vw;
@@ -200,7 +202,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 40px;
-  background-color: #fadcde;
+  z-index: 10;
+  position: relative;
 }
 .lb-sec4-img {
   width: 49.5%;
@@ -223,7 +226,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  background-color: #fadcde;
+  z-index: 10;
+  position: relative;
 }
 .lb-section5-ig-wrap {
   width: 48%;
@@ -255,7 +259,8 @@
 #prodcut-container.lookbook-product-grid {
   width: 100%;
   padding: 0 40px 40px;
-  background-color: #fadcde;
+  z-index: 10;
+  position: relative;
 }
 
 #prodcut-container.prodcut-container-mobile {
