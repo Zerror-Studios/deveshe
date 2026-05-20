@@ -251,8 +251,32 @@
   align-items: center;
   justify-content: center;
   gap: 0.46875rem;
-  padding: 0.4vw 3vw;
+  padding: 0.4vw 0;
   position: relative;
+  width: 100%;
+}
+
+.curated-filter-strip__desktop {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+}
+
+.curated-filter-strip__filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.46875rem;
+  position: relative;
+}
+
+.curated-filter-strip__count {
+  color: #c9a84c;
+  font-weight: 400;
 }
 
 /* ─── Item ────────────────────────────────────────────────────────────────── */
@@ -343,6 +367,7 @@
   transition: clip-path 0.5s cubic-bezier(0.77, 0, 0.175, 1);
 
   pointer-events: none;
+  border-radius: 5px;
 }
 
 .curated-filter-strip__menu--open {
@@ -353,7 +378,10 @@
 /* ─── Options — match navbar .nav-link-wrapper a ─────────────────────────── */
 
 .curated-filter-strip__option {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
   border: none;
   background: transparent;
   text-align: left;
@@ -364,16 +392,64 @@
   color: #000;
   text-transform: capitalize;
   line-height: 1.4;
-  width: fit-content;
+  width: 100%;
+  max-width: 280px;
   cursor: pointer;
-  padding: 0;
-  border-radius: 0;
+  padding: 10px 12px;
+  border-radius: 2px;
   text-decoration: none;
-  transition: color 0.2s ease, opacity 0.2s ease;
+  transition: background-color 0.25s ease, color 0.2s ease;
+}
+
+.curated-filter-strip__option.is-selected {
+  background-color: #fadcde;
+}
+
+.curated-filter-strip__option-text {
+  flex: 0 1 auto;
+}
+
+.curated-filter-strip__option-check {
+  flex-shrink: 0;
+  font-size: 14px;
+  line-height: 1;
+  color: #000;
 }
 
 .curated-filter-strip__option:hover {
-  color: red;
+  color: #000;
+}
+
+.curated-filter-strip__option.is-selected:hover {
+  background-color: #fadcde;
+}
+
+.curated-filter-strip__reset {
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  flex-shrink: 0;
+  border: none;
+  outline: none;
+  appearance: none;
+  background-color: #000;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: calc(8px + 0.229167vw);
+  font-weight: 400;
+  font-family: paragraph;
+  letter-spacing: 0.3px;
+  line-height: 1;
+  padding: 0.6875rem 1.25rem 0.59375rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+.curated-filter-strip__reset:hover {
+  opacity: 0.85;
 }
 
 /* Mobile navbar clearance (desktop nav hidden ≤1000px) */
