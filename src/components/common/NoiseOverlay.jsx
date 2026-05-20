@@ -1,9 +1,10 @@
-import React from 'react'
+import React from "react";
 
-const NoiseOverlay = () => {
+export default function NoiseOverlay({ className = "" }) {
   return (
-    <div className="noise"></div>
-  )
+    <div
+      className={className ? `noise ${className}` : "noise"}
+      aria-hidden="true"
+    />
+  );
 }
-
-export default NoiseOverlay

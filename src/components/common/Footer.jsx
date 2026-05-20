@@ -1,9 +1,11 @@
 import Link from "next/link";
 import React from "react";
+import NoiseOverlay from "@/components/common/NoiseOverlay";
 
 const Footer = () => {
   return (
     <footer>
+      <NoiseOverlay className="noise--footer" />
 
       {/* Hero */}
       <div className="footer-hero">
@@ -17,9 +19,16 @@ const Footer = () => {
       </div>
 
       {/* Description */}
-      <p className="footer-description para-small">
-        Created by the DeVeSheDreams team, this store and signature collection
-        celebrates our collective creativity and passion for apparel. Carefully designed.
+      <p className="footer-description">
+        <span className="footer-description__line">
+          Created by the DeVeSheDreams team, this store and
+        </span>
+        <span className="footer-description__line">
+          signature collection celebrates our collective creativity
+        </span>
+        <span className="footer-description__line">
+          and passion for apparel. Carefully designed.
+        </span>
       </p>
 
       {/* Divider */}

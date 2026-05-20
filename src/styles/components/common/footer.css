@@ -4,6 +4,15 @@ footer {
   z-index: 10;
   position: relative;
   background-color: #fadcde;
+  overflow: hidden;
+}
+
+footer .footer-hero,
+footer .footer-description,
+footer .footer-divider,
+footer .footer-bottom {
+  position: relative;
+  z-index: 2;
 }
 
 /* ── HERO SECTION ── */
@@ -46,11 +55,17 @@ footer {
 /* ── DESCRIPTION ── */
 .footer-description {
   padding: 0 32px 32px;
-  font-size: clamp(14px, 1.5vw, 20px);
+  margin: 0;
+  font-family: subTitleFont, sans-serif;
+  font-size: clamp(12px, 1vw, 14px);
   font-weight: 400;
-  line-height: 1.45;
+  line-height: 1.6;
   color: #000;
-  max-width: 680px;
+  max-width: 420px;
+}
+
+.footer-description__line {
+  display: block;
 }
 
 /* ── DIVIDER ── */
@@ -188,7 +203,15 @@ footer {
 
   .footer-description {
     padding: 0 20px 28px;
-    font-size: clamp(13px, 3.5vw, 17px);
+    max-width: none;
+  }
+
+  .footer-description__line {
+    display: inline;
+  }
+
+  .footer-description__line + .footer-description__line::before {
+    content: " ";
   }
 
   .footer-divider {
@@ -210,7 +233,6 @@ footer {
 
   .footer-description {
     padding: 0 16px 24px;
-    font-size: 14px;
   }
 
   .footer-divider {
