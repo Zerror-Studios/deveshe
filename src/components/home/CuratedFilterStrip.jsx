@@ -47,6 +47,29 @@ const FILTER_MENUS = [
   },
 ];
 
+function getMenuCount(selections, menuId) {
+  return selections[menuId]?.length ?? 0;
+}
+
+function getTotalCount(selections) {
+  return Object.values(selections).reduce(
+    (sum, items) => sum + (items?.length ?? 0),
+    0
+  );
+}
+
+function isOptionSelected(selections, menuId, option) {
+  return selections[menuId]?.includes(option) ?? false;
+}
+
+function toggleSelection(prev, menuId, option) {
+  const current = prev[menuId] ?? [];
+  const next = current.includes(option)
+    ? current.filter((item) => item !== option)
+    : [...current, option];
+  return { ...prev, [menuId]: next };
+}
+
 const PILL_IDX = [1, 2];
 const MOBILE_NAV_OFFSET = 70;
 const MOBILE_BREAKPOINT = 1000;
@@ -82,15 +105,7 @@ function MobileFilterPopup({
 }) {
   const [portalReady, setPortalReady] = useState(false);
 
-  const getMenuCount = (menuId) => selections[menuId]?.length ?? 0;
-
-  const totalCount = Object.values(selections).reduce(
-    (sum, items) => sum + (items?.length ?? 0),
-    0
-  );
-
-  const isSelected = (menuId, option) =>
-    selections[menuId]?.includes(option) ?? false;
+  const totalCount = getTotalCount(selections);
 
   useEffect(() => {
     setPortalReady(true);
@@ -143,7 +158,7 @@ function MobileFilterPopup({
         <div className="cfs-mobile-popup__body">
           {FILTER_MENUS.map((menu) => {
             const isExpanded = expandedId === menu.id;
-            const menuCount = getMenuCount(menu.id);
+            const menuCount = getMenuCount(selections, menu.id);
             return (
               <div key={menu.id} className="cfs-mobile-popup__section">
                 <button
@@ -169,7 +184,7 @@ function MobileFilterPopup({
                 >
                   <div className="cfs-mobile-popup__options">
                     {menu.options.map((opt) => {
-                      const selected = isSelected(menu.id, opt);
+                      const selected = isOptionSelected(selections, menu.id, opt);
                       return (
                         <button
                           key={opt}
@@ -217,9 +232,10 @@ export default function CuratedFilterStrip() {
   const [rootMinHeight, setRootMinHeight] = useState(undefined);
   const [isMobilePopupOpen, setIsMobilePopupOpen] = useState(false);
   const [mobileExpandedId, setMobileExpandedId] = useState(null);
-  const [mobileSelections, setMobileSelections] = useState({});
+  const [selections, setSelections] = useState({});
 
   const stripRef = useRef(null);
+  const totalCount = getTotalCount(selections);
   const anchorYRef = useRef(null);
   const wasPinnedRef = useRef(false);
 
@@ -235,19 +251,12 @@ export default function CuratedFilterStrip() {
     setMobileExpandedId(null);
   }, []);
 
-  const toggleMobileOption = (menuId, option) => {
-    setMobileSelections((prev) => {
-      const current = prev[menuId] ?? [];
-      const next = current.includes(option)
-        ? current.filter((item) => item !== option)
-        : [...current, option];
-
-      return { ...prev, [menuId]: next };
-    });
+  const toggleOption = (menuId, option) => {
+    setSelections((prev) => toggleSelection(prev, menuId, option));
   };
 
-  const resetMobileSelections = () => {
-    setMobileSelections({});
+  const resetSelections = () => {
+    setSelections({});
     setMobileExpandedId(null);
   };
   const openMobilePopup = () => {
@@ -364,59 +373,106 @@ export default function CuratedFilterStrip() {
                 onClick={openMobilePopup}
               >
                 Filter
+                {totalCount > 0 && (
+                  <span className="curated-filter-strip__count">
+                    {" "}
+                    / {totalCount}
+                  </span>
+                )}
               </button>
             ) : (
-              <>
-                {FILTER_MENUS.map((menu, idx) => {
-                  const isOpen = activeMenu === menu.id;
-                  const isPill = PILL_IDX.includes(idx);
+              <div className="curated-filter-strip__desktop">
+                <div className="curated-filter-strip__filters">
+                  {FILTER_MENUS.map((menu, idx) => {
+                    const isOpen = activeMenu === menu.id;
+                    const isPill = PILL_IDX.includes(idx);
+                    const menuCount = getMenuCount(selections, menu.id);
 
-                  return (
-                    <div
-                      key={menu.id}
-                      className={`curated-filter-strip__item${
-                        isOpen ? " curated-filter-strip__item--open" : ""
-                      }`}
-                      onMouseEnter={() => setActiveMenu(menu.id)}
-                    >
-                      <button
-                        type="button"
-                        className={`curated-filter-strip__trigger${
-                          isOpen ? " curated-filter-strip__trigger--open" : ""
+                    return (
+                      <div
+                        key={menu.id}
+                        className={`curated-filter-strip__item${
+                          isOpen ? " curated-filter-strip__item--open" : ""
                         }`}
-                        aria-expanded={isOpen}
-                        aria-haspopup="listbox"
-                        onClick={() => setActiveMenu(isOpen ? null : menu.id)}
+                        onMouseEnter={() => setActiveMenu(menu.id)}
                       >
-                        {isPill && <PillSvg className="cfs-pill-svg--left" />}
-                        <span>{menu.label}</span>
-                        {isPill && <PillSvg className="cfs-pill-svg--right" />}
-                      </button>
-                    </div>
-                  );
-                })}
+                        <button
+                          type="button"
+                          className={`curated-filter-strip__trigger${
+                            isOpen ? " curated-filter-strip__trigger--open" : ""
+                          }`}
+                          aria-expanded={isOpen}
+                          aria-haspopup="listbox"
+                          onClick={() => setActiveMenu(isOpen ? null : menu.id)}
+                        >
+                          {isPill && <PillSvg className="cfs-pill-svg--left" />}
+                          <span>
+                            {menu.label}
+                            {menuCount > 0 && (
+                              <span className="curated-filter-strip__count">
+                                {" "}
+                                / {menuCount}
+                              </span>
+                            )}
+                          </span>
+                          {isPill && <PillSvg className="cfs-pill-svg--right" />}
+                        </button>
+                      </div>
+                    );
+                  })}
 
-                <div
-                  className={`curated-filter-strip__menu ${
-                    activeData ? "curated-filter-strip__menu--open" : ""
-                  }`}
-                  role="listbox"
-                  aria-label={activeData?.label}
-                  onMouseLeave={() => setActiveMenu(null)}
-                >
-                  {activeData?.options.map((opt) => (
-                    <button
-                      key={opt}
-                      type="button"
-                      className="curated-filter-strip__option"
-                      role="option"
-                      onClick={() => setActiveMenu(null)}
-                    >
-                      {opt}
-                    </button>
-                  ))}
+                  <div
+                    className={`curated-filter-strip__menu ${
+                      activeData ? "curated-filter-strip__menu--open" : ""
+                    }`}
+                    role="listbox"
+                    aria-label={activeData?.label}
+                    onMouseLeave={() => setActiveMenu(null)}
+                  >
+                    {activeData?.options.map((opt) => {
+                      const selected = isOptionSelected(
+                        selections,
+                        activeData.id,
+                        opt
+                      );
+                      return (
+                        <button
+                          key={opt}
+                          type="button"
+                          className={`curated-filter-strip__option${
+                            selected ? " is-selected" : ""
+                          }`}
+                          role="option"
+                          aria-selected={selected}
+                          onClick={() => toggleOption(activeData.id, opt)}
+                        >
+                          <span className="curated-filter-strip__option-text">
+                            {opt}
+                          </span>
+                          {selected && (
+                            <span
+                              className="curated-filter-strip__option-check"
+                              aria-hidden
+                            >
+                              ✓
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </>
+
+                {totalCount > 0 && (
+                  <button
+                    type="button"
+                    className="curated-filter-strip__reset"
+                    onClick={resetSelections}
+                  >
+                    Reset all
+                  </button>
+                )}
+              </div>
             )}
           </div>
         </div>
@@ -429,9 +485,9 @@ export default function CuratedFilterStrip() {
         onToggleSection={(id) =>
           setMobileExpandedId((prev) => (prev === id ? null : id))
         }
-        selections={mobileSelections}
-        onToggleOption={toggleMobileOption}
-        onReset={resetMobileSelections}
+        selections={selections}
+        onToggleOption={toggleOption}
+        onReset={resetSelections}
         onApply={closeMobilePopup}
       />
     </>
