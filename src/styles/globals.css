@@ -706,18 +706,15 @@ input[type="number"] {
   z-index: 9;
 }
 
-.noise--footer,
-.noise--drawer {
+.noise-overlay {
   position: absolute;
   inset: 0;
   z-index: 1;
 }
 
-.noise--drawer {
-  z-index: 3;
-}
 
-.noise:before {
+
+.noise:before , .noise-overlay:before {
   animation: noise 1s steps(2) infinite;
   background-image: url("/noise2.jpeg");
   content: "";

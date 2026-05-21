@@ -4,6 +4,7 @@ import React from "react";
 const Footer = () => {
   return (
     <footer>
+      <div className="noise-overlay"></div>
 
       {/* Hero */}
       <div className="footer-hero">
