@@ -55,6 +55,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 30px;
+  column-gap: 20px;
 }
 
 /* CARD */
@@ -77,17 +78,6 @@
 
 .curated-image {
   object-fit: cover;
-  transition: transform 550ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    filter 550ms cubic-bezier(0.2, 0.8, 0.2, 1);
-  will-change: transform, filter;
-}
-
-/* hover effects only on devices that actually hover */
-@media (hover: hover) and (pointer: fine) {
-  .curated-card:hover .curated-image {
-    transform: scale(1.06);
-    filter: brightness(92%);
-  }
 }
 
 .curated-imagePlaceholder {
@@ -129,13 +119,6 @@
   flex-shrink: 0;
   text-align: right;
   white-space: nowrap;
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-  .curated-image {
-    transition: none !important;
-  }
 }
 
 /* RESPONSIVE */
