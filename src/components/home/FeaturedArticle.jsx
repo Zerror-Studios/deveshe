@@ -72,20 +72,18 @@ export default function FeaturedArticle() {
             {/* 🔥 CONTENT */}
             <div className="article-content">
                 <h2 className="article-title">
-                    Culture Canvas: Sam Lake <span>[NEW]</span>
+                What to wear in 40&deg;C without looking like you gave up 
                 </h2>
 
                 <p className="article-desc">
-                    Creative director, writer, world-builder, and cult figure - Sam Lake is
-                    always chasing the next evolution in storytelling...
+                Why is linen the only fabric that makes sense in the Indian Summer?...
                 </p>
 
-                <p className="article-date">[9.26.2025]</p>
 
                 <BracketSlideCta
-                    label="View all articles"
-                    href="/lookbook"
-                    ariaLabel="View all articles"
+                    label="Read more"
+                    href="/blog/what-to-wear-in-40c-without-looking-like-you-gave-up"
+                    ariaLabel="Read more"
                 />
             </div>
         </section>

@@ -356,10 +356,10 @@
   justify-content: flex-end;
   gap: 0.75rem;
 
-  min-height: 350px;
-  max-height: 500px;
+  min-height: 400px;
+  max-height: 600px;
   overflow-y: auto;
-  padding: 2rem;
+  padding: 2vw 2rem;
 
   z-index: 2;
 
@@ -383,26 +383,27 @@
   justify-content: flex-start;
   gap: 10px;
   border: none;
-  background: transparent;
+  background: transparent !important;
   text-align: left;
-  font-family: paragraphStyleB, paragraph, sans-serif;
-  font-size: 16px;
-  font-weight: 100;
-  letter-spacing: 1px;
-  color: #000;
-  text-transform: capitalize;
-  line-height: 1.4;
-  width: 100%;
-  max-width: 280px;
+  font-family: paragraphStyleB, sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 100 !important;
+  letter-spacing: 1px !important;
+  color: #000 !important;
+  text-transform: capitalize !important;
+  line-height: 1.4 !important;
+  width: fit-content !important;
+  max-width: 100%;
   cursor: pointer;
-  padding: 10px 12px;
-  border-radius: 2px;
-  text-decoration: none;
-  transition: background-color 0.25s ease, color 0.2s ease;
+  padding: 0 !important;
+  border-radius: 0;
+  text-decoration: none !important;
+  transition: opacity 0.2s ease, color 0.2s ease !important;
 }
 
 .curated-filter-strip__option.is-selected {
   background-color: #fadcde;
+  padding: 0 !important;
 }
 
 .curated-filter-strip__option-text {
@@ -411,17 +412,21 @@
 
 .curated-filter-strip__option-check {
   flex-shrink: 0;
-  font-size: 14px;
+  font-family: paragraphStyleB, sans-serif;
+  font-size: 16px;
+  font-weight: 100;
   line-height: 1;
   color: #000;
 }
 
 .curated-filter-strip__option:hover {
-  color: #000;
+  color: red !important;
+  background-color: transparent !important;
 }
 
 .curated-filter-strip__option.is-selected:hover {
-  background-color: #fadcde;
+  color: red !important;
+  background-color: #fadcde !important;
 }
 
 .curated-filter-strip__reset {
@@ -639,6 +644,7 @@
   padding-bottom: 4px;
 }
 
+/* Match .nav-mobile-popup__link */
 .cfs-mobile-popup__option {
   border: none;
   background: transparent;
@@ -649,12 +655,13 @@
   justify-content: flex-start;
   gap: 10px;
   text-align: left;
-  font-family: paragraph;
+  font-family: paragraph, sans-serif;
   font-size: 14px;
   font-weight: 400;
   letter-spacing: 0.2px;
   text-transform: capitalize;
   color: #000;
+  text-decoration: none;
   cursor: pointer;
   border-radius: 2px;
   transition: background-color 0.25s ease, color 0.2s ease;
@@ -670,17 +677,21 @@
 
 .cfs-mobile-popup__option-check {
   flex-shrink: 0;
+  font-family: paragraph, sans-serif;
   font-size: 14px;
+  font-weight: 400;
   line-height: 1;
   color: #000;
 }
 
 .cfs-mobile-popup__option:hover {
+  background-color: #fadcde;
   color: #000;
 }
 
 .cfs-mobile-popup__option.is-selected:hover {
   background-color: #fadcde;
+  color: #000;
 }
 
 .cfs-mobile-popup__footer {

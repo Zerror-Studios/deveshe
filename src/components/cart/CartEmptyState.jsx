@@ -1,12 +1,22 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const SPEED = 2.6;
 const DEFAULT_ORB_SIZE = 112;
+const IMAGE_ROTATE_MS = 10_000;
+
+const BAG_ORB_IMAGES = [
+  "/assets/images/bag/buy.webp",
+  "/assets/images/bag/sheldon.webp",
+  "/assets/images/bag/pig.webp",
+  "/assets/images/bag/bob.gif",
+  "/assets/images/bag/zero.webp",
+];
 
 export default function CartEmptyState({ active }) {
+  const [imageIndex, setImageIndex] = useState(0);
   const playgroundRef = useRef(null);
   const orbRef = useRef(null);
   const stateRef = useRef({
@@ -105,6 +115,21 @@ export default function CartEmptyState({ active }) {
     };
   }, [active]);
 
+  useEffect(() => {
+    if (!active) {
+      setImageIndex(0);
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      setImageIndex((prev) => (prev + 1) % BAG_ORB_IMAGES.length);
+    }, IMAGE_ROTATE_MS);
+
+    return () => clearInterval(intervalId);
+  }, [active]);
+
+  const orbSrc = BAG_ORB_IMAGES[imageIndex];
+
   return (
     <div ref={playgroundRef} className="cart-empty">
       <div className="cart-empty__copy">
@@ -114,12 +139,14 @@ export default function CartEmptyState({ active }) {
 
       <div ref={orbRef} className="cart-empty__orb">
         <Image
-          src="/buy.webp"
+          key={orbSrc}
+          src={orbSrc}
           alt=""
           fill
           sizes="(max-width: 576px) 100px, (max-width: 992px) 120px, 132px"
           className="cart-empty__orb-img"
-          priority
+          priority={imageIndex === 0}
+          unoptimized={orbSrc.endsWith(".gif")}
         />
       </div>
     </div>
