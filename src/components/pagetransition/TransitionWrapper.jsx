@@ -48,9 +48,9 @@ export default function TransitionWrapper({ children }) {
             0
           )
           .to(
-            logoRef.current,            // ← animate logo in
+            logoRef.current,
             { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.7)" },
-            0.3
+            ">"
           );
 
         return () => {
