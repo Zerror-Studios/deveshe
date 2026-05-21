@@ -10,7 +10,10 @@
   justify-content: center;
   pointer-events: none;
   opacity: 0;
-  background-color: #fadcde;
+}
+
+.page-transition-overlay.is-active {
+  pointer-events: all;
 }
 
 .page-transition-overlay__svg {

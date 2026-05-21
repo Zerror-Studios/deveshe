@@ -199,8 +199,6 @@ footer .footer-bottom {
 /* ── MOBILE LANDSCAPE / LARGE PHONE (≤768px) ── */
 @media (max-width: 768px) {
   .footer-hero {
-    flex-direction: column;
-    align-items: flex-start;
     padding: 32px 20px 48px;
     gap: 16px;
   }
@@ -232,9 +230,28 @@ footer .footer-bottom {
   }
 
   .footer-bottom {
+    display: grid;
     grid-template-columns: 1fr 1fr;
     padding: 24px 20px 36px;
     gap: 28px 20px;
+  }
+
+  /* Row 1: pages | policy — Row 2: social | copyright */
+  .footer-links {
+    order: 1;
+  }
+
+  .footer-policy {
+    order: 2;
+  }
+
+  .footer-social {
+    order: 3;
+  }
+
+  .footer-brand {
+    order: 4;
+    grid-column: 1 / -1;
   }
 }
 
@@ -253,7 +270,6 @@ footer .footer-bottom {
   }
 
   .footer-bottom {
-    grid-template-columns: 1fr 1fr;
     padding: 20px 16px 32px;
     gap: 24px 16px;
   }
