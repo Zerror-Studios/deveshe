@@ -1,21 +1,6 @@
-import React from 'react'
-import CommonButton from '@/components/common/CommonButton'
+import { BLOG_POSTS } from "@/data/blogs";
+import BlogsClient from "./BlogsClient";
 
-const page = () => {
-  return (
-    <div id="status_section">
-      <h2>
-        Work in Progress
-      </h2>
-
-      <p>
-        This section is currently under development and will be available soon.
-        We're working hard to bring you fresh content and new features.
-      </p>
-
-      <CommonButton title={"Go Back to Home"} href={"/"} />
-    </div>
-  )
+export default function BlogsPage() {
+  return <BlogsClient posts={BLOG_POSTS} />;
 }
-
-export default page

@@ -6,7 +6,13 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import CuratedFilterStrip from "@/components/home/CuratedFilterStrip";
 
-const HeroSection = ({ heroImageSrc, categoryName, isDefault = false }) => {
+const HeroSection = ({
+  heroImageSrc,
+  categoryName,
+  isDefault = false,
+  showFilter = true,
+  description = "Discover our latest collection of outerwear. Carefully crafted from the finest fabrics and premium hardware.",
+}) => {
   const resolvedSrc = isDefault ? heroImageSrc : encodeURI(heroImageSrc);
   const sectionRef = useRef(null);
   const innerRef = useRef(null);
@@ -30,10 +36,12 @@ const HeroSection = ({ heroImageSrc, categoryName, isDefault = false }) => {
         transformOrigin: "50% 0%",
         force3D: true,
       });
-      gsap.set(filterWrapRef.current, {
-        autoAlpha: 0,
-        pointerEvents: "none",
-      });
+      if (filterWrapRef.current) {
+        gsap.set(filterWrapRef.current, {
+          autoAlpha: 0,
+          pointerEvents: "none",
+        });
+      }
 
       gsap.to(innerRef.current, {
         yPercent: -100,
@@ -81,23 +89,25 @@ const HeroSection = ({ heroImageSrc, categoryName, isDefault = false }) => {
           scrub: true,
         },
       });
-      gsap.to(filterWrapRef.current, {
-        autoAlpha: 1,
-        pointerEvents: "auto",
-        duration: 1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "bottom 60%",
-          end: "bottom 50%",
-          scrub: true,
-        },
-      });
+      if (showFilter && filterWrapRef.current) {
+        gsap.to(filterWrapRef.current, {
+          autoAlpha: 1,
+          pointerEvents: "auto",
+          duration: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "bottom 60%",
+            end: "bottom 50%",
+            scrub: true,
+          },
+        });
+      }
 
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [resolvedSrc]);
+  }, [resolvedSrc, showFilter]);
 
   return (
     <div ref={sectionRef} className="shop_hero_section">
@@ -105,13 +115,12 @@ const HeroSection = ({ heroImageSrc, categoryName, isDefault = false }) => {
         {categoryName && (
           <span ref={categoryNameRef} className="shop_hero_section_category_name">{categoryName}</span>
         )}
-        <p ref={paragraphRef}>
-          Discover our latest collection of outerwear. Carefully crafted from
-          the finest fabrics and premium hardware.
-        </p>
-        <div ref={filterWrapRef} className="shop_hero_filter_wrap">
-          <CuratedFilterStrip />
-        </div>
+        <p ref={paragraphRef}>{description}</p>
+        {showFilter ? (
+          <div ref={filterWrapRef} className="shop_hero_filter_wrap">
+            <CuratedFilterStrip />
+          </div>
+        ) : null}
       </div>
       <div ref={innerRef} className="shop_hero_section_inner">
         <img

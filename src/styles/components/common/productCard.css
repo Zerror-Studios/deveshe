@@ -10,35 +10,18 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
-  transition: transform 650ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    filter 650ms cubic-bezier(0.2, 0.8, 0.2, 1);
-  transform: scale(1);
-  will-change: transform, filter;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .common_product_card:hover img {
-    transform: scale(1.04);
-    filter: brightness(1.06) contrast(1.02) saturate(1.03);
-  }
 }
 
 .product_card_details {
   width: 100%;
   position: absolute;
-  bottom: -10%;
+  bottom: 0;
   left: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1vw;
   color: #fff;
-  transition: transform 650ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    bottom 650ms cubic-bezier(0.2, 0.8, 0.2, 1);
-  transform: translateY(0);
-}
-.common_product_card:hover .product_card_details {
-  bottom: 0;
 }
 
 .product_card_details h4 {
@@ -47,27 +30,6 @@
   font-size: 14px;
   line-height: 1.35;
   font-style: initial;
-  transform: scale(1);
-  transform-origin: left center;
-  transition: transform 650ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .common_product_card:hover .product_card_details {
-    transform: translateY(-2px);
-  }
-
-  .common_product_card:hover .product_card_details h4 {
-    transform: scale(1.04);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .common_product_card img,
-  .product_card_details,
-  .product_card_details h4 {
-    transition: none !important;
-  }
 }
 
 @media (min-width: 445px) and (max-width: 576px) {

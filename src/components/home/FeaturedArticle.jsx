@@ -82,7 +82,7 @@ export default function FeaturedArticle() {
 
                 <BracketSlideCta
                     label="Read more"
-                    href="/blog/what-to-wear-in-40c-without-looking-like-you-gave-up"
+                    href="/blogs/what-to-wear-in-40c-without-looking-like-you-gave-up"
                     ariaLabel="Read more"
                 />
             </div>
