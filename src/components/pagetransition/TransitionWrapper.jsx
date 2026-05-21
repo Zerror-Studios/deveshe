@@ -31,9 +31,13 @@ export default function TransitionWrapper({ children }) {
     <TransitionRouter
       auto
       leave={(next) => {
-        const tl = gsap.timeline({ onComplete: next });
+        const overlay = transitionOverlayRef.current;
+        const tl = gsap.timeline({
+          onStart: () => overlay?.classList.add("is-active"),
+          onComplete: next,
+        });
 
-        tl.to(transitionOverlayRef.current, {
+        tl.to(overlay, {
           opacity: 1,
           duration: 0.5,
           ease: "power2.inOut",
@@ -49,10 +53,19 @@ export default function TransitionWrapper({ children }) {
             0.3
           );
 
-        return () => tl.kill();
+        return () => {
+          tl.kill();
+          overlay?.classList.remove("is-active");
+        };
       }}
       enter={(next) => {
-        const tl = gsap.timeline({ onComplete: next });
+        const overlay = transitionOverlayRef.current;
+        const tl = gsap.timeline({
+          onComplete: () => {
+            overlay?.classList.remove("is-active");
+            next();
+          },
+        });
 
         tl.to(logoRef.current, {        // ← fade logo out first
           opacity: 0,
@@ -66,13 +79,16 @@ export default function TransitionWrapper({ children }) {
             0
           )
           .to(
-            transitionOverlayRef.current,
+            overlay,
             { opacity: 0, duration: 0.5, ease: "power2.inOut" },
             1
           )
           .set(svgPathRef.current, { drawSVG: "0%", strokeWidth: 2 });
 
-        return () => tl.kill();
+        return () => {
+          tl.kill();
+          overlay?.classList.remove("is-active");
+        };
       }}
     >
       <div
