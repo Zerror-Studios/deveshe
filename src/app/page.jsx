@@ -1,6 +1,7 @@
 import React from "react";
 import { createApolloClientServer } from "@/lib/apolloClient.server";
-import { GET_PRODUCTS } from "@/graphql";
+import { mapBlogForListing } from "@/data/blogs";
+import { GET_CLIENT_SIDE_BLOGS, GET_PRODUCTS } from "@/graphql";
 import { ProductStatus } from "@/utils/Constant";
 import HomeClient from "./HomeClient";
 
@@ -60,24 +61,39 @@ export async function generateMetadata() {
 export default async function HomePage() {
   const client = createApolloClientServer();
   let productData = [];
+  let latestBlog = null;
 
   try {
-    const { data } = await client.query({
-      query: GET_PRODUCTS,
-      variables: {
-        offset: 0,
-        limit: 1000,
-        filters: {
-          categoryIds: ["6898b3cdddf0354e025da816"],
-          status: ProductStatus.PUBLISHED,
+    const [productRes, blogsRes] = await Promise.all([
+      client.query({
+        query: GET_PRODUCTS,
+        variables: {
+          offset: 0,
+          limit: 1000,
+          filters: {
+            categoryIds: ["6898b3cdddf0354e025da816"],
+            status: ProductStatus.PUBLISHED,
+          },
         },
-      },
-    });
-    productData = data?.getClientSideProducts?.products || [];
+      }),
+      client.query({
+        query: GET_CLIENT_SIDE_BLOGS,
+        variables: {
+          limit: 1,
+          offset: 0,
+          filter: {},
+        },
+      }),
+    ]);
+
+    productData = productRes?.data?.getClientSideProducts?.products || [];
+    latestBlog = mapBlogForListing(
+      blogsRes?.data?.getClientSideBlogs?.blogs?.[0]
+    );
   } catch (error) {
-    console.error("Error fetching home products:", error?.message);
+    console.error("Error fetching home page data:", error?.message);
   }
 
-  return <HomeClient productData={productData} />;
+  return <HomeClient productData={productData} latestBlog={latestBlog} />;
 }
 
