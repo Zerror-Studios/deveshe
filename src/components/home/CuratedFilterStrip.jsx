@@ -72,6 +72,14 @@ function toggleSelection(prev, menuId, option) {
 
 const PILL_IDX = [1, 2];
 const MOBILE_NAV_OFFSET = 70;
+const FILTER_DROPDOWN_ZONE =
+  ".curated-filter-strip__filters, .curated-filter-strip__menu, .curated-filter-strip__reset";
+
+function closeFilterUnlessEnteringZone(e, setActiveMenu) {
+  const related = e.relatedTarget;
+  if (related?.closest?.(FILTER_DROPDOWN_ZONE)) return;
+  setActiveMenu(null);
+}
 const MOBILE_BREAKPOINT = 1000;
 
 function getNavOffset() {
@@ -411,6 +419,7 @@ export default function CuratedFilterStrip() {
   }, []);
 
   const activeData = FILTER_MENUS.find((m) => m.id === activeMenu);
+  const activeMenuOpen = Boolean(activeData);
 
   return (
     <>
@@ -441,8 +450,14 @@ export default function CuratedFilterStrip() {
                 )}
               </button>
             ) : (
-              <div className="curated-filter-strip__desktop">
-                <div className="curated-filter-strip__filters">
+              <div
+                className="curated-filter-strip__desktop"
+                onMouseLeave={(e) => closeFilterUnlessEnteringZone(e, setActiveMenu)}
+              >
+                <div
+                  className="curated-filter-strip__filters"
+                  onMouseLeave={(e) => closeFilterUnlessEnteringZone(e, setActiveMenu)}
+                >
                   {FILTER_MENUS.map((menu, idx) => {
                     const isOpen = activeMenu === menu.id;
                     const isPill = PILL_IDX.includes(idx);
@@ -482,44 +497,53 @@ export default function CuratedFilterStrip() {
                   })}
 
                   <div
-                    className={`curated-filter-strip__menu ${
-                      activeData ? "curated-filter-strip__menu--open" : ""
+                    className={`curated-filter-strip__menu${
+                      activeMenuOpen ? " curated-filter-strip__menu--open" : ""
                     }`}
                     role="listbox"
                     aria-label={activeData?.label}
-                    onMouseLeave={() => setActiveMenu(null)}
+                    onMouseLeave={(e) =>
+                      closeFilterUnlessEnteringZone(e, setActiveMenu)
+                    }
                   >
-                    {activeData?.options.map((opt) => {
-                      const selected = isOptionSelected(
-                        selections,
-                        activeData.id,
-                        opt
-                      );
-                      return (
-                        <button
-                          key={opt}
-                          type="button"
-                          className={`curated-filter-strip__option${
-                            selected ? " is-selected" : ""
-                          }`}
-                          role="option"
-                          aria-selected={selected}
-                          onClick={() => toggleOption(activeData.id, opt)}
-                        >
-                          <span className="curated-filter-strip__option-text">
-                            {opt}
-                          </span>
-                          {selected && (
-                            <span
-                              className="curated-filter-strip__option-check"
-                              aria-hidden
+                    {activeMenuOpen ? (
+                      <div key={activeMenu} className="curated-filter-strip__menu__list">
+                        {activeData.options.map((opt, optIdx) => {
+                          const selected = isOptionSelected(
+                            selections,
+                            activeData.id,
+                            opt
+                          );
+                          return (
+                            <button
+                              key={opt}
+                              type="button"
+                              className={`curated-filter-strip__option${
+                                selected ? " is-selected" : ""
+                              }`}
+                              role="option"
+                              aria-selected={selected}
+                              style={{
+                                "--cfs-item-delay": `${0.12 + optIdx * 0.05}s`,
+                              }}
+                              onClick={() => toggleOption(activeData.id, opt)}
                             >
-                              ✓
-                            </span>
-                          )}
-                        </button>
-                      );
-                    })}
+                              <span className="curated-filter-strip__option-text">
+                                {opt}
+                              </span>
+                              {selected && (
+                                <span
+                                  className="curated-filter-strip__option-check"
+                                  aria-hidden
+                                >
+                                  ✓
+                                </span>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : null}
                   </div>
                 </div>
 

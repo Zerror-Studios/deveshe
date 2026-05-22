@@ -12,7 +12,7 @@ const HeroSection = ({
   isDefault = false,
   showFilter = true,
   animateNav = true,
-  description = "Discover our latest collection of outerwear. Carefully crafted from the finest fabrics and premium hardware.",
+  categoryDescription,
 }) => {
   const resolvedSrc = isDefault ? heroImageSrc : encodeURI(heroImageSrc);
   const sectionRef = useRef(null);
@@ -68,21 +68,19 @@ const HeroSection = ({
       });
       if (nav) {
         gsap.set(nav, { yPercent: 0 });
-        if (animateNav) {
-          gsap.to(nav, {
-            yPercent: -110,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top top",
-              end: "140px top",
-              scrub: true,
-            },
-          });
-        }
+        gsap.to(nav, {
+          yPercent: -110,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "140px top",
+            scrub: true,
+          },
+        });
       }
       gsap.to([paragraphRef.current, categoryNameRef.current], {
-        color: "black",
+        color: "#fe0000",
         duration: 1,
         ease: "none",
         scrollTrigger: {
@@ -110,7 +108,7 @@ const HeroSection = ({
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [resolvedSrc, showFilter, animateNav]);
+  }, [resolvedSrc, showFilter]);
 
   return (
     <div ref={sectionRef} className="shop_hero_section">
@@ -118,7 +116,7 @@ const HeroSection = ({
         {categoryName && (
           <span ref={categoryNameRef} className="shop_hero_section_category_name">{categoryName}</span>
         )}
-        <p ref={paragraphRef}>{description}</p>
+        <p ref={paragraphRef}>{categoryDescription || "Discover our latest collection of outerwear. Carefully crafted from the finest fabrics and premium hardware."}</p>
         {showFilter ? (
           <div ref={filterWrapRef} className="shop_hero_filter_wrap">
             <CuratedFilterStrip />

@@ -5,7 +5,6 @@ import React, { useEffect, useRef, useState } from "react";
 
 const SPEED = 2.6;
 const DEFAULT_ORB_SIZE = 112;
-const IMAGE_ROTATE_MS = 10_000;
 
 const BAG_ORB_IMAGES = [
   "/assets/images/bag/buy.webp",
@@ -64,6 +63,7 @@ export default function CartEmptyState({ active }) {
       }
 
       let { x, y, vx, vy } = stateRef.current;
+      let hitEdge = false;
 
       x += vx;
       y += vy;
@@ -71,17 +71,25 @@ export default function CartEmptyState({ active }) {
       if (x <= 0) {
         x = 0;
         vx = Math.abs(vx);
+        hitEdge = true;
       } else if (x >= maxX) {
         x = maxX;
         vx = -Math.abs(vx);
+        hitEdge = true;
       }
 
       if (y <= 0) {
         y = 0;
         vy = Math.abs(vy);
+        hitEdge = true;
       } else if (y >= maxY) {
         y = maxY;
         vy = -Math.abs(vy);
+        hitEdge = true;
+      }
+
+      if (hitEdge) {
+        setImageIndex((prev) => (prev + 1) % BAG_ORB_IMAGES.length);
       }
 
       stateRef.current = { x, y, vx, vy };
@@ -116,16 +124,7 @@ export default function CartEmptyState({ active }) {
   }, [active]);
 
   useEffect(() => {
-    if (!active) {
-      setImageIndex(0);
-      return;
-    }
-
-    const intervalId = setInterval(() => {
-      setImageIndex((prev) => (prev + 1) % BAG_ORB_IMAGES.length);
-    }, IMAGE_ROTATE_MS);
-
-    return () => clearInterval(intervalId);
+    if (!active) setImageIndex(0);
   }, [active]);
 
   const orbSrc = BAG_ORB_IMAGES[imageIndex];

@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   text-decoration: none;
-  color: #000;
+  color: #fe0000;
   cursor: pointer;
 }
 
@@ -34,7 +34,7 @@
   font-size: 14px;
   font-weight: 400;
   line-height: 1.35;
-  color: #000 !important;
+  color: #fe0000 !important;
   margin: 0;
   text-align: left;
 }

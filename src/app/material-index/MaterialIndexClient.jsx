@@ -10,7 +10,7 @@ export default function MaterialIndexClient({ materials }) {
         isDefault
         showFilter={false}
         animateNav={false}
-        description="A catalogue of cloth — where each fabric comes from, how it behaves, and what we build with it."
+        categoryDescription="A catalogue of cloth — where each fabric comes from, how it behaves, and what we build with it."
       />
       <MaterialListing materials={materials} />
     </>
