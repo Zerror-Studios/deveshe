@@ -19,6 +19,7 @@
   text-align: center;
   margin-bottom: 4vw;
   perspective: 800px;
+  color: #fe0000;
 }
 
 .article-heading .split>span {
@@ -76,7 +77,7 @@
   font-family: heading;
   font-size: 2vw;
   line-height: 0.9;
-  color: red;
+  color: #fe0000;
   margin-bottom: 1vw;
 
 }
@@ -106,7 +107,7 @@
 .article-desc {
   font-family: paragraphStyleB;
   font-size: 2.2vw;
-  color: black;
+  color: #000;
   margin-bottom: 1.5vw;
 
 }

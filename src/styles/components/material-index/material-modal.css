@@ -187,12 +187,15 @@
 @media (max-width: 768px) {
   .material-modal {
     padding: 20px;
-    align-items: flex-end;
+    align-items: center;
+    justify-content: center;
   }
 
   .material-modal__panel {
-    max-width: none;
-    max-height: 85vh;
+    width: min(100%, 420px);
+    max-width: 420px;
+    max-height: min(85vh, calc(100dvh - 40px));
+    margin: 0 auto;
   }
 
   .material-modal__content {

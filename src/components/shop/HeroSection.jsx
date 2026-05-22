@@ -80,7 +80,7 @@ const HeroSection = ({
         });
       }
       gsap.to([paragraphRef.current, categoryNameRef.current], {
-        color: "black",
+        color: "#fe0000",
         duration: 1,
         ease: "none",
         scrollTrigger: {

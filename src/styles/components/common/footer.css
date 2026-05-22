@@ -5,6 +5,7 @@ footer {
   position: relative;
   background-color: #fadcde;
   overflow: hidden;
+  color: #fe0000;
 }
 
 footer .footer-hero,
@@ -26,7 +27,7 @@ footer .footer-bottom {
 
 .footer-hero-headline {
   margin: 0;
-  color: #000;
+  color: #fe0000;
   max-width: 65%;
   font-family: heading;
   font-size: 6.5vw;
@@ -39,7 +40,7 @@ footer .footer-bottom {
 }
 
 .footer-copyright-badge {
-  color: #000;
+  color: #fe0000;
   white-space: nowrap;
   display: flex;
   align-items: center;
@@ -65,7 +66,7 @@ footer .footer-bottom {
   font-size: clamp(12px, 1vw, 14px);
   font-weight: 400;
   line-height: 1.6;
-  color: #000;
+  color: #fe0000;
   max-width: 420px;
 }
 
@@ -76,7 +77,7 @@ footer .footer-bottom {
 /* ── DIVIDER ── */
 .footer-divider {
   border: none;
-  border-top: 1.5px solid #000;
+  border-top: 1.5px solid #fe0000;
   margin: 0 32px;
 }
 
@@ -100,7 +101,7 @@ footer .footer-bottom {
 .footer-brand p {
   font-size: clamp(12px, 1vw, 14px);
   font-weight: 400;
-  color: #000;
+  color: #fe0000;
   line-height: 1.6;
   margin: 0;
 }
@@ -115,7 +116,7 @@ footer .footer-bottom {
 }
 
 .footer-dev-credit a {
-  color: #000;
+  color: #fe0000;
   font-weight: bold;
   text-underline-offset: 2px;
 }
@@ -134,7 +135,7 @@ footer .footer-bottom {
 .footer-links a {
   font-size: clamp(12px, 1vw, 14px);
   font-weight: 400;
-  color: #000;
+  color: #fe0000;
   text-decoration: none;
 }
 
@@ -152,7 +153,7 @@ footer .footer-bottom {
 .footer-policy a {
   font-size: clamp(12px, 1vw, 14px);
   font-weight: 400;
-  color: #000;
+  color: #fe0000;
   text-decoration: none;
 }
 
@@ -170,7 +171,7 @@ footer .footer-bottom {
 .footer-social a {
   font-size: clamp(12px, 1vw, 14px);
   font-weight: 400;
-  color: #000;
+  color: #fe0000;
   text-decoration: none;
 }
 

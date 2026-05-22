@@ -5,6 +5,7 @@
   -moz-osx-font-smoothing: grayscale;
   z-index: 10;
   position: relative;
+  color: #fe0000;
 }
 
 .blog-listing__header {
@@ -20,6 +21,7 @@
   text-align: center;
   margin-bottom: 0;
   perspective: 800px;
+  color: #fe0000;
 }
 
 .blog-listing__heading .split > span {
@@ -36,7 +38,7 @@
   text-align: center;
   max-width: 32rem;
   margin: 1rem auto 0;
-  color: #333;
+  color: #fe0000;
 }
 
 /* Shared with .blog-post__relatedGrid on blog detail */
@@ -52,7 +54,7 @@
   font-family: paragraph;
   font-size: 14px;
   text-align: center;
-  color: #666;
+  color: #fe0000;
   padding: 3rem 0;
 }
 

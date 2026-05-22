@@ -19,10 +19,10 @@
   font-size: 1.3vw;
   text-align: center;
   line-height: 1.2;
-  color: black;
+  color: #fe0000;
   margin-top: 1vw;
 }
 .polaroid_card p span {
-  color: red;
+  color: #fe0000;
 }
 

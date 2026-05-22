@@ -10,7 +10,7 @@ export default function BlogsClient({ posts }) {
         isDefault
         showFilter={false}
         animateNav={false}
-        description="Stories on style, fabric, and wearing what you mean."
+        categoryDescription="Stories on style, fabric, and wearing what you mean."
       />
       <BlogListing posts={posts} />
     </>

@@ -563,9 +563,6 @@
     font-size: 16px;
   }
 
-  .blog-post__figureMedia {
-    aspect-ratio: 4 / 3;
-  }
 
   .blog-post__end {
     margin-top: 2rem;
