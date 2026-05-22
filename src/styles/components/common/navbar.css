@@ -69,7 +69,6 @@
   transform: translate(-50%, -50%);
   will-change: transform;
   opacity: 0;
-  padding: 0vw 3vw;
   z-index: 9;
 }
 
@@ -153,32 +152,67 @@
   pointer-events: all;
 }
 
-/* ─── Dropdown Wrapper ────────────────────────────────────────────────────── */
+/* ─── Dropdown — fixed height expand, stagger options ─────────────────────── */
+
+@keyframes nav-dropdown-list-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes nav-dropdown-item-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
 
 .nav-link-wrapper {
+  --nav-dropdown-height: 380px;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
+  height: 0;
   background-color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  gap: 0.75rem;
-  min-height: 400px;
-  max-height: 600px;
-  overflow-y: auto;
-  padding: 2vw 2rem;
+  gap: 0.65rem;
+  overflow: hidden;
+  padding: 0 1rem;
   z-index: 5;
-  clip-path: inset(0 0 100% 0);
-  transition: clip-path 0.5s cubic-bezier(0.77, 0, 0.175, 1);
   pointer-events: none;
-  
+  border-radius: 5px;
+  opacity: 0;
+  transition:
+    height 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.04s,
+    padding 0.55s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-link-wrapper--open {
-  clip-path: inset(0 0 0% 0);
+  height: var(--nav-dropdown-height);
+  opacity: 1;
+  padding: 2rem 1rem;
   pointer-events: all;
+}
+
+.nav-link-wrapper__list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  width: 100%;
+  height: 100%;
+  animation: nav-dropdown-list-in 0.2s ease forwards;
 }
 
 /* Override global #nav .nav-link a styles for dropdown links */
@@ -197,13 +231,22 @@
   text-decoration: none !important;
   line-height: 1.4 !important;
   width: fit-content !important;
-  transition: opacity 0.2s ease !important;
   z-index: unset !important;
+  opacity: 0;
+  transform: translate3d(0, 8px, 0);
+  will-change: opacity, transform;
 }
 
-.nav-link-wrapper a:hover,
-#nav .nav-link-wrapper a:hover {
+.nav-link-wrapper__list a,
+#nav .nav-link-wrapper__list a {
+  animation: nav-dropdown-item-in 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: var(--nav-item-delay, 0.12s);
+}
+
+.nav-link-wrapper__list a:hover,
+#nav .nav-link-wrapper__list a:hover {
   color: red !important;
+  transition: color 0.2s ease !important;
 }
 
 .nav-link-wrapper a .hoverline,

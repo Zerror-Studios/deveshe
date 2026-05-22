@@ -7,11 +7,12 @@ const CategoriesClient = ({
   productData,
   heroImageSrc,
   categoryName,
+  categoryDescription,
   currentCategorySlug,
 }) => {
   return (
     <>
-      <HeroSection heroImageSrc={heroImageSrc} categoryName={categoryName} />
+      <HeroSection heroImageSrc={heroImageSrc} categoryName={categoryName} categoryDescription={categoryDescription} />
       <CuratedProducts
         products={productData}
         categoryName={categoryName}

@@ -53,6 +53,14 @@ const LogoGroup = () => (
   </Link>
 );
 
+const NAV_DROPDOWN_ZONE = ".nav-link, .nav-link-wrapper";
+
+function closeMenuUnlessEnteringZone(e, setActiveMenu) {
+  const related = e.relatedTarget;
+  if (related?.closest?.(NAV_DROPDOWN_ZONE)) return;
+  setActiveMenu(null);
+}
+
 const NavLinks = ({ pathname }) => {
   const [activeMenu, setActiveMenu] = useState(null);
 
@@ -84,6 +92,9 @@ const NavLinks = ({ pathname }) => {
   const activeMenuHasDropdown =
     activeMenu !== null && getDropdownLinks(MenuData[activeMenu]).length > 0;
 
+  const activeDropdownLinks =
+    activeMenu !== null ? getDropdownLinks(MenuData[activeMenu]) : [];
+
   return (
     <>
       <div
@@ -93,17 +104,17 @@ const NavLinks = ({ pathname }) => {
 
       <div
         className="nav-link"
-        onMouseLeave={() => setActiveMenu(null)}
+        onMouseLeave={(e) => closeMenuUnlessEnteringZone(e, setActiveMenu)}
       >
         {MenuData.map((link, idx) => {
           const isPill = idx === 1;
-          const dropdownLinks = getDropdownLinks(link);
           const hasDropdown =
             link?.dropdownType === "lookbooks" ||
             link?.dropdownType === "categories" ||
-            dropdownLinks.length > 0;
+            getDropdownLinks(link).length > 0;
           const isActive = !hasDropdown && pathname === link.link;
           const isDropdownOpen = hasDropdown && activeMenu === idx;
+
           return (
             <div
               key={link?.name || idx}
@@ -132,21 +143,30 @@ const NavLinks = ({ pathname }) => {
                   <div className="hoverline" />
                 </Link>
               )}
-
-              {dropdownLinks.length > 0 && (
-                <div
-                  className={`nav-link-wrapper ${activeMenu === idx ? "nav-link-wrapper--open" : ""}`}
-                >
-                  {dropdownLinks.map((item) => (
-                    <Link key={`${item.link}-${item.name}`} href={item.link}>
-                      <span>{item.name}</span>
-                    </Link>
-                  ))}
-                </div>
-              )}
             </div>
           );
         })}
+
+        <div
+          className={`nav-link-wrapper${activeMenuHasDropdown ? " nav-link-wrapper--open" : ""}`}
+          onMouseLeave={(e) => closeMenuUnlessEnteringZone(e, setActiveMenu)}
+        >
+          {activeMenuHasDropdown ? (
+            <div key={activeMenu} className="nav-link-wrapper__list">
+              {activeDropdownLinks.map((item, linkIdx) => (
+                <Link
+                  key={`${item.link}-${item.name}`}
+                  href={item.link}
+                  style={{
+                    "--nav-item-delay": `${0.12 + linkIdx * 0.05}s`,
+                  }}
+                >
+                  <span>{item.name}</span>
+                </Link>
+              ))}
+            </div>
+          ) : null}
+        </div>
       </div>
     </>
   );
