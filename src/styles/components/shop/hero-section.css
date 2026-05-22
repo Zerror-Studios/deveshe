@@ -45,6 +45,13 @@
     will-change: opacity;
 }
 
+/* Avoid early sticky/fixed fight while filter lives inside scrolling hero */
+.shop_hero_filter_wrap .curated-filter-strip:not(.curated-filter-strip--pinned) {
+    position: relative;
+    top: auto;
+    margin-bottom: 0;
+}
+
 .shop_hero_section_inner {
     position: absolute;
     top: 0px;

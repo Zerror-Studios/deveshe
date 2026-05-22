@@ -8,84 +8,88 @@ import ScrollTrigger from "gsap/dist/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function FeaturedArticle() {
-    useEffect(() => {
-        const splitText = (selector) => {
-            document.querySelectorAll(selector).forEach((el) => {
-                if (!el.dataset.split) {
-                    const letters = (el.textContent || "")
-                        .split("")
-                        .map((char) =>
-                            char === " " ? `<span>&nbsp;</span>` : `<span>${char}</span>`
-                        );
-                    el.innerHTML = letters.join("");
-                    el.dataset.split = "true";
-                }
-            });
-        };
+export default function FeaturedArticle({ blog }) {
+  useEffect(() => {
+    const splitText = (selector) => {
+      document.querySelectorAll(selector).forEach((el) => {
+        if (!el.dataset.split) {
+          const letters = (el.textContent || "")
+            .split("")
+            .map((char) =>
+              char === " " ? `<span>&nbsp;</span>` : `<span>${char}</span>`
+            );
+          el.innerHTML = letters.join("");
+          el.dataset.split = "true";
+        }
+      });
+    };
 
-        splitText(".article-heading .split");
+    splitText(".article-heading .split");
 
-        const ctx = gsap.context(() => {
-            gsap
-                .timeline({
-                    scrollTrigger: {
-                        trigger: ".article-container",
-                        start: "top 75%",
-                        end: "top 40%",
-                    },
-                })
-                .fromTo(
-                    ".article-heading .split span",
-                    { rotateX: "90deg" },
-                    {
-                        duration: 0.8,
-                        rotateX: "0deg",
-                        stagger: 0.03,
-                        ease: "bounce.out",
-                    }
-                );
+    const ctx = gsap.context(() => {
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: ".article-container",
+            start: "top 75%",
+            end: "top 40%",
+          },
+        })
+        .fromTo(
+          ".article-heading .split span",
+          { rotateX: "90deg" },
+          {
+            duration: 0.8,
+            rotateX: "0deg",
+            stagger: 0.03,
+            ease: "bounce.out",
+          }
+        );
 
-            setTimeout(() => ScrollTrigger.refresh(), 200);
-        });
+      setTimeout(() => ScrollTrigger.refresh(), 200);
+    });
 
-        return () => ctx.revert();
-    }, []);
+    return () => ctx.revert();
+  }, []);
 
-    return (
-        <section className="article-container">
-            <p className="article-heading">
-                <span className="split">Latest </span>
-                <span className="split heading-accent">Blogs</span>
-            </p>
-            {/* 🔥 HERO IMAGE */}
-            <div className="article-imageWrapper">
-                <Image
-                    width={1000}
-                    height={1000}
-                    src="https://ark8.net/_next/image?url=https%3A%2F%2Fa.storyblok.com%2Ff%2F161230%2F2796x1573%2Fdefb514004%2Fj-sam-ban.jpg&w=1920&q=90" // replace with your image
-                    alt="article"
-                    className="article-image"
-                />
-            </div>
+  if (!blog?.slug) return null;
 
-            {/* 🔥 CONTENT */}
-            <div className="article-content">
-                <h2 className="article-title">
-                What to wear in 40&deg;C without looking like you gave up 
-                </h2>
+  const href = `/blogs/${blog.slug}`;
+  const imageSrc = blog.image || "";
+  const imageAlt = blog.imageAlt || blog.title || "Latest blog";
 
-                <p className="article-desc">
-                Why is linen the only fabric that makes sense in the Indian Summer?...
-                </p>
+  return (
+    <section className="article-container">
+      <p className="article-heading">
+        <span className="split">Latest </span>
+        <span className="split heading-accent">Blogs</span>
+      </p>
 
+      {imageSrc ? (
+        <div className="article-imageWrapper">
+          <Image
+            width={1000}
+            height={1000}
+            src={imageSrc}
+            alt={imageAlt}
+            className="article-image"
+          />
+        </div>
+      ) : null}
 
-                <BracketSlideCta
-                    label="Read more"
-                    href="/blogs/what-to-wear-in-40c-without-looking-like-you-gave-up"
-                    ariaLabel="Read more"
-                />
-            </div>
-        </section>
-    );
+      <div className="article-content">
+        <h2 className="article-title">{blog.title}</h2>
+
+        {blog.excerpt ? (
+          <p className="article-desc">{blog.excerpt}</p>
+        ) : null}
+
+        <BracketSlideCta
+          label="Read more"
+          href={href}
+          ariaLabel={`Read more: ${blog.title}`}
+        />
+      </div>
+    </section>
+  );
 }

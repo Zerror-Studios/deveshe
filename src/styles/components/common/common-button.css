@@ -1,0 +1,100 @@
+/* Shared pill button — pixel-match #nav .nav_btn_items / #nav .nav-link a */
+
+.common-btn,
+#common_black_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 220px;
+  height: fit-content;
+  padding: 0.6875rem 1rem 0.59375rem;
+  border: none;
+  border-radius: 5px;
+  color: #000 !important;
+  background-color: #fff;
+  font-family: paragraph;
+  font-weight: 100;
+  font-size: calc(8px + 0.229167vw);
+  line-height: 1;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: font-weight 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.common-btn:hover:not(:disabled),
+#common_black_btn:hover:not(:disabled) {
+  font-weight: 600;
+}
+
+.common-btn:disabled,
+#common_black_btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.common-btn .common_btn_loadin,
+#common_black_btn .common_btn_loadin {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+}
+
+.common-btn .loading_line,
+#common_black_btn .loading_line {
+  background-color: #000;
+}
+
+/* Destructive actions — same pill as nav, brand red */
+.common-btn--danger {
+  color: #fe0000 !important;
+  background-color: #fff;
+}
+
+.common-btn--danger:hover:not(:disabled) {
+  font-weight: 600;
+  color: #fe0000 !important;
+  background-color: #fff;
+}
+
+.common-btn--danger .loading_line {
+  background-color: #fe0000;
+}
+
+.deactivate-actions .common-btn {
+  flex: 1;
+  max-width: none;
+  width: 100%;
+}
+
+#profile_header .common-btn--danger,
+#delete_account .common-btn--danger {
+  width: auto;
+  max-width: 220px;
+}
+
+@media (max-width: 576px) {
+  .common-btn,
+  #common_black_btn {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .common-btn .common_btn_loadin,
+  #common_black_btn .common_btn_loadin {
+    padding: 0 8vw;
+  }
+}

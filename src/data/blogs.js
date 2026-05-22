@@ -1,6 +1,20 @@
+import { formatDateTime } from "@/utils/Util";
+import {
+  getBlogContentPlainText,
+  normalizeBlogContent,
+} from "@/utils/parseBlogContent";
+
 export const BLOG_HERO_IMAGE = "/assets/images/home/Homepage3.webp";
 
 export const BLOG_DEFAULT_AUTHOR = "DeVeSheDreams";
+
+function estimateReadTime(content) {
+  const text = getBlogContentPlainText(content);
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  if (!words) return null;
+
+  return `${Math.max(1, Math.round(words / 200))} min`;
+}
 
 const IMG = {
   h1: "/assets/images/home/Homepage1.webp",
@@ -450,6 +464,51 @@ export const BLOG_POSTS = [
     ],
   },
 ];
+
+export function mapBlogForListing(blog) {
+  if (!blog) return null;
+
+  return {
+    _id: blog._id,
+    slug: blog.slug,
+    title: blog.title,
+    excerpt: blog.excerpt,
+    image: blog.asset?.path || blog.image || "",
+    imageAlt: blog.asset?.altText || blog.imageAlt || blog.title,
+  };
+}
+
+export function mapBlogForDetail(blog) {
+  if (!blog) return null;
+
+  const excerpt = blog.excerpt?.trim();
+  const { contentHtml, content } = normalizeBlogContent(blog.content, excerpt);
+  const hasBody = Boolean(contentHtml || content?.length);
+
+  return {
+    _id: blog._id,
+    slug: blog.slug,
+    title: blog.title,
+    excerpt,
+    intro: hasBody ? [] : excerpt ? [excerpt] : [],
+    image: blog.asset?.path || "",
+    imageAlt: blog.asset?.altText || blog.title,
+    date: blog.publishedAt ? formatDateTime(blog.publishedAt) : "",
+    author: blog.meta?.author || BLOG_DEFAULT_AUTHOR,
+    readTime: estimateReadTime(blog.content),
+    content,
+    contentHtml,
+    meta: blog.meta,
+  };
+}
+
+export function getRelatedPostsFromList(blogs, slug, limit = 4) {
+  return (blogs || [])
+    .filter((b) => b?.slug && b.slug !== slug)
+    .slice(0, limit)
+    .map(mapBlogForListing)
+    .filter(Boolean);
+}
 
 export function getBlogBySlug(slug) {
   return BLOG_POSTS.find((post) => post.slug === slug) ?? null;

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import BlogGridCard from "@/components/common/card/BlogGridCard";
 import BlogPostShare from "@/components/blogs/BlogPostShare";
+import { htmlParser } from "@/utils/Util";
 
 function getReadMinutes(readTime) {
   const match = readTime?.match(/(\d+)/);
@@ -119,7 +120,9 @@ export default function BlogPostDetail({ post, relatedPosts = [] }) {
       </header>
 
       <div className="blog-post__inner">
-        {post.content?.length ? (
+        {post.contentHtml ? (
+          <div className="blog-post__body">{htmlParser(post.contentHtml)}</div>
+        ) : post.content?.length ? (
           <div className="blog-post__body">
             {post.content.map((block, index) => (
               <BlogContentBlock key={`${block.type}-${index}`} block={block} />

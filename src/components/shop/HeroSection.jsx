@@ -11,6 +11,7 @@ const HeroSection = ({
   categoryName,
   isDefault = false,
   showFilter = true,
+  animateNav = true,
   description = "Discover our latest collection of outerwear. Carefully crafted from the finest fabrics and premium hardware.",
 }) => {
   const resolvedSrc = isDefault ? heroImageSrc : encodeURI(heroImageSrc);
@@ -67,16 +68,18 @@ const HeroSection = ({
       });
       if (nav) {
         gsap.set(nav, { yPercent: 0 });
-        gsap.to(nav, {
-          yPercent: -110,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top top",
-            end: "140px top",
-            scrub: true,
-          },
-        });
+        if (animateNav) {
+          gsap.to(nav, {
+            yPercent: -110,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top top",
+              end: "140px top",
+              scrub: true,
+            },
+          });
+        }
       }
       gsap.to([paragraphRef.current, categoryNameRef.current], {
         color: "black",
@@ -107,7 +110,7 @@ const HeroSection = ({
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [resolvedSrc, showFilter]);
+  }, [resolvedSrc, showFilter, animateNav]);
 
   return (
     <div ref={sectionRef} className="shop_hero_section">

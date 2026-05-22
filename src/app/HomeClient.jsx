@@ -12,7 +12,7 @@ import CuratedProducts from "@/components/home/CuratedProducts";
 import CategoryExplore from "@/components/home/CategoryExplore";
 import FeaturedArticle from "@/components/home/FeaturedArticle";
 
-export default function HomeClient({ productData }) {
+export default function HomeClient({ productData, latestBlog }) {
   const sectionRef = useRef(null);
   const pathname = usePathname();
 
@@ -37,7 +37,7 @@ export default function HomeClient({ productData }) {
       <HeroSectionHome />
       <CuratedProducts products={productData.slice(0, 8)} />
       <CategoryExplore />
-      <FeaturedArticle />
+      <FeaturedArticle blog={latestBlog} />
       {/* <HeroSection /> */}
       {/* <ExploreSection sectionRef={sectionRef} /> */}
       {/* <ProductSection sectionRef={sectionRef} data={productData} /> */}

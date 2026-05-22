@@ -4,8 +4,8 @@ import Link from "next/link";
 export function getBlogGridCardProps(post) {
   return {
     href: `/blogs/${post?.slug || ""}`,
-    src: post?.image || "",
-    alt: post?.title || "Blog post",
+    src: post?.image || post?.asset?.path || "",
+    alt: post?.imageAlt || post?.asset?.altText || post?.title || "Blog post",
     title: post?.title || "",
   };
 }

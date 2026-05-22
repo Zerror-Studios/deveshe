@@ -506,37 +506,9 @@
   gap: 12px;
 }
 
-.btn-cancel {
-  flex: 1;
-  padding: 10px 0;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-.btn-cancel:hover {
-  background: #f8f8f8;
-}
-
-.btn-deactivate {
-  flex: 1;
-  padding: 10px 0;
-  background: #000;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-.btn-deactivate:hover {
-  background: #111;
-}
-
-#profile_header #common_black_btn ,#delete_account #common_black_btn{
-  color: red;
+#profile_header .profile-logout-btn {
+  margin: 0;
+  flex-shrink: 0;
 }
 
 /* Responsive */
