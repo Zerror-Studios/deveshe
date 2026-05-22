@@ -9,6 +9,7 @@ export default function BlogsClient({ posts }) {
         heroImageSrc={BLOG_HERO_IMAGE}
         isDefault
         showFilter={false}
+        animateNav={false}
         description="Stories on style, fabric, and wearing what you mean."
       />
       <BlogListing posts={posts} />

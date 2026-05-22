@@ -3,7 +3,15 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 
-const CommonButton = ({ title, href, onClick, loading = false, type = "submit" }) => {
+const CommonButton = ({
+  title,
+  href,
+  onClick,
+  loading = false,
+  type = "submit",
+  variant = "default",
+  className = "",
+}) => {
   const router = useRouter();
 
   const handleClick = () => {
@@ -14,10 +22,19 @@ const CommonButton = ({ title, href, onClick, loading = false, type = "submit" }
     }
   };
 
+  const rootClass = [
+    "common-btn",
+    variant === "danger" ? "common-btn--danger" : "",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <button
-      id="common_black_btn"
+      id={variant === "default" ? "common_black_btn" : undefined}
       type={type}
+      className={rootClass}
       onClick={handleClick}
       disabled={loading}
     >

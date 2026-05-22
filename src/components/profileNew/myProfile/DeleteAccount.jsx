@@ -43,13 +43,12 @@ const DeleteAccount = () => {
             only owner of any teams, either assign another owner or deactivate the
             team.
           </p>
-          <div
-            className="_btn_wrapper _btn_height _w-full de-btn"
-            style={{ minWidth: "220px" }}
+          <CommonButton
+            title="Deactivate Account"
+            type="button"
+            variant="danger"
             onClick={() => setIsOpen(true)}
-          >
-            Deactivate Account
-          </div>
+          />
         </div>
       </div>
       <DeactivatePopup isOpen={isOpen} isLoading={loading} handleSave={handleSave} onClose={() => setIsOpen(false)} />

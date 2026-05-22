@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import CommonButton from "@/components/common/CommonButton";
 
 const DeactivatePopup = ({ isOpen, onClose, isLoading, handleSave }) => {
   if (!isOpen) return null;
@@ -22,20 +23,14 @@ const DeactivatePopup = ({ isOpen, onClose, isLoading, handleSave }) => {
         </ul>
 
         <div className="deactivate-actions">
-          <button className="btn-cancel" onClick={onClose}>
-            Cancel
-          </button>
-          <button className="btn-deactivate" onClick={handleSave}>
-            {isLoading ? (
-              <div className="common_btn_loadin">
-                <div className="loading_line_wrap">
-                  <div className="loading_line"></div>
-                </div>
-              </div>
-            ) : "Deactivate"
-            }
-
-          </button>
+          <CommonButton title="Cancel" type="button" onClick={onClose} />
+          <CommonButton
+            title="Deactivate"
+            type="button"
+            variant="danger"
+            loading={isLoading}
+            onClick={handleSave}
+          />
         </div>
       </div>
     </div>

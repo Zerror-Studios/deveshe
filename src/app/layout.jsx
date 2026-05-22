@@ -13,6 +13,7 @@ import "swiper/css/pagination";
 
 import "@/styles/components/sizeAssistance.css";
 import "@/styles/components/common/navbar.css";
+import "@/styles/components/common/common-button.css";
 import "@/styles/components/login.css";
 import "@/styles/components/home.css";
 import "@/styles/components/about.css";
@@ -27,6 +28,9 @@ import "@/styles/components/common/productCard.css";
 import "@/styles/components/common/blog-card.css";
 import "@/styles/components/blogs/blogs-listing.css";
 import "@/styles/components/blogs/blog-post.css";
+import "@/styles/components/common/material-card.css";
+import "@/styles/components/material-index/material-listing.css";
+import "@/styles/components/material-index/material-modal.css";
 import "@/styles/components/common/footer.css";
 import "@/styles/components/common/bracket-slide-cta.css";
 import "@/styles/components/home/curated-products.css";

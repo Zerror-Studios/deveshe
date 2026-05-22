@@ -1,5 +1,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
+import CommonButton from "@/components/common/CommonButton";
 import { useAuthStore } from "@/store/auth-store";
 import { TokenManager } from "@/utils/tokenManager";
 
@@ -32,13 +33,13 @@ const ProfileHeader = ({ activeTab, setTab }) => {
         ))}
       </div>
 
-      <div
-        id="logout_btn"
+      <CommonButton
+        title="Logout"
+        type="button"
+        variant="danger"
         onClick={handleSignout}
-        className="_btn_wrapper _btn_height _w-full de-btn"
-      >
-        Logout
-      </div>
+        className="profile-logout-btn"
+      />
     </div>
   );
 };

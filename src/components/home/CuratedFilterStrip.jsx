@@ -229,6 +229,7 @@ export default function CuratedFilterStrip() {
   const isMobileView = useIsMobileView();
   const [activeMenu, setActiveMenu] = useState(null);
   const [isPinned, setIsPinned] = useState(false);
+  const [pinTop, setPinTop] = useState(0);
   const [rootMinHeight, setRootMinHeight] = useState(undefined);
   const [isMobilePopupOpen, setIsMobilePopupOpen] = useState(false);
   const [mobileExpandedId, setMobileExpandedId] = useState(null);
@@ -245,6 +246,45 @@ export default function CuratedFilterStrip() {
 
     anchorYRef.current = el.getBoundingClientRect().top + window.scrollY;
   }, []);
+
+  const getShouldPin = useCallback(() => {
+    const strip = stripRef.current;
+    if (!strip) return false;
+
+    const navTop = getNavOffset();
+    const rect = strip.getBoundingClientRect();
+    const heroSection = strip.closest(".shop_hero_section");
+
+    if (heroSection) {
+      const heroTop = heroSection.offsetTop;
+      const heroHeight = heroSection.offsetHeight;
+      const pinAt = heroTop + heroHeight * 0.5;
+      const unpinAt = heroTop + heroHeight * 0.72;
+      const heroRect = heroSection.getBoundingClientRect();
+
+      if (wasPinnedRef.current) {
+        if (window.scrollY < unpinAt) return false;
+        if (heroRect.bottom > window.innerHeight * 0.58) return false;
+        return true;
+      }
+
+      const filterRevealScroll = heroTop + heroHeight * 0.45;
+      const stripAtTop = rect.top <= navTop + 2;
+
+      return window.scrollY >= Math.max(pinAt, filterRevealScroll) && stripAtTop;
+    }
+
+    if (anchorYRef.current == null) measureAnchor();
+    const anchor = anchorYRef.current ?? 0;
+    const pinAt = anchor - navTop;
+    const unpinAt = pinAt - 48;
+
+    if (wasPinnedRef.current) {
+      return window.scrollY >= unpinAt;
+    }
+
+    return window.scrollY >= pinAt && rect.top <= navTop + 2;
+  }, [measureAnchor]);
 
   const closeMobilePopup = useCallback(() => {
     setIsMobilePopupOpen(false);
@@ -277,12 +317,8 @@ export default function CuratedFilterStrip() {
     if (!strip) return;
 
     const onScroll = () => {
-      if (anchorYRef.current == null) measureAnchor();
-
+      const pinned = getShouldPin();
       const navTop = getNavOffset();
-      const anchor = anchorYRef.current ?? 0;
-
-      const pinned = window.scrollY >= anchor - navTop;
 
       if (wasPinnedRef.current && !pinned) {
         requestAnimationFrame(() => {
@@ -293,12 +329,7 @@ export default function CuratedFilterStrip() {
       wasPinnedRef.current = pinned;
 
       setIsPinned(pinned);
-
-      if (pinned) {
-        setRootMinHeight(strip.offsetHeight);
-      } else {
-        setRootMinHeight(undefined);
-      }
+      setPinTop(navTop);
     };
 
     const onResize = () => {
@@ -310,16 +341,44 @@ export default function CuratedFilterStrip() {
       });
     };
 
+    const onHeroRefresh = () => {
+      anchorYRef.current = null;
+      requestAnimationFrame(onScroll);
+    };
+
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
+
+    const heroSection = strip.closest(".shop_hero_section");
+    if (heroSection) {
+      window.addEventListener("load", onHeroRefresh);
+    }
 
     onScroll();
 
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
+      if (heroSection) {
+        window.removeEventListener("load", onHeroRefresh);
+      }
     };
-  }, [measureAnchor]);
+  }, [measureAnchor, getShouldPin]);
+
+  useLayoutEffect(() => {
+    const strip = stripRef.current;
+    if (!strip) return;
+
+    if (!isPinned) {
+      setRootMinHeight(undefined);
+      return;
+    }
+
+    const styles = getComputedStyle(strip);
+    const marginBottom = parseFloat(styles.marginBottom) || 0;
+
+    setRootMinHeight(strip.offsetHeight + marginBottom);
+  }, [isPinned]);
 
   useEffect(() => {
     if (isMobileView) {
@@ -364,6 +423,7 @@ export default function CuratedFilterStrip() {
           className={`curated-filter-strip ${
             isPinned ? "curated-filter-strip--pinned" : ""
           }`}
+          style={isPinned ? { top: pinTop } : undefined}
         >
           <div className="curated-filter-strip__inner">
             {isMobileView ? (
