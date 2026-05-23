@@ -8,7 +8,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client/react";
 import { CREATE_CONTACT_FORM } from "@/graphql";
-import CommonButton from "../common/CommonButton";
+import BracketSlideCta from "@/components/common/BracketSlideCta";
 
 // Contact Form Validation
 const contactSchema = z.object({
@@ -206,13 +206,15 @@ const ContactForm = () => {
             )}
           </div>
 
-          <CommonButton
-            title="Submit"
-            loading={loading}
-            variant="brand"
-            useDefaultId={false}
-            className="contact-form-submit"
-          />
+          <div className="contact-form-submit-wrap">
+            <BracketSlideCta
+              label="Submit"
+              type="submit"
+              loading={loading}
+              className="contact-form-submit"
+              ariaLabel="Submit contact form"
+            />
+          </div>
         </form>
       </div>
     </div>
