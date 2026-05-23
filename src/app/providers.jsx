@@ -8,7 +8,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import Layout from "@/components/layouts/Layout";
 import NavApolloWarmup from "@/components/layouts/NavApolloWarmup";
 import SmoothScroller from "@/components/common/SmoothScroller";
-import SiteGate from "@/components/common/SiteGate";
+// import SiteGate from "@/components/common/SiteGate";
 import TransitionWrapper from "@/components/pagetransition/TransitionWrapper";
 
 export default function Providers({ children }) {
@@ -18,16 +18,16 @@ export default function Providers({ children }) {
     <ApolloProvider client={client}>
       <NavApolloWarmup />
       <AuthProvider>
-        <SiteGate>
+        {/* <SiteGate> */}
           <TransitionWrapper>
             <Layout>
-              <Suspense fallback={null}>
+              <Suspense fallback={null}>  
                 <SmoothScroller />
               </Suspense>
               {children}
             </Layout>
           </TransitionWrapper>
-        </SiteGate>
+        {/* </SiteGate> */}
       </AuthProvider>
       <ToastContainer position="top-right" />
     </ApolloProvider>
