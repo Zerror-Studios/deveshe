@@ -19,5 +19,4 @@ const HeroSectionHome = () => {
         </div>
     )
 }
-
 export default HeroSectionHome

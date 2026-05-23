@@ -62,8 +62,8 @@ const PhoneModal = () => {
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
 
-      const scale = isSmallMobile ? 1.35 : isMobile ? 1.65 : 1.58;
-      const offsetY = isSmallMobile ? -8 : isMobile ? -12 : -12;
+      const scale = isSmallMobile ? 1.45 : isMobile ? 1.75 : 2.05;
+      const offsetY = isSmallMobile ? -8 : isMobile ? -12 : -14;
       modelGroup.scale.setScalar(scale);
       modelGroup.position.set(0, offsetY, 0);
     };
