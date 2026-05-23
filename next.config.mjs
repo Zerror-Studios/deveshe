@@ -10,6 +10,7 @@ const nextConfig = {
       "dieselfarm.com",
       "plus.unsplash.com",
       "ark8.net",
+      "a.storyblok.com",
       "localhost",
       "cdn.deveshedreams.com",
       "assets.deveshedreams.com",
