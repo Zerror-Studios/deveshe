@@ -1,163 +1,105 @@
 export const MATERIAL_HERO_IMAGE = "/assets/images/home/shop page.webp";
 
 const IMG = {
-  h1: "/assets/images/home/Homepage1.webp",
-  h2: "/assets/images/home/Homepage2.webp",
-  h3: "/assets/images/home/Homepage3.webp",
-  h4: "/assets/images/home/Homepage4.webp",
+  cupro:
+    "https://a.storyblok.com/f/161230/886x550/8b62f9bca7/cupro.jpg",
+  recycledPolyamide:
+    "https://a.storyblok.com/f/161230/600x600/224b30645e/recycled-polyamide.webp",
+  takisada:
+    "https://a.storyblok.com/f/161230/1000x578/c7a909933a/takisada-2.jpg",
+  lampo:
+    "https://a.storyblok.com/f/161230/594x792/69d409ee6e/lampo-metallic-standard.jpg",
+  econyl:
+    "https://a.storyblok.com/f/161230/1000x587/f977ca9bc8/econyl-2.jpg",
 };
 
 export const MATERIALS = [
   {
-    id: "tech-d",
-    code: "TECH D",
-    name: "TECHNICAL DUCHESSE",
-    title: "Technical duchesse",
-    image: IMG.h1,
-    imageAlt: "Technical duchesse fabric swatch",
+    id: "cupro",
+    code: "CUPRO",
+    name: "CUPRO",
+    title: "Cupro",
+    image: IMG.cupro,
+    imageAlt: "White cupro fabric swatch",
     description:
-      "Developed for outerwear, this recycled polyester blend is lightweight, water-resistant, and built to move heat away from the body. The hand is crisp with a subtle sheen that reads refined under city light.",
-    source: { name: "Limonta", country: "ITALY" },
+      "Regenerated cellulose with a silk-like fall and cool touch against skin. It breathes through humid weather and takes dye with a deep, even saturation.",
+    source: { name: "Asahi Kasei", country: "JAPAN" },
     usedIn: [
       {
-        title: "Structured rain coat",
-        image: IMG.h3,
+        title: "Fluid lining",
+        image: IMG.cupro,
         href: "/shop",
       },
     ],
   },
   {
-    id: "lin-o",
-    code: "LIN O",
-    name: "OPEN WEAVE LINEN",
-    title: "Open weave linen",
-    image: IMG.h2,
-    imageAlt: "Open weave linen swatch",
+    id: "rec-pa",
+    code: "REC-PA",
+    name: "OLMETEX RECYCLED POLYAMIDE",
+    title: "Olmetex recycled polyamide",
+    image: IMG.recycledPolyamide,
+    imageAlt: "Recycled polyamide fabric swatch",
     description:
-      "Woven in Europe from long-staple flax, this open weave breathes through humid commutes and softens with wear. Natural slub and variation give each garment a quiet, lived-in character.",
-    source: { name: "Baird McNutt", country: "IRELAND" },
+      "A lightweight recycled polyamide with a crisp hand and subtle sheen. Developed for outerwear, it moves heat away from the body and recovers cleanly from pack crease.",
+    source: { name: "Olmetex", country: "ITALY" },
     usedIn: [
       {
-        title: "Relaxed summer shirt",
-        image: IMG.h2,
-        href: "/shop",
-      },
-      {
-        title: "Linen blend trouser",
-        image: IMG.h4,
+        title: "Technical shell jacket",
+        image: IMG.recycledPolyamide,
         href: "/shop",
       },
     ],
   },
   {
-    id: "cot-p",
-    code: "COT P",
-    name: "COTTON POPLIN",
-    title: "Cotton poplin",
-    image: IMG.h3,
-    imageAlt: "Cotton poplin swatch",
+    id: "jap-rp",
+    code: "JAP-RP",
+    name: "TAKISADA RECYCLED POLYESTER",
+    title: "Takisada recycled polyester",
+    image: IMG.takisada,
+    imageAlt: "Takisada recycled polyester camouflage swatch",
     description:
-      "A fine cotton poplin with a clean surface and stable press. It holds shape through the morning and eases gently by afternoon — the default shirting cloth for days that move between AC and heat.",
-    source: { name: "Albini Group", country: "ITALY" },
+      "Japanese-milled recycled polyester with bold pattern clarity and stable colour. The face is smooth, the hand is dry, and the drape stays controlled through movement.",
+    source: { name: "Takisada", country: "JAPAN" },
     usedIn: [
       {
-        title: "Essential poplin shirt",
-        image: IMG.h1,
+        title: "Patterned outer layer",
+        image: IMG.takisada,
         href: "/shop",
       },
     ],
   },
   {
-    id: "wol-g",
-    code: "WOL G",
-    name: "WOOL GAUZE",
-    title: "Wool gauze",
-    image: IMG.h4,
-    imageAlt: "Wool gauze swatch",
+    id: "lampo",
+    code: "LAMPO",
+    name: "LAMPO METALLIC STANDARD",
+    title: "Lampo metallic standard",
+    image: IMG.lampo,
+    imageAlt: "Lampo metallic standard zipper on navy tape",
     description:
-      "A sheer wool gauze that layers without bulk. It adds warmth at the shoulder and chest while staying almost weightless through the body — ideal for transitional evenings and overcooled rooms.",
-    source: { name: "Vitale Barberis", country: "ITALY" },
+      "Italian Lampo zip in metallic standard finish — consistent pull, clean tape alignment, and hardware that reads refined under studio light.",
+    source: { name: "Lampo", country: "ITALY" },
     usedIn: [
       {
-        title: "Lightweight layer jacket",
-        image: IMG.h4,
+        title: "Outerwear closure",
+        image: IMG.lampo,
         href: "/shop",
       },
     ],
   },
   {
-    id: "can-c",
-    code: "CAN C",
-    name: "CANVAS COTTON",
-    title: "Canvas cotton",
-    image: IMG.h1,
-    imageAlt: "Canvas cotton swatch",
+    id: "ecnyl",
+    code: "ECNYL",
+    name: "ECONYL REGENERATED NYLON",
+    title: "Econyl regenerated nylon",
+    image: IMG.econyl,
+    imageAlt: "Econyl regenerated nylon swatch",
     description:
-      "A dense cotton canvas with a dry hand and matte finish. It sheds light rain, softens at stress points, and ages into a softer drape without losing structure at the seam.",
-    source: { name: "Halley Stevensons", country: "UNITED KINGDOM" },
+      "Regenerated nylon from recovered waste with performance parity to virgin fibre. Strong, elastic, and colour-fast — built for swim, active, and high-wear pieces.",
+    source: { name: "Aquafil", country: "ITALY" },
     usedIn: [
       {
-        title: "Utility field jacket",
-        image: IMG.h3,
-        href: "/shop",
-      },
-    ],
-  },
-  {
-    id: "silk-t",
-    code: "SILK T",
-    name: "TUSSAH SILK BLEND",
-    title: "Tussah silk blend",
-    image: IMG.h2,
-    imageAlt: "Tussah silk blend swatch",
-    description:
-      "A silk blend with a natural grain and soft luster. It falls cleanly from the shoulder, catches light at movement, and pairs with both tailored trousers and relaxed denim.",
-    source: { name: "Kamiyama", country: "JAPAN" },
-    usedIn: [
-      {
-        title: "Evening shirt",
-        image: IMG.h2,
-        href: "/shop",
-      },
-    ],
-  },
-  {
-    id: "tec-s",
-    code: "TEC S",
-    name: "TECHNICAL SHELL",
-    title: "Technical shell",
-    image: IMG.h3,
-    imageAlt: "Technical shell fabric swatch",
-    description:
-      "A bonded technical shell with taped seams and a matte face. Breathable membrane keeps heat from building under the layer while shedding monsoon bursts on the walk in.",
-    source: { name: "Schoeller", country: "SWITZERLAND" },
-    usedIn: [
-      {
-        title: "Commute shell",
-        image: IMG.h1,
-        href: "/shop",
-      },
-      {
-        title: "Packable rain layer",
-        image: IMG.h4,
-        href: "/shop",
-      },
-    ],
-  },
-  {
-    id: "hem-l",
-    code: "HEM L",
-    name: "HEAVY LINEN TWILL",
-    title: "Heavy linen twill",
-    image: IMG.h4,
-    imageAlt: "Heavy linen twill swatch",
-    description:
-      "A heavier linen twill with diagonal structure and a dry, substantial hand. It holds pleats, recovers from sitting, and reads intentional when the season turns breezy.",
-    source: { name: "Tessuti Di Sondrio", country: "ITALY" },
-    usedIn: [
-      {
-        title: "Tailored linen trouser",
-        image: IMG.h2,
+        title: "Performance knit",
+        image: IMG.econyl,
         href: "/shop",
       },
     ],

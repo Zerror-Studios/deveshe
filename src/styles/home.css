@@ -476,16 +476,18 @@
     position: static;
   }
 
-  .desktop_add_btn {
-    display: none;
+  .ProductDetails_wrapper .desktop_add_btn.product-detail-actions {
+    display: none !important;
   }
 
-  .mobile_add_btn {
-    display: block !important;
+  .ProductDetails_wrapper .mobile_add_btn.product-detail-actions {
+    display: flex !important;
     position: sticky !important;
     bottom: 0 !important;
+    z-index: 10;
     background-color: #fadcde;
     padding: 20px;
+    margin-top: 0;
   }
 
   .ProductDets_text_wrapper {
