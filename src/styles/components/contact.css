@@ -9,7 +9,6 @@
   position: relative;
   z-index: 10;
   color: #fe0000;
-  border-top: 1px solid #fe0000;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -53,36 +52,46 @@
 }
 
 .contact-page__right {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
   height: 100%;
+  min-height: 0;
 }
 
 .contact-page__phone-col {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(12px, 1.5vh, 20px);
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  max-height: 100%;
+  pointer-events: none;
 }
 
-.contact-page__form-cta.bracketSlideCta {
-  font-size: clamp(18px, 2.2vw, 28px);
-  flex-shrink: 0;
+.contact-page__phone-col > * {
+  pointer-events: auto;
 }
 
 .contact-page__right .phone_container {
-  flex: 1 1 0;
-  width: 100%;
-  max-width: 100%;
-  min-height: min(68vh, 820px);
-  max-height: calc(100vh - 140px);
-  height: 100%;
-  margin: 0 auto;
+  position: absolute;
+  top: clamp(0px, 1vh, 16px);
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: clamp(52px, 7vh, 80px);
+  width: min(100%, 520px);
+  max-width: 520px;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  margin: 0;
+  z-index: 1;
+}
+
+.contact-page__form-cta.bracketSlideCta {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(8px, 2vh, 24px);
+  transform: translateX(-50%);
+  z-index: 2;
+  font-size: clamp(18px, 2.2vw, 28px);
+  white-space: nowrap;
 }
 
 /* Header */
@@ -283,9 +292,21 @@
   max-width: 42ch;
 }
 
-.contact-form-submit.common-btn {
-  max-width: 100%;
+.contact-form-submit-wrap {
+  display: flex;
+  justify-content: center;
   width: 100%;
+  margin-top: clamp(24px, 3vw, 36px);
+}
+
+.contact-form-submit-wrap .contact-form-submit.bracketSlideCta {
+  font-size: clamp(48px, 8.5vw, 88px);
+  margin: 0 auto;
+}
+
+.contact-form-submit-wrap .contact-form-submit.bracketSlideCta:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 #contact_form #form,
@@ -406,8 +427,9 @@
   }
 
   .contact-page__right .phone_container {
-    min-height: min(72vh, 900px);
-    max-height: calc(100vh - 160px);
+    width: min(100%, 540px);
+    max-width: 540px;
+    bottom: clamp(56px, 7.5vh, 88px);
   }
 }
 
@@ -417,24 +439,32 @@
     justify-content: space-between;
   }
 
-  .contact-page__phone-col {
-    width: 100%;
-    max-width: none;
-  }
-
   .contact-page__right .phone_container {
-    min-height: min(70vh, 860px);
-    max-height: calc(100vh - 150px);
+    width: min(100%, 520px);
+    max-width: 520px;
+  }
+}
+
+/* ── Mobile nav clearance (fixed .navbar-mobile, 65px) ── */
+@media (max-width: 1000px) {
+  #contact_form {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+    padding-top: calc(65px + 40px);
+    padding-left: clamp(20px, 4vw, 32px);
+    padding-right: clamp(20px, 4vw, 32px);
+    padding-bottom: 48px;
   }
 }
 
 /* ── Mobile — stack, natural height ── */
 @media (max-width: 768px) {
   #contact_form {
-    height: auto;
-    min-height: 100vh;
-    overflow: visible;
-    padding: 32px 20px 48px;
+    padding-top: calc(60px + 36px);
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 48px;
   }
 
   .contact-page {
@@ -472,34 +502,61 @@
   }
 
   .contact-page__right {
-    justify-content: center;
-    align-items: center;
+    position: relative;
+    min-height: min(62vh, 600px);
   }
 
   .contact-page__phone-col {
+    position: relative;
+    inset: auto;
     width: 100%;
-    max-width: min(100%, 440px);
+    max-width: min(100%, 520px);
     height: auto;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(16px, 3vh, 24px);
+    pointer-events: auto;
   }
 
   .contact-page__right .phone_container {
-    flex: none;
+    position: relative;
+    top: auto;
+    left: auto;
+    bottom: auto;
+    transform: none;
     width: 100%;
-    max-width: min(100%, 480px);
-    min-height: min(52vh, 500px);
-    max-height: 620px;
+    max-width: min(100%, 520px);
+    min-height: min(56vh, 540px);
+    max-height: min(64vh, 640px);
+    height: min(56vh, 540px);
     margin: 0 auto;
+  }
+
+  .contact-page__form-cta.bracketSlideCta {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    transform: none;
   }
 
   .contact-form-drawer {
     width: min(82%, 520px);
+  }
+
+  .contact-form-submit-wrap .contact-form-submit.bracketSlideCta {
+    font-size: clamp(52px, 14vw, 76px);
   }
 }
 
 /* ── Small phone (matches footer .footer-hero) ── */
 @media (max-width: 480px) {
   #contact_form {
-    padding: 24px 16px 40px;
+    padding-top: calc(60px + 32px);
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 40px;
   }
 }
 

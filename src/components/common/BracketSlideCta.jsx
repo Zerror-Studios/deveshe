@@ -13,6 +13,7 @@ export default function BracketSlideCta({
   ariaLabel,
   disabled = false,
   loading = false,
+  type = "button",
 }) {
   const rootClass = ["bracketSlideCta", className].filter(Boolean).join(" ");
 
@@ -49,7 +50,7 @@ export default function BracketSlideCta({
 
   return (
     <button
-      type="button"
+      type={type}
       className={rootClass}
       onClick={onClick}
       aria-label={computedAria}
