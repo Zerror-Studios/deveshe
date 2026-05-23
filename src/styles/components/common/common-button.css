@@ -1,7 +1,8 @@
 /* Shared pill button — pixel-match #nav .nav_btn_items / #nav .nav-link a */
 
 .common-btn,
-#common_black_btn {
+#common_black_btn,
+.common-btn--light {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -29,6 +30,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.common-btn--light:hover:not(:disabled),
 .common-btn:hover:not(:disabled),
 #common_black_btn:hover:not(:disabled) {
   font-weight: 600;
@@ -40,6 +42,7 @@
   cursor: not-allowed;
 }
 
+.common-btn--light .common_btn_loadin,
 .common-btn .common_btn_loadin,
 #common_black_btn .common_btn_loadin {
   width: 100%;
@@ -53,12 +56,33 @@
   padding: 0 1rem;
 }
 
+.common-btn--light .loading_line,
 .common-btn .loading_line,
 #common_black_btn .loading_line {
   background-color: #000;
 }
 
-/* Destructive actions — same pill as nav, brand red */
+/* Brand fill — primary CTAs on pink / light sections */
+.common-btn--brand {
+  color: #fff !important;
+  background-color: #fe0000;
+}
+
+.common-btn--brand:hover:not(:disabled) {
+  font-weight: 600;
+  color: #fff !important;
+  background-color: #fe0000;
+}
+
+.common-btn--brand .common_btn_loadin {
+  background-color: #fe0000;
+}
+
+.common-btn--brand .loading_line {
+  background-color: #fff;
+}
+
+/* Destructive / accent outline — white pill, red label */
 .common-btn--danger {
   color: #fe0000 !important;
   background-color: #fff;

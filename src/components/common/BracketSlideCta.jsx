@@ -11,6 +11,8 @@ export default function BracketSlideCta({
   onClick,
   className = "",
   ariaLabel,
+  disabled = false,
+  loading = false,
 }) {
   const rootClass = ["bracketSlideCta", className].filter(Boolean).join(" ");
 
@@ -30,7 +32,9 @@ export default function BracketSlideCta({
     </>
   );
 
-  if (href != null && href !== "") {
+  const isDisabled = disabled || loading;
+
+  if (href != null && href !== "" && !isDisabled) {
     return (
       <Link
         href={href}
@@ -49,6 +53,8 @@ export default function BracketSlideCta({
       className={rootClass}
       onClick={onClick}
       aria-label={computedAria}
+      disabled={isDisabled}
+      aria-busy={loading || undefined}
     >
       {inner}
     </button>

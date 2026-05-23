@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo, useRef } from "react";
 import { htmlParser } from "@/utils/Util";
 import { Const, StockStatus } from "@/utils/Constant";
 import gsap from "gsap";
+import CommonButton from "@/components/common/CommonButton";
 
 const ProductContent = ({
   data = {},
@@ -95,6 +96,12 @@ const ProductContent = ({
     );
   }, [data]);
 
+  const addToBagTitle = !cartBtn
+    ? "Select a Size"
+    : isOutOfStock
+      ? StockStatus.OUT_OF_STOCK
+      : "Add to Bag";
+
   if (!data) return null;
   return (
     <div className="ProductDets_text_wrapper" ref={wrapperRef}>
@@ -104,7 +111,7 @@ const ProductContent = ({
             <h1 className="ProductDets_text_container_resp_productName ProductDets_common_style">
               {data.name}
             </h1>
-            <div className="ProductDets_text_container_price_resp_flex ProductDets_common_style">
+            <div className="ProductDets_text_container_price_resp_flex ProductDets_common_style product-detail-price-header">
               <span>{finalPrice} INR</span>
             </div>
           </div>
@@ -201,53 +208,31 @@ const ProductContent = ({
             ))}
           </div>
 
-          <div className="ProductDets_Notify_wrap desktop_add_btn">
-            <button
-              className={`ProductDets_ntfy_btn ${!isOutOfStock ? "ProductDets_ntfy_btn_grid" : "BtnOutline_Grid"}`}
-              id="easysize-cart-button"
-              style={loading ? { backgroundColor: "black" } : {}}
+          <div className="ProductDets_Notify_wrap desktop_add_btn product-detail-actions">
+            <CommonButton
+              type="button"
               onClick={handleAddToCart}
+              loading={loading}
+              disabled={!cartBtn || isOutOfStock}
+              useDefaultId={false}
+              className="product-detail-cta product-detail-cta--full"
             >
-              {loading ? (
-                <div className="ani-wrap">
-                  <div className="ani-main" />
-                </div>
-              ) : (
-                <>
-                  <span className="ProductDets_ntfy_btn_slect_size">
-                    {!cartBtn ? "Select a Size" : isOutOfStock ? StockStatus.OUT_OF_STOCK : "Add to Bag"}
-                  </span>
-                  <span className="ProductDets_ntfy_btn_AddtoBeg">
-                    {isOutOfStock ? StockStatus.OUT_OF_STOCK : "Add to Bag"}
-                  </span>
-                  <div className="ProductDets_ntfy_btn_price">
-                    <span>{finalPrice} INR</span>
-                  </div>
-                </>
-              )}
-            </button>
+              <span className="product-detail-cta__label">{addToBagTitle}</span>
+              {cartBtn ? (
+                <span className="product-detail-cta__price">
+                  {finalPrice} INR
+                </span>
+              ) : null}
+            </CommonButton>
             {isOutOfStock && (
-              <button
-                className="ProductDets_ntfy_btn ProductDets_ntfy_btn_grid"
-                id="easysize-cart-button"
-                style={notifyLoading ? { backgroundColor: "black" } : {}}
+              <CommonButton
+                type="button"
+                title="Notify me"
                 onClick={handleNotifyMe}
-              >
-                {notifyLoading ? (
-                  <div className="ani-wrap">
-                    <div className="ani-main" />
-                  </div>
-                ) : (
-                  <>
-                    <span className="ProductDets_ntfy_btn_slect_size">
-                      Notify me
-                    </span>
-                    <span className="ProductDets_ntfy_btn_AddtoBeg">
-                      Notify me
-                    </span>
-                  </>
-                )}
-              </button>
+                loading={notifyLoading}
+                useDefaultId={false}
+                className="product-detail-cta"
+              />
             )}
           </div>
 

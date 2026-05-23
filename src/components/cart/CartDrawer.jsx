@@ -11,7 +11,7 @@ import gsap from "gsap";
 import CartProduct from "@/components/cart/CartProduct";
 import CartEmptyState from "@/components/cart/CartEmptyState";
 import NoiseOverlay from "@/components/common/NoiseOverlay";
-import CommonButton from "../common/CommonButton";
+import BracketSlideCta from "@/components/common/BracketSlideCta";
 import { TokenManager } from "@/utils/tokenManager";
 
 const CartDrawer = ({ isOpen, closeCart }) => {
@@ -145,7 +145,6 @@ const CartDrawer = ({ isOpen, closeCart }) => {
   return (
     <div id="card_drawer" onClick={closeCart} ref={backdropRef}>
       <div id="drawer" onClick={(e) => e.stopPropagation()} ref={drawerRef}>
-        <NoiseOverlay className="noise--drawer" />
         <div id="drawer_header">
           <span>
             Bag <sup>({count})</sup>
@@ -176,26 +175,28 @@ const CartDrawer = ({ isOpen, closeCart }) => {
         </div>
 
         {!isEmpty && (
-        <div id="drawer_bottom">
-          <div className="total_price">
-            <span>Total</span>
-            {totalprice !== discountedPrice && (
-              <span>{formatePrice(totalprice)}</span>
-            )}
-            <span>{formatePrice(discountedPrice)}</span>
-          </div>
-          <div className="checkout_btn_container">
-            <span>
+          <div id="drawer_bottom">
+            <p className="cart-delivery-note">
               Our outfits are made to order! The delivery time for our products
               is approx. 2 weeks
-            </span>
-            <CommonButton
-              title={"Checkout"}
-              onClick={navigateCheckout}
-              loading={isBtnLoading}
-            />
+            </p>
+            <div className="total_price">
+              <span>Total</span>
+              {totalprice !== discountedPrice && (
+                <span>{formatePrice(totalprice)}</span>
+              )}
+              <span>{formatePrice(discountedPrice)}</span>
+            </div>
+            <div className="checkout_btn_container">
+              <BracketSlideCta
+                label="Checkout"
+                onClick={navigateCheckout}
+                loading={isBtnLoading}
+                className="cart-checkout-cta"
+                ariaLabel="Checkout"
+              />
+            </div>
           </div>
-        </div>
         )}
       </div>
     </div>

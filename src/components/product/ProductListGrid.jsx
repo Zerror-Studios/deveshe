@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { getProductPriceLabel } from "@/utils/Util";
 import ProductCard from "../common/card/ProductCard";
+import CommonButton from "@/components/common/CommonButton";
 import { usePathname, useSearchParams } from "next/navigation";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
@@ -60,6 +61,13 @@ const ProductListGrid = ({
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, [pathname, searchParams, data]);
+
+  const addToBagTitle = !cartBtn
+    ? "Select a Size"
+    : isOutOfStock
+      ? StockStatus.OUT_OF_STOCK
+      : "Add to Bag";
+
   return (
     <div className="Similar_prd_wrap">
       <h2 className="Similar_prd_head">
@@ -83,29 +91,20 @@ const ProductListGrid = ({
         })}
       </div>
 
-      <div className="ProductDets_Notify_wrap mobile_add_btn">
-        <button
-          className="ProductDets_ntfy_btn ProductDets_ntfy_btn_grid"
-          id="easysize-cart-button"
-          style={loading ? { backgroundColor: "black" } : {}}
+      <div className="ProductDets_Notify_wrap mobile_add_btn product-detail-actions">
+        <CommonButton
+          type="button"
           onClick={handleAddToCart}
+          loading={loading}
+          disabled={!cartBtn || isOutOfStock}
+          useDefaultId={false}
+          className="product-detail-cta product-detail-cta--full"
         >
-          {loading ? (
-            <div className="ani-wrap">
-              <div className="ani-main" />
-            </div>
-          ) : (
-            <>
-              <span className="ProductDets_ntfy_btn_slect_size">
-                {!cartBtn ? "Select a Size" : isOutOfStock ? StockStatus.OUT_OF_STOCK : "Add to Bag"}
-              </span>
-              <span className="ProductDets_ntfy_btn_AddtoBeg">{isOutOfStock ? StockStatus.OUT_OF_STOCK : "Add to Bag"}</span>
-              <div className="ProductDets_ntfy_btn_price">
-                <span>{finalPrice} INR</span>
-              </div>
-            </>
-          )}
-        </button>
+          <span className="product-detail-cta__label">{addToBagTitle}</span>
+          {cartBtn ? (
+            <span className="product-detail-cta__price">{finalPrice} INR</span>
+          ) : null}
+        </CommonButton>
         <p className="ProductDets_info_text sql38zc _1l9nr81o">
           Complimentary shipping on orders above 5000 INR.
         </p>

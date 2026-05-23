@@ -7,7 +7,7 @@ import gsap from "gsap";
 import { RxCross2 } from "react-icons/rx";
 import ContactForm from "@/components/contact/ContactForm";
 import AddressSection from "@/components/contact/AddressSection";
-import CommonButton from "@/components/common/CommonButton";
+import BracketSlideCta from "@/components/common/BracketSlideCta";
 
 const PhoneModal = dynamic(() => import("@/components/contact/PhoneModal"), {
   ssr: false,
@@ -50,7 +50,7 @@ export default function ContactClient() {
         opacity: 1,
         y: 0,
         scale: 1,
-        stagger: 0.25,
+        stagger: 0.12,
         duration: 0.8,
         ease: "back.out(1.3)",
       },
@@ -73,7 +73,9 @@ export default function ContactClient() {
             aria-label="Contact form"
           >
             <div className="contact-form-drawer-header">
-              <span className="contact-form-drawer-header-title">Contact form</span>
+              <span className="contact-form-drawer-header-title">
+                Send a message
+              </span>
               <button
                 type="button"
                 aria-label="Close contact form"
@@ -83,6 +85,10 @@ export default function ContactClient() {
               </button>
             </div>
             <div className="contact-form-drawer-body" data-lenis-prevent>
+              <p className="contact-form-drawer-lead">
+                Tell us what you need — sizing, orders, collaborations, or
+                anything else. We read every note.
+              </p>
               <ContactForm />
             </div>
           </div>
@@ -94,18 +100,35 @@ export default function ContactClient() {
   return (
     <>
       <section id="contact_form" ref={sectionRef}>
-        <div className="contact-hero">
-          <div className="animate-item contact-copy">
-            <AddressSection />
-          </div>
-          <div className="animate-item contact-phone">
-            <PhoneModal />
-            <div className="contact-phone-cta">
-              <CommonButton
-                title="Use a form here"
-                type="button"
-                onClick={() => setIsFormOpen(true)}
-              />
+        <div className="contact-page">
+          <div className="contact-page__split">
+            <div className="contact-page__left animate-item">
+              <header className="contact-page__header">
+                <p className="contact-page__eyebrow">Customer Support</p>
+                <h1 className="contact-page__title">
+                  <span>Let&apos;s</span>{" "}
+                  <span className="contact-page__title-accent">talk</span>
+                </h1>
+                <p className="contact-page__lead">
+                  We believe in the power of digital, and we love collaborating
+                  with brands that feel the same. Reach out — we&apos;re here to
+                  help.
+                </p>
+              </header>
+
+              <AddressSection />
+            </div>
+
+            <div className="contact-page__right animate-item">
+              <div className="contact-page__phone-col">
+                <PhoneModal />
+                <BracketSlideCta
+                  label="Use a form"
+                  onClick={() => setIsFormOpen(true)}
+                  className="contact-page__form-cta"
+                  ariaLabel="Open contact form"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -114,4 +137,3 @@ export default function ContactClient() {
     </>
   );
 }
-

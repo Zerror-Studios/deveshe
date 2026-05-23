@@ -509,9 +509,9 @@
     margin: 0 !important;
   }
 
-  .ProductDets_bottom_links_wrap button,
-  .ProductDets_bottom_links_wrap p {
-    color: #7b7b7b !important;
+  .ProductDetails_wrapper .ProductDets_bottom_links_wrap button,
+  .ProductDetails_wrapper .ProductDets_bottom_links_wrap p {
+    color: #fe0000 !important;
   }
 
   .title_size_color {
@@ -608,6 +608,67 @@
 .ProductDetails_cntr {
   position: relative;
   list-style: none;
+}
+
+/* Product detail — brand red text + nav-style white pill CTAs */
+.ProductDetails_wrapper .ProductDets_description_wrap,
+.ProductDetails_wrapper .ProductDets_description_wrap *,
+.ProductDetails_wrapper .ProductDets_text-container_prdt_Desc,
+.ProductDetails_wrapper .ProductDets_text-container_prdt_Desc * {
+  color: #fe0000 !important;
+}
+
+.ProductDetails_wrapper .ProductDets_text_container_resp_productName,
+.ProductDetails_wrapper .ProductDets_text_container_productName,
+.ProductDetails_wrapper .ProductDets-size_numbers,
+.ProductDetails_wrapper .easysize_button,
+.ProductDetails_wrapper #easysize_button,
+.ProductDetails_wrapper .ProductDets_info_text,
+.ProductDetails_wrapper .Similar_prd_like-this {
+  color: #fe0000;
+}
+
+.ProductDetails_wrapper .product-detail-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.ProductDetails_wrapper .product-detail-price-header {
+  display: none;
+}
+
+.ProductDetails_wrapper .product-detail-cta--full.common-btn {
+  width: 100%;
+  max-width: 100%;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.ProductDetails_wrapper .product-detail-cta__label,
+.ProductDetails_wrapper .product-detail-cta__price {
+  font-family: paragraph;
+  font-size: calc(8px + 0.229167vw);
+  line-height: 1;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: #000 !important;
+}
+
+.ProductDetails_wrapper .product-detail-cta__label {
+  text-align: left;
+}
+
+.ProductDetails_wrapper .product-detail-cta__price {
+  text-align: right;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ProductDetails_wrapper .product-detail-cta--full.common-btn:hover:not(:disabled) .product-detail-cta__label,
+.ProductDetails_wrapper .product-detail-cta--full.common-btn:hover:not(:disabled) .product-detail-cta__price {
+  font-weight: 600;
 }
 
 .ProductDets_main {
@@ -1054,7 +1115,7 @@ button {
   position: absolute;
   width: 100%;
   height: 0.05vw;
-  background-color: black;
+  background-color: #fe0000;
   bottom: 15%;
   left: 0;
   transform: scaleX(0);
@@ -1791,8 +1852,18 @@ button {
     transition: all 0.2s ease-in-out;
   }
 
+  .ProductDetails_wrapper #easysize_button,
+  .ProductDetails_wrapper .easysize_button {
+    color: #fe0000 !important;
+  }
+
   #easysize_button:hover {
     color: #000 !important;
+  }
+
+  .ProductDetails_wrapper #easysize_button:hover,
+  .ProductDetails_wrapper .easysize_button:hover {
+    color: #fe0000 !important;
   }
 
   #easyweight_button {
@@ -1851,9 +1922,9 @@ button {
     line-height: 0.9;
   }
 
-  .ProductDets_common_style span {
+  .ProductDetails_wrapper .ProductDets_common_style span {
     font-size: 12px;
-    color: #767676;
+    color: #fe0000;
   }
 
   .ProductDets_size_wrap {

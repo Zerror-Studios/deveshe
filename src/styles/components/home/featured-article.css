@@ -31,6 +31,25 @@
 
 /* IMAGE */
 
+.article-imageLink,
+.article-titleLink {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.article-imageLink {
+  cursor: pointer;
+}
+
+.article-imageLink:hover .article-image {
+  opacity: 0.92;
+}
+
+.article-titleLink:hover .article-title {
+  opacity: 0.85;
+}
+
 .article-imageWrapper {
 
   position: relative;

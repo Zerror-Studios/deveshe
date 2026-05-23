@@ -206,7 +206,13 @@ const ContactForm = () => {
             )}
           </div>
 
-          <CommonButton title={"Submit"} loading={loading} />
+          <CommonButton
+            title="Submit"
+            loading={loading}
+            variant="brand"
+            useDefaultId={false}
+            className="contact-form-submit"
+          />
         </form>
       </div>
     </div>

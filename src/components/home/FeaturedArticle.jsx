@@ -2,6 +2,7 @@
 
 import BracketSlideCta from "@/components/common/BracketSlideCta";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
@@ -66,19 +67,27 @@ export default function FeaturedArticle({ blog }) {
       </p>
 
       {imageSrc ? (
-        <div className="article-imageWrapper">
-          <Image
-            width={1000}
-            height={1000}
-            src={imageSrc}
-            alt={imageAlt}
-            className="article-image"
-          />
-        </div>
+        <Link
+          href={href}
+          className="article-imageLink"
+          aria-label={`Read article: ${blog.title}`}
+        >
+          <div className="article-imageWrapper">
+            <Image
+              width={1000}
+              height={1000}
+              src={imageSrc}
+              alt={imageAlt}
+              className="article-image"
+            />
+          </div>
+        </Link>
       ) : null}
 
       <div className="article-content">
-        <h2 className="article-title">{blog.title}</h2>
+        <Link href={href} className="article-titleLink">
+          <h2 className="article-title">{blog.title}</h2>
+        </Link>
 
         {blog.excerpt ? (
           <p className="article-desc">{blog.excerpt}</p>
