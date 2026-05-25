@@ -62,23 +62,8 @@ const PhoneModal = () => {
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
 
-      const aspect = width / height;
-      let scale;
-      let offsetY;
-
-      if (isSmallMobile) {
-        scale = 1.5;
-        offsetY = -8;
-      } else if (isMobile) {
-        scale = 1.68;
-        offsetY = -11;
-      } else if (aspect < 0.95) {
-        scale = 1.72;
-        offsetY = -22;
-      } else {
-        scale = 1.85;
-        offsetY = -16;
-      }
+      const scale = isSmallMobile ? 1.45 : isMobile ? 1.75 : 2.05;
+      const offsetY = isSmallMobile ? -8 : isMobile ? -12 : -14;
       modelGroup.scale.setScalar(scale);
       modelGroup.position.set(0, offsetY, 0);
     };
@@ -285,9 +270,9 @@ const PhoneModal = () => {
     const animate = () => {
       const t = clock.getElapsedTime();
       camera.position.x = 5 + Math.sin(t) * 5;
-      camera.position.y = 18;
-      camera.position.z = 48;
-      camera.lookAt(0, 4, 0);
+      camera.position.y = 20;
+      camera.position.z = 45;
+      camera.lookAt(0, 0, 0);
       renderer.render(scene, camera);
       animationFrameId = window.requestAnimationFrame(animate);
     };
