@@ -8,12 +8,12 @@ export const FOOTER_QUICK_LINKS = [
 
 export const SHOP_NAV_LINKS = [
   { name: "See all", link: "/shop" },
-  { name: "Tops", link: "/shop/tops" },
-  { name: "Jackets", link: "/shop/jackets" },
-  { name: "Pants", link: "/shop/pants" },
-  { name: "Dresses", link: "/shop/dresses" },
-  { name: "Co cord sets", link: "/shop/co-cord-sets" },
-  { name: "Accessories", link: "/shop/accessories" },
+  { name: "Tops", link: "/shop/tops", imgsrc: "/assets/images/category/Tops final.png" },
+  { name: "Jackets", link: "/shop/jackets", imgsrc: "/assets/images/category/Jackets final.png" },
+  { name: "Pants", link: "/shop/pants", imgsrc: "/assets/images/category/Pants final.png" },
+  { name: "Dresses", link: "/shop/dresses", imgsrc: "/assets/images/category/Dresses final.png" },
+  { name: "Co cord sets", link: "/shop/co-cord-sets", imgsrc: "/assets/images/category/Co ord sets final.png" },
+  { name: "Accessories", link: "/shop/accessories", imgsrc: "/assets/images/category/Accessories final.png" },
 ];
 
 export const MenuData = [
