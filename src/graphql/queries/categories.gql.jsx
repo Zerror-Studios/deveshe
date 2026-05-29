@@ -61,6 +61,19 @@ export const GET_CLIENT_SIDE_CATEGORY_BY_SLUG = gql`
         productType
         slug
         status
+        categoryIds
+        categories {
+          _id
+          name
+          slug
+        }
+        productOptions {
+          optionName
+          showInProductPageAs
+          choices {
+            name
+          }
+        }
         variants {
           selectedOptions
           priceDifference

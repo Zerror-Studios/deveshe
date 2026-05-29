@@ -19,6 +19,12 @@ export const GET_PRODUCTS = gql`
         slug
         status
         isDeleted
+        categoryIds
+        categories {
+          _id
+          name
+          slug
+        }
         variants {
           selectedOptions
           priceDifference

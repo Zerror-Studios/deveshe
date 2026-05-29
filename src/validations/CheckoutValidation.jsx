@@ -36,14 +36,18 @@ export const CheckoutSchema = z
 
     useShippingAsBilling: z.boolean().default(true),
     shippingAddress: AddressSchema,
-    billingAddress: AddressSchema.optional(),
+    billingAddress: z.any().optional(),
   })
   .superRefine((data, ctx) => {
-    if (!data.useShippingAsBilling && !data.billingAddress) {
-      ctx.addIssue({
-        path: ["billingAddress"],
-        code: z.ZodIssueCode.custom,
-        message: "Billing address is required when not using shipping address",
-      });
+    if (data.useShippingAsBilling) return;
+
+    const result = AddressSchema.safeParse(data.billingAddress);
+    if (!result.success) {
+      for (const issue of result.error.issues) {
+        ctx.addIssue({
+          ...issue,
+          path: ["billingAddress", ...(issue.path ?? [])],
+        });
+      }
     }
   });

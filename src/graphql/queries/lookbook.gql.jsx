@@ -9,6 +9,7 @@ export const GET_LOOKBOOKS = gql`
         subName
         status
         description
+        productIds
         assets {
           path
           type

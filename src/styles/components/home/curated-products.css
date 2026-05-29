@@ -51,6 +51,10 @@
   color: #fe0000;
 }
 
+.curated-grid__empty {
+  padding: 2rem 0 4rem;
+}
+
 
 /* GRID */
 .curated-grid {

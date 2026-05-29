@@ -8,6 +8,7 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { useShopFilter } from "@/context/ShopFilterContext";
 
 const PILL_PATH =
   "M10.21 4V0a4.09 4.09 0 0 1-4 4H4a4.09 4.09 0 0 1-4-4v24a4.09 4.09 0 0 1 4-4h2.21a4.09 4.09 0 0 1 4 4V4Z";
@@ -24,29 +25,6 @@ const PillSvg = ({ className }) => (
   </svg>
 );
 
-const FILTER_MENUS = [
-  {
-    id: "collection",
-    label: "Collection",
-    options: ["All collections", "Spring / Summer", "Fall / Winter", "Archive"],
-  },
-  {
-    id: "productType",
-    label: "Product type",
-    options: ["All types", "Tops", "Bottoms", "Outerwear", "Dresses", "Accessories"],
-  },
-  {
-    id: "size",
-    label: "Size",
-    options: ["All sizes", "XS", "S", "M", "L", "XL", "XXL"],
-  },
-  {
-    id: "sort",
-    label: "Sort by",
-    options: ["Featured", "Newest", "Price: low to high", "Price: high to low"],
-  },
-];
-
 function getMenuCount(selections, menuId) {
   return selections[menuId]?.length ?? 0;
 }
@@ -62,15 +40,7 @@ function isOptionSelected(selections, menuId, option) {
   return selections[menuId]?.includes(option) ?? false;
 }
 
-function toggleSelection(prev, menuId, option) {
-  const current = prev[menuId] ?? [];
-  const next = current.includes(option)
-    ? current.filter((item) => item !== option)
-    : [...current, option];
-  return { ...prev, [menuId]: next };
-}
-
-const PILL_IDX = [1, 2];
+const PILL_MENU_IDS = new Set(["productType", "size"]);
 const MOBILE_NAV_OFFSET = 70;
 const FILTER_DROPDOWN_ZONE =
   ".curated-filter-strip__filters, .curated-filter-strip__menu, .curated-filter-strip__reset";
@@ -106,6 +76,7 @@ function MobileFilterPopup({
   onClose,
   expandedId,
   onToggleSection,
+  menus,
   selections,
   onToggleOption,
   onReset,
@@ -164,7 +135,7 @@ function MobileFilterPopup({
         </header>
 
         <div className="cfs-mobile-popup__body">
-          {FILTER_MENUS.map((menu) => {
+          {menus.map((menu) => {
             const isExpanded = expandedId === menu.id;
             const menuCount = getMenuCount(selections, menu.id);
             return (
@@ -234,6 +205,7 @@ function MobileFilterPopup({
 }
 
 export default function CuratedFilterStrip() {
+  const shopFilter = useShopFilter();
   const isMobileView = useIsMobileView();
   const [activeMenu, setActiveMenu] = useState(null);
   const [isPinned, setIsPinned] = useState(false);
@@ -241,12 +213,16 @@ export default function CuratedFilterStrip() {
   const [rootMinHeight, setRootMinHeight] = useState(undefined);
   const [isMobilePopupOpen, setIsMobilePopupOpen] = useState(false);
   const [mobileExpandedId, setMobileExpandedId] = useState(null);
-  const [selections, setSelections] = useState({});
 
   const stripRef = useRef(null);
-  const totalCount = getTotalCount(selections);
   const anchorYRef = useRef(null);
   const wasPinnedRef = useRef(false);
+
+  const menus = shopFilter?.menus ?? [];
+  const selections = shopFilter?.selections ?? {};
+  const toggleOption = shopFilter?.toggleOption ?? (() => {});
+  const resetSelections = shopFilter?.resetSelections ?? (() => {});
+  const totalCount = getTotalCount(selections);
 
   const measureAnchor = useCallback(() => {
     const el = stripRef.current;
@@ -299,14 +275,11 @@ export default function CuratedFilterStrip() {
     setMobileExpandedId(null);
   }, []);
 
-  const toggleOption = (menuId, option) => {
-    setSelections((prev) => toggleSelection(prev, menuId, option));
-  };
-
-  const resetSelections = () => {
-    setSelections({});
+  const handleReset = () => {
+    resetSelections();
     setMobileExpandedId(null);
   };
+
   const openMobilePopup = () => {
     setActiveMenu(null);
     setIsMobilePopupOpen(true);
@@ -418,8 +391,10 @@ export default function CuratedFilterStrip() {
     };
   }, []);
 
-  const activeData = FILTER_MENUS.find((m) => m.id === activeMenu);
+  const activeData = menus.find((m) => m.id === activeMenu);
   const activeMenuOpen = Boolean(activeData);
+
+  if (!menus.length) return null;
 
   return (
     <>
@@ -458,9 +433,9 @@ export default function CuratedFilterStrip() {
                   className="curated-filter-strip__filters"
                   onMouseLeave={(e) => closeFilterUnlessEnteringZone(e, setActiveMenu)}
                 >
-                  {FILTER_MENUS.map((menu, idx) => {
+                  {menus.map((menu) => {
                     const isOpen = activeMenu === menu.id;
-                    const isPill = PILL_IDX.includes(idx);
+                    const isPill = PILL_MENU_IDS.has(menu.id);
                     const menuCount = getMenuCount(selections, menu.id);
 
                     return (
@@ -551,7 +526,7 @@ export default function CuratedFilterStrip() {
                   <button
                     type="button"
                     className="curated-filter-strip__reset"
-                    onClick={resetSelections}
+                    onClick={handleReset}
                   >
                     Reset all
                   </button>
@@ -569,9 +544,10 @@ export default function CuratedFilterStrip() {
         onToggleSection={(id) =>
           setMobileExpandedId((prev) => (prev === id ? null : id))
         }
+        menus={menus}
         selections={selections}
         onToggleOption={toggleOption}
-        onReset={resetSelections}
+        onReset={handleReset}
         onApply={closeMobilePopup}
       />
     </>

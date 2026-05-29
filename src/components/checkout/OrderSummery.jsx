@@ -12,7 +12,8 @@ import { toast } from "react-toastify";
 import { APPLY_CART_COUPON, REMOVE_CART_COUPON } from "@/graphql";
 
 const couponSchema = z.object({ couponCode: z.string().min(1, "Coupon code is required") });
-const OrderSummary = ({ data, refetch }) => {
+
+function OrderSummary({ data, refetch }) {
   const {
     totalprice = 0,
     itemcount = 0,
@@ -222,4 +223,4 @@ const OrderSummary = ({ data, refetch }) => {
   );
 };
 
-export default OrderSummary;
+export default React.memo(OrderSummary);

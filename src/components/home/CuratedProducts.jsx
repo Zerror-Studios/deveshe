@@ -6,11 +6,26 @@ import ScrollTrigger from "gsap/dist/ScrollTrigger";
 
 import ProductGridCard from "@/components/common/card/ProductGridCard";
 import ProductLoader from "@/components/loaders/ProductLoader";
+import { useShopFilter } from "@/context/ShopFilterContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const DEFAULT_DESCRIPTION =
   "Handpicked styles to elevate your everyday look.";
+
+function getCuratedHeading(categoryName, isShop) {
+  if (!isShop || !categoryName?.trim()) {
+    return { primary: "Top ", accent: "Picks" };
+  }
+
+  const words = categoryName.trim().split(/\s+/);
+  if (words.length === 1) {
+    return { primary: "", accent: words[0] };
+  }
+
+  const accent = words.pop();
+  return { primary: `${words.join(" ")} `, accent };
+}
 
 export default function CuratedProducts({
   products = [],
@@ -18,11 +33,15 @@ export default function CuratedProducts({
   isShop = false,
   description,
 }) {
+  const shopFilter = useShopFilter();
+  const displayProducts = shopFilter?.filteredProducts ?? products;
+  const heading = getCuratedHeading(categoryName, isShop);
   const descriptionText =
     description ??
     (isShop && categoryName
       ? `Explore our curated ${categoryName} selection.`
       : DEFAULT_DESCRIPTION);
+
   useEffect(() => {
     const splitText = (selector) => {
       document.querySelectorAll(selector).forEach((el) => {
@@ -63,7 +82,7 @@ export default function CuratedProducts({
     });
 
     return () => ctx.revert();
-  }, [categoryName]);
+  }, [heading.primary, heading.accent]);
 
   return (
     <section
@@ -71,18 +90,26 @@ export default function CuratedProducts({
     >
       <div className="curated-header">
         <h2 className="curated-heading">
-          <span className="split">Top </span>
-          <span className="split heading-accent">Picks</span>
+          {heading.primary ? (
+            <span className="split">{heading.primary}</span>
+          ) : null}
+          <span className="split heading-accent">{heading.accent}</span>
         </h2>
         {descriptionText ? (
           <p className="curated-description">{descriptionText}</p>
         ) : null}
       </div>
-      {!products || products.length === 0 ? (
-        <ProductLoader />
+      {!displayProducts || displayProducts.length === 0 ? (
+        products?.length > 0 && shopFilter?.hasActiveFilters ? (
+          <p className="curated-description curated-grid__empty">
+            No products match your filters. Try adjusting or resetting filters above.
+          </p>
+        ) : (
+          <ProductLoader />
+        )
       ) : (
         <div className="curated-grid">
-          {products.map((product) => (
+          {displayProducts.map((product) => (
             <ProductGridCard
               key={product?._id || product?.slug}
               product={product}
