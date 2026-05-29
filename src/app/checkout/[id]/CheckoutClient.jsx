@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,11 +14,9 @@ import Shipping from "@/components/checkout/Shipping";
 import BillingAddress from "@/components/checkout/BillingAddress";
 import OrderSummary from "@/components/checkout/OrderSummery";
 import { EmailSubscribedStatus } from "@/utils/Constant";
-import Checkout from "nimbbl_sonic";
 import { useParams, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
 import Loader from "@/components/checkout/Loader";
-import gsap from "gsap";
 import CommonButton from "@/components/common/CommonButton";
 import { trackEcomEvent } from "@/utils/analytics";
 
@@ -32,21 +30,23 @@ export default function CheckoutClient() {
   const { isLoggedIn, user } = useAuthStore((state) => state);
   const [checkoutOrder] = useMutation(CHECKOUT_ORDER);
 
-  const cartListPayload = { cartId };
   const { data: response, refetch } = useQuery(CART_LIST, {
     skip: !cartId,
-    variables: cartListPayload,
-    fetchPolicy: "network-only",
+    variables: { cartId },
+    fetchPolicy: "cache-first",
     nextFetchPolicy: "cache-first",
   });
 
-  const cartData = response?.getCart || {};
+  const cart = response?.getCart;
+  const cartListPayload = useMemo(() => ({ cartId }), [cartId]);
 
   useEffect(() => {
-    if (cartData && Object.keys(cartData).length > 0) {
-      trackEcomEvent.beginCheckout(cartData.items, cartData.totalValue);
-    }
-  }, [cartData]);
+    if (!cart?._id || !cart?.cart?.length) return;
+    trackEcomEvent.beginCheckout(
+      cart.cart,
+      cart.discountedPrice ?? cart.totalprice ?? 0
+    );
+  }, [cart?._id]);
 
   const {
     register,
@@ -57,6 +57,8 @@ export default function CheckoutClient() {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(CheckoutSchema),
+    mode: "onBlur",
+    reValidateMode: "onBlur",
     defaultValues: {
       shippingAddress: {
         addressType: "HOME",
@@ -122,7 +124,8 @@ export default function CheckoutClient() {
 
   const launchNimbblSonicCheckout = async (token) => {
     try {
-      const checkout = new Checkout({ token });
+      const { default: NimbblCheckout } = await import("nimbbl_sonic");
+      const checkout = new NimbblCheckout({ token });
       checkout.open({
         callback_handler: async function (response) {
           try {
@@ -147,8 +150,16 @@ export default function CheckoutClient() {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const { email, emailSubscribedStatus, shippingAddress, billingAddress } =
-        data;
+      const {
+        email,
+        emailSubscribedStatus,
+        shippingAddress,
+        useShippingAsBilling,
+      } = data;
+
+      const billingAddress = useShippingAsBilling
+        ? shippingAddress
+        : data.billingAddress;
 
       const payload = {
         userData: {
@@ -159,7 +170,7 @@ export default function CheckoutClient() {
           countryCode: shippingAddress.countryCode,
           emailSubscribedStatus,
         },
-        cartId: cartData?._id,
+        cartId: cart?._id,
         shippingAddress: { email, ...shippingAddress },
         billingAddress: { email, ...billingAddress },
       };
@@ -176,30 +187,10 @@ export default function CheckoutClient() {
     }
   };
 
-  const leftRef = useRef(null);
-  const rightRef = useRef(null);
-
-  useEffect(() => {
-    const tl = gsap.timeline({
-      defaults: { duration: 0.8, ease: "power3.out" },
-    });
-
-    gsap.set([leftRef.current, rightRef.current], {
-      opacity: 0,
-      y: 100,
-    });
-
-    tl.to([leftRef.current, rightRef.current], {
-      opacity: 1,
-      y: 0,
-      duration: 1,
-    });
-  }, []);
-
   return (
     <>
-      <div className="checkout-cont">
-        <div className="checkout-left" ref={leftRef}>
+      <div className="checkout-cont" data-lenis-prevent>
+        <div className="checkout-left">
           <Heading />
           <form onSubmit={handleSubmit(onSubmit)} className="checkout-main">
             <ContactDetail
@@ -224,9 +215,9 @@ export default function CheckoutClient() {
             <CommonButton title={"Pay now"} loading={isLoading} />
           </form>
         </div>
-        <div className="checkout-right" ref={rightRef}>
+        <div className="checkout-right">
           <OrderSummary
-            data={cartData}
+            data={cart}
             refetch={() => refetch(cartListPayload)}
           />
         </div>
@@ -235,4 +226,3 @@ export default function CheckoutClient() {
     </>
   );
 }
-

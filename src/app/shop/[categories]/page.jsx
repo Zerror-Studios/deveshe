@@ -1,7 +1,12 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import { GET_CLIENT_SIDE_CATEGORY_BY_SLUG } from "@/graphql";
+import {
+  GET_CLIENT_SIDE_CATEGORIES,
+  GET_CLIENT_SIDE_CATEGORY_BY_SLUG,
+  GET_LOOKBOOKS,
+} from "@/graphql";
 import { createApolloClientServer } from "@/lib/apolloClient.server";
+import { ProductStatus } from "@/utils/Constant";
 import CategoriesClient from "./CategoriesClient";
 
 export const dynamic = "force-dynamic";
@@ -49,13 +54,31 @@ export default async function CategoriesPage({ params }) {
 
   const client = createApolloClientServer();
   let category = null;
+  let categories = [];
+  let lookbooks = [];
 
   try {
-    const { data } = await client.query({
-      query: GET_CLIENT_SIDE_CATEGORY_BY_SLUG,
-      variables: { slug },
-    });
-    category = data?.getClientSideCategory ?? null;
+    const [categoryRes, categoriesRes, lookbooksRes] = await Promise.all([
+      client.query({
+        query: GET_CLIENT_SIDE_CATEGORY_BY_SLUG,
+        variables: { slug },
+      }),
+      client.query({
+        query: GET_CLIENT_SIDE_CATEGORIES,
+        variables: { offset: 0, limit: 100, filter: {} },
+      }),
+      client.query({
+        query: GET_LOOKBOOKS,
+        variables: {
+          offset: 0,
+          limit: 100,
+          filter: { status: ProductStatus.PUBLISHED },
+        },
+      }),
+    ]);
+    category = categoryRes?.data?.getClientSideCategory ?? null;
+    categories = categoriesRes?.data?.getClientSideCategories?.categories || [];
+    lookbooks = lookbooksRes?.data?.getClientSideLookBooks?.lookBooks || [];
   } catch (error) {
     console.error("Error fetching category by slug:", error?.message);
   }
@@ -67,6 +90,8 @@ export default async function CategoriesPage({ params }) {
   return (
     <CategoriesClient
       productData={productData}
+      categories={categories}
+      lookbooks={lookbooks}
       heroImageSrc={category?.imgsrc || undefined}
       categoryName={category?.name || "Shop"}
       categoryDescription={category?.description || ""}

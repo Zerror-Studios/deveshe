@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useWatch } from "react-hook-form";
 import { PhoneInput } from "react-international-phone";
 import { countriesData, addressType } from "@/helpers/Data";
@@ -9,21 +9,11 @@ const BillingAddress = ({ errors, control, register, setValue }) => {
     control,
     name: "useShippingAsBilling",
   });
-  const shippingAddress = useWatch({ control, name: "shippingAddress" });
-  const billingAddress = useWatch({ control, name: "billingAddress" });
-
-  useEffect(() => {
-    if (useShippingAsBilling) {
-      const { phone, countryCode, addressType, ...rest } =
-        shippingAddress || {};
-      setValue("billingAddress", {
-        ...rest,
-        phone: phone || "",
-        countryCode: countryCode || "",
-        addressType: addressType || "HOME",
-      });
-    }
-  }, [useShippingAsBilling, shippingAddress, setValue]);
+  const billingPhone = useWatch({ control, name: "billingAddress.phone" });
+  const billingCountryCode = useWatch({
+    control,
+    name: "billingAddress.countryCode",
+  });
 
   return (
     <div className="Payment_container" style={{ marginTop: "20px" }}>
@@ -224,9 +214,8 @@ const BillingAddress = ({ errors, control, register, setValue }) => {
                           <PhoneInput
                             disabled={useShippingAsBilling}
                             value={`+${
-                              billingAddress?.countryCode?.replace("+", "") ||
-                              "91"
-                            }${billingAddress?.phone || ""}`}
+                              billingCountryCode?.replace("+", "") || "91"
+                            }${billingPhone || ""}`}
                             defaultCountry="in"
                             className="delivery__phone_btn"
                             inputClassName="delivery__input__phone"

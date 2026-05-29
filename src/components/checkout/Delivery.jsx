@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useWatch } from "react-hook-form";
 import { PhoneInput } from "react-international-phone";
 import { countriesData, addressType } from "@/helpers/Data";
@@ -15,20 +15,28 @@ const Delivery = ({ errors, control, register, setValue }) => {
   const [isAddress, setIsAddress] = useState(true);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [offset, setOffset] = useState(0);
-  const shippingAddress = useWatch({ control, name: "shippingAddress" });
+  const shippingPhone = useWatch({ control, name: "shippingAddress.phone" });
+  const shippingCountryCode = useWatch({
+    control,
+    name: "shippingAddress.countryCode",
+  });
   const { isLoggedIn, user } = useAuthStore((state) => state);
-  const payload = {
-    filters: { userId: user?._id },
-    limit: LIMIT,
-    offset,
-    sort: { createdAt: Sort.DESC, primary: Sort.ASC },
-  };
+  const addressVariables = useMemo(
+    () => ({
+      filters: { userId: user?._id },
+      limit: LIMIT,
+      offset,
+      sort: { createdAt: Sort.DESC, primary: Sort.ASC },
+    }),
+    [user?._id, offset]
+  );
   const {
     data: addressResponse,
     loading,
   } = useQuery(USER_ADDRESS_LIST, {
     skip: !isLoggedIn,
-    variables: payload,
+    variables: addressVariables,
+    fetchPolicy: "cache-first",
   });
   const { data = [] } = addressResponse?.getAddressByFilters || {};
 
@@ -278,8 +286,7 @@ const Delivery = ({ errors, control, register, setValue }) => {
             <div className="Phone_input_cntr div-name">
               <PhoneInput
                 defaultCountry="in"
-                value={`+${shippingAddress?.countryCode?.replace("+", "") || "91"
-                  }${shippingAddress?.phone || ""}`}
+                value={`+${shippingCountryCode?.replace("+", "") || "91"}${shippingPhone || ""}`}
                 className="delivery__phone_btn"
                 inputClassName="delivery__input__phone"
                 onChange={(value, metadata) => {

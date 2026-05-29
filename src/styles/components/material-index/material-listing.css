@@ -1,5 +1,5 @@
 .material-listing {
-  padding: 40px 40px 80px;
+  padding: 8rem 40px 80px;
   font-family: paragraph;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -68,13 +68,19 @@
   }
 }
 
+@media (max-width: 1000px) {
+  .material-listing {
+    padding-top: calc(65px + 40px);
+  }
+}
+
 @media (max-width: 768px) {
   .material-listing__grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
   .material-listing {
-    padding: 20px;
+    padding: calc(65px + 32px) 20px 60px;
   }
 
   .material-listing__heading {
@@ -85,7 +91,7 @@
 
 @media (max-width: 480px) {
   .material-listing {
-    padding: 30px 20px;
+    padding: calc(65px + 24px) 20px 48px;
   }
 
   .material-listing__grid {
