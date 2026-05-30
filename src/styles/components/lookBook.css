@@ -30,6 +30,7 @@
   line-height: 0.9;
   text-transform: uppercase;
   text-align: center;
+  color: #fe0000;
 }
 .lb-header-text h2 span {
   display: inline-block;
@@ -42,6 +43,7 @@
   font-size: 1.5rem;
   opacity: 0;
   margin-bottom: 1vw;
+  color: #fe0000;
 }
 .word {
   display: inline-block;
@@ -69,10 +71,18 @@
   padding-left: 30vw;
   font-family: paragraphStyleB;
   font-size: 2.2vw;
-  color: black;
+  color: #fe0000 !important;
   font-weight: 500;
   z-index: 10;
   position: relative;
+}
+
+#lb-text-container span{
+  color: #fe0000 !important;
+}
+
+#lb-text-container * {
+  color: #fe0000;
 }
 
 #lb-video-container {
@@ -163,6 +173,10 @@
   text-align: left;
   font-family: paragraphStyleB;
   font-size: 2.2vw;
+  color: white;
+}
+
+#main-banner-text * {
   color: white;
 }
 #overlay-lb2 {
@@ -293,6 +307,7 @@
   flex-direction: column;
   gap: 5px;
   padding-top: 5px;
+  color: #fe0000;
 }
 @media (max-width: 576px) {
   #lb-section3-ig img {
