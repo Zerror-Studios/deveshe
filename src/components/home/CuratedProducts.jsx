@@ -13,6 +13,19 @@ gsap.registerPlugin(ScrollTrigger);
 const DEFAULT_DESCRIPTION =
   "Handpicked styles to elevate your everyday look.";
 
+const EMPTY_FILTER_MESSAGE =
+  "No products match your filters. Try adjusting or resetting filters above.";
+
+function getEmptyProductsMessage(categoryName, isShop) {
+  if (isShop && categoryName?.trim()) {
+    return `Nothing in ${categoryName.trim()} yet—the rack's taking a breather. Check back soon.`;
+  }
+  if (isShop) {
+    return "The shop's gone quiet for now. Fresh pieces landing soon.";
+  }
+  return "No products here yet—the rack's taking a breather.";
+}
+
 function getCuratedHeading(categoryName, isShop) {
   if (!isShop || !categoryName?.trim()) {
     return { primary: "Top ", accent: "Picks" };
@@ -34,6 +47,7 @@ export default function CuratedProducts({
   description,
 }) {
   const shopFilter = useShopFilter();
+  const sourceProducts = shopFilter?.products ?? products;
   const displayProducts = shopFilter?.filteredProducts ?? products;
   const heading = getCuratedHeading(categoryName, isShop);
   const descriptionText =
@@ -100,12 +114,18 @@ export default function CuratedProducts({
         ) : null}
       </div>
       {!displayProducts || displayProducts.length === 0 ? (
-        products?.length > 0 && shopFilter?.hasActiveFilters ? (
+        shopFilter?.hasActiveFilters && sourceProducts?.length > 0 ? (
           <p className="curated-description curated-grid__empty">
-            No products match your filters. Try adjusting or resetting filters above.
+            {EMPTY_FILTER_MESSAGE}
           </p>
-        ) : (
+        ) : sourceProducts == null ? (
           <ProductLoader />
+        ) : (
+          <div className="curated-grid__empty curated-empty">
+            <p className="curated-empty__message">
+              {getEmptyProductsMessage(categoryName, isShop)}
+            </p>
+          </div>
         )
       ) : (
         <div className="curated-grid">
