@@ -55,6 +55,19 @@
   padding: 2rem 0 4rem;
 }
 
+.curated-empty {
+  text-align: center;
+}
+
+.curated-empty__message {
+  font-family: paragraphStyleB, paragraph, sans-serif;
+  font-size: clamp(16px, 1.8vw, 22px);
+  line-height: 1.45;
+  color: #fe0000;
+  max-width: 36ch;
+  margin: 0 auto;
+}
+
 
 /* GRID */
 .curated-grid {

@@ -79,12 +79,13 @@ export function ShopFilterProvider({
     () => ({
       menus,
       selections,
+      products,
       filteredProducts,
       toggleOption,
       resetSelections,
       hasActiveFilters: Object.keys(selections).length > 0,
     }),
-    [menus, selections, filteredProducts, toggleOption, resetSelections]
+    [menus, selections, products, filteredProducts, toggleOption, resetSelections]
   );
 
   return (

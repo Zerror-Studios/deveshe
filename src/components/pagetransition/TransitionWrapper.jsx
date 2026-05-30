@@ -17,12 +17,12 @@ const HOMEPAGE_LOGO_KEY = "dd-homepage-logo-intro";
 
 const TIMING = {
   short: {
-    overlay: 0.2,
-    brush: 0.55,
+    overlay: 0.5,
+    brush: 1.5,
   },
   logo: {
-    overlay: 0.3,
-    brush: 0.9,
+    overlay: 0.5,
+    brush: 1.5,
     logoIn: 0.35,
     logoOut: 0.25,
     hold: 0.15,
@@ -137,7 +137,7 @@ export default function TransitionWrapper({ children }) {
         duration: overlayFade,
         ease: "power2.inOut",
       },
-      `-=${overlayFade * 0.4}`
+      `-=${overlayFade}`
     )
       .set(path, { drawSVG: "0%", strokeWidth: 2 })
       .call(() => {

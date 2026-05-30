@@ -13,6 +13,7 @@
   display: flex;
   padding: 200px 0px 50px;
   justify-content: center;
+  color: #fe0000;
 }
 
 .checkout-left,
@@ -59,8 +60,8 @@
   font-weight: 400;
 }
 
-a {
-  color: #000;
+.checkout-cont a {
+  color: #fe0000;
 }
 
 .checkout_header span:nth-child(2) {
@@ -758,8 +759,8 @@ input:focus {
 
 .checkout-main button {
   height: 40px;
-  background-color: #000;
-  color: #fff;
+  background-color: #fff;
+  color: #000;
   border-radius: 30px;
   padding: 9px 1rem;
   width: 100%;
@@ -769,7 +770,8 @@ input:focus {
 }
 
 .checkout-main button:hover {
-  background-color: #4b4b4b;
+  background-color: #fff;
+  font-weight: 600;
 }
 
 @media (max-width: 576px) {
@@ -950,8 +952,9 @@ input:focus {
 
 .ApplyBtn {
   border-radius: 0px !important;
-  background-color: #000 !important;
-  color: #fff;
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 1px solid #fff !important;
   min-width: 70px;
 }
 
@@ -1307,4 +1310,166 @@ input:focus {
     width: 45%;
     margin: 0;
   }
+}
+
+/* Checkout — brand red text (#fe0000) */
+.checkout-cont,
+.checkout-cont p,
+.checkout-cont h1,
+.checkout-cont h2,
+.checkout-cont h6,
+.checkout-cont label,
+.checkout-cont span:not(.checkmark):not(.arrow),
+.checkout-cont .checkout-t,
+.checkout-cont .checkout-total,
+.checkout-cont .checkout-price,
+.checkout-cont .same_style_text,
+.checkout-cont .black-ship-t,
+.checkout-cont .summary-name,
+.checkout-cont .summary-details div,
+.checkout-cont .summary-qtn,
+.checkout-cont .summary-price,
+.checkout-cont .summary-qty,
+.checkout-cont .cart-p,
+.checkout-cont .cpp,
+.checkout-cont .cpp-p,
+.checkout-cont .address-p,
+.checkout-cont .add-name,
+.checkout-cont .add-p,
+.checkout-cont .sinp-p,
+.checkout-cont .ship-text,
+.checkout-cont .payment_title_cntr p,
+.checkout-cont .Delivery_input_cntr label,
+.checkout-cont .Delivery_input_cntr .country_name,
+.checkout-cont .Shipping_method_cntr,
+.checkout-cont .Shipping_method_cntr p,
+.checkout-cont .credit_card_cntr span,
+.checkout-cont .Paypal_main_cntr span,
+.checkout-cont .checkbox-container h6,
+.checkout-cont .tax_name,
+.checkout-cont .tax_amount,
+.checkout-cont .total_tax_value,
+.checkout-cont .total_tax_label,
+.checkout-cont .inclusive_tax_msg,
+.checkout-cont .main-ship-t,
+.checkout-cont .promo-t,
+.checkout-cont .edit-add,
+.checkout-cont .localogo,
+.checkout-cont .error,
+.checkout-cont .error-text,
+.checkout-cont .sinp-error,
+.checkout-cont .error-checkout,
+.checkout-cont .input_grid_style_for_all span,
+.checkout-cont .card-details-error {
+  color: #fe0000 !important;
+}
+
+.checkout-cont input,
+.checkout-cont select,
+.checkout-cont textarea {
+  color: #fe0000 !important;
+}
+
+.checkout-cont input::placeholder,
+.checkout-cont textarea::placeholder {
+  color: rgba(254, 0, 0, 0.55) !important;
+  opacity: 1;
+}
+
+.checkout-cont .checkout_header span:nth-child(2),
+.checkout-cont .checkout_header span:nth-child(2) svg {
+  color: #fe0000 !important;
+}
+
+.checkout-cont .summary-cont,
+.checkout-cont .checkout-price-cont,
+.checkout-cont .tax_breakdown_section,
+.checkout-cont .total_tax_row,
+.checkout-cont .checkout-in,
+.checkout-cont .not-active-cont,
+.checkout-cont .main-ship-t {
+  border-color: rgba(254, 0, 0, 0.25) !important;
+}
+
+.checkout-cont .final-checkout-cont {
+  border: 1px solid rgba(254, 0, 0, 0.35);
+  background-color: rgba(254, 0, 0, 0.04);
+}
+
+.checkout-cont .contact_input_cntr input,
+.checkout-cont .Name_input_cntr input,
+.checkout-cont .Company_input_cntr input,
+.checkout-cont .pincode_city_input_cntr input,
+.checkout-cont .Address_input_cntr input,
+.checkout-cont .Appartment_input_cntr input,
+.checkout-cont .Phone_input_cntr input,
+.checkout-cont .Delivery_input_cntr select,
+.checkout-cont .card_details_input_cntr input,
+.checkout-cont .Name_on_card_input_cntr input,
+.checkout-cont .card_details_cover_cntr input,
+.checkout-cont .promo-input,
+.checkout-cont .sinp,
+.checkout-cont .delivery__input__phone,
+.checkout-cont .cards_inner_content,
+.checkout-cont .card_details_cntr,
+.checkout-cont .Shipping_method_cntr,
+.checkout-cont .address-div {
+  border-color: rgba(254, 0, 0, 0.35) !important;
+  background-color: rgba(254, 0, 0, 0.04) !important;
+}
+
+.checkout-cont .address-div:hover {
+  background-color: rgba(254, 0, 0, 0.08) !important;
+}
+
+.checkout-cont .checkbox-container .checkmark {
+  border-color: #fe0000 !important;
+  background-color: rgba(254, 0, 0, 0.04) !important;
+}
+
+.checkout-cont .checkbox-container input[type="checkbox"]:checked + .checkmark,
+.checkout-cont .checkbox-container input[type="radio"]:checked + .checkmark {
+  background-color: #fe0000 !important;
+  border-color: #fe0000 !important;
+}
+
+.checkout-cont .checkbox_cntr_paypal input {
+  border-color: rgba(254, 0, 0, 0.35) !important;
+}
+
+.checkout-cont .checkbox_cntr_paypal input:checked {
+  border-color: #fe0000 !important;
+}
+
+.checkout-cont input:focus,
+.checkout-cont select:focus {
+  outline-color: #fe0000 !important;
+}
+
+.checkout-cont .checkout-main button,
+.checkout-cont .RemoveBtn,
+.checkout-cont .checkout-main #common_black_btn {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+.checkout-cont .ApplyBtn {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 1px solid #fff !important;
+}
+
+.checkout-cont .checkout-main button:hover,
+.checkout-cont .ApplyBtn:hover,
+.checkout-cont .RemoveBtn:hover,
+.checkout-cont .checkout-main #common_black_btn:hover:not(:disabled) {
+  background-color: #fff !important;
+  color: #000 !important;
+  font-weight: 600;
+}
+
+.checkout-cont .delivery__phone_btn .react-international-phone-country-selector-button {
+  border-color: rgba(254, 0, 0, 0.35) !important;
+  background-color: rgba(254, 0, 0, 0.04) !important;
+  color: #fe0000 !important;
 }
