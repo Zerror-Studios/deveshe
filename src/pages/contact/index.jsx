@@ -1,9 +1,14 @@
 import React, { useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
 import gsap from "gsap";
 import SeoHeader from "@/components/seo/SeoHeader";
-import PhoneModal from "@/components/contact/PhoneModal";
 import ContactForm from "@/components/contact/ContactForm";
 import AddressSection from "@/components/contact/AddressSection";
+
+// three / R3F stay out of the main bundle and off the server (SF-17).
+const PhoneModal = dynamic(() => import("@/components/contact/PhoneModal"), {
+  ssr: false,
+});
 
 const Contact = ({ meta }) => {
   const sectionRef = useRef(null);
@@ -39,6 +44,8 @@ const Contact = ({ meta }) => {
       },
       "-=0.6" // overlap with section animation for smoothness
     );
+
+    return () => tl.kill();
   }, []);
 
   return (

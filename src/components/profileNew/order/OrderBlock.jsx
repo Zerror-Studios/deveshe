@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useQuery } from "@apollo/client/react";
-import { useAuthStore } from "@/store/auth-store";
 import { ORDER_LIST } from "@/graphql";
 import OrderHeader from './OrderHeader'
 import OrderTable from './OrderTable'
@@ -18,17 +17,17 @@ const columns = [
 const OrderBlock = () => {
   const LIMIT = 100;
   const [offset, setOffset] = useState(0);
-  const { user } = useAuthStore((state) => state);
 
+  // Customer-scoped: the server reads the customer from the token.
   const payload = {
-    filter: { userId: user?._id },
     limit: LIMIT,
     offset,
   };
   const { data: response, loading } = useQuery(ORDER_LIST, {
     variables: payload,
+    fetchPolicy: "network-only",
   });
-  const { data = [], totalCount = 0 } = response?.getOrdersByFilters || {};
+  const { orders: data = [], totalCount = 0 } = response?.myOrders || {};
   return (
     <>
       <OrderHeader totalCount={totalCount} />

@@ -1,7 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { useAuthStore } from "@/store/auth-store";
-import { TokenManager } from "@/utils/tokenManager";
+import { useAuth } from "@/context/AuthContext";
 
 const tabs = [
   { id: 0, label: "My Profile" },
@@ -11,12 +10,11 @@ const tabs = [
 
 const ProfileHeader = ({ activeTab, setTab }) => {
   const router = useRouter();
-  const { clearAuth } = useAuthStore();
-  const handleSignout = () => {
-    TokenManager.clearTokens();
-    clearAuth();
-    localStorage.removeItem("user-data");
-    router.replace("/");
+  const { logout } = useAuth();
+  const handleSignout = async () => {
+    // Leave the guarded page first so withAuth does not redirect to /login.
+    await router.replace("/");
+    await logout();
   };
   return (
     <div id="profile_header">

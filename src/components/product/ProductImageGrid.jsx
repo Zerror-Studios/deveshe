@@ -5,9 +5,23 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 // import required modules
 import { Pagination } from "swiper/modules";
+import {
+  GalleryActionEnum,
+  trackGalleryInteraction,
+} from "@/utils/analytics-events.util";
 
-const ProductImageGrid = ({ assets = [], setSelectedAsset, setIsPreviewOpen }) => {
+// Desktop shows the gallery beside the details; phones get the swiper
+// (RPERF-12).
+const DESKTOP_GRID_SIZES = "(max-width: 1000px) 100vw, 33vw";
+
+const ProductImageGrid = ({ assets = [], setSelectedAsset, setIsPreviewOpen, itemId }) => {
   if (!assets && assets.length === 0) return;
+  // PRD-013 gallery_interaction: opening the preview is a zoom.
+  const openPreview = (item) => {
+    trackGalleryInteraction(itemId, GalleryActionEnum.ZOOM);
+    setSelectedAsset(item);
+    setIsPreviewOpen && setIsPreviewOpen(true);
+  };
   const [isMobile, setIsMobile] = useState(false);
 
   // detect mobile screen
@@ -50,6 +64,7 @@ const ProductImageGrid = ({ assets = [], setSelectedAsset, setIsPreviewOpen }) =
                               <Image
                                 width={1000}
                                 height={1000}
+                                sizes={DESKTOP_GRID_SIZES}
                                 src={item?.path || ""}
                                 alt={item?.altText || ""}
                               />
@@ -73,10 +88,7 @@ const ProductImageGrid = ({ assets = [], setSelectedAsset, setIsPreviewOpen }) =
                     <button
                       key={`product-image-${index}`}
                       className="ProductDets_Big_img_cntr"
-                      onClick={() => {
-                        setSelectedAsset(item);
-                        setIsPreviewOpen && setIsPreviewOpen(true);
-                      }}
+                      onClick={() => openPreview(item)}
                     >
                       <div className="shop_card_img_bgcover">
                         <div className="ProductDets_Big_card_img-main_cntr">
@@ -97,6 +109,7 @@ const ProductImageGrid = ({ assets = [], setSelectedAsset, setIsPreviewOpen }) =
                             <Image
                               width={1000}
                               height={1000}
+                              sizes={DESKTOP_GRID_SIZES}
                               src={item?.path || ""}
                               alt={item?.altText || ""}
                             />
@@ -113,6 +126,9 @@ const ProductImageGrid = ({ assets = [], setSelectedAsset, setIsPreviewOpen }) =
           pagination={true}
           modules={[Pagination]}
           className="mySwiper"
+          onSlideChange={() =>
+            trackGalleryInteraction(itemId, GalleryActionEnum.SWIPE)
+          }
         >
           {assets &&
             assets?.map((item, index) => {
@@ -120,10 +136,7 @@ const ProductImageGrid = ({ assets = [], setSelectedAsset, setIsPreviewOpen }) =
                 <SwiperSlide key={index} className="skeleton-loading">
                   {item?.type === "VIDEO" ? (
                     <video
-                      onClick={() => {
-                        setSelectedAsset(item);
-                        setIsPreviewOpen && setIsPreviewOpen(true);
-                      }}
+                      onClick={() => openPreview(item)}
                       src={item?.path || ""}
                       autoPlay
                       muted
@@ -137,12 +150,10 @@ const ProductImageGrid = ({ assets = [], setSelectedAsset, setIsPreviewOpen }) =
                     />
                   ) : (
                     <Image
-                      onClick={() => {
-                        setSelectedAsset(item);
-                        setIsPreviewOpen && setIsPreviewOpen(true);
-                      }}
+                      onClick={() => openPreview(item)}
                       width={1000}
                       height={1000}
+                      sizes="100vw"
                       src={item?.path || ""}
                       alt={item?.altText || ""}
                     />

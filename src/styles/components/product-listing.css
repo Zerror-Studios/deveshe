@@ -1,0 +1,185 @@
+/* PRD-014 FR-0.8 (D9): /products and /category/[slug], in the home
+   #shop language (2px black rules, heading font, square cards). */
+
+.listing_wrapper {
+  width: 100%;
+  padding-top: 90px;
+}
+
+.listing_header {
+  padding: 2vw 3vw 1.5vw;
+  border-bottom: 2px solid black;
+}
+
+.listing_title {
+  font-family: heading;
+  font-weight: 400;
+  font-size: 5vw;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.listing_description {
+  max-width: 640px;
+  margin-top: 0.8rem;
+  font-family: paragraph;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.listing_categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 1.2rem;
+}
+
+.listing_category {
+  padding: 6px 14px;
+  border: 1px solid black;
+  border-radius: 50px;
+  font-family: paragraph;
+  font-size: 13px;
+  color: black;
+  text-transform: capitalize;
+  transition: all ease 0.3s;
+}
+
+.listing_category:hover,
+.listing_category.active {
+  color: white;
+  background-color: black;
+}
+
+.listing_grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.listing_grid .common_product_card {
+  border-bottom: 2px solid black;
+  border-right: 2px solid black;
+}
+
+.listing_grid .common_product_card:nth-child(4n) {
+  border-right: none;
+}
+
+.listing_footer,
+.listing_state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 3vw 20px 5vw;
+  font-family: paragraph;
+  font-size: 14px;
+  text-align: center;
+}
+
+.listing_state {
+  min-height: 40vh;
+  justify-content: center;
+}
+
+.listing_count {
+  color: #767676;
+  font-size: 12px;
+}
+
+.listing_button {
+  min-width: 180px;
+  padding: 9px 24px;
+  border: 1px solid black;
+  border-radius: 50px;
+  color: white;
+  background-color: black;
+  font-family: paragraph;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all ease 0.3s;
+}
+
+.listing_button:hover {
+  font-weight: 600;
+}
+
+.listing_button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.listing_button:focus-visible,
+.listing_category:focus-visible {
+  outline: 2px solid black;
+  outline-offset: 3px;
+}
+
+/* Home #shop "View all" (PRD-014 FR-0.8) */
+.shop_view_all {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 2.5vw 20px;
+  border-bottom: 2px solid black;
+}
+
+.shop_state {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 40vh;
+  padding: 40px 20px;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  font-family: paragraph;
+  font-size: 14px;
+  text-align: center;
+}
+
+@media (max-width: 1000px) {
+  .listing_grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .listing_grid .common_product_card:nth-child(4n) {
+    border-right: 2px solid black;
+  }
+
+  .listing_grid .common_product_card:nth-child(3n) {
+    border-right: none;
+  }
+
+  .listing_title {
+    font-size: 8vw;
+  }
+}
+
+@media (max-width: 576px) {
+  .listing_wrapper {
+    padding-top: 70px;
+  }
+
+  .listing_header {
+    padding: 20px;
+  }
+
+  .listing_title {
+    font-size: 10vw;
+  }
+
+  .listing_grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .listing_grid .common_product_card,
+  .listing_grid .common_product_card:nth-child(3n),
+  .listing_grid .common_product_card:nth-child(4n) {
+    border-right: none;
+    border-bottom: none;
+  }
+}

@@ -15,7 +15,9 @@ const ProductContainer = ({ data }) => {
             src={path || ""}
             alt={altText}
             name={item?.name || ""}
-            price={getProductPriceLabel(item?.variants, item?.discountedPrice)}
+            price={getProductPriceLabel(item?.variants)}
+            product={item}
+            listName="Lookbook"
           />
         );
       })}

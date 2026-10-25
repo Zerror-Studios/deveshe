@@ -1,8 +1,9 @@
 import { gql } from "@apollo/client";
 
+// Totals are computed on the server; the client never sends prices.
 export const CART_LIST = gql`
-  query GetCart($guestId: String, $cartId: String, $token: String) {
-    getCart(guestId: $guestId, cartId: $cartId, token: $token) {
+  query GetCart($guestId: String, $cartId: String) {
+    getCart(guestId: $guestId, cartId: $cartId) {
       _id
       userId
       guestId
@@ -10,63 +11,37 @@ export const CART_LIST = gql`
       totalprice
       discountedPrice
       totalDiscount
+      totalTax
       isFreeShippingEnabled
+      pricesIncludeTax
       cart {
+        productId
+        variantId
         name
-        description
+        sku
         asset {
           _id
           path
           type
-          isFeatured
           altText
         }
+        price
+        finalPrice
         qty
         freeQty
-        price
-        variantDetail {
-          variantDetailId
-          selectedOptions
-          priceDifference
-          variantPrice
-          variantCostOfGoods
-          shippingWeight
-          sku
-          trackInventory
-          stockQuantity
-          stockStatus
-          status
-        }
-        finalPrice
-        customTexts
-        productId
-        product {
-          _id
-          name
-          slug
-          productOptions {
-            optionName
-            choices {
-              name
-            }
-            showInProductPageAs
-          }
-        }
+        customizations
       }
-      coupon {
-        couponId
-        couponCode
+      promotion {
+        promotionId
+        promotionCode
+        promotionName
+        discount
       }
-      totalTax
       taxBreakdown {
         name
         rate
         amount
       }
-      pricesIncludeTax
-      nimbblOrderId
-      nimbblInvoiceId
-      nimbblTransanctionId
       createdAt
       updatedAt
     }

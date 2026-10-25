@@ -1,41 +1,55 @@
 import React, { useState } from "react";
-import { useQuery } from "@apollo/client/react";
-import { USER_ADDRESS_LIST } from "@/graphql";
+import { toast } from "react-toastify";
+import { useMutation, useQuery } from "@apollo/client/react";
+import { DELETE_ADDRESS, USER_ADDRESS_LIST } from "@/graphql";
 import AddressHeader from "./AddressHeader";
 import AddressContainer from "./AddressContainer";
 import AddressPopup from "./AddressPopup";
-import { useAuthStore } from "@/store/auth-store";
-import { Sort } from "@/utils/Constant";
+import { getErrorMessage } from "@/utils/api-error.util";
 
 const AddressBlocks = () => {
-  const LIMIT = 10;
   const [isOpen, setIsOpen] = useState(false);
-  const [addressId, setAddressId] = useState(null);
-  const [offset, setOffset] = useState(0);
-  const { user } = useAuthStore();
+  const [editAddress, setEditAddress] = useState(null);
 
-  const payload = {
-    filters: { userId: user?._id },
-    limit: LIMIT,
-    offset,
-    sort: { createdAt: Sort.DESC, primary: Sort.ASC },
-  };
   const {
     data: addressResponse,
     loading,
     refetch,
   } = useQuery(USER_ADDRESS_LIST, {
-    variables: payload,
+    fetchPolicy: "network-only",
   });
-  const { data, totalCount } = addressResponse?.getAddressByFilters || {};
+  const [deleteAddress] = useMutation(DELETE_ADDRESS);
+  const data = addressResponse?.getAddresses || [];
+
+  const openPopup = (address = null) => {
+    setEditAddress(address);
+    setIsOpen(true);
+  };
+
+  const handleDelete = async (address) => {
+    try {
+      await deleteAddress({ variables: { addressId: address._id } });
+      toast.success("Address removed");
+      await refetch();
+    } catch (err) {
+      console.error(err);
+      toast.error(getErrorMessage(err, "Failed to remove address"));
+    }
+  };
+
   return (
     <>
-      <AddressHeader setIsOpen={setIsOpen} />
-      <AddressContainer data={data} totalCount={totalCount} loading={loading} setAddressId={setAddressId} />
+      <AddressHeader setIsOpen={() => openPopup(null)} />
+      <AddressContainer
+        data={data}
+        totalCount={data.length}
+        loading={loading}
+        onEdit={openPopup}
+        onDelete={handleDelete}
+      />
       <AddressPopup
         isOpen={isOpen}
-        addressId={addressId}
-        listPayload={payload}
+        address={editAddress}
         setOpen={setIsOpen}
         refetch={refetch}
       />

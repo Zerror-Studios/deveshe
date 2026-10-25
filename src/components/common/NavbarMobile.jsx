@@ -73,12 +73,16 @@ const NavbarMobile = ({ openCart }) => {
         "a"
       );
 
-    document.querySelectorAll(".side-menu-links a").forEach((link) => {
-      link.addEventListener("click", () => {
-        setIsMenuOpen(false);
-        menuTL.current.reverse();
-      });
-    });
+    const closeMenu = () => {
+      setIsMenuOpen(false);
+      menuTL.current.reverse();
+    };
+    const links = document.querySelectorAll(".side-menu-links a");
+    links.forEach((link) => link.addEventListener("click", closeMenu));
+
+    return () => {
+      links.forEach((link) => link.removeEventListener("click", closeMenu));
+    };
   }, []);
 
   const toggleMenu = () => {
@@ -92,14 +96,16 @@ const NavbarMobile = ({ openCart }) => {
       return newState;
     });
   };
+  const loaderIntervalRef = useRef(null);
   const startLoader = () => {
     let current = 0;
-    const interval = setInterval(() => {
+    clearInterval(loaderIntervalRef.current);
+    loaderIntervalRef.current = setInterval(() => {
       current++;
       setPercent(current);
 
       if (current >= 100) {
-        clearInterval(interval);
+        clearInterval(loaderIntervalRef.current);
       }
     }, 10);
   };
@@ -143,6 +149,11 @@ const NavbarMobile = ({ openCart }) => {
           gsap.set("#loader_slider", { display: "none" });
         },
       });
+
+    return () => {
+      tl.kill();
+      clearInterval(loaderIntervalRef.current);
+    };
   }, [router.pathname]); // ✅ re-run if route changes
 
   const handleLoginBtn = () => {
@@ -229,7 +240,7 @@ const NavbarMobile = ({ openCart }) => {
                   onClick={handleLoginBtn}
                 />
               )}
-              <Link href="/#shop">shop</Link>
+              <Link href="/products">shop</Link>
               <Link href="/lookbook">lookbook</Link>
               <Link href="/about">about</Link>
               <Link href="/contact">contact</Link>

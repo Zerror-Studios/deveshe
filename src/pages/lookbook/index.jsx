@@ -1,24 +1,36 @@
 import React, { Suspense } from "react";
 import SeoHeader from "@/components/seo/SeoHeader";
 import ChapterList from "@/components/lookbook/ChapterList";
-import { createApolloClient } from "@/lib/apolloClient";
-import { GET_LOOKBOOKS } from "@/graphql";
-import { ProductStatus } from "@/utils/Constant";
+import CommonButton from "@/components/common/CommonButton";
+import { LookbookChapters } from "@/helpers/LookbookData";
 
 const Lookbook = ({ meta, data }) => {
   return (
     <>
       <SeoHeader meta={meta} />
-      <Suspense fallback={"Loading..."}>
-        <ChapterList data={data || []} />
-      </Suspense>
+      {data?.length > 0 ? (
+        <Suspense fallback={"Loading..."}>
+          <ChapterList data={data} />
+        </Suspense>
+      ) : (
+        <div id="status_section">
+          <h2>
+            Lookbook <br /> <span>Coming Soon</span>
+          </h2>
+          <p>
+            Our next chapters are being styled. Meanwhile, discover the
+            collection.
+          </p>
+          <CommonButton title={"Shop the Collection"} href={"/products"} />
+        </div>
+      )}
     </>
   );
 };
 
 export default Lookbook;
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const meta = {
     title: "Lookbook – DeVeSheDreams",
     description:
@@ -47,30 +59,11 @@ export async function getServerSideProps() {
     }
   };
 
-  try {
-    const client = createApolloClient();
-    const { data } = await client.query({
-      query: GET_LOOKBOOKS,
-      variables: {
-        offset: 0,
-        limit: 10,
-        filter: { status: ProductStatus.PUBLISHED }
-      },
-    });
-
-    return {
-      props: {
-        meta,
-        data: data?.getClientSideLookBooks?.lookBooks || [],
-      },
-    };
-  } catch (error) {
-    console.error("Error fetching data:", error.message);
-    return {
-      props: {
-        meta,
-        data: [],
-      },
-    };
-  }
+  // Static editorial content: there is no lookbook backend yet.
+  return {
+    props: {
+      meta,
+      data: LookbookChapters,
+    },
+  };
 }

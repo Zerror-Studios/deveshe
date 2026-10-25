@@ -1,0 +1,162 @@
+# CLAUDE.md — storefronts/deveshe-dreams
+
+These are the engineering rules for Claude Code and developers in this storefront. The file reflects the code as analysed on **2026-10-13**, updated after the PRD-002 migration (WS-F2) and round 2 (R2-W6) on **2026-10-14**. When the code and this file disagree, check the code and then update this file.
+
+**Precedence.** System and platform instructions come first, then the workspace `../../CLAUDE.md` and `../CLAUDE.md` (shared storefront rules, when present), then this file, then user requests that don't conflict with those. The API contract this site must follow is in `../../zcom-backend/docs/architecture/storefront-api-contract.md`.
+
+**Architecture.** Read `docs/architecture/solution-architecture.md` for the diagrams and design of this repo. The platform-wide view is in `../../ARCHITECTURE.md`, when the workspace root is present.
+
+## 0. Workspace rules (shared by every ZCommerce repo)
+
+This repo is one part of the ZCommerce platform. The full map is in the workspace root `../CLAUDE.md` (`../../CLAUDE.md` for storefronts), when that file is present. The rules below are mandatory here even when it isn't.
+
+1. **PRD first (tiered).**
+   - **T1** covers: a new feature, page or module; a GraphQL contract change; a model or event change; auth, tenant, permission or billing logic; a new integration. T1 needs a PRD in `docs/prd/` with **Status: Approved** before any code. If none exists, draft one from `docs/prd/_TEMPLATE.md` (Status *Draft*) and **stop for approval**.
+   - **T2** covers bug fixes, tweaks and small refactors. T2 needs only a line in `docs/changelog/YYYY-MM.md`.
+   - Unsure of the tier? Treat it as T1 and ask.
+   - Cross-repo PRDs have their source of truth in `zcom-backend/docs/prd/`; consumer repos keep a pointer PRD.
+2. **Read docs before, update docs after (MANDATORY, no exceptions).** Documentation is part of the definition of done. Every change, including code, config, infra, dependencies and decisions, updates all related docs in the same change. Record decisions and approvals from conversation in the PRD or ADR immediately, before implementing. A task isn't finished while any doc disagrees with the code.
+   - **Before** a change, read this file, `README.md`, `docs/README.md`, and the relevant PRD, ADR and architecture docs.
+   - **After** it, in the same change, update whatever is now stale: the README (setup, commands, env names), `docs/architecture/*` (contracts), PRD status and implementation log, the changelog, `docs/README.md` (the index), and this `CLAUDE.md` (rules and known issues).
+   - End every task with a **"Docs impact"** line.
+3. **Ask, don't guess.**
+   - Ask one precise question, with options and a recommendation, when the request conflicts with a PRD, an ADR, this file, or the code.
+   - Do the same when docs and code disagree, or when a change would affect a contract, a security or tenant boundary, the design system, dependencies or deployment.
+   - Don't ask about things you can verify in the code yourself.
+4. **Scoped and safe.**
+   - No drive-by refactors or mass reformatting.
+   - Don't add dependencies without asking.
+   - Never commit, push, deploy or touch databases unless asked.
+   - Never print or commit secrets or `.env` values, including the token embedded in `git remote -v`.
+   - Report checks honestly, keeping pre-existing failures separate from new ones.
+5. **Coding style: the owner's signature (mandatory).** Follow the workspace `CODING_STYLE.md` (`../CODING_STYLE.md`, or `../../CODING_STYLE.md` for storefronts). Its baseline is the `zcom-backend` style.
+   - 2 spaces, double quotes, semicolons, trailing commas, 80 columns.
+   - Named exports with barrel `index.ts` files (React page and component files are the exception: `export default X;` at the end).
+   - File names are `kebab-case.role.ts`.
+   - Static-class controllers and services, with `return await`.
+   - `xEnum = {…} as const`; the `I` prefix only for Mongoose documents; `UPPER_SNAKE` constants with unit suffixes (`_MS`, `_DAYS`).
+   - `GraphQLError` with `extensions.code`; one `createLogger({ service })` per module.
+   - JSDoc module headers and `// ─── ` section dividers.
+
+   **New files** follow it exactly. **Edits** keep the file's existing formatting; never reformat untouched code. When you commit, use Conventional Commits: `type(scope): summary (PRD-NNN)`.
+6. **Storefront specifics.**
+   - Use only backend operations listed in the storefront contract doc, and validate field-level.
+   - The server computes money.
+   - When you fix shared logic (tokenManager, Apollo links, customer session, useVisitor, the checkout handler, sanitiser, stores), check `../rare-element` for the same issue.
+
+## 1. What this is
+
+The **Deveshe Dreams** brand storefront: a custom-designed shopper site on ZCommerce, with home, products, lookbooks, cart, checkout (the store's payment app: Nimbbl, Razorpay, Cashfree or PayU, PRD-011), login and profile.
+
+**Stack:**
+- Next.js 15 with the **Pages Router**, React 18, **JavaScript**.
+- Apollo Client 4, zustand 5, react-hook-form + zod 4.
+- GSAP business (`gsap` is aliased to `@gsap/business`) with ScrollTrigger, SplitText and ScrollToPlugin.
+- Lenis (`@studio-freight/lenis`) + Tempus, Swiper, react-toastify, three / @react-three/fiber (only the contact `PhoneModal`, loaded with `ssr: false`).
+
+MUI, emotion, styled-components (PRD-002 SF-21), `react-tooltip` and `cross-fetch` (re-audit RMAINT-9) were removed, and the lockfile is pruned.
+
+**Integration status: on the current backend contract (PRD-002 WS-F2, 2026-10-14).**
+- All 33 operations validate against the composed backend schema (PRD-014 FR-0.8/FR-0.9 added `getClientSideCategories` for the category listing and `getReviews` for the home reviews, and `pricing` on the checkout session; round 2 added `issueGuestCartId` and `mergeGuestCart`; round 3 added `unsubscribeNewsletter` for the `/unsubscribe` page, `pages/unsubscribe/index.jsx`; PRD-003 FR-0.5 added `customerRequestPasswordReset` and `customerResetPassword` for `pages/forgot-password.jsx` and `pages/reset-password.jsx`). The backend builds the link from the tenant's **configured domain**, so that domain must serve this storefront or redirect keeping the query string (FIN-3; the owner checks it per tenant). The contract is `../../zcom-backend/docs/architecture/storefront-api-contract.md`.
+- **Tenant by host** (the backend has no db-token, PRD-007): the browser calls same-origin `/v1/graphql`, which `src/middleware.js` proxies to `API_GATEWAY_URL` (there is no `next.config.mjs` rewrite any more, because a rewrite can't set request headers). The proxy strips client `x-zcom-*`, `x-tenant-domain` and `x-forwarded-host` headers (VSEC-4) and the shopper's `Origin`/`Referer` (`BROWSER_ONLY_HEADERS`, PRD-007 FR-8.2), and adds the **edge headers** from `lib/edge-headers.server.js`: `x-zcom-client-ip`, `x-tenant-domain` and `x-zcom-edge-secret` (PRD-002 R2-C1). The gateway accepts the tenant only with the edge secret, so `EDGE_SHARED_SECRET` is required in production (PRD-007 FR-8.3). The client IP (VSEC-3, `getClientIp`) is `x-vercel-forwarded-for` only when `VERCEL` is set, else `request.ip`, else the **right-most** `x-forwarded-for` hop; the first hop and `x-real-ip` are client-controlled and never used. Without `NEXT_PUBLIC_TENANT_DOMAIN` the proxy fails closed with a 500 in every environment (never an untenanted request). Server-side calls (`getServerSideProps` on `/`, `/products`, `/category/[slug]` and `/product/[slug]`, catalog reads through `lib/catalog-listing.server.js`) send `x-tenant-domain` / `x-forwarded-host` = `NEXT_PUBLIC_TENANT_DOMAIN` (`lib/api-config.util.js`) plus the edge secret, but no `x-zcom-client-ip` (catalog reads; the gateway sees the host's IP for them).
+- **Newsletter unsubscribe (PRD-002 VCON-1):** `pages/unsubscribe/index.jsx` (`noindex, nofollow`) is the target of the link the backend puts in campaign emails (`https://<tenant domain>/unsubscribe?email=…&token=…`, signed with `NEWSLETTER_TOKEN_SECRET`). It reads `email` and `token` once, removes them from the URL (`router.replace`, shallow), and calls `unsubscribeNewsletter(email, token)`. The server answers uniformly, so every server answer shows the same neutral message; only a network failure offers a retry.
+- **Guest cart ids are server-issued** (`issueGuestCartId`, `<random>.<hmac>`), requested lazily by `useVisitor` on the first add to bag; on `INVALID_GUEST_ID` the stored id is dropped and the call retried once. Old unsigned UUIDs are dropped on read, so **existing guest bags are lost once** at deploy.
+- **Checkout requires login** (the backend checkout operations are customer-only); the guest bag is moved in at login with one `mergeGuestCart` call (server-side, idempotent).
+- **Backend gaps shown as such:** Lookbook has no backend, so `/lookbook` shows "Coming soon" while `helpers/LookbookData.jsx` is empty and `/lookbook/[slug]` 404s; change password (logged in) and account deactivation are hidden, while a forgotten password is reset through `/forgot-password` → `/reset-password` (PRD-003 FR-0.5); there's no public stock level, so "Unavailable / Notify me" shows only for an ARCHIVED variant, an option combination with no published variant, or a `PRODUCT_UNAVAILABLE` answer (PRD-014 UX-09, as rare-element).
+- **Catalog (PRD-014 FR-0.8, D9):** `/products` (every published product) and `/category/[slug]` page through `getClientSideProducts` 12 at a time with "Load more" (`components/listing/ProductListing.jsx`, `styles/components/product-listing.css`); the nav "Shop" link goes to `/products`. The home `#shop` shows the 11 newest published products and "View all"; no category id is hard-coded anywhere. The home reviews section shows only approved `getReviews` results and is hidden when there are none (UX-35).
+- Nothing has been tested end to end against a running backend or any payment sandbox yet.
+
+## 2. Directory map (`src/`)
+
+```
+pages/          _app.jsx (providers, global CSS, one Apollo client per app), _document.jsx (GA/GTM), index, about, contact,
+                login, profile, lookbook/[slug], products, category/[slug], product/[slug], checkout/[id], checkout/thank-you,
+                checkout/payment-failed (Retry payment → the kept order's checkout, Back to cart),
+                unsubscribe (VCON-1, noindex), legal pages, 404
+middleware.js   /v1/graphql proxy to API_GATEWAY_URL with the edge headers (R2-C1); route guard: /profile and
+                /checkout/* (except payment-failed) need a customer session cookie → /login?next=…
+components/     per-page folders (home, product, listing, lookbook, lookbookChapter, cart, checkout, profileNew, login, about, contact),
+                common/ (SmoothScroller = Lenis), layouts/, loaders/, seo/ (JSON-LD schema components)
+lib/            apolloClient.jsx (the only client: error → auth → http), api-config.util.js (endpoint + tenant headers),
+                edge-headers.server.js (SERVER ONLY: edge secret, client IP, tenant header),
+                catalog-listing.server.js (SERVER ONLY: product pages and categories for getServerSideProps),
+                customer-session.service.js (login, signup, refresh, logout, mergeGuestCart), withAuth.jsx (client fallback guard)
+graphql/        queries/*.gql.jsx, mutations/*.mutation.jsx, index.jsx barrel (export *)
+store/          zustand: auth-store (persisted "user-data": profile + isLoggedIn hint, no tokens), cart-store (drawer open/closed)
+context/        AuthContext.jsx (logout)
+utils/          tokenManager.js (in-memory access token), api-error.util.js (error → message), sanitize-html.util.js,
+                json-ld.util.js (toJsonLd), catalog.util.js (variant price/options), redirect.util.js (safe ?next=),
+                pending-order.util.js (unpaid order id, its checkout session id, cart and details fingerprints in sessionStorage), analytics.js (trackEcomEvent),
+                analytics-events.util.js (PRD-013 event layer), ga-attribution.util.js (PRD-012), payment-checkout.util.js (PRD-011),
+                Constant.jsx, Util.jsx
+helpers/        static data (LookbookData.jsx is empty until a lookbook backend exists)
+hooks/          useVisitor (server-issued signed guest id, lazy, 7-day sliding; compare-and-clear, VBUG-6), useMutationHandler
+validations/    CheckoutValidation.jsx (zod)
+styles/         globals.css (+@font-face), page CSS files, a few *.module.css
+```
+
+## 3. Rules
+
+- **Routing.** Pages Router conventions only: `getServerSideProps`/`getStaticProps`, `next/router`, `next/head`. Don't add an `app/` directory; moving to the App Router is an ADR-level decision. Pages that need data use SSR (`getServerSideProps`); static info pages use `getStaticProps` for SEO metadata only. Unknown or unpublished products return `notFound`.
+- **Data.**
+  - Put gql documents in `graphql/queries` or `graphql/mutations` and export them through `graphql/index.jsx`. Don't write inline `gql` in components.
+  - Use the client from `lib/apolloClient.jsx`; `_app.jsx` creates it once (`useState(() => createApolloClient())`). Never call the gateway by another URL: endpoint and tenant headers come from `lib/api-config.util.js`. Server code passes `createApolloClient({ headers: getEdgeSecretHeaders() })`.
+  - **`lib/edge-headers.server.js` is server-only.** Import it only from `middleware.js` and `getServerSideProps`; `EDGE_SHARED_SECRET` must never reach the browser bundle (check `.next/static` after a build).
+  - Show errors with `utils/api-error.util.js`, which branches on `extensions.reason` / `code`, never on message text. It maps the round 2 reasons too (`CHECKOUT_EXPIRED`, `RESERVATION_RELEASED`, `INVALID_QTY`, `TOO_MANY_LINES`, `ORDER_CANCELLED`, `INVALID_GUEST_ID`, `TENANT_NOT_FOUND`).
+  - Error link: `TOKEN_EXPIRED`/`UNAUTHENTICATED` with a session hint → refresh once and retry; `INVALID_AUTH_TOKEN` or `TENANT_MISMATCH` → clear the local session (`INVALID_DB_TOKEN` was removed, PRD-007); `TENANT_NOT_FOUND` → one "store unavailable" toast (PRD-002 R2-C5). A refresh that fails for a transient reason (network, 5xx) doesn't log the shopper out; only session-ending codes do (RBUG-19).
+- **Auth and tokens.**
+  - The access token lives **in memory only** (`utils/tokenManager.js`). The refresh token is the HttpOnly `__Host-zc_cust_rt` cookie (`zc_cust_rt` in dev); JavaScript never reads or writes it, and never selects `refreshToken` from a response.
+  - Login, signup (CONFLICT → "account exists"), refresh (`customerRefreshToken`, single-flight), logout (`customerLogout`, then clear token, profile and Apollo store) and the guest-cart merge (`mergeGuestCart`, one call; the guest id is kept on a transient failure and dropped when invalid) all live in `lib/customer-session.service.js`. Reuse it; don't add storage keys.
+  - The persisted `isLoggedIn` flag is only a hint that a cookie session may exist; the server decides.
+  - On startup the old localStorage tokens and the legacy JS `refresh_token` cookie are deleted once, so existing shoppers **log in once after this version deploys** (rare-element instead leaves the legacy cookie for the backend's `LEGACY_REFRESH_COOKIE_UNTIL` window).
+  - After login, redirect only through `utils/redirect.util.js`, never `router.back()`. It resolves `?next=` with `new URL` and keeps it only when it stays same-origin (backslashes and control characters rejected, RSEC-6); with no valid `next` the shopper goes to `/`.
+- **Money and checkout.** The server computes every price and total; show `getCart` / checkout-session values. Checkout is `createCheckoutSessionFromCart` (with `attribution` from `utils/ga-attribution.util.js`: GA cookie ids and the visit's UTMs captured in `_app.jsx`, PRD-012) → poll `getCheckoutSession` until RESERVED → `completeCheckout` → `createPaymentSession({orderId})` → `openPaymentCheckout` (`utils/payment-checkout.util.js`, PRD-011: Razorpay / Cashfree scripts on demand, Nimbbl via a dynamic `nimbbl_sonic` import, PayU form post) → `verifyPayment` → the thank-you page polls `myOrder` until PAID. PayU and Cashfree redirects return through `pages/api/payments/return.js` (303) to `/checkout/payment-return`, which verifies with the shopper's session. A retry reuses the unpaid order: its id is kept in sessionStorage with a fingerprint of the cart lines and coupon (`utils/pending-order.util.js`, RBUG-8) and, since VBUG-4, of the checkout details (email + shipping + billing address as sent), also across a reload. A changed bag or coupon starts a new order so the total is never stale (RBUG-9), and so does a changed email or address; a legacy entry without the details fingerprint is never reused. `CHECKOUT_REPLACED`, `PAYMENT_NOT_CONFIGURED`, `MISSING_PROVIDER_ORDER` and `INVALID_EMAIL` have messages in `utils/api-error.util.js` (VCON-2). The coupon controls are locked while an order is being placed or paid, and the pay button stays disabled until the payment window's result or close (RBUG-15). A checkout session takes a 15-minute stock hold, so it is opened for pricing **only on an explicit shopper action**: "Show final total" at the shipping step (same validation as "Pay now") or "Pay now", never on page load, a preselected address or typing (PRD-014 W0V2-02). The summary and the shipping step then show the session's server `pricing` (subtotal, discount, shipping, tax, total); "Pay now" with unchanged details sends the same variables and the backend returns that same active session (R2-C8). Any change to the email, addresses, bag or coupon drops the confirmation and the pricing, and a new session (which replaces the old one and releases its hold) is opened only when the shopper confirms again (PRD-014 UX-03, W0V-C-03, W0V2-02). Without pricing (not confirmed yet, calculating, or a kept order whose details were changed) shipping reads "Calculated at payment" / "Calculating…" and the total is labelled "Total before shipping" (or "Estimated total" with free shipping), never as final. The kept order's entry also holds its checkout session id, so a reload or a retry shows that session's pricing again (`getCheckoutSession`). With saved addresses the kept order's address (on a retry), else the primary one, else the first is preselected, and a failed validation is shown at the delivery step and the "Pay now" button (UX-02). The payment-failed page finds the kept order's cart with `PendingOrder.findCartId` and offers "Retry payment" (FR-0.12). The thank-you page never shows success without PAID: a missing order or one still unpaid after polling shows a terminal "not confirmed yet" state (RBUG-20).
+- **HTML and JSON-LD.** Render CMS HTML only through `utils/sanitize-html.util.js` (every link gets `rel="noopener noreferrer"`; styles with a backslash are dropped, RSEC-11), and JSON-LD only through `toJsonLd` (`utils/json-ld.util.js`).
+- **Shared files carry a "Keep in sync with `storefronts/rare-element/…`" header** (RMAINT-7): `edge-headers.server.js`, `redirect.util.js`, `pending-order.util.js`, `useVisitor.jsx` and the others shared with rare-element. Change both.
+- **Styling.**
+  - Use global CSS files in `styles/` (plus the existing `*.module.css` where they're already used) and match the page you're in.
+  - Don't add MUI, styled-components, emotion or Tailwind.
+  - Fonts are declared with `@font-face` in `globals.css`.
+- **Animation.**
+  - Register GSAP plugins in the component that uses them, and clean up only your own timelines with `@gsap/react` `useGSAP` or a context revert. **Never** call `ScrollTrigger.killAll()` or `globalTimeline.clear()` (SF-20).
+  - Smooth scroll is the single `SmoothScroller` (Lenis); don't create a second one, and resize it from a `ResizeObserver`, not an interval.
+  - The GSAP business package needs the private registry auth in `.npmrc`; never print its token.
+- **Analytics.** Use `utils/analytics.js` → `trackEcomEvent` for e-commerce events (GA/GTM in `_document.jsx`, IDs from env). `purchase` fires once per order. Don't add inline gtag calls.
+  - **Event layer (PRD-013 FR-4).** `utils/analytics-events.util.js` mirrors the backend vocabulary (`zcom-backend/packages/core/src/analytics/analytics-events.vocabulary.ts`: `StorefrontEventEnum`, `CtaEnum`, `CUSTOM_DIMENSION_PARAMETERS`, 100-char clip) by hand; keep both, and the rare-element twin `utils/analytics-events.js`, in sync. Send every non-e-commerce event through `trackEvent` or its typed helpers (`trackSelectItem`, `trackSelectVariant`, `trackCtaClick`, `trackGalleryInteraction`, `trackSizeGuideOpen`, `trackNotifyMe`, `trackCouponApply`/`trackCouponFailed`, `trackAddShippingInfo`, `trackAddPaymentInfo`, `trackCheckoutError`, `trackSearch`): it is a no-op without `gtag`, clips strings, drops empty values and never throws. **`item_id` is always the identifier the e-commerce items use here, the variant `sku`** (first variant when none is chosen): take it from `getAnalyticsItemId(product, variant)`, never from a product id or slug, so the backend can join the event to the product. `reason` is the GraphQL `extensions.reason`/`code`, never message text; no PII in any parameter. **To add an event:** add the name (and its parameters) to the backend vocabulary first, mirror it in both storefront files, add a typed helper, and call it where the UI does the thing; list it in the PRD-013 pointer. The wired events and their components are in `docs/prd/PRD-013-behaviour-analytics-depth.md` §2; there is no site search or wishlist here, so `search` and `cta: wishlist` aren't wired.
+- **Images and headers.** Use `next/image`. Hosts are an allowlist in `next.config.mjs` `images.remotePatterns` (the asset domains plus `IMAGE_REMOTE_HOSTS`). The same file sets the CSP and security headers; a new third-party script host must be added to the CSP. `script-src` keeps `'unsafe-inline'` on purpose (SF-9 partial): a per-request nonce would make every static/ISR page dynamic, and GTM custom-HTML tags need it. `CSP_REPORT_ONLY=true` ships the policy as report-only for rollout. Since PRD-011 the CSP also lists the payment-app hosts in the `PAYMENT_*_SOURCES` constants (Razorpay, Cashfree; PayU and Razorpay in `form-action`).
+- **Images.** Product cards pass real dimensions and a `sizes` hint (RPERF-12); keep that for new grids.
+
+## 4. Commands
+
+| Task | Command | Notes |
+|---|---|---|
+| Install | `npm ci` | GSAP business needs the registry auth in `.npmrc` |
+| Dev | `npm run dev` | http://localhost:3000; API calls need `API_GATEWAY_URL` and `NEXT_PUBLIC_TENANT_DOMAIN` (dev and lint start without them; the proxy answers 503 without `API_GATEWAY_URL` and 500 without `NEXT_PUBLIC_TENANT_DOMAIN`) |
+| Build | `npm run build` | The only real check; there are no tests. A production build fails if `API_GATEWAY_URL` or `NEXT_PUBLIC_TENANT_DOMAIN` is missing (RMAINT-6) |
+| Lint | `npm run lint` | `next lint`, but **no ESLint config exists**, so expect a prompt or failure; say so |
+| Start | `npm run start` | after a build |
+
+Env var names (`.env.example`): `API_GATEWAY_URL` (server-only, required), `NEXT_PUBLIC_TENANT_DOMAIN` (required), `EDGE_SHARED_SECRET` (server-only, required in production; the gateway's edge secret, never `NEXT_PUBLIC_`), `IMAGE_REMOTE_HOSTS`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_GTM_ID`, `CSP_REPORT_ONLY` (optional, `"true"` = report-only CSP). All `NEXT_PUBLIC_*` values are public. `NEXT_PUBLIC_DB_TOKEN`, `NEXT_PUBLIC_BACKEND_ENDPOINT`, `NEXT_PUBLIC_NIMBBL_BASE_URL` and `NEXT_PUBLIC_GRAPHQL_API_URL` are **no longer read**; remove them from hosting.
+
+## 5. Known issues (don't fix unless asked)
+
+- **`.npmrc` (GreenSock registry token) is still tracked in git**, although `.gitignore` now lists it. Owner: `git rm --cached .npmrc`, rotate the token, decide on a history purge (it's on `main`, `dev` and `ayush`). Rotate the old `NEXT_PUBLIC_DB_TOKEN` as well (the backend no longer accepts any db-token, PRD-007).
+- **Deployment prerequisites (owner):** set `API_GATEWAY_URL` and `NEXT_PUBLIC_TENANT_DOMAIN` in Vercel; the domain must be an ACTIVE `db_configs` tenant; set `EDGE_SHARED_SECRET`; do **not** add the storefront to the gateway `CORS_ORIGINS` (the proxy no longer forwards the browser Origin, and edge-signed requests skip that check, PRD-007 FR-8.2).
+- **Edge secret (owner, required since PRD-007):** set `EDGE_SHARED_SECRET` in Vercel and on EB in the same deploy (without it here, the gateway resolves no tenant for this store and ignores its client-IP header). Confirm the host's client IP source (`x-vercel-forwarded-for` on Vercel, else the right-most `x-forwarded-for` hop). Off Vercel the right-most hop is only trustworthy when the host's own proxy appends it; check the host (lead's final verification). Since PRD-002 round 3 the backend also limits logins to 30/min per client IP across all tenants (`AUTH_IP_RATE_LIMIT_PER_MIN`): the secret is what lets the gateway use each shopper's own IP for that bucket.
+- **Accepted (PRD-002 R3-D7):** SF-9 `'unsafe-inline'` and VPERF-4 (every browser API call passes through the Edge middleware, the price of the edge headers).
+- **CSP:** `script-src 'unsafe-inline'` kept (SF-9 partial, see §3); roll out with `CSP_REPORT_ONLY=true` first.
+- **Backend gaps:** no lookbook, password change while logged in, account deactivation or public stock level (see §1).
+- **Shared logic is duplicated with `../rare-element`** under different file names (here `utils/api-error.util.js`, `utils/sanitize-html.util.js`, `lib/customer-session.service.js`, `utils/tokenManager.js`; there `utils/errors.js`, `utils/sanitize-html.js`, `context/AuthContext.jsx`, `utils/tokenManager.js`). A shared package is ADR-level; until then fix both.
+- No ESLint config, no tests, no browser or payment-sandbox run of the round 2, round 3 and PRD-011 changes.
+- **Audit 2026-10-14:** `docs/audits/2026-10-14-storefront-audit.md` has the per-finding remediation status, including the re-audit (round 2) items.
+- **PRD-014 Wave 0 (2026-10-25, `docs/prd/PRD-014-production-readiness-remediation.md`):** UX-01/02/03/04/09/35 fixed in code, not browser-tested; the listing pages' design (D9) is reviewed by the owner in UAT. `next` is `^15.5.28`; `npm audit` still reports `postcss` (high) and `next` (moderate), which clear only with next 16 (a major, owner decision), and `uuid` via the pinned `@react-three/drei` (moderate). Open from the 2026-10-25 audit for later waves: full profile PII in localStorage (FR-1.9), order history status/detail, `_error.jsx`, PDP `seo.title` fallback and Product JSON-LD, hard-coded "free above 5000 INR" and fit copy, footer newsletter → `/`, no consent banner. `components/loaders/ProductLoader.jsx` is no longer used.
+- **Changed details on a kept order (backend gap, W0V-C-03):** `createCheckoutSessionFromCart` replaces only an *active* (PENDING/RESERVED) session. Once `completeCheckout` has made the UN_PAID order its session is COMPLETED, so a retry with a different address or email opens a new session and a second order, and the first order keeps its stock hold and promotion use (no customer cancel operation and no unpaid-order expiry job exist). The checkout preselects the kept order's address and says that changing it places a new order; the cancel is a backend follow-up.
+- **`utils/pending-order.util.js` stores `checkoutId`** (W0V-C-03); its rare-element twin (`src/utils/pending-order.js`) has the same optional field since W0V2-02 (unused there).
+
+## 6. Before you finish a change
+
+- [ ] I read the contract doc and checked that every operation I touched exists in the backend.
+- [ ] No prices or totals are sent from the client, no new `NEXT_PUBLIC_*` secrets were added, and no inline gql.
+- [ ] I checked `../rare-element` for the same shared-logic issue.
+- [ ] `npm run build` passes (or I reported why not), and I checked the change in the browser on desktop and mobile widths.
+- [ ] Docs are updated (§0.2), and I wrote a "Docs impact" line.

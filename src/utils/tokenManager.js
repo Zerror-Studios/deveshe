@@ -1,70 +1,61 @@
-// Token Manager Utility for handling access and refresh tokens
-import Cookies from 'js-cookie';
+/**
+ * Customer access token, held in memory only (PRD-001 phase 2, SF-9).
+ *
+ * The refresh token lives in the HttpOnly `__Host-zc_cust_rt` cookie set by
+ * the backend; JavaScript never reads or writes it. After a reload the
+ * access token is recovered with `customerRefreshToken` (see
+ * `lib/customer-session.service.js`).
+ */
+import Cookies from "js-cookie";
 
-const ACCESS_TOKEN_KEY = 'access_token';
-const REFRESH_TOKEN_KEY = 'refresh_token';
-const TOKEN_EXPIRY_KEY = 'token_expiry';
+// ─── Constants ────────────────────────────────────────────────────────────
+
+/** Refresh this long before the server-side expiry. */
+const EXPIRY_SKEW_MS = 60 * 1000;
+/** Used when the server does not send `expiresIn`. */
+const DEFAULT_TTL_MS = 14 * 60 * 1000;
+
+const LEGACY_LOCAL_KEYS = ["access_token", "token_expiry"];
+const LEGACY_REFRESH_COOKIE = "refresh_token";
+
+// ─── State ────────────────────────────────────────────────────────────────
+
+let accessToken = null;
+let expiresAtMs = 0;
+
+// ─── API ──────────────────────────────────────────────────────────────────
 
 export const TokenManager = {
-  // Set both access and refresh tokens
-  setTokens(accessToken, refreshToken) {
-    if (typeof window === 'undefined') return;
-
-    // Store access token in localStorage (short-lived, 15min)
-    localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-
-    // Calculate and store expiry time (14 minutes to refresh before actual expiry)
-    const expiryTime = Date.now() + (14 * 60 * 1000); // 14 minutes
-    localStorage.setItem(TOKEN_EXPIRY_KEY, expiryTime.toString());
-
-    // Store refresh token in HttpOnly-like cookie (7 days)
-    // Note: For true HttpOnly, this should be set by the server
-    Cookies.set(REFRESH_TOKEN_KEY, refreshToken, {
-      expires: 7, // 7 days
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict'
-    });
+  /** `expiresInSec` comes from `customerLogin.expiresIn` when known. */
+  setAccessToken(token, expiresInSec) {
+    if (typeof window === "undefined") return;
+    accessToken = token || null;
+    const ttlMs = expiresInSec ? expiresInSec * 1000 : DEFAULT_TTL_MS;
+    expiresAtMs = token ? Date.now() + ttlMs - EXPIRY_SKEW_MS : 0;
   },
 
-  // Get access token
   getAccessToken() {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem(ACCESS_TOKEN_KEY);
+    if (typeof window === "undefined") return null;
+    return accessToken;
   },
 
-  // Get refresh token
-  getRefreshToken() {
-    if (typeof window === 'undefined') return null;
-    return Cookies.get(REFRESH_TOKEN_KEY);
-  },
-
-  // Check if access token is expired or about to expire
   isTokenExpired() {
-    if (typeof window === 'undefined') return true;
-
-    const expiry = localStorage.getItem(TOKEN_EXPIRY_KEY);
-    if (!expiry) return true;
-
-    return Date.now() >= parseInt(expiry);
+    return !accessToken || Date.now() >= expiresAtMs;
   },
 
-  // Clear all tokens
   clearTokens() {
-    if (typeof window === 'undefined') return;
-
-    localStorage.removeItem(ACCESS_TOKEN_KEY);
-    localStorage.removeItem(TOKEN_EXPIRY_KEY);
-    Cookies.remove(REFRESH_TOKEN_KEY);
+    accessToken = null;
+    expiresAtMs = 0;
   },
 
-  // Get time until token expiry (in milliseconds)
-  getTimeUntilExpiry() {
-    if (typeof window === 'undefined') return 0;
-
-    const expiry = localStorage.getItem(TOKEN_EXPIRY_KEY);
-    if (!expiry) return 0;
-
-    const timeLeft = parseInt(expiry) - Date.now();
-    return timeLeft > 0 ? timeLeft : 0;
-  }
+  /** Removes the pre-phase-2 localStorage token and JS refresh cookie. */
+  clearLegacyStorage() {
+    if (typeof window === "undefined") return;
+    try {
+      LEGACY_LOCAL_KEYS.forEach((key) => localStorage.removeItem(key));
+      Cookies.remove(LEGACY_REFRESH_COOKIE);
+    } catch {
+      // storage can be unavailable (private mode); nothing to clean
+    }
+  },
 };

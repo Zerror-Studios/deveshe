@@ -20,6 +20,7 @@ const ChapterList = ({ data = [] }) => {
     let mouseY = 0;
     let prevX = 0;
     let prevY = 0;
+    let frameId = null;
 
     const moveCursor = (e) => {
       mouseX = e.clientX;
@@ -68,7 +69,7 @@ const ChapterList = ({ data = [] }) => {
         gsap.set(cursorInner, { rotation: -angle });
       }
 
-      requestAnimationFrame(render);
+      frameId = requestAnimationFrame(render);
     };
 
     // 👉 attach listeners only to wrapper
@@ -78,6 +79,7 @@ const ChapterList = ({ data = [] }) => {
     render();
 
     return () => {
+      cancelAnimationFrame(frameId);
       wrapper.removeEventListener("mousemove", moveCursor);
       wrapper.removeEventListener("mouseleave", leaveCursor);
     };
@@ -130,7 +132,6 @@ const ChapterList = ({ data = [] }) => {
 
     return () => {
       ctx.revert();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, [data]);
 

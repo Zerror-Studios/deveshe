@@ -7,8 +7,7 @@ import BannerContainer from "@/components/lookbookChapter/BannerContainer";
 import ImageSectionOne from "@/components/lookbookChapter/ImageSectionOne";
 import ImageSectionTwo from "@/components/lookbookChapter/ImageSectionTwo";
 import ImageSectionThree from "@/components/lookbookChapter/ImageSectionThree";
-import { GET_LOOKBOOK_BY_ID } from "@/graphql";
-import { createApolloClient } from "@/lib/apolloClient";
+import { LookbookChapters } from "@/helpers/LookbookData";
 
 const LookbookDetail = ({ meta, data }) => {
   return (
@@ -44,25 +43,14 @@ export async function getServerSideProps({ params }) {
     robots: "index, follow",
   };
 
-  try {
-    const client = createApolloClient();
-    const { data } = await client.query({
-      query: GET_LOOKBOOK_BY_ID,
-      variables: { getClientSideLookBookByIdId: id },
-    });
-    return {
-      props: {
-        meta,
-        data: data?.getClientSideLookBookById || {},
-      },
-    };
-  } catch (error) {
-    console.error("Error fetching data:", error.message);
-    return {
-      props: {
-        meta,
-        data: {},
-      },
-    };
-  }
+  // Static editorial content (no lookbook backend); unknown slug → 404.
+  const data = LookbookChapters.find((chapter) => chapter._id === id);
+  if (!data) return { notFound: true };
+
+  return {
+    props: {
+      meta,
+      data,
+    },
+  };
 }

@@ -40,6 +40,11 @@ const OurProcess = () => {
         "-=0.7"
       ); // small gap before next strip starts
     });
+
+    return () => {
+      tl.scrollTrigger?.kill();
+      tl.kill();
+    };
   }, []);
 
   return (

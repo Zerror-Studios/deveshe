@@ -5,14 +5,13 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { PhoneInput } from "react-international-phone";
-import { useMutation } from "@apollo/client/react";
-import { SIGN_UP_USER } from "@/graphql";
-import { useAuthStore } from "@/store/auth-store";
-import { UserStatus } from "@/utils/Constant";
+import { useApolloClient } from "@apollo/client/react";
 import { toast } from 'react-toastify';
 import "react-international-phone/style.css";
 import CommonButton from "../common/CommonButton";
-import { TokenManager } from "@/utils/tokenManager";
+import { CustomerSession } from "@/lib/customer-session.service";
+import { getErrorMessage } from "@/utils/api-error.util";
+import { getSafeNextPath } from "@/utils/redirect.util";
 
 const SignupSchema = z
   .object({
@@ -37,8 +36,8 @@ const Signup = ({ setToggle }) => {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
-  const [signupUser, { loading }] = useMutation(SIGN_UP_USER);
-  const { setUser, setIsLoggedIn } = useAuthStore((state) => state);
+  const client = useApolloClient();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -51,27 +50,22 @@ const Signup = ({ setToggle }) => {
   });
 
   const onSubmit = async (data) => {
+    if (loading) return;
+    setLoading(true);
     try {
-      const { confirmPassword, ...rest } = data;
-      const input = {
-        ...rest,
-        status: UserStatus.ACTIVE,
-      };
-      const { data: response } = await signupUser({ variables: { input } });
-      const { user, accessToken, refreshToken } = response?.clientUserSave || {};
-      if (accessToken && refreshToken && Object.keys(user).length > 0) {
-        localStorage.removeItem("visitorId");
-        localStorage.removeItem("visitorExpire");
-        TokenManager.clearTokens(); // clear previous
-        TokenManager.setTokens(accessToken, refreshToken);
-        setUser(user);
-        setIsLoggedIn(true);
-        toast.success("Account created successfully!");
-        router.back();
-      }
+      const { confirmPassword, ...input } = data;
+      await CustomerSession.signup(client, input);
+      toast.success("Account created successfully!");
+      router.replace(getSafeNextPath(router.query.next, "/"));
     } catch (err) {
       console.error(err);
-      toast.error(err.message || "Signup failed");
+      toast.error(
+        getErrorMessage(err, "Signup failed", {
+          CONFLICT: "An account with this email already exists. Please log in.",
+        }),
+      );
+    } finally {
+      setLoading(false);
     }
   };
 

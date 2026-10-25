@@ -1,44 +1,29 @@
 import { gql } from "@apollo/client";
 
+// Prices come from variants; there is no product-level price.
 export const GET_PRODUCTS = gql`
   query GetClientSideProducts($limit: Int, $offset: Int, $filters: GetProductsFilterInput) {
     getClientSideProducts(limit: $limit, offset: $offset, filters: $filters) {
       products {
         _id
         name
-        description
         assets {
           path
           type
           altText
         }
-        price
-        discountedPrice
-        costOfGoods
         productType
         slug
         status
-        isDeleted
+        badgeIds
         variants {
-          selectedOptions
-          priceDifference
-          variantPrice
+          _id
+          title
           sku
-          variantCostOfGoods
-          shippingWeight
-          trackInventory
-          stockQuantity
+          optionValues
+          price
+          compareAtPrice
           status
-          stockStatus
-          visibility
-        }
-        productOptions {
-          choices {
-            assetsId
-            name
-          }
-          optionName
-          showInProductPageAs
         }
       }
       totalCount
@@ -50,23 +35,21 @@ export const GET_PRODUCT_BY_ID = gql`
   query GetClientSideProductById($slug: String) {
     getClientSideProductById(slug: $slug) {
       _id
-      additionalInfo {
-        description
-        title
-      }
-      margin
-      discountedPrice
-      createdAt
-      costOfGoods
+      name
+      description
+      status
+      slug
       categoryIds
+      badgeIds
       categories {
         _id
         name
         slug
       }
-      description
-      name
-      price
+      additionalInfo {
+        title
+        description
+      }
       productOptions {
         optionName
         choices {
@@ -81,16 +64,13 @@ export const GET_PRODUCT_BY_ID = gql`
         type
         altText
       }
-      saleType
-      saleValue
-      status
-      slug
-      meta {
+      seo {
         title
         description
         keywords
         primaryKeywords
         author
+        canonical
         robots
         og {
           title
@@ -106,23 +86,13 @@ export const GET_PRODUCT_BY_ID = gql`
       }
       variants {
         _id
-        selectedOptions
-        priceDifference
-        variantPrice
+        title
         sku
-        variantCostOfGoods
-        shippingWeight
-        trackInventory
-        stockQuantity
+        optionValues
+        price
+        compareAtPrice
         status
-        stockStatus
-        visibility
       }
-      ribbon {
-        name
-        ribbonId
-      }
-      profit
     }
   }
 `;

@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "@/components/layouts/Layout";
 import SmoothScroller from "@/components/common/SmoothScroller";
 import { ToastContainer } from "react-toastify";
 import { ApolloProvider } from "@apollo/client/react";
 import { createApolloClient } from "@/lib/apolloClient";
 import { AuthProvider } from "@/context/AuthContext";
+import { TokenManager } from "@/utils/tokenManager";
+import { captureLandingAttribution } from "@/utils/ga-attribution.util";
 import "@/styles/globals.css";
 import "@/styles/home.css";
 import "@/styles/checkout.css";
@@ -18,6 +20,7 @@ import "swiper/css/pagination";
 import "@/styles/components/sizeAssistance.css";
 import "@/styles/components/navbar.css";
 import "@/styles/components/login.css";
+import "@/styles/components/password-reset.css";
 import "@/styles/components/home.css";
 import "@/styles/components/about.css";
 import "@/styles/components/legal.css";
@@ -29,9 +32,18 @@ import "@/styles/components/newPorfile.css";
 import "@/styles/components/common/polaroid.css";
 import "@/styles/components/common/productCard.css";
 import "@/styles/components/common/footer.css";
+import "@/styles/components/product-listing.css";
 
 export default function App({ Component, pageProps }) {
-  const client = createApolloClient();
+  // One client per browser session (SF-19); server pages create their own.
+  const [client] = useState(() => createApolloClient());
+
+  useEffect(() => {
+    TokenManager.clearLegacyStorage();
+    // PRD-012: remember the visit's UTMs, referrer and landing page once
+    captureLandingAttribution();
+  }, []);
+
   return (
     <>
       <ApolloProvider client={client}>

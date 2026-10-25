@@ -12,6 +12,8 @@ const AddressCard = (
     phone,
     pincode,
     type,
+    onEdit,
+    onDelete,
   }
 ) => {
   return (
@@ -24,6 +26,16 @@ const AddressCard = (
         <p>{`${city}, ${state}, ${country} - ${pincode}`}</p>
         <p>{phone}</p>
         <p className='person_location'>{type}</p>
+        {(onEdit || onDelete) && (
+          <div className='address_actions'>
+            {onEdit && (
+              <button type='button' onClick={onEdit}>Edit</button>
+            )}
+            {onDelete && (
+              <button type='button' onClick={onDelete}>Remove</button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )

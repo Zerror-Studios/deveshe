@@ -1,58 +1,27 @@
 "use client";
-import { formatDateTime, formatePrice, renderVariants } from "@/utils/Util";
+import { formatDateTime, formatePrice } from "@/utils/Util";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { FiArrowRight } from "react-icons/fi";
 
-const orders = [
-  {
-    id: "000052",
-    product: {
-      name: "The Boardroom Babe",
-      qty: 1,
-      sku: "Bl04XS",
-      color: "XS",
-      image: "/assets/images/about/img1.webp",
-    },
-    date: "Friday, 05 September, 25",
-    price: "₹4,000",
-    status: "Unpaid",
-    awb: "NA",
-    track: "NA",
-  },
-  {
-    id: "000053",
-    product: {
-      name: "The Boardroom Babe",
-      qty: 1,
-      sku: "Bl04XS",
-      color: "XS",
-      image: "/assets/images/about/img1.webp",
-    },
-    date: "Friday, 05 September, 25",
-    price: "₹4,000",
-    status: "Paid",
-    awb: "NA",
-    track: "NA",
-  },
-];
-
 const OrderTable = ({ data, columns, loading }) => {
   return (
     <>
-      {orders.length > 0 ? (
+      {loading ? (
+        <div className="no-order-div flex-all">
+          <div className="loader-btn" />
+        </div>
+      ) : data?.length > 0 ? (
         <div className="table-container">
           <table className="order-table">
             <thead>
               <tr>
                 {columns?.map((item, index) => {
                   return (
-                    <>
-                      <th key={`order-column-${index}`}>
-                        {item}
-                      </th>
-                    </>
+                    <th key={`order-column-${index}`}>
+                      {item}
+                    </th>
                   );
                 })}
               </tr>
@@ -78,17 +47,14 @@ const OrderTable = ({ data, columns, loading }) => {
                             <div>
                               <p className="product-name">{cartItem?.name || ""}</p>
                               <p>Qty : {cartItem?.qty || ""}</p>
-                              <p>Sku : {cartItem?.variantDetail?.sku || ""}</p>
-                              <p>
-                                {renderVariants(cartItem?.product?.productOptions || [], cartItem?.variantDetail?.selectedOptions || [])}
-                              </p>
+                              <p>Sku : {cartItem?.sku || ""}</p>
                             </div>
                           </div>
                         );
                       })}
                     </td>
                     <td>{formatDateTime(item?.createdAt || "")}</td>
-                    <td>{formatePrice(item?.discountedPrice || 0)}</td>
+                    <td>{formatePrice(item?.orderPrice ?? item?.discountedPrice ?? 0)}</td>
                     <td>
                       <span
                         className={`status ${item.paymentStatus === "PAID"
@@ -108,6 +74,7 @@ const OrderTable = ({ data, columns, loading }) => {
                           id="common_black_btn"
                           href={`https://shiprocket.co/tracking/${item?.awb_code}`}
                           target="_blank"
+                          rel="noopener noreferrer"
                           className="track-btn"
                         >
                           Track

@@ -1,7 +1,7 @@
 export const MenuData = [
   {
     name: "Shop",
-    link: "/#shop",
+    link: "/products",
   },
   {
     name: "Lookbook",

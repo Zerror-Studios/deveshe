@@ -16,6 +16,13 @@ const Navbar = ({ openCart }) => {
   useEffect(() => {
     if (window.innerWidth < 1000) return;
 
+    // Only this component's animations are killed on cleanup; a global
+    // ScrollTrigger.killAll() would also kill other pages' triggers (SF-20).
+    let isCancelled = false;
+    let loaderInterval = null;
+    let introTimeline = null;
+    let scrollTimeline = null;
+
     const init = async () => {
       const logos = document.querySelectorAll(".logo");
       const logoContainer = document.querySelector("#logo-container");
@@ -33,6 +40,7 @@ const Navbar = ({ openCart }) => {
               })
         )
       );
+      if (isCancelled) return;
 
       // Calculate positions
       const spacing = 10;
@@ -106,16 +114,17 @@ const Navbar = ({ openCart }) => {
 
       const startLoader = () => {
         let current = 0;
-        const interval = setInterval(() => {
+        loaderInterval = setInterval(() => {
           current++;
           setPercent(current);
 
           if (current >= 100) {
-            clearInterval(interval);
+            clearInterval(loaderInterval);
           }
         }, 10);
       };
       var tl = gsap.timeline();
+      introTimeline = tl;
 
       // Move logo and nav buttons smoothly at the same time
       tl.call(startLoader)
@@ -196,7 +205,7 @@ const Navbar = ({ openCart }) => {
         );
 
       // GSAP Timeline
-      gsap
+      scrollTimeline = gsap
         .timeline({
           scrollTrigger: {
             trigger: document.documentElement,
@@ -285,9 +294,12 @@ const Navbar = ({ openCart }) => {
     const timeout = setTimeout(() => requestAnimationFrame(init), 30);
 
     return () => {
+      isCancelled = true;
       clearTimeout(timeout);
-      ScrollTrigger.killAll();
-      gsap.globalTimeline.clear();
+      clearInterval(loaderInterval);
+      introTimeline?.kill();
+      scrollTimeline?.scrollTrigger?.kill();
+      scrollTimeline?.kill();
     };
   }, [router.asPath]);
 

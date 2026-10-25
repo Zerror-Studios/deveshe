@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import SeoHeader from "@/components/seo/SeoHeader";
 import Image from "next/image";
@@ -6,66 +6,155 @@ import CommonButton from "@/components/common/CommonButton";
 import { useQuery } from "@apollo/client/react";
 import { GET_ORDER_BY_ID } from "@/graphql";
 import { trackEcomEvent } from "@/utils/analytics";
+import { PendingOrder } from "@/utils/pending-order.util";
+
+// PAID is set asynchronously after verifyPayment, so poll myOrder briefly.
+// After polling ends without PAID the page shows a terminal "not confirmed
+// yet" state, and a missing order never shows success (RBUG-20).
+const ORDER_POLL_INTERVAL_MS = 3000;
+const ORDER_POLL_MAX_MS = 60 * 1000;
+const REDIRECT_SECONDS = 10;
+const PURCHASE_TRACKED_KEY = "ga_purchase_tracked";
+const SUPPORT_EMAIL = "deveshedreams@gmail.com";
+
+// GA purchase fires once per order, also across reloads.
+const markPurchaseTracked = (orderId) => {
+  try {
+    const tracked = JSON.parse(localStorage.getItem(PURCHASE_TRACKED_KEY) || "[]");
+    if (tracked.includes(orderId)) return false;
+    localStorage.setItem(
+      PURCHASE_TRACKED_KEY,
+      JSON.stringify([...tracked, orderId].slice(-20))
+    );
+    return true;
+  } catch {
+    return true;
+  }
+};
 
 const ThankYou = ({ meta }) => {
   const router = useRouter();
-  const [time, setTime] = useState(10);
+  const [time, setTime] = useState(REDIRECT_SECONDS);
+  const [isPolling, setIsPolling] = useState(true);
+  const purchaseTrackedRef = useRef(false);
+  const orderId = router.query.orderId;
 
-  const { data: orderData } = useQuery(GET_ORDER_BY_ID, {
-    variables: { getClientSidePaymentByOrderIdId: router.query.id },
-    skip: !router.query.id,
+  const { data: orderData, loading, error } = useQuery(GET_ORDER_BY_ID, {
+    variables: { id: orderId },
+    skip: !orderId,
+    fetchPolicy: "network-only",
+    pollInterval: isPolling ? ORDER_POLL_INTERVAL_MS : 0,
   });
+  const order = orderData?.myOrder;
+  const isPaid = order?.paymentStatus === "PAID";
 
   useEffect(() => {
-    if (orderData?.getClientSidePaymentByOrderId) {
-      const orderInfo = orderData.getClientSidePaymentByOrderId;
-      const order = orderInfo.order;
-      trackEcomEvent.purchase(
-        order._id,
-        order.totalprice,
-        order.cart || [],
-        order.shippingAmount || 0,
-        order.taxAmount || 0
-      );
-    }
-  }, [orderData]);
+    const timer = setTimeout(() => setIsPolling(false), ORDER_POLL_MAX_MS);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
+    if (!isPaid || purchaseTrackedRef.current) return;
+    purchaseTrackedRef.current = true;
+    setIsPolling(false);
+    PendingOrder.clear();
+    if (!markPurchaseTracked(order._id)) return;
+    trackEcomEvent.purchase(
+      order._id,
+      order.orderPrice ?? order.totalprice,
+      order.cart || [],
+      order.shippingAmount || 0,
+      order.tax?.totalTax || 0
+    );
+  }, [isPaid, order]);
+
+  // Countdown starts once the payment is confirmed.
+  useEffect(() => {
+    if (!isPaid) return;
     const countdown = setInterval(() => {
-      setTime((prev) => {
-        if (prev <= 1) {
-          clearInterval(countdown);
-          router.push("/");
-          return 0;
-        }
-        return prev - 1;
-      });
+      setTime((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
 
     return () => clearInterval(countdown);
-  }, [router]);
+  }, [isPaid]);
+
+  useEffect(() => {
+    if (time === 0) router.push("/");
+  }, [time]);
+
+  const isMissing = router.isReady && (!orderId || (!loading && (error || !order)));
+  const isUnconfirmed = !isPaid && !isPolling && !isMissing;
+
+  if (isMissing || isUnconfirmed) {
+    return (
+      <>
+        <SeoHeader meta={meta} />
+        <div id="status_section">
+          <h2>
+            {isMissing ? (
+              <>
+                We couldn’t find <br /> this <span>order</span>
+              </>
+            ) : (
+              <>
+                Payment not <br /> <span>confirmed</span> yet
+              </>
+            )}
+          </h2>
+          <p>
+            {isMissing
+              ? "Check your orders in your profile, or contact us."
+              : "We haven’t received confirmation from the bank yet. If money left your account, contact us with your order number before paying again."}
+            {order?.orderNo ? ` Order #${order.orderNo}.` : ""}
+          </p>
+          <p>
+            Contact us at{" "}
+            <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
+          </p>
+          <CommonButton title={"Go Back to Home"} href={"/"} />
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
       <SeoHeader meta={meta} />
       <div id="status_section">
-        <Image
-          width={1000}
-          height={1000}
-          src="/success.gif"
-          alt="payment successfull"
-        />
+        {isPaid && (
+          <Image
+            width={1000}
+            height={1000}
+            src="/success.gif"
+            alt="payment successfull"
+          />
+        )}
         <h2>
-          Thank You <br /> for Your <span>Purchase!</span>
+          {isPaid ? (
+            <>
+              Thank You <br /> for Your <span>Purchase!</span>
+            </>
+          ) : (
+            <>
+              Confirming <br /> your <span>payment</span>
+            </>
+          )}
         </h2>
-        <p>
-          Your payment has been successfully processed. We’re preparing your
-          order and will send you updates soon. Thank you for shopping.
-        </p>
-        <p>
-          You will be redirected to the home page in<strong> {time} </strong>
-          seconds
-        </p>
+        {isPaid ? (
+          <>
+            <p>
+              Your payment has been successfully processed. We’re preparing your
+              order{order?.orderNo ? ` #${order.orderNo}` : ""} and will send
+              you updates soon. Thank you for shopping.
+            </p>
+            <p>
+              You will be redirected to the home page in<strong> {time} </strong>
+              seconds
+            </p>
+          </>
+        ) : (
+          <p>We’re confirming your payment. This can take a few seconds.</p>
+        )}
         <CommonButton title={"Go Back to Home"} href={"/"} />
       </div>
     </>

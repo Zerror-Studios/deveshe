@@ -1,9 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import SeoHeader from "@/components/seo/SeoHeader";
 import Image from "next/image";
 import CommonButton from "@/components/common/CommonButton";
+import { useCartStore } from "@/store/cart-store";
+import { PendingOrder } from "@/utils/pending-order.util";
 
+// PRD-014 FR-0.12 (UX-04): the unpaid order is kept for its bag
+// (`utils/pending-order.util.js`). "Retry payment" goes back to that bag's
+// checkout, which reuses the same order while the bag, email and addresses
+// are unchanged; "Back to cart" opens the bag drawer.
 const PaymentFailed = ({ meta }) => {
+  const router = useRouter();
+  const { openCart } = useCartStore((state) => state);
+  const [retryCartId, setRetryCartId] = useState(null);
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    const orderId =
+      typeof router.query.orderId === "string" ? router.query.orderId : "";
+    setRetryCartId(PendingOrder.findCartId(orderId));
+  }, [router.isReady, router.query.orderId]);
+
+  const handleRetry = () => {
+    if (!retryCartId) return;
+    router.push(`/checkout/${encodeURIComponent(retryCartId)}`);
+  };
+
   return (
     <>
       <SeoHeader meta={meta} />
@@ -20,10 +43,19 @@ const PaymentFailed = ({ meta }) => {
           Payment <span>Failed</span>
         </h2>
         <p>
-          Unfortunately, your payment could not be processed. Please try again
-          to complete your order.
+          Unfortunately, your payment could not be processed.
+          {retryCartId
+            ? " Your order is saved, so you can retry the payment."
+            : " Your bag is saved, so you can check out again."}
         </p>
-        <CommonButton title={"Go Back to Home"} href={"/"} />
+        {retryCartId && (
+          <CommonButton
+            title={"Retry payment"}
+            type="button"
+            onClick={handleRetry}
+          />
+        )}
+        <CommonButton title={"Back to cart"} type="button" onClick={openCart} />
       </div>
     </>
   );

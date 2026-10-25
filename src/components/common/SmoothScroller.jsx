@@ -25,9 +25,22 @@ export default function SmoothScroller() {
       infinite: false,
     });
 
-    const resize = setInterval(() => {
-      if (lenis.current) lenis.current.resize();
-    }, 150);
+    // Re-measure only when the page content changes size (SF-17); Lenis
+    // already handles window resizes.
+    let resizeFrame = null;
+    const scheduleResize = () => {
+      if (resizeFrame) return;
+      resizeFrame = requestAnimationFrame(() => {
+        resizeFrame = null;
+        if (lenis.current) lenis.current.resize();
+      });
+    };
+    const resizeObserver =
+      typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(scheduleResize)
+        : null;
+    resizeObserver?.observe(document.body);
+    window.addEventListener("load", scheduleResize);
 
     function onFrame(time) {
       if (lenis.current) lenis.current.raf(time);
@@ -37,7 +50,9 @@ export default function SmoothScroller() {
 
     return () => {
       unsubscribe();
-      clearInterval(resize);
+      resizeObserver?.disconnect();
+      window.removeEventListener("load", scheduleResize);
+      if (resizeFrame) cancelAnimationFrame(resizeFrame);
       if (lenis.current) {
         lenis.current.destroy();
         lenis.current = null;

@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { getErrorMessage as getApiErrorMessage } from '@/utils/api-error.util';
 
 /**
  * Custom hook for handling GraphQL mutations with built-in error handling,
@@ -202,24 +203,8 @@ export const useMutationHandler = (mutation, options = {}) => {
  * Extract meaningful error message from GraphQL error
  */
 const getErrorMessage = (error, fallbackMessage) => {
-  if (error.graphQLErrors && error.graphQLErrors.length > 0) {
-    return error.graphQLErrors[0].message;
-  }
-
-  if (error.networkError) {
-    if (error.networkError.statusCode === 401) {
-      return 'Authentication required. Please log in.';
-    }
-    if (error.networkError.statusCode === 403) {
-      return 'You do not have permission to perform this action.';
-    }
-    if (error.networkError.statusCode >= 500) {
-      return 'Server error. Please try again later.';
-    }
-    return error.networkError.message || 'Network error occurred.';
-  }
-
-  return error.message || fallbackMessage;
+  // Apollo Client 4 errors: branch on extensions.code / reason
+  return getApiErrorMessage(error, fallbackMessage);
 };
 
 export default useMutationHandler;

@@ -1,0 +1,43 @@
+# deveshe-dreams — docs index
+
+This is the index of every document in this repo. **Keep it current:** any doc you add, rename or retire must be reflected here in the same change. Workflow rules are in `../CLAUDE.md` §0.
+
+| Folder | Holds | Naming |
+|---|---|---|
+| `prd/` | Product requirement docs; T1 work needs one with Status *Approved* | `PRD-NNN-<slug>.md`, from `_TEMPLATE.md` |
+| `architecture/` | Living analyses, contracts and diagrams of how the code works today | `<topic>.md` |
+| `adr/` | Architecture decision records, immutable once Accepted (supersede, don't edit) | `ADR-NNN-<slug>.md`, from `_TEMPLATE.md` |
+| `reviews/` | Code and design reviews | `YYYY-MM-DD-<slug>.md` |
+| `audits/` | Security, performance and accessibility audits, with each finding's status (open, fixed or won't fix) | `YYYY-MM-DD-<slug>.md` |
+| `changelog/` | One line per change (T1 and T2) | `YYYY-MM.md` |
+
+## PRDs
+
+| ID | Title | Status | Repos |
+|---|---|---|---|
+| [PRD-001](prd/PRD-001-session-cookie-hardening.md) | Session & refresh-cookie hardening, phase 2 (pointer → backend) | Approved; code complete 2026-10-14 (PRD-002 WS-F2) | deveshe-dreams |
+| [PRD-002](prd/PRD-002-audit-remediation.md) | Platform audit remediation (pointer → backend); this repo's work is WS-F2, R2-W6 and R3-C | Approved; WS-F2, R2-W6 and R3-C done 2026-10-14; integration check passed | deveshe-dreams |
+| [PRD-003](prd/PRD-003-legacy-data-migration.md) | Legacy data migration (pointer → backend `zcom-backend/docs/prd/PRD-003-legacy-data-migration.md`); this repo's share is the FR-0.5 password-reset UX and the cutover config | In progress; FR-0.5 pages code complete 2026-10-15 | deveshe-dreams |
+| [PRD-011](prd/PRD-011-payment-provider-apps.md) | Razorpay, Cashfree and PayU payment apps (pointer → backend `zcom-backend/docs/prd/PRD-011-payment-provider-apps.md`); this repo: one payment step for SDK / redirect / form-post checkouts, `/api/payments/return`, CSP hosts | Implemented 2026-10-21 (not browser-tested) |
+| [PRD-012](prd/PRD-012-analytics-app-ga4-sync.md) | Analytics as an app (pointer → backend); this repo: visit attribution (GA cookie ids, UTMs) sent with checkout | Implemented 2026-10-22 |
+| [PRD-014](prd/PRD-014-production-readiness-remediation.md) | Production-readiness remediation (pointer → backend `zcom-backend/docs/prd/PRD-014-production-readiness-remediation.md`); this repo's Wave 0 (W0-G): `/products` + `/category/[slug]`, saved-address preselect, server checkout pricing, payment retry, "Unavailable" variants, approved reviews only, `next` 15.5.28 | In progress; Wave 0 code complete 2026-10-25 (not browser-tested) | deveshe-dreams |
+| [PRD-013](prd/PRD-013-behaviour-analytics-depth.md) | Behaviour and product analytics depth (pointer → backend `zcom-backend/docs/prd/PRD-013-behaviour-analytics-depth.md`); this repo: the GA4 event layer `utils/analytics-events.util.js` (`select_item`, `select_variant`, `cta_click`, `gallery_interaction`, `size_guide_open`, `notify_me`, `coupon_apply`/`coupon_failed`, `add_shipping_info`, `add_payment_info`, `checkout_error`) | Implemented 2026-10-23 (not browser-tested) |
+
+## Architecture
+
+| Doc | Purpose | Last verified |
+|---|---|---|
+| [solution-architecture.md](architecture/solution-architecture.md) | **Start here.** Storefront design: Pages Router SSR/SSG, middleware proxy (edge headers) and guard, same-origin data access, cookie session model, checkout flow, presentation, gaps (Mermaid). Parent: `../../ARCHITECTURE.md` (workspace) | 2026-10-14 |
+| Storefront API contract | Lives in `../../zcom-backend/docs/architecture/storefront-api-contract.md` | 2026-10-14 |
+
+## ADRs
+
+| ID | Decision | Status |
+|---|---|---|
+| — | _none yet_ | |
+
+## Reviews and audits
+
+| Date | Doc | Scope | Open findings |
+|---|---|---|---|
+| 2026-10-14 | [2026-10-14-storefront-audit.md](audits/2026-10-14-storefront-audit.md) | Storefront: contract drift, leaked token, refresh link, SSRF; remediation status and round 2 (re-audit) statuses at the end | SF-2 open; SF-9, SF-21, RMAINT-7 partial; verification re-audit done; round 3 (R3-C) fixed VBUG-4/6, VSEC-3/4, VCON-1/2 |

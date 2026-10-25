@@ -1,10 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from 'react-toastify';
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckoutSchema } from "@/validations/CheckoutValidation";
-import { useMutation, useQuery } from "@apollo/client/react";
-import { CART_LIST, CHECKOUT_ORDER } from "@/graphql";
+import { useApolloClient, useQuery } from "@apollo/client/react";
+import {
+  CART_LIST,
+  COMPLETE_CHECKOUT,
+  CREATE_CHECKOUT_SESSION,
+  CREATE_PAYMENT_SESSION,
+  GET_CHECKOUT_SESSION,
+  UPDATE_MY_PROFILE,
+  VERIFY_PAYMENT,
+} from "@/graphql";
 import SeoHeader from "@/components/seo/SeoHeader";
 import Heading from "@/components/checkout/Heading";
 import ContactDetail from "@/components/checkout/ContactDetail";
@@ -12,20 +20,146 @@ import Delivery from "@/components/checkout/Delivery";
 import Shipping from "@/components/checkout/Shipping";
 import BillingAddress from "@/components/checkout/BillingAddress";
 import OrderSummary from "@/components/checkout/OrderSummery";
-import { EmailSubscribedStatus, Sort } from "@/utils/Constant";
-import Checkout from "nimbbl_sonic";
+import { EmailSubscribedStatus } from "@/utils/Constant";
+import { openPaymentCheckout } from "@/utils/payment-checkout.util";
 import { useRouter } from "next/router";
 import { useAuthStore } from "@/store/auth-store";
 import Loader from "@/components/checkout/Loader";
 import gsap from "gsap";
 import CommonButton from "@/components/common/CommonButton";
 import { trackEcomEvent } from "@/utils/analytics";
+import {
+  createReasonError,
+  getAnyErrorMessage,
+  getErrorCode,
+  getErrorReason,
+} from "@/utils/api-error.util";
+import { getLoginPath } from "@/utils/redirect.util";
+import {
+  PendingOrder,
+  getCartFingerprint,
+  getCheckoutDetailsFingerprint,
+} from "@/utils/pending-order.util";
+import { getOrderAttribution } from "@/utils/ga-attribution.util";
+import {
+  CheckoutStepEnum,
+  CtaEnum,
+  trackAddPaymentInfo,
+  trackAddShippingInfo,
+  trackCheckoutError,
+  trackCtaClick,
+} from "@/utils/analytics-events.util";
+
+// Contract flow (PRD-002 WS-C, PRD-011): cart → checkout session (poll
+// RESERVED) → completeCheckout (order) → payment session → the store's
+// payment app (`openPaymentCheckout`) → verifyPayment. PayU posts back to
+// `/api/payments/return` → `/checkout/payment-return`.
+//
+// PRD-014 W0V-C-03 / W0V2-02: a checkout session takes a 15-minute stock
+// hold, so it is opened for pricing only on an explicit shopper action:
+// "Show final total" at the shipping step, or "Pay now". Never on page
+// load, a preselected address or typing. "Pay now" sends the same details
+// and the backend returns that same active session (R2-C8); changed
+// details need a new confirmation, and the backend then replaces the
+// session and releases its hold.
+const RESERVATION_POLL_INTERVAL_MS = 1000;
+const RESERVATION_POLL_ATTEMPTS = 20;
+const ORDER_ADDRESS_FIELDS = [
+  "firstname",
+  "lastname",
+  "addressType",
+  "flat",
+  "addressline1",
+  "addressline2",
+  "landmark",
+  "phone",
+  "countryCode",
+  "city",
+  "country",
+  "states",
+  "pincode",
+];
+const CART_REFRESH_REASONS = ["PRICE_CHANGED", "PROMOTION_INVALID", "OUT_OF_STOCK"];
+// The order (or its stock hold) is gone: the next attempt starts over.
+const ORDER_RESET_REASONS = [
+  "PRICE_CHANGED",
+  "CHECKOUT_EXPIRED",
+  "RESERVATION_RELEASED",
+  "ORDER_CANCELLED",
+];
+// CustomerProfile.emailSubscribedStatus is numeric on the backend
+const EMAIL_SUBSCRIBED_STATUS_CODE = {
+  [EmailSubscribedStatus.UNSUBSCRIBED]: 0,
+  [EmailSubscribedStatus.SUBSCRIBED]: 1,
+  [EmailSubscribedStatus.NEVER_SUBSCRIBED]: 2,
+};
+
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Form address → OrderAddressInput (flat strings only)
+const toOrderAddressInput = (address = {}, email) => {
+  const input = { email };
+  ORDER_ADDRESS_FIELDS.forEach((field) => {
+    if (address?.[field]) input[field] = String(address[field]);
+  });
+  return input;
+};
+
+// Email and both order addresses exactly as sent to the server (VBUG-4).
+const toCheckoutDetails = (formData) => {
+  const { email, shippingAddress, billingAddress, useShippingAsBilling } =
+    formData;
+  return {
+    email,
+    shippingAddress: toOrderAddressInput(shippingAddress, email),
+    billingAddress: toOrderAddressInput(
+      useShippingAsBilling ? shippingAddress : billingAddress,
+      email
+    ),
+  };
+};
+
 const CheckoutPage = ({ meta }) => {
   const router = useRouter();
+  const client = useApolloClient();
   const [isLoading, setIsLoading] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(false);
+  // True from opening the payment window until its result or close (RBUG-15).
+  const [isAwaitingPayment, setIsAwaitingPayment] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
   const { isLoggedIn, user } = useAuthStore((state) => state);
-  const [checkoutOrder] = useMutation(CHECKOUT_ORDER);
+  const submittingRef = useRef(false);
+  const verifyingRef = useRef(false);
+  // Unpaid order for this cart, kept across reloads (RBUG-8/RBUG-9):
+  // `{ orderId, detailsFingerprint }` or null.
+  const pendingOrderRef = useRef(null);
+  // PRD-014 UX-03 / W0V-C-03: the checkout session's server pricing
+  // (shipping, discount, tax, total) for the summary; null until a session
+  // exists for the current bag and details.
+  const [sessionPricing, setSessionPricing] = useState(null);
+  const [isPricing, setIsPricing] = useState(false);
+  const [pricingError, setPricingError] = useState("");
+  // Bumped on every pricing run; an older answer is ignored.
+  const pricingRequestRef = useRef(0);
+  // The bag + details key the shown pricing belongs to (no pending order).
+  const pricedKeyRef = useRef(null);
+  // W0V2-02: the bag + details key the shopper confirmed with "Show final
+  // total"; any change drops it, so new details need a new confirmation.
+  const confirmedKeyRef = useRef(null);
+  // Bumped by each confirmation so the pricing effect runs (also a retry).
+  const [pricingConfirmation, setPricingConfirmation] = useState(0);
+  // The pending order's checkout session whose pricing is shown.
+  const pricedCheckoutIdRef = useRef(null);
+  // Set once the payment succeeded: nothing is priced again.
+  const isCheckoutDoneRef = useRef(false);
+  // PRD-014 UX-02: a submit that fails validation says so at the button.
+  const [submitError, setSubmitError] = useState("");
+  // PRD-014 FR-0.12: an unpaid order is kept for this bag (retry path).
+  const [hasPendingOrder, setHasPendingOrder] = useState(false);
+  const beginCheckoutTrackedRef = useRef(false);
+  // PRD-013: add_shipping_info once per visit; the payment app for errors.
+  const shippingInfoTrackedRef = useRef(false);
+  const paymentProviderRef = useRef(null);
   const cartListPayload = {
     cartId: router?.query?.id,
   };
@@ -34,7 +168,7 @@ const CheckoutPage = ({ meta }) => {
     loading,
     refetch,
   } = useQuery(CART_LIST, {
-    skip: !router?.query?.id,
+    skip: !router?.query?.id || !isLoggedIn,
     variables: cartListPayload,
     fetchPolicy: "network-only",
     nextFetchPolicy: "cache-first",
@@ -42,10 +176,46 @@ const CheckoutPage = ({ meta }) => {
 
   const cartData = response?.getCart || {};
 
+  // Restore the unpaid order after a reload; a changed bag or coupon
+  // (fingerprint mismatch) drops it, so the total is never stale.
   useEffect(() => {
-    if (cartData && Object.keys(cartData).length > 0) {
-      trackEcomEvent.beginCheckout(cartData.items, cartData.totalValue);
+    if (!cartData?._id) return;
+    pendingOrderRef.current = PendingOrder.read(cartData);
+    setHasPendingOrder(Boolean(pendingOrderRef.current));
+  }, [cartData]);
+
+  // A changed bag or coupon re-prices through the pricing effect below.
+  const forgetPendingOrder = () => {
+    PendingOrder.clear(cartData?._id);
+    pendingOrderRef.current = null;
+    pricedCheckoutIdRef.current = null;
+    pricedKeyRef.current = null;
+    confirmedKeyRef.current = null;
+    setHasPendingOrder(false);
+    setSessionPricing(null);
+  };
+
+  // The payment went through: stop pricing and forget the order.
+  const finishCheckout = () => {
+    isCheckoutDoneRef.current = true;
+    forgetPendingOrder();
+  };
+
+  // Checkout is customer-only (middleware checks the cookie hint).
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (isHydrated && !isLoggedIn) {
+      router.replace(getLoginPath(router.asPath));
     }
+  }, [isHydrated, isLoggedIn]);
+
+  useEffect(() => {
+    if (beginCheckoutTrackedRef.current || !cartData?.cart?.length) return;
+    beginCheckoutTrackedRef.current = true;
+    trackEcomEvent.beginCheckout(cartData.cart, cartData.discountedPrice);
   }, [cartData]);
 
   const {
@@ -78,106 +248,450 @@ const CheckoutPage = ({ meta }) => {
   useEffect(() => {
     if (isLoggedIn) {
       setValue("email", user?.email);
-      setValue(
-        "emailSubscribedStatus",
-        user?.emailSubscribedStatus || EmailSubscribedStatus.NEVER_SUBSCRIBED
-      );
     }
   }, [isLoggedIn]);
 
-  const handleOrderPayment = async (payload) => {
-    try {
-      setIsPageLoading(true);
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/payment/handle-order-payment`,
-        {
-          method: "POST",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "application/json",
-            dbtoken: `Bearer ${process.env.NEXT_PUBLIC_DB_TOKEN || ""}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+  // ─── Server pricing before "Pay now" (W0V-C-03, W0V2-02) ────────────────
 
-      if (!response.ok) {
-        throw new Error(`Failed with status ${response.status}`);
-      }
-      const result = await response.json();
-      const { redirectUrl, awb_code } = result.data || {};
-      if (redirectUrl) {
-        await router.push(
-          {
-            pathname: redirectUrl,
-            ...(awb_code ? { query: { awb_code } } : {}),
-          },
-          undefined,
-          { shallow: true }
-        );
-        setIsPageLoading(false);
-      }
-    } catch (error) {
-      console.error(`Error in Payment Order: ${error.message}`);
-      setIsPageLoading(false);
-      return null;
+  const [
+    watchedEmail,
+    watchedShipping,
+    watchedBilling,
+    watchedUseShippingAsBilling,
+  ] = useWatch({
+    control,
+    name: [
+      "email",
+      "shippingAddress",
+      "billingAddress",
+      "useShippingAsBilling",
+    ],
+  });
+  const pricingValues = {
+    email: watchedEmail,
+    shippingAddress: watchedShipping,
+    billingAddress: watchedBilling,
+    useShippingAsBilling: watchedUseShippingAsBilling,
+  };
+  // Only a form that would pass "Pay now" validation is priced.
+  const pricingDetails = CheckoutSchema.safeParse(pricingValues).success
+    ? toCheckoutDetails(pricingValues)
+    : null;
+  const pricingKey =
+    pricingDetails && cartData?._id
+      ? `${getCartFingerprint(cartData)}|${getCheckoutDetailsFingerprint(
+          pricingDetails
+        )}`
+      : null;
+  const isPendingOrderDetails =
+    hasPendingOrder &&
+    !!pricingDetails &&
+    PendingOrder.matches(pendingOrderRef.current, pricingDetails);
+  const isCheckoutBusy = isLoading || isAwaitingPayment || isPageLoading;
+
+  // FR-0.12: on a retry the saved address of the kept order is preselected
+  // (not the primary one), so paying again reuses that order.
+  const isPendingAddress = useCallback(
+    (formAddress) => {
+      if (!hasPendingOrder || !pendingOrderRef.current) return false;
+      return PendingOrder.matches(
+        pendingOrderRef.current,
+        toCheckoutDetails({
+          email: watchedEmail,
+          shippingAddress: formAddress,
+          billingAddress: formAddress,
+          useShippingAsBilling: true,
+        })
+      );
+    },
+    [hasPendingOrder, watchedEmail]
+  );
+
+  useEffect(() => {
+    const requestId = ++pricingRequestRef.current;
+    const isCurrent = () => requestId === pricingRequestRef.current;
+    if (isCheckoutBusy || isCheckoutDoneRef.current) {
+      setIsPricing(false);
+      return undefined;
     }
+    // Changed details (or bag) need a new confirmation
+    if (confirmedKeyRef.current !== pricingKey) confirmedKeyRef.current = null;
+    setPricingError("");
+    if (!pricingKey) {
+      pricedKeyRef.current = null;
+      setSessionPricing(null);
+      setIsPricing(false);
+      return undefined;
+    }
+
+    // A kept (unpaid) order: show its own session's pricing while the
+    // details match; never open a second session for it
+    const pending = pendingOrderRef.current;
+    if (pending) {
+      pricedKeyRef.current = null;
+      if (!PendingOrder.matches(pending, pricingDetails)) {
+        pricedCheckoutIdRef.current = null;
+        setSessionPricing(null);
+        setIsPricing(false);
+        return undefined;
+      }
+      if (
+        !pending.checkoutId ||
+        pricedCheckoutIdRef.current === pending.checkoutId
+      ) {
+        setIsPricing(false);
+        return undefined;
+      }
+      setIsPricing(true);
+      client
+        .query({
+          query: GET_CHECKOUT_SESSION,
+          variables: { id: pending.checkoutId },
+          fetchPolicy: "network-only",
+        })
+        .then(({ data }) => {
+          if (!isCurrent()) return;
+          pricedCheckoutIdRef.current = pending.checkoutId;
+          setSessionPricing(data?.getCheckoutSession?.pricing ?? null);
+        })
+        .catch(() => {
+          if (isCurrent()) setSessionPricing(null);
+        })
+        .finally(() => {
+          if (isCurrent()) setIsPricing(false);
+        });
+      return undefined;
+    }
+
+    pricedCheckoutIdRef.current = null;
+    if (pricedKeyRef.current === pricingKey) {
+      setIsPricing(false);
+      return undefined;
+    }
+    pricedKeyRef.current = null;
+    setSessionPricing(null);
+    // No explicit confirmation for these details: no session, no hold
+    if (confirmedKeyRef.current !== pricingKey) {
+      setIsPricing(false);
+      return undefined;
+    }
+    setIsPricing(true);
+    (async () => {
+      try {
+        const { data } = await client.mutate({
+          mutation: CREATE_CHECKOUT_SESSION,
+          variables: {
+            cartId: cartData?._id,
+            shippingAddress: pricingDetails.shippingAddress,
+            billingAddress: pricingDetails.billingAddress,
+            attribution: getOrderAttribution(),
+          },
+        });
+        if (!isCurrent()) return;
+        const pricing = data?.createCheckoutSessionFromCart?.pricing ?? null;
+        pricedKeyRef.current = pricing ? pricingKey : null;
+        setSessionPricing(pricing);
+      } catch (error) {
+        if (!isCurrent()) return;
+        setSessionPricing(null);
+        // "Show final total" again retries; nothing retries on its own
+        confirmedKeyRef.current = null;
+        setPricingError(
+          getAnyErrorMessage(
+            error,
+            "We could not calculate shipping for this address."
+          )
+        );
+        const reason = getErrorReason(error);
+        if (CART_REFRESH_REASONS.includes(reason)) refetch(cartListPayload);
+      } finally {
+        if (isCurrent()) setIsPricing(false);
+      }
+    })();
+    return undefined;
+  }, [pricingKey, hasPendingOrder, isCheckoutBusy, pricingConfirmation]);
+
+  const waitForReservation = async (initialSession) => {
+    let session = initialSession;
+    for (let attempt = 0; attempt <= RESERVATION_POLL_ATTEMPTS; attempt += 1) {
+      const status = session?.status;
+      if (status === "RESERVED" || status === "COMPLETED") return session;
+      if (status === "FAILED") {
+        throw createReasonError(session.failureReason || "CHECKOUT_FAILED");
+      }
+      if (status === "EXPIRED") throw createReasonError("CHECKOUT_EXPIRED");
+
+      await wait(RESERVATION_POLL_INTERVAL_MS);
+      const { data } = await client.query({
+        query: GET_CHECKOUT_SESSION,
+        variables: { id: initialSession.id },
+        fetchPolicy: "network-only",
+      });
+      session = data?.getCheckoutSession;
+    }
+    throw createReasonError("RESERVATION_PENDING");
   };
 
-  const launchNimbblSonicCheckout = async (token) => {
-    try {
-      const checkout = new Checkout({ token });
+  // Creates the UN_PAID order once; a retried payment reuses it while the
+  // email and addresses are unchanged. A shopper who closes Nimbbl and edits
+  // them gets a new order with the new details (VBUG-4).
+  const placeOrder = async (formData) => {
+    const details = toCheckoutDetails(formData);
+    if (PendingOrder.matches(pendingOrderRef.current, details)) {
+      return pendingOrderRef.current.orderId;
+    }
+    if (pendingOrderRef.current) forgetPendingOrder();
 
-      checkout.open({
-        callback_handler: async function (response) {
+    const { data: created } = await client.mutate({
+      mutation: CREATE_CHECKOUT_SESSION,
+      variables: {
+        cartId: cartData?._id,
+        shippingAddress: details.shippingAddress,
+        billingAddress: details.billingAddress,
+        // PRD-012: GA ids and UTMs so the order can be attributed
+        attribution: getOrderAttribution(),
+      },
+    });
+    // Same details as the pricing step: the backend returns that session
+    const session = await waitForReservation(
+      created?.createCheckoutSessionFromCart
+    );
+    if (session?.pricing) setSessionPricing(session.pricing);
+    pricedCheckoutIdRef.current = session.id;
+
+    const { data: completed } = await client.mutate({
+      mutation: COMPLETE_CHECKOUT,
+      variables: { checkoutId: session.id },
+    });
+    const orderId = completed?.completeCheckout?.orderId;
+    if (!orderId) throw createReasonError("CHECKOUT_FAILED");
+
+    pendingOrderRef.current = PendingOrder.save(
+      cartData,
+      orderId,
+      details,
+      session.id
+    );
+    setHasPendingOrder(true);
+    return orderId;
+  };
+
+  const handleOrderPayment = async (payload, paymentSession, orderId) => {
+    if (verifyingRef.current) return;
+    verifyingRef.current = true;
+    setIsPageLoading(true);
+    let pathname = "/checkout/payment-failed";
+    try {
+      const { data } = await client.mutate({
+        mutation: VERIFY_PAYMENT,
+        variables: {
+          payload: {
+            providerOrderId: paymentSession.providerOrderId,
+            ...payload,
+          },
+        },
+      });
+      const result = data?.verifyPayment;
+      // PAID is confirmed asynchronously; the thank-you page polls myOrder.
+      if (result?.success || result?.status !== "FAILED") {
+        pathname = "/checkout/thank-you";
+        finishCheckout();
+      } else {
+        trackCheckoutError(
+          CheckoutStepEnum.PAYMENT,
+          result?.status || "FAILED",
+          paymentProviderRef.current,
+        );
+      }
+    } catch (error) {
+      const reason = getErrorReason(error);
+      if (reason === "ALREADY_PAID") {
+        pathname = "/checkout/thank-you";
+        finishCheckout();
+      } else {
+        trackCheckoutError(
+          CheckoutStepEnum.PAYMENT,
+          reason || getErrorCode(error) || "VERIFY_FAILED",
+          paymentProviderRef.current,
+        );
+      }
+      console.error(`Error in Payment Order: ${error.message}`);
+      toast.error(getAnyErrorMessage(error, "We could not verify your payment."));
+    } finally {
+      verifyingRef.current = false;
+    }
+    await router.push({ pathname, query: { orderId } });
+    setIsPageLoading(false);
+  };
+
+  const launchPaymentCheckout = async (paymentSession, orderId) => {
+    // A window can report its close more than once
+    let isCallbackHandled = false;
+    try {
+      await openPaymentCheckout(paymentSession, {
+        onResult: async (payload) => {
+          if (isCallbackHandled) return;
+          isCallbackHandled = true;
           try {
-            if (
-              response?.event_type === "globalCloseCheckoutModal" &&
-              response?.payload
-            ) {
-              await handleOrderPayment(response.payload);
-            }
+            await handleOrderPayment(payload, paymentSession, orderId);
           } catch (err) {
-            console.error("Error in callback_handler:", err);
+            console.error("Error handling the payment result:", err);
+          } finally {
+            setIsAwaitingPayment(false);
           }
+        },
+        onDismiss: () => {
+          if (isCallbackHandled) return;
+          isCallbackHandled = true;
+          trackCheckoutError(
+            CheckoutStepEnum.PAYMENT,
+            "PAYMENT_DISMISSED",
+            paymentProviderRef.current,
+          );
+          setIsAwaitingPayment(false);
+          toast.info("Payment was not completed. You can try again.");
         },
       });
     } catch (error) {
       console.error("Error launching checkout:", error);
-    } finally {
-      setIsLoading(false);
+      trackCheckoutError(
+        CheckoutStepEnum.PAYMENT,
+        "PAYMENT_WINDOW_FAILED",
+        paymentProviderRef.current,
+      );
+      setIsAwaitingPayment(false);
+      toast.error("Could not open the payment window. Please try again.");
     }
   };
 
+  // Best effort: the "email me" checkbox updates the customer profile.
+  const saveEmailPreference = (status) => {
+    const code = EMAIL_SUBSCRIBED_STATUS_CODE[status];
+    if (code === undefined || code === user?.emailSubscribedStatus) return;
+    client
+      .mutate({
+        mutation: UPDATE_MY_PROFILE,
+        variables: { input: { emailSubscribedStatus: code } },
+      })
+      .catch(() => {});
+  };
+
+  // PRD-014 UX-02: "Pay now" never fails silently. Field errors render next
+  // to the fields (the delivery form opens itself for a saved address that
+  // fails); this names the problem at the button and scrolls to it.
+  const onInvalid = (formErrors) => {
+    const firstPath = formErrors?.email
+      ? "email"
+      : formErrors?.shippingAddress
+        ? "shippingAddress"
+        : "billingAddress";
+    setSubmitError(
+      firstPath === "email"
+        ? "Please enter a valid email address."
+        : firstPath === "shippingAddress"
+          ? "Please select or complete your delivery address."
+          : "Please complete your billing address."
+    );
+    const target = document.querySelector(
+      firstPath === "email"
+        ? ".contact_container"
+        : firstPath === "shippingAddress"
+          ? ".Delivery_container"
+          : ".Payment_container"
+    );
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  // "Show final total": validates like "Pay now", then opens the session
+  // for exactly these details (its hold is the shopper's explicit choice).
+  const onConfirmDetails = handleSubmit(() => {
+    if (!pricingKey) {
+      setSubmitError(
+        loading
+          ? "Your bag is still loading. Please try again in a moment."
+          : "We could not load your bag. Please refresh the page."
+      );
+      return;
+    }
+    setSubmitError("");
+    confirmedKeyRef.current = pricingKey;
+    setPricingConfirmation((count) => count + 1);
+  }, onInvalid);
+
   const onSubmit = async (data) => {
+    if (submittingRef.current || isAwaitingPayment) return;
+    if (!cartData?._id) {
+      setSubmitError(
+        loading
+          ? "Your bag is still loading. Please try again in a moment."
+          : "We could not load your bag. Please refresh the page."
+      );
+      return;
+    }
+    setSubmitError("");
+    submittingRef.current = true;
     setIsLoading(true);
+    // PRD-013 Q3: the validated form is the address step's completion.
+    if (!shippingInfoTrackedRef.current) {
+      shippingInfoTrackedRef.current = true;
+      trackAddShippingInfo(
+        cartData,
+        cartData?.isFreeShippingEnabled ? "free" : "standard",
+      );
+    }
+    let orderId = null;
     try {
-      const { email, emailSubscribedStatus, shippingAddress, billingAddress } =
-        data;
-
-      const payload = {
-        userData: {
-          firstName: shippingAddress.firstname,
-          lastName: shippingAddress.lastname,
-          email,
-          phoneNumber: shippingAddress.phone,
-          countryCode: shippingAddress.countryCode,
-          emailSubscribedStatus,
-        },
-        cartId: cartData?._id,
-        shippingAddress: { email, ...shippingAddress },
-        billingAddress: { email, ...billingAddress },
-      };
-
-      const { data: response } = await checkoutOrder({
-        variables: { input: payload },
+      orderId = await placeOrder(data);
+      saveEmailPreference(data.emailSubscribedStatus);
+      const { data: paymentResponse } = await client.mutate({
+        mutation: CREATE_PAYMENT_SESSION,
+        variables: { input: { orderId } },
       });
-      const { token } = response?.clientCheckout?.nimbblData || {};
-      launchNimbblSonicCheckout(token);
+      const paymentSession = paymentResponse?.createPaymentSession;
+      paymentProviderRef.current =
+        paymentSession?.checkout?.provider?.toLowerCase() || null;
+      if (!paymentSession?.checkout) {
+        throw new Error("Payment could not be started");
+      }
+      // PRD-013 Q3: the payment window is the payment step.
+      trackAddPaymentInfo(cartData, paymentProviderRef.current);
+      setIsAwaitingPayment(true);
+      await launchPaymentCheckout(paymentSession, orderId);
     } catch (err) {
-      setIsLoading(false);
       console.error(err);
-      toast.error(err.message || "Failed");
+      const reason = err?.reason || getErrorReason(err);
+      if (reason === "ALREADY_PAID" && pendingOrderRef.current) {
+        const paidOrderId = pendingOrderRef.current.orderId;
+        finishCheckout();
+        router.push({
+          pathname: "/checkout/thank-you",
+          query: { orderId: paidOrderId },
+        });
+        return;
+      }
+      // Before an order exists the failure belongs to the address step.
+      trackCheckoutError(
+        orderId ? CheckoutStepEnum.PAYMENT : CheckoutStepEnum.ADDRESS,
+        reason ||
+          getErrorCode(err) ||
+          (orderId ? "PAYMENT_START_FAILED" : "CHECKOUT_FAILED"),
+        orderId ? paymentProviderRef.current : undefined,
+      );
+      if (ORDER_RESET_REASONS.includes(reason)) forgetPendingOrder();
+      // No order yet: the shown pricing may be stale, and it is opened
+      // again only when the shopper confirms (W0V2-02)
+      if (!orderId) {
+        pricedKeyRef.current = null;
+        confirmedKeyRef.current = null;
+        setSessionPricing(null);
+      }
+      if (CART_REFRESH_REASONS.includes(reason)) {
+        refetch(cartListPayload);
+      }
+      toast.error(getAnyErrorMessage(err, "Checkout failed. Please try again."));
+    } finally {
+      submittingRef.current = false;
+      setIsLoading(false);
     }
   };
   const leftRef = useRef(null);
@@ -198,6 +712,8 @@ const CheckoutPage = ({ meta }) => {
       y: 0,
       duration: 1,
     });
+
+    return () => tl.kill();
   }, []);
 
   return (
@@ -206,7 +722,11 @@ const CheckoutPage = ({ meta }) => {
       <div className="checkout-cont">
         <div className="checkout-left" ref={leftRef}>
           <Heading />
-          <form onSubmit={handleSubmit(onSubmit)} className="checkout-main">
+          <form
+            onSubmit={handleSubmit(onSubmit, onInvalid)}
+            className="checkout-main"
+            noValidate
+          >
             <ContactDetail
               register={register}
               watch={watch}
@@ -218,19 +738,56 @@ const CheckoutPage = ({ meta }) => {
               errors={errors}
               register={register}
               setValue={setValue}
+              isPreferredAddress={isPendingAddress}
             />
-            <Shipping />
+            <Shipping
+              pricing={sessionPricing}
+              isPricing={isPricing}
+              error={pricingError}
+              isFreeShippingEnabled={cartData?.isFreeShippingEnabled}
+              onConfirm={
+                hasPendingOrder || isCheckoutBusy ? undefined : onConfirmDetails
+              }
+            />
             <BillingAddress
               register={register}
               setValue={setValue}
               control={control}
               errors={errors}
             />
-            <CommonButton title={"Pay now"} loading={isLoading} />
+            {isPendingOrderDetails && !submitError && (
+              <p className="checkout_pending_note" role="status">
+                Your order is saved. Pay now to retry the payment with the
+                same delivery details.
+              </p>
+            )}
+            {hasPendingOrder && !isPendingOrderDetails && !submitError && (
+              <p className="checkout_pending_note" role="status">
+                You changed the delivery details of your saved order. Paying
+                now places a new order with these details; its shipping and
+                total are confirmed when you pay.
+              </p>
+            )}
+            {submitError && (
+              <p className="checkout_submit_error" role="alert">
+                {submitError}
+              </p>
+            )}
+            <CommonButton
+              title={"Pay now"}
+              loading={isLoading || isAwaitingPayment}
+              onClick={() => trackCtaClick(CtaEnum.PAY_NOW)}
+            />
           </form>
         </div>
         <div className="checkout-right" ref={rightRef}>
-          <OrderSummary data={cartData} refetch={() => refetch(cartListPayload)} />
+          <OrderSummary
+            data={cartData}
+            pricing={sessionPricing}
+            isPricing={isPricing}
+            locked={isLoading || isAwaitingPayment || isPageLoading}
+            refetch={() => refetch(cartListPayload)}
+          />
         </div>
       </div>
       <Loader isLoading={isPageLoading} />

@@ -22,7 +22,7 @@ const AboutHeroSection = () => {
     const isMobile = window.innerWidth <= 576;
     const lerpFactor = isMobile ? 0.07 : 0.1;
 
-    gsap.to(
+    const scrollTween = gsap.to(
       {},
       {
         scrollTrigger: {
@@ -46,8 +46,10 @@ const AboutHeroSection = () => {
       }
     );
 
+    // Only this component's trigger (SF-20)
     return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      scrollTween.scrollTrigger?.kill();
+      scrollTween.kill();
     };
   }, []);
 

@@ -4,12 +4,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
-import { useLazyQuery } from "@apollo/client/react";
-import { LOGIN_USER } from "@/graphql";
+import { useApolloClient } from "@apollo/client/react";
 import { toast } from 'react-toastify';
-import { useAuthStore } from "@/store/auth-store";
 import CommonButton from "../common/CommonButton";
-import { TokenManager } from "@/utils/tokenManager";
+import { CustomerSession } from "@/lib/customer-session.service";
+import { getErrorMessage } from "@/utils/api-error.util";
+import { getSafeNextPath } from "@/utils/redirect.util";
+import Link from "next/link";
 
 // Schema validation
 const LoginSchema = z.object({
@@ -20,8 +21,8 @@ const LoginSchema = z.object({
 const Login = ({ setToggle }) => {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
-  const { setUser, setIsLoggedIn } = useAuthStore((state) => state);
-  const [loginUser, { loading }] = useLazyQuery(LOGIN_USER, { fetchPolicy: "network-only" });
+  const client = useApolloClient();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -32,25 +33,28 @@ const Login = ({ setToggle }) => {
   });
 
   const onSubmit = async (formData) => {
+    if (loading) return;
+    setLoading(true);
     try {
-      const { data } = await loginUser({ variables: formData });
-      const { user, accessToken, refreshToken } = data?.userLogin || {};
-      if (accessToken && refreshToken && user) {
-        localStorage.removeItem("visitorId");
-        localStorage.removeItem("visitorExpire");
-        TokenManager.clearTokens(); // clear previous
-        TokenManager.setTokens(accessToken, refreshToken);
-        setUser(user);
-        setIsLoggedIn(true);
-        toast.success("Login successful!");
-        router.back();
-      } else {
-        toast.error("Invalid login credentials.");
+      const { failedMergeCount } = await CustomerSession.login(
+        client,
+        formData,
+      );
+      toast.success("Login successful!");
+      if (failedMergeCount > 0) {
+        toast.info("Some items from your bag are no longer available.");
       }
+      router.replace(getSafeNextPath(router.query.next, "/"));
     } catch (err) {
       console.error("Login error:", err);
-      const gqlMessage = err?.graphQLErrors?.[0]?.message;
-      toast.error(gqlMessage || err.message || "Login failed");
+      toast.error(
+        getErrorMessage(err, "Login failed", {
+          UNAUTHENTICATED: "Invalid email or password.",
+          BAD_USER_INPUT: "Invalid email or password.",
+        }),
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -87,6 +91,9 @@ const Login = ({ setToggle }) => {
             {errors?.password && (
               <div className="error-p">{errors?.password?.message || ""}</div>
             )}
+          </div>
+          <div className="forgot-link">
+            <Link href="/forgot-password">Forgot password?</Link>
           </div>
           <CommonButton title={"Login"} loading={loading} />
         </form>

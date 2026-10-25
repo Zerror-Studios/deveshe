@@ -5,7 +5,12 @@ import { useRouter } from "next/router";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { StockStatus } from "@/utils/Constant";
+import { CtaEnum, trackCtaClick } from "@/utils/analytics-events.util";
 gsap.registerPlugin(ScrollTrigger);
+
+// 2 / 3 / 5 columns (styles/home.css `.Similar_prd_cntr`), RPERF-12.
+const SIMILAR_GRID_SIZES =
+  "(max-width: 576px) 50vw, (max-width: 1000px) 33vw, 20vw";
 
 const ProductListGrid = ({
   title = "You may also like",
@@ -15,6 +20,7 @@ const ProductListGrid = ({
   handleAddToCart,
   cartBtn,
   finalPrice,
+  analyticsItemId,
 }) => {
   if (!data && data.length === 0) return;
   const router = useRouter();
@@ -27,6 +33,11 @@ const ProductListGrid = ({
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  const handleAddToBagClick = () => {
+    trackCtaClick(CtaEnum.ADD_TO_CART, { itemId: analyticsItemId });
+    handleAddToCart();
+  };
 
   useLayoutEffect(() => {
     if (window.innerWidth < 1000) return;
@@ -50,13 +61,13 @@ const ProductListGrid = ({
       );
     });
 
-    setTimeout(() => {
+    const refreshTimer = setTimeout(() => {
       ScrollTrigger.refresh();
     }, 280);
 
     return () => {
+      clearTimeout(refreshTimer);
       ctx.revert();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, [router.asPath, data]);
   return (
@@ -73,10 +84,10 @@ const ProductListGrid = ({
               src={item?.assets?.[0]?.path || ""}
               alt={item?.assets?.[0]?.altText || ""}
               name={item?.name || ""}
-              price={getProductPriceLabel(
-                item?.variants,
-                item?.discountedPrice
-              )}
+              price={getProductPriceLabel(item?.variants)}
+              sizes={SIMILAR_GRID_SIZES}
+              product={item}
+              listName={title}
             />
           );
         })}
@@ -87,7 +98,7 @@ const ProductListGrid = ({
           className="ProductDets_ntfy_btn ProductDets_ntfy_btn_grid"
           id="easysize-cart-button"
           style={loading ? { backgroundColor: "black" } : {}}
-          onClick={handleAddToCart}
+          onClick={handleAddToBagClick}
         >
           {loading ? (
             <div className="ani-wrap">
@@ -96,9 +107,9 @@ const ProductListGrid = ({
           ) : (
             <>
               <span className="ProductDets_ntfy_btn_slect_size">
-                {!cartBtn ? "Select a Size" : isOutOfStock ? StockStatus.OUT_OF_STOCK : "Add to Bag"}
+                {!cartBtn ? "Select a Size" : isOutOfStock ? StockStatus.UNAVAILABLE : "Add to Bag"}
               </span>
-              <span className="ProductDets_ntfy_btn_AddtoBeg">{isOutOfStock ? StockStatus.OUT_OF_STOCK : "Add to Bag"}</span>
+              <span className="ProductDets_ntfy_btn_AddtoBeg">{isOutOfStock ? StockStatus.UNAVAILABLE : "Add to Bag"}</span>
               <div className="ProductDets_ntfy_btn_price">
                 <span>{finalPrice} INR</span>
               </div>

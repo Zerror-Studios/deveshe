@@ -3,7 +3,10 @@
  * Provides a standardized way to track events across the platform.
  */
 
-export const GA_TRACKING_ID = "G-Z10KLGLTDB";
+// Defaults are the current production IDs (PRD-002 SF-22).
+export const GA_TRACKING_ID =
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-Z10KLGLTDB";
+export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || "GTM-W56B2J8G";
 
 /**
  * Maps an internal product object to the standard GA4 items schema.
@@ -16,15 +19,30 @@ export const mapProductToGA4Item = (product, variant = null, quantity = 1) => {
   if (!product) return null;
 
   return {
-    item_id: variant?.sku || product?._id,
+    // PRD-013 FR-2.2: the backend joins events through `product_variant`,
+    // so a product without a chosen variant reports its first variant.
+    item_id: variant?.sku || product?.variants?.[0]?.sku || product?._id,
     item_name: product.name,
-    price: Number(variant?.variantPrice || product.discountedPrice || product.price || 0),
+    price: Number(variant?.price || 0),
     quantity: Number(quantity),
     item_brand: "Deveshe Dreams",
     item_category: product.categoryIds?.[0] || "General",
-    item_variant: variant?.name || ""
+    item_variant: variant?.title || ""
   };
 };
+
+/**
+ * Maps a server cart or order line (CartItem / OrderItemSnapshot) to GA4.
+ * @param {Object} line - The line with productId, name, sku, price, qty.
+ * @returns {Object} GA4 item object.
+ */
+export const mapLineToGA4Item = (line) => ({
+  item_id: line?.sku || line?.productId,
+  item_name: line?.name || "",
+  price: Number(line?.price || 0),
+  quantity: Number(line?.qty || 1),
+  item_brand: "Deveshe Dreams",
+});
 
 /**
  * Tracks a custom event in GA4.
@@ -49,7 +67,7 @@ export const trackEcomEvent = {
   viewItem: (product, variant = null) => {
     trackGAEvent("view_item", {
       currency: "INR",
-      value: Number(variant?.variantPrice || product.discountedPrice || product.price || 0),
+      value: Number(variant?.price || 0),
       items: [mapProductToGA4Item(product, variant)]
     });
   },
@@ -57,7 +75,7 @@ export const trackEcomEvent = {
   addToCart: (product, variant = null, quantity = 1) => {
     trackGAEvent("add_to_cart", {
       currency: "INR",
-      value: Number(variant?.variantPrice || product.discountedPrice || product.price || 0) * quantity,
+      value: Number(variant?.price || 0) * quantity,
       items: [mapProductToGA4Item(product, variant, quantity)]
     });
   },
@@ -66,7 +84,7 @@ export const trackEcomEvent = {
     trackGAEvent("begin_checkout", {
       currency: "INR",
       value: Number(totalValue),
-      items: cartItems.map(item => mapProductToGA4Item(item.product, item.variantDetail, item.qty))
+      items: cartItems.map(mapLineToGA4Item)
     });
   },
 
@@ -77,7 +95,7 @@ export const trackEcomEvent = {
       currency: "INR",
       tax: Number(tax),
       shipping: Number(shipping),
-      items: items.map(item => mapProductToGA4Item(item.product, item.variantDetail, item.qty))
+      items: items.map(mapLineToGA4Item)
     });
   }
 };

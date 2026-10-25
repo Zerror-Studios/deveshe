@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { FiMinus, FiPlus } from "react-icons/fi";
-import { formatePrice, renderVariants } from "@/utils/Util";
+import { formatePrice } from "@/utils/Util";
 
 const CartProduct = ({
   item,
@@ -16,7 +16,7 @@ const CartProduct = ({
       setRemoving(true);
       await handleRemoveItem(
         item?.productId || null,
-        item?.variantDetail?.variantDetailId || null,
+        item?.variantId || null,
         isCompleteRemove
       );
     } finally {
@@ -27,7 +27,7 @@ const CartProduct = ({
   const onAdd = async () => {
     try {
       setAdding(true);
-      await handleAddItem(item?.productId || null, item?.variantDetail || {}, item?.categoryId || null);
+      await handleAddItem(item?.productId || null, item?.variantId || null);
     } finally {
       setAdding(false);
     }
@@ -47,7 +47,6 @@ const CartProduct = ({
         <div className="product_dets">
           <div className="product_dets_top">
             <span>{item?.name || ""}</span>
-            {renderVariants(item?.product?.productOptions || [], item?.variantDetail?.selectedOptions || [])}
             <div className="cart_qt">
               <span>Quantity</span>
               <button disabled={removing} onClick={() => onRemove(false)}>
@@ -70,7 +69,7 @@ const CartProduct = ({
         <div className="product_price">
           <span>
             {`${item.qty > 1 ? `${item?.qty} x` : ""} ${formatePrice(
-              item?.variantDetail?.variantPrice || 0
+              item?.price || 0
             )}`}
           </span>
         </div>

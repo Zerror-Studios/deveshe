@@ -1,5 +1,6 @@
 import { Const } from "@/Utils/Constant";
 import Head from "next/head";
+import { toJsonLd } from "@/utils/json-ld.util";
 
 const BreadcrumbSchema = ({ itemList }) => {
   const breadcrumb = {
@@ -34,7 +35,7 @@ const BreadcrumbSchema = ({ itemList }) => {
     <Head>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+        dangerouslySetInnerHTML={{ __html: toJsonLd(breadcrumb) }}
       ></script>
     </Head>
   );

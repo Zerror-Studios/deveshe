@@ -6,8 +6,8 @@ const AddressContainer = (
     data = [],
     totalCount = 0,
     loading = false,
-    setOpen,
-    setAddressId
+    onEdit,
+    onDelete,
   }) => {
   return (
     <div id="address_container">
@@ -33,6 +33,8 @@ const AddressContainer = (
                   country={item?.country || ""}
                   pincode={item?.pincode || ""}
                   type={item?.addressType || ""}
+                  onEdit={onEdit ? () => onEdit(item) : undefined}
+                  onDelete={onDelete ? () => onDelete(item) : undefined}
                 />
               ))}
             </>

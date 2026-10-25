@@ -2,10 +2,32 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
 import React, { useEffect } from "react";
+import Link from "next/link";
 import { FaStar } from "react-icons/fa6";
 gsap.registerPlugin(ScrollTrigger);
-const ReviewSection = () => {
+
+// Ratings are out of five (ReviewInput.rating).
+const MAX_RATING = 5;
+
+const formatReviewDate = (value) => {
+  const date = value ? new Date(value) : null;
+  if (!date || Number.isNaN(date.getTime())) return "";
+  return new Intl.DateTimeFormat("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(date);
+};
+
+// PRD-014 FR-0.9 (UX-35): only real, APPROVED reviews (`getReviews`, read on
+// the server in pages/index.jsx). The server never exposes the reviewer, so
+// none is named; with no approved review the section is not rendered.
+const ReviewSection = ({ reviews = [] }) => {
+  const hasReviews = reviews.length > 0;
+
   useEffect(() => {
+    if (!hasReviews) return;
+
     // Split text into <span> only once
     function splitText(selector) {
       document.querySelectorAll(selector).forEach((el) => {
@@ -52,121 +74,86 @@ const ReviewSection = () => {
     });
 
     return () => ctx.revert();
-  }, []);
-  const reviews = [
-    {
-      id: 1,
-      name: "Sachi Bhansali",
-      avatar: "/placeholder/avatar-female.jpg", // replace with actual image if any
-      content:
-        "I love the blue ombré top I got! It’s so comfortable and fits so well! I love the silver detailing on the sleeves too, just the right amount of accent needed to elevate the top!",
-      time: "11:42 AM",
-      date: "Feb 12, 2025",
-      tag: "De Ve She Dreams",
-      rating: 5,
-    },
-    {
-      id: 2,
-      name: "Nami Shah",
-      avatar: "/placeholder/avatar-female.jpg",
-      content:
-        "The designs for each piece feel thoughtful and unique while maintaining consistent quality. Great statement pieces to add to any wardrobe!",
-      time: "3:15 PM",
-      date: "Mar 28, 2025",
-      tag: "De Ve She Dreams",
-      rating: 4,
-    },
-    {
-      id: 3,
-      name: "Vrishali Pispati",
-      avatar: "/placeholder/avatar-female.jpg",
-      content:
-        "I bought this printed poplin shirt for my son and he absolutely loves it. It’s comfortable and looks great on him.",
-      time: "9:05 AM",
-      date: "May 09, 2025",
-      tag: "De Ve She Dreams",
-      rating: 4,
-    },
-    {
-      id: 4,
-      name: "Aruja Kothari",
-      avatar: "/placeholder/avatar-female.jpg",
-      content:
-        "The collection at De Ve She Dreams is super versatile! Love the way they use motifs along with abstract patterns. The fabric is so comfortable and you can easily style the pieces up or down! 100% recommended 😍",
-      time: "6:48 PM",
-      date: "Jun 14, 2025",
-      tag: "De Ve She Dreams",
-      rating: 5,
-    },
-  ];
+  }, [hasReviews]);
+
+  if (!hasReviews) return null;
 
   return (
     <div id="review_section">
       <div className="review_title_slide">
         <h2 className="review_title review_title_large">Happy customers</h2>
       </div>
-      {reviews.map((review, i) => (
-        <div key={review.id} className="review_slide">
-          {i === 0 && (
-            <h2 className="review_title review_title_mobile">
-              Happy customers
-            </h2>
-          )}
+      {reviews.map((review, i) => {
+        const rating = Math.min(Math.max(review.rating || 0, 0), MAX_RATING);
+        const date = formatReviewDate(review.createdAt);
+        return (
+          <div key={review._id} className="review_slide">
+            {i === 0 && (
+              <h2 className="review_title review_title_mobile">
+                Happy customers
+              </h2>
+            )}
 
-          <div className="review_card">
-            <div className="tweet-card" role="article" aria-label="Tweet card">
-              {/* Header */}
-              <div className="tweet-header">
-                <Image
-                  width={1000}
-                  height={1000}
-                  className="avatar"
-                  src={review.avatar}
-                  alt={review.name}
-                />
-                <div className="author">
-                  <div className="name">{review.name}</div>
-                  {[...Array(5)].map((_, index) => (
-                    <FaStar
-                      key={index}
-                      className={`${index < review.rating ? '':'rating-star'} rating-s`}
+            <div className="review_card">
+              <div className="tweet-card" role="article">
+                {/* Header */}
+                <div className="tweet-header">
+                  <Image
+                    width={1000}
+                    height={1000}
+                    className="avatar"
+                    src="/placeholder/avatar-female.jpg"
+                    alt=""
+                  />
+                  <div className="author">
+                    <div className="name">Customer review</div>
+                    <span
+                      role="img"
+                      aria-label={`Rated ${rating} out of ${MAX_RATING}`}
+                    >
+                      {[...Array(MAX_RATING)].map((_, index) => (
+                        <FaStar
+                          key={index}
+                          aria-hidden="true"
+                          className={`${index < rating ? "" : "rating-star"} rating-s`}
+                        />
+                      ))}
+                    </span>
+                  </div>
+
+                  <div className="bird" aria-hidden="true">
+                    <Image
+                      width={1000}
+                      height={1000}
+                      src="/scrapbook/letter.png"
+                      alt=""
                     />
-                  ))}
+                  </div>
                 </div>
 
-                <div className="bird" aria-hidden="true">
-                   <Image
-                  width={1000}
-                  height={1000}
-                  src='/scrapbook/letter.png'
-                  alt={review.name}
-                />
-                </div>
+                {/* Body */}
+                <p className="tweet-body">{review.comment}</p>
+
+                {/* Footer */}
+                {(date || review.product?.slug) && (
+                  <div className="tweet-footer">
+                    {date && <span>{date}</span>}
+                    {date && review.product?.slug && <span>·</span>}
+                    {review.product?.slug && (
+                      <Link
+                        href={`/product/${review.product.slug}`}
+                        className="tag"
+                      >
+                        {review.product.name}
+                      </Link>
+                    )}
+                  </div>
+                )}
               </div>
-
-              {/* Body */}
-              <p className="tweet-body">{review.content}</p>
-
-              {/* Footer */}
-              {review.time && review.date && (
-                <div className="tweet-footer">
-                  <span>{review.time}</span>
-                  <span>·</span>
-                  <span>{review.date}</span>
-                  {review.tag && (
-                    <>
-                      <span>·</span>
-                      <a href="#" className="tag">
-                        {review.tag}
-                      </a>
-                    </>
-                  )}
-                </div>
-              )}
             </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

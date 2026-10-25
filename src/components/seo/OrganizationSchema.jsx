@@ -1,4 +1,5 @@
 import React from "react";
+import { toJsonLd } from "@/utils/json-ld.util";
 
 const OrganizationSchema = () => {
   const schemaData = {
@@ -16,7 +17,7 @@ const OrganizationSchema = () => {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+      dangerouslySetInnerHTML={{ __html: toJsonLd(schemaData) }}
     ></script>
   );
 };

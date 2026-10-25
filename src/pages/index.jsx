@@ -3,14 +3,23 @@ import { useRouter } from "next/router";
 import SeoHeader from "@/components/seo/SeoHeader";
 import HeroSection from "@/components/home/HeroSection";
 import ExploreSection from "@/components/home/ExploreSection";
-import { createApolloClient } from "@/lib/apolloClient";
-import { GET_PRODUCTS } from "@/graphql";
+import {
+  createServerCatalogClient,
+  fetchProductPage,
+} from "@/lib/catalog-listing.server";
+import { GET_REVIEWS } from "@/graphql";
 import VisionSection from "@/components/home/VisionSection";
 import ProductSection from "@/components/home/ProductSection";
 import ReviewSection from "@/components/home/ReviewSection";
-import { ProductStatus } from "@/utils/Constant";
 
-const Home = ({ meta, productData }) => {
+// PRD-014 FR-0.8: the home shows the newest published products (one large
+// card + a grid of ten) and links to /products for the rest.
+const HOME_FEATURED_LIMIT = 11;
+// PRD-014 FR-0.9 (UX-35): up to four approved reviews with a comment.
+const HOME_REVIEW_LIMIT = 4;
+const HOME_REVIEW_FETCH_LIMIT = 12;
+
+const Home = ({ meta, productData, productTotal, productError, reviews }) => {
   const sectionRef = useRef(null);
   const router = useRouter();
   useEffect(() => {
@@ -49,9 +58,14 @@ const Home = ({ meta, productData }) => {
       <SeoHeader meta={meta} />
       <HeroSection />
       <ExploreSection sectionRef={sectionRef} />
-      <ProductSection sectionRef={sectionRef} data={productData} />
+      <ProductSection
+        sectionRef={sectionRef}
+        data={productData}
+        totalCount={productTotal}
+        loadError={productError}
+      />
       <VisionSection />
-      <ReviewSection />
+      <ReviewSection reviews={reviews} />
     </>
   );
 };
@@ -93,32 +107,29 @@ export async function getServerSideProps() {
     }
   };
 
-  try {
-    const client = createApolloClient();
-    const { data } = await client.query({
-      query: GET_PRODUCTS,
-      variables: {
-        offset: 0,
-        limit: 1000,
-        filters: {
-          categoryIds: ["6898b3cdddf0354e025da816"],
-          status: ProductStatus.PUBLISHED,
-        },
-      },
-    });
-    return {
-      props: {
-        meta,
-        productData: data?.getClientSideProducts?.products || [],
-      },
-    };
-  } catch (error) {
-    console.error("Error fetching data:", error.message);
-    return {
-      props: {
-        meta,
-        productData: [],
-      },
-    };
+  const client = createServerCatalogClient();
+  const [productResult, reviewResult] = await Promise.allSettled([
+    fetchProductPage(client, { limit: HOME_FEATURED_LIMIT }),
+    client.query({
+      query: GET_REVIEWS,
+      variables: { offset: 0, limit: HOME_REVIEW_FETCH_LIMIT },
+    }),
+  ]);
+  if (productResult.status === "rejected") {
+    console.error("Home products failed:", productResult.reason?.message);
   }
+  // Reviews are optional: without them the section is simply not shown.
+  const reviews = (reviewResult.value?.data?.getReviews?.data || [])
+    .filter((review) => review?.comment?.trim() && review?.rating > 0)
+    .slice(0, HOME_REVIEW_LIMIT);
+
+  return {
+    props: {
+      meta,
+      productData: productResult.value?.products || [],
+      productTotal: productResult.value?.totalCount || 0,
+      productError: productResult.status === "rejected",
+      reviews,
+    },
+  };
 }

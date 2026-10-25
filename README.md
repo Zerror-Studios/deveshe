@@ -1,42 +1,57 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# deveshe-dreams — Deveshe Dreams storefront
 
-## Getting Started
+This is a custom-designed shopper storefront on the **ZCommerce** platform by Zerror Studios. It's built with Next.js 15 with the Pages Router (React 18) in JavaScript, and it consumes the shared ZCommerce GraphQL gateway (`../../zcom-backend`). Payments go through Nimbbl.
 
-First, run the development server:
+> Working here with Claude Code or as a new engineer? Read [`CLAUDE.md`](CLAUDE.md), then [`docs/README.md`](docs/README.md). The API contract every storefront follows is in `../../zcom-backend/docs/architecture/storefront-api-contract.md`.
+
+**Integration status: current.** Since PRD-002 (2026-10-14, rounds 1 to 3) every operation validates against the backend schema (29/29), including the newsletter `/unsubscribe` page. The site calls the API same-origin at `/v1/graphql` (proxied to the gateway by `src/middleware.js`, which adds the edge headers: client IP, tenant domain and the optional edge secret), picks the tenant by its domain, uses server-issued guest cart ids, keeps the access token in memory and uses the HttpOnly customer cookie for refresh. Checkout requires login. Not yet tested end to end against a running backend or the Nimbbl sandbox.
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm ci
+cp .env.example .env.local   # fill in the values (ask the team; never commit them)
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Environment variables** (names only, see `.env.example`):
+- `API_GATEWAY_URL` (server-only, **required**): the gateway origin; `/v1/graphql` is proxied to it. A production build fails without it; dev and lint start without it (re-audit RMAINT-6).
+- `NEXT_PUBLIC_TENANT_DOMAIN` (**required**, also enforced by production builds): the brand's production domain, used to select the tenant. Without it the `/v1/graphql` proxy fails closed with a 500.
+- `EDGE_SHARED_SECRET` (server-only, optional): the gateway's edge secret, sent as `x-zcom-edge-secret` on proxied and server-side calls so the gateway's strict mode trusts this site's tenant and client-IP headers. Never prefix it with `NEXT_PUBLIC_`.
+- `CSP_REPORT_ONLY` (optional): `true` sends the CSP as `Content-Security-Policy-Report-Only` (rollout switch).
+- `IMAGE_REMOTE_HOSTS` (optional): extra `next/image` hosts, comma-separated (e.g. the tenant's S3 bucket).
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_GTM_ID` (optional): analytics IDs.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Every `NEXT_PUBLIC_*` value is public in the browser bundle. The old `NEXT_PUBLIC_DB_TOKEN`, `NEXT_PUBLIC_BACKEND_ENDPOINT`, `NEXT_PUBLIC_NIMBBL_BASE_URL` and `NEXT_PUBLIC_GRAPHQL_API_URL` are no longer read.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+**Deploying** (owner):
+- set the two required variables in Vercel, make sure the domain is an ACTIVE tenant in the backend's `db_configs`, and add the storefront origin to the gateway's `CORS_ORIGINS`;
+- set `EDGE_SHARED_SECRET` in Vercel **at the same moment** as on Elastic Beanstalk and the CloudFront origin header (that turns on the gateway's strict mode), in the **same deploy** as backend PRD-002 round 3 (its 30/min per-IP login bucket would otherwise see every shopper as this host's IP), and confirm the host's client IP source (`x-vercel-forwarded-for` on Vercel, else the right-most `x-forwarded-for` hop);
+- roll the CSP out with `CSP_REPORT_ONLY=true` first;
+- `git rm --cached .npmrc` and rotate the GSAP token (still tracked, SF-2);
+- run a browser and Nimbbl sandbox checkout before go-live.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Shopper-visible effects: existing shoppers log in once (the old JS refresh cookie is removed) and old guest bags are dropped once (guest ids are now server-issued); login without `?next=` lands on `/`; checkout is locked while an unpaid order exists, and a coupon change creates a new order; the thank-you page never shows success before payment is confirmed; a missing store shows a "store unavailable" notice.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Installing needs GreenSock business registry access (`.npmrc`). Ask the team for credentials; never commit or print the token.
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+| Task | Command |
+|---|---|
+| Dev | `npm run dev` |
+| Build | `npm run build` |
+| Start (after build) | `npm run start` |
+| Lint | `npm run lint` (currently not functional; see `CLAUDE.md` §4) |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+There are no tests.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Structure
 
-## Deploy on Vercel
+Routes: `/`, `/products` and `/category/[slug]` (catalog listing with Load more, PRD-014), `/product/[slug]`, `/lookbook` ("Coming soon" until a lookbook backend exists), `/lookbook/[slug]`, `/checkout/[id]` (+ `thank-you`, `payment-failed`), `/login`, `/profile`, `/about`, `/contact`, and the legal pages. `src/middleware.js` sends shoppers without a session to `/login?next=…` for `/profile` and checkout. Source lives under `src/`, using the `@/*` alias. The full map is in `CLAUDE.md` §2.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contributing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-## Dev
+- **Tiered PRD-first workflow.** T1 changes need an approved PRD; anything that touches the API has its source of truth in `../../zcom-backend/docs/prd/`. T2 changes need a changelog line in `docs/changelog/`.
+- **Shared logic.** Fixes to shared logic (tokens, the Apollo client, checkout, stores) must be checked against the other storefronts.
+- **Keep docs current.** Update this README and `CLAUDE.md` in the same change. Commit with Conventional Commits.

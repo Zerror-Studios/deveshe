@@ -1,19 +1,16 @@
 import React, { createContext, useContext } from "react";
 import { useApolloClient } from "@apollo/client/react";
-import { TokenManager } from "@/utils/tokenManager";
-import { useAuthStore } from "@/store/auth-store";
+import { CustomerSession } from "@/lib/customer-session.service";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const client = useApolloClient();
-  const { clearAuth } = useAuthStore((state) => state);
+
+  // Revokes the cookie session, clears the token, the profile and the cache.
   const logout = async () => {
     try {
-      TokenManager.clearTokens();
-      clearAuth();
-      localStorage.removeItem("user-data");
-      await client.clearStore();
+      await CustomerSession.logout(client);
     } catch (err) {
       console.error("Logout error:", err);
     }

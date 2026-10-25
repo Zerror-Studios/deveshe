@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useWatch } from "react-hook-form";
 import { PhoneInput } from "react-international-phone";
 import { countriesData, addressType } from "@/helpers/Data";
@@ -6,50 +6,102 @@ import "react-international-phone/style.css";
 import { IoLocationOutline } from "react-icons/io5";
 import CommonButton from "../common/CommonButton";
 import { useAuthStore } from "@/store/auth-store";
-import { Sort } from "@/utils/Constant";
 import { useQuery } from "@apollo/client/react";
 import { USER_ADDRESS_LIST } from "@/graphql";
 
-const Delivery = ({ errors, control, register, setValue }) => {
-  const LIMIT = 10;
+// Saved address → form values (nulls become empty strings for zod).
+const toFormAddress = (address) => ({
+  firstname: address.firstname || "",
+  lastname: address.lastname || "",
+  addressType: address.addressType || "",
+  flat: address.flat || "",
+  addressline1: address.addressline1 || "",
+  addressline2: address.addressline2 || "",
+  landmark: address.landmark || "",
+  country: address.country || "",
+  states: address.states || "",
+  city: address.city || "",
+  pincode: address.pincode || "",
+  countryCode: address.countryCode || "",
+  phone: address.phone || "",
+  primary: Boolean(address.primary),
+});
+
+// `isPreferredAddress(formAddress)` (optional) marks the saved address to
+// preselect over the primary one: the kept order's address on a payment
+// retry (PRD-014 FR-0.12 / W0V-C-03).
+const Delivery = ({
+  errors,
+  control,
+  register,
+  setValue,
+  isPreferredAddress = null,
+}) => {
   const [isAddress, setIsAddress] = useState(true);
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const [offset, setOffset] = useState(0);
+  // True while the selection is ours, not the shopper's.
+  const isAutoSelectedRef = useRef(true);
   const shippingAddress = useWatch({ control, name: "shippingAddress" });
-  const { isLoggedIn, user } = useAuthStore((state) => state);
-  const payload = {
-    filters: { userId: user?._id },
-    limit: LIMIT,
-    offset,
-    sort: { createdAt: Sort.DESC, primary: Sort.ASC },
-  };
+  const { isLoggedIn } = useAuthStore((state) => state);
   const {
     data: addressResponse,
     loading,
   } = useQuery(USER_ADDRESS_LIST, {
     skip: !isLoggedIn,
-    variables: payload,
   });
-  const { data = [] } = addressResponse?.getAddressByFilters || {};
+  const data = addressResponse?.getAddresses || [];
+  const shippingErrors = errors?.shippingAddress;
+  const firstShippingError = Object.values(shippingErrors || {}).find(
+    (error) => error?.message,
+  )?.message;
 
+  const selectAddress = (index) => {
+    const selected = data[index];
+    if (!selected) return;
+    setSelectedAddress(index);
+    const formAddress = toFormAddress(selected);
+    setValue("shippingAddress", formAddress, { shouldValidate: true });
+    setValue("billingAddress", formAddress, { shouldValidate: true });
+  };
+
+  // PRD-014 UX-02: with saved addresses the form is hidden, so one must be
+  // selected: the preferred address (a retry's kept order), else the
+  // primary one (the server lists it first), else the first one. It may
+  // re-run when the preference arrives, never over a shopper's choice.
   useEffect(() => {
-    if (data.length > 0) {
-      setIsAddress(false);
-    }
-  }, [data]);
+    if (data.length === 0 || !isAutoSelectedRef.current) return;
+    const preferredIndex = isPreferredAddress
+      ? data.findIndex((address) =>
+          isPreferredAddress(toFormAddress(address))
+        )
+      : -1;
+    const primaryIndex = data.findIndex((address) => address?.primary);
+    const fallbackIndex = primaryIndex >= 0 ? primaryIndex : 0;
+    const index = preferredIndex >= 0 ? preferredIndex : fallbackIndex;
+    if (index === selectedAddress) return;
+    if (selectedAddress === null) setIsAddress(false);
+    selectAddress(index);
+  }, [data, isPreferredAddress]);
+
+  // A saved address that fails validation can't be fixed in a hidden
+  // form: open the form with it so every field error is visible.
+  useEffect(() => {
+    if (shippingErrors && !isAddress) setIsAddress(true);
+  }, [shippingErrors]);
 
   const handleAddress = (e) => {
-    const parsedValue = parseInt(e.target.value, 10);
-    setSelectedAddress(parsedValue);
-    const selected = data[parsedValue];
-    if (!selected) return;
-    setValue("shippingAddress", selected, { shouldValidate: true });
-    setValue("billingAddress", selected, { shouldValidate: true });
+    isAutoSelectedRef.current = false;
+    selectAddress(parseInt(e.target.value, 10));
   };
 
   return (
     <div className="Delivery_container">
       <h2 className="same_style_text">Delivery</h2>
+      {firstShippingError && (
+        <p className="error" role="alert">
+          Please check your delivery address: {firstShippingError}
+        </p>
+      )}
       {!isAddress && data.length > 0 && (
         <>
           <div className="order-div">
@@ -132,9 +184,21 @@ const Delivery = ({ errors, control, register, setValue }) => {
             title={"Add Address"}
             loading={false}
             type="button"
-            onClick={() => setIsAddress(true)}
+            onClick={() => {
+              isAutoSelectedRef.current = false;
+              setIsAddress(true);
+            }}
           />
         </>
+      )}
+      {isAddress && data.length > 0 && (
+        <button
+          type="button"
+          className="Delivery_saved_link"
+          onClick={() => setIsAddress(false)}
+        >
+          Use a saved address
+        </button>
       )}
       {isAddress && (
         <div className="Delivery_cntr_form">

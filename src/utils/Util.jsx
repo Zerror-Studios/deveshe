@@ -1,8 +1,9 @@
-import parse from "html-react-parser";
+import { parseSafeHtml } from "@/utils/sanitize-html.util";
 
+// CMS HTML is sanitised while parsing (PRD-002 SF-10).
 export const htmlParser = (data = "") => {
   if (!data) return "";
-  return parse(data || "");
+  return parseSafeHtml(data || "");
 };
 
 // utils/formatTime.ts
@@ -55,13 +56,14 @@ export const formatePrice = (price) => {
   return formattedPrice;
 };
 
-export const getProductPriceLabel = (variants = [], discountedPrice = 0) => {
+// Prices come from the variants (there is no product-level price).
+export const getProductPriceLabel = (variants = [], fallbackPrice = 0) => {
   if (!variants || variants.length === 0) {
-    return formatePrice(discountedPrice || 0);
+    return formatePrice(fallbackPrice || 0);
   }
-  const prices = variants.map((v) => v.variantPrice).filter(Boolean);
+  const prices = variants.map((v) => v.price).filter(Boolean);
   if (prices.length === 0) {
-    return formatePrice(discountedPrice || 0);
+    return formatePrice(fallbackPrice || 0);
   }
   const minPrice = Math.min(...prices);
   const maxPrice = Math.max(...prices);

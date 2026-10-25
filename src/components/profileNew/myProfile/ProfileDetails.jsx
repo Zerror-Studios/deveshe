@@ -5,13 +5,14 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client/react";
-import { UPDATE_USER_PROFILE } from "@/graphql";
+import { UPDATE_MY_PROFILE } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
 import { toast } from "react-toastify";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import Image from "next/image";
 import { MdOutlineDone } from "react-icons/md";
+import { getErrorMessage } from "@/utils/api-error.util";
 
 const SignupSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -23,7 +24,7 @@ const SignupSchema = z.object({
 
 const ProfileDetails = () => {
   const [isEditable, setIsEditable] = useState(true);
-  const [updateUser, { loading }] = useMutation(UPDATE_USER_PROFILE);
+  const [updateUser, { loading }] = useMutation(UPDATE_MY_PROFILE);
   const { user, setUser } = useAuthStore((state) => state);
 
   const {
@@ -44,13 +45,12 @@ const ProfileDetails = () => {
   const onSubmit = async (data) => {
     if (!isEditable) return;
     try {
-      const input = {
-        ...data,
-      };
+      // Email is not editable by the customer (backend allowlist).
+      const { email, ...input } = data;
       const { data: response } = await updateUser({
-        variables: { input, clientUserUpdateId: user?._id },
+        variables: { input },
       });
-      const updatedUser = response?.clientUserUpdate?.user;
+      const updatedUser = response?.updateMyProfile;
 
       if (updatedUser) {
         setUser(updatedUser);
@@ -58,7 +58,7 @@ const ProfileDetails = () => {
       }
     } catch (err) {
       console.error(err);
-      toast.error(err?.message || "Update failed");
+      toast.error(getErrorMessage(err, "Update failed"));
     }
   };
 
@@ -75,10 +75,7 @@ const ProfileDetails = () => {
       <div className="profile_right_container">
         <div className="profile_avatar">
           <Image
-            src={
-              user?.profileImg ||
-              `https://avatar.iran.liara.run/username?username=${user?.firstName}+${user?.lastName}`
-            }
+            src={user?.profileImg || "/placeholder/user.png"}
             alt="avatar"
             width={100}
             height={100}
@@ -115,6 +112,7 @@ const ProfileDetails = () => {
           <div className="user_form_input">
             <input
               type="email"
+              readOnly
               disabled={isEditable}
               placeholder="Email"
               {...register("email")}

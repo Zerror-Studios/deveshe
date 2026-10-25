@@ -10,15 +10,19 @@ import { formatePrice, getCartItemCount } from "@/utils/Util";
 import gsap from "gsap";
 import CartProduct from "@/components/cart/CartProduct";
 import CommonButton from "../common/CommonButton";
-import { TokenManager } from "@/utils/tokenManager";
+import {
+  getErrorMessage,
+  isInvalidGuestIdError,
+} from "@/utils/api-error.util";
+import { getLoginPath } from "@/utils/redirect.util";
+import { CtaEnum, trackCtaClick } from "@/utils/analytics-events.util";
 
 const CartDrawer = ({ isOpen, closeCart }) => {
   const router = useRouter();
   const drawerRef = useRef(null);
   const backdropRef = useRef(null);
-  const token = TokenManager.getAccessToken();
-  const { visitorId } = useVisitor();
-  const { user, isLoggedIn } = useAuthStore((state) => state);
+  const { visitorId, resetVisitorId } = useVisitor();
+  const { isLoggedIn } = useAuthStore((state) => state);
 
   const [isBtnLoading, setIsBtnLoading] = useState(false);
 
@@ -28,8 +32,10 @@ const CartDrawer = ({ isOpen, closeCart }) => {
     REMOVE_ITEM_FROM_CART
   );
 
+  // Customers are identified by their token; guests by the server-issued
+  // guest id (R2-C2).
   const cartListPayload = isLoggedIn
-    ? { token }
+    ? {}
     : visitorId
       ? { guestId: visitorId }
       : {};
@@ -37,6 +43,7 @@ const CartDrawer = ({ isOpen, closeCart }) => {
   const {
     data: cartResponse,
     loading,
+    error: cartError,
     refetch,
   } = useQuery(CART_LIST, {
     skip: !isOpen || (!isLoggedIn && !visitorId),
@@ -44,6 +51,15 @@ const CartDrawer = ({ isOpen, closeCart }) => {
     fetchPolicy: "network-only",
     nextFetchPolicy: "cache-first",
   });
+
+  // A rejected guest id has no cart: drop it; the next add issues a new one.
+  useEffect(() => {
+    if (!isLoggedIn && isInvalidGuestIdError(cartError)) resetVisitorId();
+  }, [cartError, isLoggedIn, resetVisitorId]);
+
+  const handleGuestError = (err) => {
+    if (!isLoggedIn && isInvalidGuestIdError(err)) resetVisitorId();
+  };
 
   const {
     _id,
@@ -53,16 +69,10 @@ const CartDrawer = ({ isOpen, closeCart }) => {
   } = cartResponse?.getCart || {};
 
   const count = getCartItemCount(cart);
-  const handleAddItem = async (productId, variantDetail, categoryId) => {
+  const handleAddItem = async (productId, variantId) => {
     try {
-      const { __typename, ...variantWithoutTypename } = variantDetail;
       const payload = {
-        input: {
-          productId,
-          categoryId,
-          variantDetail: variantWithoutTypename,
-          ...(isLoggedIn && token ? { token } : {}),
-        },
+        input: { productId, variantId, qty: 1 },
         ...(!isLoggedIn && visitorId ? { guestId: visitorId } : {}),
       };
 
@@ -73,21 +83,21 @@ const CartDrawer = ({ isOpen, closeCart }) => {
       await refetch();
     } catch (err) {
       console.error(err);
-      toast.error(err.message || "Failed to add item in cart");
+      handleGuestError(err);
+      toast.error(getErrorMessage(err, "Failed to add item in cart"));
     }
   };
 
   const handleRemoveItem = async (
     productId,
-    variantDetailId,
+    variantId,
     isCompleteRemove = true
   ) => {
     try {
       const input = {
-        ...(isLoggedIn && token ? { userId: user?._id } : {}),
         ...(!isLoggedIn && visitorId ? { guestId: visitorId } : {}),
         productId,
-        variantDetailId,
+        variantId,
         isCompleteRemove,
       };
       const { data: response } = await removeCartItem({ variables: { input } });
@@ -97,14 +107,21 @@ const CartDrawer = ({ isOpen, closeCart }) => {
       await refetch();
     } catch (err) {
       console.error(err);
-      toast.error(err.message || "Failed to remove item from cart");
+      handleGuestError(err);
+      toast.error(getErrorMessage(err, "Failed to remove item from cart"));
     }
   };
 
   const navigateCheckout = async () => {
+    if (!_id || cart.length === 0) return;
+    trackCtaClick(CtaEnum.CHECKOUT);
     try {
       setIsBtnLoading(true);
-      await router.push(`/checkout/${_id}`);
+      // Checkout is customer-only; guests log in first (the guest bag is
+      // merged into the customer bag at login).
+      await router.push(
+        isLoggedIn ? `/checkout/${_id}` : getLoginPath(router.asPath),
+      );
       closeCart();
     } catch (err) {
       console.error("Navigation failed:", err);
@@ -137,6 +154,8 @@ const CartDrawer = ({ isOpen, closeCart }) => {
         duration: 0.3,
       });
     }
+
+    return () => tl.kill();
   }, [isOpen]);
 
   return (

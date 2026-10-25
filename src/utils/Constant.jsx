@@ -23,6 +23,9 @@ export const ProductStatus = {
 export const StockStatus = {
   IN_STOCK: "In Stock",
   OUT_OF_STOCK: "Out of stock",
+  // PRD-014 UX-09: no published variant for the chosen options, or the
+  // variant is archived / rejected by the server (no stock level exists).
+  UNAVAILABLE: "Unavailable",
 };
 
 export const UserStatus = {

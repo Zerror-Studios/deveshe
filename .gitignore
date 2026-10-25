@@ -5,15 +5,18 @@
 /.pnp
 .pnp.js
 .yarn/install-state.gz
-/npmrc
+# private registry auth (GSAP business token); never commit
+.npmrc
 
 # env files (can opt-in for committing if needed)
 # local env files
+.env
 .env*.local
 *.env
-*.env.example
 *.env.local
 *.env.staging
+# variable names only, committed
+!.env.example
 
 # testing
 /coverage

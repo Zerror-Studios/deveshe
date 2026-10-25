@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import PhoneInput from "react-phone-input-2";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -6,9 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import { IoLocationOutline } from "react-icons/io5";
 import { useMutation } from "@apollo/client/react";
-import { USER_ADDRESS_SAVE_OR_UPDATE } from "@/graphql";
-import { useAuthStore } from "@/store/auth-store";
+import { CREATE_ADDRESS, UPDATE_ADDRESS } from "@/graphql";
 import { addressType } from "@/helpers/Data";
+import { getErrorMessage } from "@/utils/api-error.util";
 import "react-phone-input-2/lib/style.css";
 
 // Zod schema
@@ -26,11 +26,15 @@ const addressSchema = z.object({
   countryCode: z.string().min(1, "Country code is required"),
 });
 
-const AddressPopup = ({ isOpen, addressId, listPayload, setOpen, refetch }) => {
-  const { user } = useAuthStore();
-  const [saveUpdateAddress, { loading }] = useMutation(
-    USER_ADDRESS_SAVE_OR_UPDATE
-  );
+const ADDRESS_FIELDS = Object.keys(addressSchema.shape);
+
+const AddressPopup = ({ isOpen, address, setOpen, refetch }) => {
+  const addressId = address?._id || null;
+  const [createAddress, { loading: createLoading }] =
+    useMutation(CREATE_ADDRESS);
+  const [updateAddress, { loading: updateLoading }] =
+    useMutation(UPDATE_ADDRESS);
+  const loading = createLoading || updateLoading;
   const {
     register,
     handleSubmit,
@@ -54,33 +58,38 @@ const AddressPopup = ({ isOpen, addressId, listPayload, setOpen, refetch }) => {
     },
   });
 
+  // Prefill when editing a saved address
+  useEffect(() => {
+    if (!isOpen || !address) return;
+    ADDRESS_FIELDS.forEach((field) => {
+      if (address[field] != null) setValue(field, String(address[field]));
+    });
+  }, [isOpen, address]);
+
   useLayoutEffect(() => {
+    if (!isOpen) return;
     document.body.classList.add("overflow-hidden");
     return () => {
       document.body.classList.remove("overflow-hidden");
     };
-  }, []);
+  }, [isOpen]);
 
   const onSubmit = async (data) => {
     try {
-      const input = {
-        userId: user?._id,
-        ...data,
-      };
-      const { data: response } = await saveUpdateAddress({
-        variables: {
-          input,
-          ...(addressId ? { addressSaveOrUpdateId: addressId } : ""),
-        },
-      });
-      const addressResponse = response?.addressSaveOrUpdate;
-      if (addressResponse && Object.keys(addressResponse)?.length) {
+      // AddressInput: flat strings (pincode is a string)
+      const input = { ...data, pincode: String(data.pincode || "") };
+      const { data: response } = addressId
+        ? await updateAddress({ variables: { addressId, input } })
+        : await createAddress({ variables: { input } });
+      const addressResponse =
+        response?.updateAddress || response?.createAddress;
+      if (addressResponse?._id) {
         toast.success("Address saved successfully!");
-        await refetch(listPayload);
+        await refetch();
       }
     } catch (err) {
       console.error(err);
-      toast.error(err?.message || "Failed to save");
+      toast.error(getErrorMessage(err, "Failed to save"));
     } finally {
       reset();
       setOpen(false);

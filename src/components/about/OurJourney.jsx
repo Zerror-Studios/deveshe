@@ -76,6 +76,10 @@ const OurJourney = () => {
   useEffect(() => {
     splitText(".journey_top h2");
 
+    // Animations owned by this effect, killed on cleanup (SF-20)
+    const eraseTimelines = [];
+    let eraseTimer = null;
+
     // ✨ Intro timeline (plays once)
     const introTl = gsap.timeline({
       scrollTrigger: {
@@ -85,7 +89,7 @@ const OurJourney = () => {
         once: true,
       },
       onComplete: () => {
-        setTimeout(() => {
+        eraseTimer = setTimeout(() => {
           animateErase(".rainbow-sides__right", -1, "top -10%", "top -50%");
           animateErase(".rainbow-sides__left", 1, "top -50%", "top -90%");
         }, 300);
@@ -155,6 +159,7 @@ const OurJourney = () => {
           scrub: true,
         },
       });
+      eraseTimelines.push(eraseTl);
 
       blackPaths.forEach((black, i) => {
         const length = black.getTotalLength();
@@ -173,7 +178,11 @@ const OurJourney = () => {
     }
 
     return () => {
-      ScrollTrigger.getAll().forEach((st) => st.kill());
+      clearTimeout(eraseTimer);
+      [introTl, ...eraseTimelines].forEach((timeline) => {
+        timeline.scrollTrigger?.kill();
+        timeline.kill();
+      });
     };
   }, []);
   useEffect(() => {
@@ -215,7 +224,8 @@ const OurJourney = () => {
     });
 
     return () => {
-      ScrollTrigger.getAll().forEach((st) => st.kill());
+      tl.scrollTrigger?.kill();
+      tl.kill();
     };
   }, []);
 

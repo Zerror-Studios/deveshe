@@ -1,6 +1,16 @@
 import React, { useEffect, useState, useMemo, useRef } from "react";
 import { htmlParser } from "@/utils/Util";
-import { Const, StockStatus } from "@/utils/Constant";
+import { StockStatus } from "@/utils/Constant";
+import {
+  findVariantByOptions,
+  isVariantUnavailable,
+} from "@/utils/catalog.util";
+import {
+  CtaEnum,
+  getAnalyticsItemId,
+  trackCtaClick,
+  trackSelectVariant,
+} from "@/utils/analytics-events.util";
 import gsap from "gsap";
 
 const ProductContent = ({
@@ -16,6 +26,7 @@ const ProductContent = ({
   handleOpen,
   handleAddToCart,
   handleNotifyMe,
+  analyticsItemId,
 }) => {
   const colorOption = useMemo(
     () =>
@@ -34,7 +45,11 @@ const ProductContent = ({
   const [selectedVariants, setSelectedVariants] = useState({});
   // Initialize default variants and color
   useEffect(() => {
-    if (!data?.productOptions?.length) return;
+    if (!data?.productOptions?.length) {
+      updatePriceBasedOnVariant({});
+      setCartBtn(Boolean(data?.variants?.length === 1));
+      return;
+    }
 
     const defaults = {};
     data.productOptions.forEach((option) => {
@@ -49,29 +64,53 @@ const ProductContent = ({
   }, [data]);
 
   const updatePriceBasedOnVariant = (updatedVariants) => {
-    const selectedValues = Object.values(updatedVariants).sort();
-
-    const matchingVariant = data?.variants?.find((variant) => {
-      const options = variant.selectedOptions?.sort();
-      return (
-        options?.length === selectedValues.length &&
-        options.every((val, i) => val === selectedValues[i])
-      );
-    });
+    const matchingVariant = findVariantByOptions(
+      data?.variants,
+      Object.values(updatedVariants),
+    );
 
     if (matchingVariant) {
-      const variantPrice = matchingVariant.variantPrice || 0;
-      const { __typename, _id, ...variantWithoutTypename } = matchingVariant;
-      setVariantMatched({ variantDetailId: _id, ...variantWithoutTypename });
-      setFinalPrice(variantPrice);
+      setVariantMatched(matchingVariant);
+      setFinalPrice(matchingVariant.price || 0);
+      return matchingVariant;
+    } else if (!data?.productOptions?.length && data?.variants?.length === 1) {
+      // Single-variant product without options
+      setVariantMatched(data.variants[0]);
+      setFinalPrice(data.variants[0].price || 0);
+      return data.variants[0];
+    } else {
+      setVariantMatched(null);
+      return null;
     }
   };
 
   const handleVariants = (name, value) => {
     const updated = { ...selectedVariants, [name]: value };
     setSelectedVariants(updated);
-    setCartBtn(Object.keys(updated).length === data.productOptions?.length);
-    updatePriceBasedOnVariant(updated);
+    const complete =
+      Object.keys(updated).length === data.productOptions?.length;
+    setCartBtn(complete);
+    const matched = updatePriceBasedOnVariant(updated);
+    // PRD-013 select_variant: the API has no stock level, so only an
+    // ARCHIVED (or missing) variant counts as out of stock.
+    trackSelectVariant({
+      itemId: getAnalyticsItemId(data, matched),
+      variantId: matched?.sku,
+      variantLabel: Object.values(updated).join(" / "),
+      inStock: complete
+        ? Boolean(matched) && !isVariantUnavailable(matched)
+        : undefined,
+    });
+  };
+
+  const handleAddToBagClick = () => {
+    trackCtaClick(CtaEnum.ADD_TO_CART, { itemId: analyticsItemId });
+    handleAddToCart();
+  };
+
+  const handleNotifyClick = () => {
+    trackCtaClick(CtaEnum.NOTIFY_ME, { itemId: analyticsItemId });
+    handleNotifyMe();
   };
 
   const wrapperRef = useRef(null);
@@ -93,6 +132,8 @@ const ProductContent = ({
       { opacity: 0, y: 30 },
       { opacity: 1, y: 0, duration: 1 }
     );
+
+    return () => tl.kill();
   }, [data]);
 
   if (!data) return null;
@@ -206,7 +247,7 @@ const ProductContent = ({
               className={`ProductDets_ntfy_btn ${!isOutOfStock ? "ProductDets_ntfy_btn_grid" : "BtnOutline_Grid"}`}
               id="easysize-cart-button"
               style={loading ? { backgroundColor: "black" } : {}}
-              onClick={handleAddToCart}
+              onClick={handleAddToBagClick}
             >
               {loading ? (
                 <div className="ani-wrap">
@@ -215,10 +256,10 @@ const ProductContent = ({
               ) : (
                 <>
                   <span className="ProductDets_ntfy_btn_slect_size">
-                    {!cartBtn ? "Select a Size" : isOutOfStock ? StockStatus.OUT_OF_STOCK : "Add to Bag"}
+                    {!cartBtn ? "Select a Size" : isOutOfStock ? StockStatus.UNAVAILABLE : "Add to Bag"}
                   </span>
                   <span className="ProductDets_ntfy_btn_AddtoBeg">
-                    {isOutOfStock ? StockStatus.OUT_OF_STOCK : "Add to Bag"}
+                    {isOutOfStock ? StockStatus.UNAVAILABLE : "Add to Bag"}
                   </span>
                   <div className="ProductDets_ntfy_btn_price">
                     <span>{finalPrice} INR</span>
@@ -231,7 +272,7 @@ const ProductContent = ({
                 className="ProductDets_ntfy_btn ProductDets_ntfy_btn_grid"
                 id="easysize-cart-button"
                 style={notifyLoading ? { backgroundColor: "black" } : {}}
-                onClick={handleNotifyMe}
+                onClick={handleNotifyClick}
               >
                 {notifyLoading ? (
                   <div className="ani-wrap">
