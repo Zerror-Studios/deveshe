@@ -1,7 +1,8 @@
 import { MenuData } from "@/helpers/MenuData";
 import Link from "next/link";
 import React from "react";
-import CommonButton from "./CommonButton";
+import NewsletterForm from "./NewsletterForm";
+import { openConsentPreferences } from "@/utils/consent.util";
 
 const Footer = () => {
   return (
@@ -21,6 +22,14 @@ const Footer = () => {
             <Link href="/privacy-policy">Privacy Policy</Link>
             <Link href="/shipping-returns">Shipping & Returns</Link>
             <Link href="/terms-of-service">Terms Of Service</Link>
+            {/* PRD-014 FR-1.9: reopens the consent banner */}
+            <button
+              type="button"
+              className="footer_consent_btn"
+              onClick={openConsentPreferences}
+            >
+              Cookie Preferences
+            </button>
           </div>
           <div className="footer_link_wrap">
             <p>Social</p>
@@ -33,7 +42,8 @@ const Footer = () => {
           </div>
         </div>
         <div id="footer_btn">
-          <CommonButton title={"Sign up to the newsletter"} href={"/"} />
+          {/* PRD-014 FR-2.8 (UX-29): a real sign-up, not a link to "/" */}
+          <NewsletterForm />
         </div>
       </div>
       <div id="footer_bottom">

@@ -6,7 +6,7 @@ import { ApolloProvider } from "@apollo/client/react";
 import { createApolloClient } from "@/lib/apolloClient";
 import { AuthProvider } from "@/context/AuthContext";
 import { TokenManager } from "@/utils/tokenManager";
-import { captureLandingAttribution } from "@/utils/ga-attribution.util";
+import { startVisitAttribution } from "@/utils/ga-attribution.util";
 import "@/styles/globals.css";
 import "@/styles/home.css";
 import "@/styles/checkout.css";
@@ -32,6 +32,7 @@ import "@/styles/components/newPorfile.css";
 import "@/styles/components/common/polaroid.css";
 import "@/styles/components/common/productCard.css";
 import "@/styles/components/common/footer.css";
+import "@/styles/components/common/consent-banner.css";
 import "@/styles/components/product-listing.css";
 
 export default function App({ Component, pageProps }) {
@@ -41,7 +42,8 @@ export default function App({ Component, pageProps }) {
   useEffect(() => {
     TokenManager.clearLegacyStorage();
     // PRD-012: remember the visit's UTMs, referrer and landing page once
-    captureLandingAttribution();
+    // (only with analytics consent, W1V-C-03)
+    return startVisitAttribution();
   }, []);
 
   return (

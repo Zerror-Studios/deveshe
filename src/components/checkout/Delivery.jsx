@@ -8,24 +8,11 @@ import CommonButton from "../common/CommonButton";
 import { useAuthStore } from "@/store/auth-store";
 import { useQuery } from "@apollo/client/react";
 import { USER_ADDRESS_LIST } from "@/graphql";
-
-// Saved address → form values (nulls become empty strings for zod).
-const toFormAddress = (address) => ({
-  firstname: address.firstname || "",
-  lastname: address.lastname || "",
-  addressType: address.addressType || "",
-  flat: address.flat || "",
-  addressline1: address.addressline1 || "",
-  addressline2: address.addressline2 || "",
-  landmark: address.landmark || "",
-  country: address.country || "",
-  states: address.states || "",
-  city: address.city || "",
-  pincode: address.pincode || "",
-  countryCode: address.countryCode || "",
-  phone: address.phone || "",
-  primary: Boolean(address.primary),
-});
+import {
+  getFirstFieldError,
+  pickSavedAddressIndex,
+  toFormAddress,
+} from "@/utils/checkout-address.util";
 
 // `isPreferredAddress(formAddress)` (optional) marks the saved address to
 // preselect over the primary one: the kept order's address on a payment
@@ -51,9 +38,7 @@ const Delivery = ({
   });
   const data = addressResponse?.getAddresses || [];
   const shippingErrors = errors?.shippingAddress;
-  const firstShippingError = Object.values(shippingErrors || {}).find(
-    (error) => error?.message,
-  )?.message;
+  const firstShippingError = getFirstFieldError(shippingErrors);
 
   const selectAddress = (index) => {
     const selected = data[index];
@@ -70,14 +55,7 @@ const Delivery = ({
   // re-run when the preference arrives, never over a shopper's choice.
   useEffect(() => {
     if (data.length === 0 || !isAutoSelectedRef.current) return;
-    const preferredIndex = isPreferredAddress
-      ? data.findIndex((address) =>
-          isPreferredAddress(toFormAddress(address))
-        )
-      : -1;
-    const primaryIndex = data.findIndex((address) => address?.primary);
-    const fallbackIndex = primaryIndex >= 0 ? primaryIndex : 0;
-    const index = preferredIndex >= 0 ? preferredIndex : fallbackIndex;
+    const index = pickSavedAddressIndex(data, isPreferredAddress);
     if (index === selectedAddress) return;
     if (selectedAddress === null) setIsAddress(false);
     selectAddress(index);

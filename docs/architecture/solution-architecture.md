@@ -19,7 +19,7 @@ flowchart LR
     NX -- "browser: same-origin /v1/graphql<br/>middleware.js proxy → API_GATEWAY_URL<br/>Authorization: Bearer (memory) · cookie __Host-zc_cust_rt<br/>+ x-zcom-client-ip · x-tenant-domain · x-zcom-edge-secret (optional)" --> GW["ZCommerce gateway"]
     NX -- "SSR: API_GATEWAY_URL/v1/graphql<br/>x-tenant-domain / x-forwarded-host = NEXT_PUBLIC_TENANT_DOMAIN<br/>+ x-zcom-edge-secret (optional)" --> GW
     NX -- "Nimbbl checkout (token from createPaymentSession)" --> NB["Nimbbl"]
-    NX -- "GA + GTM (_document.jsx, IDs from env)" --> AN["Analytics"]
+    NX -- "GA + GTM after consent (IDs from env)" --> AN["Analytics"]
 ```
 
 ## 2. Rendering architecture
@@ -28,7 +28,7 @@ flowchart LR
 flowchart TB
     MW["middleware.js<br/>/v1/graphql → proxy with edge headers<br/>/profile, /checkout/* (not payment-failed)<br/>no session cookie → /login?next=…"]
     APP["pages/_app.jsx<br/>global CSS · one Apollo client (useState)<br/>AuthContext · toast · SmoothScroller (Lenis + Tempus)"]
-    DOC["pages/_document.jsx<br/>GA + GTM"]
+    DOC["pages/_document.jsx<br/>Consent Mode v2 defaults"]
     subgraph SSR["getServerSideProps (fresh each request)"]
         IDX["/ (11 newest products + 'View all', approved reviews)"]
         PL["/products · /category/[slug] (12 per page + Load more; PRD-014 FR-0.8)"]
@@ -62,9 +62,11 @@ flowchart LR
 
 **Unsubscribe (VCON-1).** `pages/unsubscribe/index.jsx` (`noindex`) reads `?email=&token=` once, strips them from the URL (`router.replace`), and calls `unsubscribeNewsletter(email, token)`; the backend signs the link (`https://<tenant domain>/unsubscribe?…`) with `NEWSLETTER_TOKEN_SECRET` and answers uniformly, so the page shows one neutral message.
 
+**Search, newsletter, reviews and SEO (PRD-014 FR-2.8).** `pages/search/index.jsx` (`noindex, follow`) renders the first page of `getClientSideProducts` with `filters.search` on the server and pages on through `ProductListing`; the footer `NewsletterForm` calls `subscribeNewsletter`; `/product/[slug]` reads the latest 10 approved reviews with the page, builds its meta from the product (merchant SEO fields win) and emits Product JSON-LD (offers, no availability until PRD-020); `pages/sitemap.xml.js` and `pages/robots.txt.js` are server-rendered from `Const.ClientLink`, the sitemap capped at 1000 products and cached for an hour at the edge.
+
 **Password reset (PRD-003 FR-0.5).** `pages/forgot-password.jsx` (`components/login/ForgotPassword.jsx`) calls `customerRequestPasswordReset` and shows one neutral state; the emailed link opens `pages/reset-password.jsx` (`components/login/ResetPassword.jsx`), which reads `?token=` once, strips it from the URL (`router.replace`, shallow) and calls `customerResetPassword`; `INVALID_RESET_TOKEN` shows the "request a new link" state. Both pages are `noindex`.
 
-**Operations in use (29, all ✅):** `issueGuestCartId`, `mergeGuestCart`, `customerLogin`, `customerSignup`, `customerRefreshToken`, `customerLogout`, `getMyProfile`, `updateMyProfile`; `getClientSideProducts`, `getClientSideProductById`; `getCart`, `addItemToCart`, `removeItemFromCart`, `applyCartPromotion`, `removeCartPromotion`; `createCheckoutSessionFromCart`, `getCheckoutSession`, `completeCheckout`, `createPaymentSession`, `verifyPayment`; `myOrders`, `myOrder`; `getAddresses`, `createAddress`, `updateAddress`, `deleteAddress`; `submitContactForm`, `requestBackInStock`, `unsubscribeNewsletter`; PRD-003 FR-0.5 (2026-10-15) adds `customerRequestPasswordReset`, `customerResetPassword` (31 in total, not yet re-validated against a composed schema).
+**Operations in use (29, all ✅):** `issueGuestCartId`, `mergeGuestCart`, `customerLogin`, `customerSignup`, `customerRefreshToken`, `customerLogout`, `getMyProfile`, `updateMyProfile`; `getClientSideProducts`, `getClientSideProductById`; `getCart`, `addItemToCart`, `removeItemFromCart`, `applyCartPromotion`, `removeCartPromotion`; `createCheckoutSessionFromCart`, `getCheckoutSession`, `completeCheckout`, `createPaymentSession`, `verifyPayment`; `myOrders`, `myOrder`; `getAddresses`, `createAddress`, `updateAddress`, `deleteAddress`; `submitContactForm`, `requestBackInStock`, `unsubscribeNewsletter`; PRD-003 FR-0.5 (2026-10-15) adds `customerRequestPasswordReset`, `customerResetPassword` (31 in total). PRD-014 FR-0.8/FR-0.9 add `getClientSideCategories` and `getReviews`; FR-2.8 (2026-10-25) adds `subscribeNewsletter`, a PDP `getReviews` read and a sitemap read of `getClientSideProducts`. 36 documents, validated with `npm run validate:ops` against the composed supergraph.
 
 Errors are mapped to messages by `utils/api-error.util.js` from `extensions.reason` / `code` (including `CHECKOUT_EXPIRED`, `RESERVATION_RELEASED`, `INVALID_QTY`, `TOO_MANY_LINES`, `ORDER_CANCELLED`, `INVALID_GUEST_ID`, `TENANT_NOT_FOUND`). A refresh that fails for a transient reason keeps the session; only session-ending codes clear it (RBUG-19).
 
@@ -75,7 +77,7 @@ stateDiagram-v2
     [*] --> Guest
     Guest: visitorId = server-issued signed id (issueGuestCartId, lazy on first add, 7-day sliding) = cart guestId<br/>INVALID_GUEST_ID → drop, re-issue, retry once
     Guest --> Authenticated: customerLogin (signup → login)<br/>mergeGuestCart(guestId), one idempotent call
-    Authenticated: access token in memory (tokenManager)<br/>refresh = HttpOnly __Host-zc_cust_rt<br/>auth-store persists profile + isLoggedIn hint only
+    Authenticated: access token in memory (tokenManager)<br/>refresh = HttpOnly __Host-zc_cust_rt<br/>auth-store persists hint + customer id only (v1, PRD-014 FE-12)
     Authenticated --> Authenticated: customerRefreshToken (single-flight, before expiry, or on TOKEN_EXPIRED)
     Authenticated --> Guest: customerLogout → clear token, profile, Apollo store<br/>or refresh refused / INVALID_AUTH_TOKEN / TENANT_MISMATCH / INVALID_DB_TOKEN
 ```
@@ -100,7 +102,8 @@ sequenceDiagram
         P->>GW: getCheckoutSession
     end
     Note over P: RESERVED → continue; FAILED / EXPIRED → error message
-    P->>GW: completeCheckout → orderId (saved as the pending order)
+    P->>GW: completeCheckout → orderId + pricing.total (saved as the pending order)
+    Note over P: pricing.total = 0 → the order is already PAID (PRD-014 COM-08):<br/>no payment session, straight to thank-you
     P->>GW: createPaymentSession({orderId}) → token
     P->>NB: Checkout({token}).open()
     NB-->>P: callback (handled once per modal)
@@ -112,7 +115,7 @@ sequenceDiagram
     Note over TY: PAID → GA purchase (once per order) and countdown<br/>polling → "confirming"; missing or still unpaid → "not confirmed yet" (never a false success)
 ```
 
-A retry reuses the same unpaid order, also after a reload (`utils/pending-order.util.js`, RBUG-8). A changed bag or coupon drops the pending order and starts a new one, so the charged total is never stale (RBUG-9); the coupon controls are locked while an order is placed or paid, and the pay button stays disabled until the Nimbbl callback or close (RBUG-15). Failures go to `payment-failed`. Guests are sent to login first.
+A retry reuses the same unpaid order, also after a reload (`utils/pending-order.util.js`, RBUG-8). A changed bag or coupon drops the pending order and starts a new one, so the charged total is never stale (RBUG-9); the coupon controls are locked while an order is placed or paid, and the pay button stays disabled until the Nimbbl callback or close (RBUG-15). Failures go to `payment-failed`. Guests are sent to login first. PRD-014 Wave 1: a ₹0 order skips the payment steps; `SHIPPING_UNAVAILABLE` (no shipping zone for the address) is shown at the pricing step or the "Pay now" button and scrolls to the delivery step; a `VARIANT_REQUIRED` cart remove refetches the bag.
 
 ## 6. Presentation layer
 
@@ -126,7 +129,7 @@ A retry reuses the same unpaid order, also after a reload (`utils/pending-order.
 | SEO | `SeoHeader` + JSON-LD schema components serialised with `toJsonLd` |
 | CMS HTML | `utils/sanitize-html.util.js` allowlist (no scripts, handlers, `javascript:` URLs, iframes or svg; every link gets `rel="noopener noreferrer"`; styles with `\` dropped, RSEC-11) |
 | Security headers | CSP (GTM/GA, `*.nimbbl.tech`, asset hosts, `frame-ancestors 'none'`), nosniff, Referrer-Policy, X-Frame-Options, Permissions-Policy, HSTS in production (`next.config.mjs`). `script-src 'unsafe-inline'` is kept (SF-9 partial: a nonce would make every static page dynamic, and GTM custom-HTML tags need it); `CSP_REPORT_ONLY=true` switches to report-only for rollout |
-| Analytics | GA, GTM (IDs from env), `utils/analytics.js` (`trackEcomEvent`, the GA4 e-commerce events), `utils/analytics-events.util.js` (PRD-013 event layer: `select_item`, `select_variant`, `cta_click`, `gallery_interaction`, `size_guide_open`, `notify_me`, `coupon_apply`/`coupon_failed`, `add_shipping_info`, `add_payment_info`, `checkout_error`; `item_id` = variant SKU), `utils/ga-attribution.util.js` (PRD-012 order attribution) |
+| Analytics | Consent first (PRD-014 FR-1.9, D10): `_document.jsx` runs only the Google Consent Mode v2 defaults ("denied"); `components/common/ConsentBanner.jsx` + `utils/consent.util.js` load GA and GTM after "analytics" consent, choice in localStorage `zc_consent`, reopened from the footer "Cookie Preferences"; IDs from env, no defaults. `utils/analytics.js` (`trackEcomEvent`, the GA4 e-commerce events), `utils/analytics-events.util.js` (PRD-013 event layer: `select_item`, `select_variant`, `cta_click`, `gallery_interaction`, `size_guide_open`, `notify_me`, `coupon_apply`/`coupon_failed`, `add_shipping_info`, `add_payment_info`, `checkout_error`; `item_id` = variant SKU), `utils/ga-attribution.util.js` (PRD-012 order attribution) |
 
 ## 7. Build and dependencies
 

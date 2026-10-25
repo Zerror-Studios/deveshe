@@ -220,6 +220,7 @@ const ProductContent = ({
                               choice.name
                             );
                           }}
+                          data-testid="pdp-option-choice"
                           className={`ProductDets-size_numbers ${selected ? "acitve" : ""
                             }`}
                         >
@@ -246,6 +247,7 @@ const ProductContent = ({
             <button
               className={`ProductDets_ntfy_btn ${!isOutOfStock ? "ProductDets_ntfy_btn_grid" : "BtnOutline_Grid"}`}
               id="easysize-cart-button"
+              data-testid="pdp-add-to-cart"
               style={loading ? { backgroundColor: "black" } : {}}
               onClick={handleAddToBagClick}
             >

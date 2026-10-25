@@ -5,10 +5,12 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
+import { FiSearch } from "react-icons/fi";
 import Button from "./Button";
 import { useAuthStore } from "@/store/auth-store";
 import { useRouter } from "next/router";
 import CommonButton from "./CommonButton";
+import { useDialogA11y } from "@/hooks/useDialogA11y";
 gsap.registerPlugin(ScrollTrigger);
 
 const NavbarMobile = ({ openCart }) => {
@@ -17,6 +19,7 @@ const NavbarMobile = ({ openCart }) => {
   const menuTL = useRef(null);
   const router = useRouter();
   const [percent, setPercent] = useState(0);
+  const sideNavRef = useRef(null);
 
   useGSAP(() => {
     menuTL.current = gsap
@@ -96,6 +99,14 @@ const NavbarMobile = ({ openCart }) => {
       return newState;
     });
   };
+  // PRD-014 UX-31: focus stays in the open menu, Escape closes it, and the
+  // closed (clipped) menu is inert, so its links leave the tab order.
+  const closeMenuFromKeyboard = () => {
+    setIsMenuOpen(false);
+    menuTL.current?.reverse();
+  };
+  useDialogA11y(sideNavRef, isMenuOpen, closeMenuFromKeyboard);
+
   const loaderIntervalRef = useRef(null);
   const startLoader = () => {
     let current = 0;
@@ -184,7 +195,7 @@ const NavbarMobile = ({ openCart }) => {
           </div>
         )}
         <div className="navbar-mobile-wrap">
-          <Link href="/" id="nav-logo">
+          <Link href="/" id="nav-logo" aria-label="DeVeSheDreams home">
             <Image
               width={1000}
               height={1000}
@@ -211,27 +222,56 @@ const NavbarMobile = ({ openCart }) => {
             />
           </Link>
           <div className="menu-icons">
-            <Link href={isLoggedIn ? "/profile" : "/login"}>
+            {/* PRD-014 FR-2.8 (UX-28): site search */}
+            <Link href="/search" aria-label="Search" className="icon_btn">
+              <FiSearch className="bag-icon" size={22} aria-hidden="true" />
+            </Link>
+            <Link
+              href={isLoggedIn ? "/profile" : "/login"}
+              aria-label="My account"
+            >
               <Image
                 className="account-logo"
                 width={23}
                 height={23}
                 src="/placeholder/user.png"
-                alt="account"
+                alt=""
               />
             </Link>
-            <HiOutlineShoppingBag
+            <button
+              type="button"
+              className="icon_btn"
               onClick={openCart}
-              className="bag-icon"
-              size={23}
-            />
-            <div id="menu-btn" onClick={toggleMenu}>
+              aria-label="Open bag"
+            >
+              <HiOutlineShoppingBag
+                className="bag-icon"
+                size={23}
+                aria-hidden="true"
+              />
+            </button>
+            <button
+              type="button"
+              id="menu-btn"
+              className="icon_btn"
+              onClick={toggleMenu}
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMenuOpen}
+              aria-controls="side-navbar"
+            >
               <span className="line1m linem"></span>
               <span className="line2m linem"></span>
-            </div>
+            </button>
           </div>
         </div>
-        <div id="side-navbar">
+        <div
+          id="side-navbar"
+          ref={sideNavRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu"
+          tabIndex={-1}
+        >
           <div className="side-menu-links">
             <div className="nav-top">
               {!isLoggedIn && (

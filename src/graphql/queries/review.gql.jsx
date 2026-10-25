@@ -23,3 +23,20 @@ export const GET_REVIEWS = gql`
     }
   }
 `;
+
+// PRD-014 FR-2.8: approved reviews of one product for the product page
+// (same rules as above). Keep in sync with
+// `storefronts/rare-element/src/graphql/queries/review.gql.jsx`.
+export const GET_PRODUCT_REVIEWS = gql`
+  query GetProductReviews($limit: Int, $offset: Int, $filter: ReviewFilterInput) {
+    getReviews(limit: $limit, offset: $offset, filter: $filter) {
+      data {
+        _id
+        rating
+        comment
+        createdAt
+      }
+      totalCount
+    }
+  }
+`;

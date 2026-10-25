@@ -20,6 +20,7 @@ import {
   toListingFilters,
 } from "@/lib/catalog-listing.server";
 import { Const } from "@/utils/Constant";
+import { parseListingSort } from "@/utils/listing-sort.util";
 
 const CategoryPage = ({
   meta,
@@ -28,6 +29,7 @@ const CategoryPage = ({
   totalCount,
   categories,
   filters,
+  sort,
   loadError,
 }) => {
   return (
@@ -35,12 +37,13 @@ const CategoryPage = ({
       <SeoHeader meta={meta} />
       <ProductListing
         // A new category starts a new list (no stale "Load more" state).
-        key={category.slug}
+        key={`${category.slug}:${sort}`}
         title={category.name}
         description={category.description}
         products={products}
         totalCount={totalCount}
         filters={filters}
+        sort={sort}
         categories={categories}
         activeSlug={category.slug}
         listName={`Category: ${category.name}`}
@@ -52,7 +55,7 @@ const CategoryPage = ({
 
 export default CategoryPage;
 
-const getUnavailableProps = (slug) => ({
+const getUnavailableProps = (slug, sort) => ({
   meta: {
     title: "Shop – DeVeSheDreams",
     description: "This collection is temporarily unavailable.",
@@ -60,6 +63,7 @@ const getUnavailableProps = (slug) => ({
     canonical: `${Const.ClientLink}/category/${encodeURIComponent(slug)}`,
   },
   filters: {},
+  sort,
   category: { _id: "", name: "Shop", slug, description: "" },
   products: [],
   totalCount: 0,
@@ -67,7 +71,8 @@ const getUnavailableProps = (slug) => ({
   loadError: true,
 });
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params, query }) {
+  const sort = parseListingSort(query?.sort);
   const slug = typeof params?.slug === "string" ? params.slug : "";
   if (!slug) return { notFound: true };
 
@@ -78,13 +83,17 @@ export async function getServerSideProps({ params }) {
   } catch (error) {
     // The API is down: an error state (not indexed), never a fake 404.
     console.error("Category lookup failed:", error?.message);
-    return { props: getUnavailableProps(slug) };
+    return { props: getUnavailableProps(slug, sort) };
   }
   if (!category || category.slug !== slug) return { notFound: true };
 
   const filters = toListingFilters({ categoryIds: [category._id] });
   const [productResult, categoryResult] = await Promise.allSettled([
-    fetchProductPage(client, { filters, limit: LISTING_PAGE_SIZE }),
+    fetchProductPage(client, {
+      filters,
+      sort,
+      limit: LISTING_PAGE_SIZE,
+    }),
     fetchCategories(client),
   ]);
   if (productResult.status === "rejected") {
@@ -111,6 +120,7 @@ export async function getServerSideProps({ params }) {
     props: {
       meta,
       filters,
+      sort,
       category: {
         _id: category._id,
         name: category.name || "",

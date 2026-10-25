@@ -15,6 +15,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import {
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_MIN_MESSAGE,
+} from "@/utils/Constant";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { useMutation } from "@apollo/client/react";
@@ -35,7 +39,9 @@ const PAGE_PATH = "/reset-password";
 
 const ResetPasswordSchema = z
   .object({
-    newPassword: z.string().min(8, "Use at least 8 characters"),
+    newPassword: z
+      .string()
+      .min(PASSWORD_MIN_LENGTH, PASSWORD_MIN_MESSAGE),
     confirmPassword: z.string().min(1, "Please confirm your password"),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {

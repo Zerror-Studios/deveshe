@@ -3,10 +3,17 @@
  * Provides a standardized way to track events across the platform.
  */
 
-// Defaults are the current production IDs (PRD-002 SF-22).
-export const GA_TRACKING_ID =
-  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-Z10KLGLTDB";
-export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || "GTM-W56B2J8G";
+// PRD-014 FR-1.9 (FE-24): no hard-coded fallback ids. An unset id loads
+// no tag, so a build without env never reports into another property.
+export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
+export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || "";
+
+/** Tag ids for `utils/consent.util.js` (loaded only after consent). */
+export const TAG_IDS = Object.freeze({
+  gaId: GA_TRACKING_ID,
+  gtmId: GTM_ID,
+  pixelId: "",
+});
 
 /**
  * Maps an internal product object to the standard GA4 items schema.
@@ -15,6 +22,16 @@ export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || "GTM-W56B2J8G";
  * @param {number} quantity - (Optional) Quantity.
  * @returns {Object} GA4 item object.
  */
+// PRD-014 FE-24: without a chosen variant, report the lowest published
+// variant price instead of 0 (as rare-element does).
+const getVariantPrice = (product, variant) => {
+  if (variant?.price) return Number(variant.price);
+  const prices = (product?.variants || [])
+    .map((v) => Number(v?.price))
+    .filter((price) => price > 0);
+  return prices.length ? Math.min(...prices) : 0;
+};
+
 export const mapProductToGA4Item = (product, variant = null, quantity = 1) => {
   if (!product) return null;
 
@@ -23,7 +40,7 @@ export const mapProductToGA4Item = (product, variant = null, quantity = 1) => {
     // so a product without a chosen variant reports its first variant.
     item_id: variant?.sku || product?.variants?.[0]?.sku || product?._id,
     item_name: product.name,
-    price: Number(variant?.price || 0),
+    price: getVariantPrice(product, variant),
     quantity: Number(quantity),
     item_brand: "Deveshe Dreams",
     item_category: product.categoryIds?.[0] || "General",
@@ -67,7 +84,7 @@ export const trackEcomEvent = {
   viewItem: (product, variant = null) => {
     trackGAEvent("view_item", {
       currency: "INR",
-      value: Number(variant?.price || 0),
+      value: getVariantPrice(product, variant),
       items: [mapProductToGA4Item(product, variant)]
     });
   },

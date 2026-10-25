@@ -57,7 +57,8 @@ export const GET_CHECKOUT_SESSION = gql`
   }
 `;
 
-// 3. Create the UN_PAID order (idempotent per session)
+// 3. Create the UN_PAID order (idempotent per session); a ₹0 total is
+//    placed PAID at once (PRD-014 COM-08), see `pricing.total`.
 export const COMPLETE_CHECKOUT = gql`
   mutation CompleteCheckout($checkoutId: ID!) {
     completeCheckout(checkoutId: $checkoutId) {
@@ -65,6 +66,9 @@ export const COMPLETE_CHECKOUT = gql`
       status
       failureReason
       orderId
+      pricing {
+        total
+      }
     }
   }
 `;

@@ -2,12 +2,12 @@
 
 | Field | Value |
 |---|---|
-| Status | **In progress** — Wave 0 (workstream W0-G) code complete 2026-10-25; not browser-tested, not run against a live backend or payment sandbox |
+| Status | **In progress** — Wave 0 (W0-G) and Wave 1 (W1-STORE: FR-1.9, UX-31/34/36/37; FU-STORE: ₹0 orders, `SHIPPING_UNAVAILABLE`; QA-12 middleware tests) code complete 2026-10-25, not committed; not browser-tested, not run against a live backend or payment sandbox; Wave 1 exit PASS WITH NOTES 2026-10-25 (two verification passes, one fix round; audit Appendix I); **Wave 2 (W2-STORE, FR-2.8 + FE-22, plus the listing sort) implemented and verified 2026-10-26 (uncommitted); Wave 2 exit PASS WITH NOTES (two verification passes, one fix round; backend audit Appendix J)** · **Close-out implemented and verified 2026-10-26 (uncommitted); final re-audit (backend audit Appendix K): PRD-014 code complete pending owner acceptance of the residual register (backend PRD-014 §10 "Close-out")** |
 | Source-of-truth PRD | [`../../../zcom-backend/docs/prd/PRD-014-production-readiness-remediation.md`](../../../zcom-backend/docs/prd/PRD-014-production-readiness-remediation.md) |
 | Approved by / on | Workspace owner, 2026-10-25, "approve with recommendations" (backend PRD §8.1; D9 = Q9 option (a)) |
 | Audit | `zcom-backend/docs/audits/2026-10-25-production-readiness/E-clients-journeys.md` (UX-01, UX-02, UX-03, UX-04, UX-09, UX-35), `A-security-tenancy.md` (SEC-12), `G-journey-walk-notes.md` |
 
-This repo's Wave 0 share: FR-0.8 (UX-01, UX-02, UX-03, UX-09), FR-0.9 (UX-35), FR-0.12 (UX-04) and FR-0.2 (SEC-12, the `next` upgrade). Later waves (FR-1.9 consent banner and `{ isLoggedIn, userId }` persistence, FR-2.8 search/sort/newsletter/reviews/SEO) are not started here.
+This repo's Wave 0 share: FR-0.8 (UX-01, UX-02, UX-03, UX-09), FR-0.9 (UX-35), FR-0.12 (UX-04) and FR-0.2 (SEC-12, the `next` upgrade). Wave 1 (W1-STORE): FR-1.9 (UX-05, FE-12, FE-24, UX-32 partial), UX-31, UX-34, UX-36, UX-37 (§1a). FR-2.8 (search/sort/newsletter/reviews/SEO) is not started here.
 
 ## 1. What changed (Wave 0)
 
@@ -42,7 +42,31 @@ This repo's Wave 0 share: FR-0.8 (UX-01, UX-02, UX-03, UX-09), FR-0.9 (UX-35), F
 - `next` `^15.2.2` (installed 15.5.9) → **`^15.5.28`** (latest 15.x patch: fixes the rewrite request-smuggling advisory and every other 15.x advisory listed by `npm audit`); `npm audit fix` (no `--force`) updated the lockfile (swiper 12.2.0, js-cookie, axios, form-data, nanoid, zod, sharp and others). No `eslint-config-next` in this repo.
 - **Remaining** (`npm audit`, 2026-10-25): 1 high + 3 moderate, 0 critical. `postcss` (high) and `next` (moderate) only clear with **next 16** (a major, owner decision under backend PRD-014 Q14); `uuid` via `@react-three/drei` (moderate) needs drei ≥ 9.122 (outside the pinned `9.102.6`).
 
+## 1a. What changed (Wave 1, W1-STORE, 2026-10-25)
+
+- **FR-1.9 / UX-05 (D10, in-house, no dependency).** Google Consent Mode v2 defaults ("denied" for `ad_storage`, `ad_user_data`, `ad_personalization`, `analytics_storage`) run in an inline head script before anything else, then the stored choice is applied. The banner (`components/common/ConsentBanner.jsx`: Accept all / Reject all / Manage with analytics and marketing; Escape closes only once a choice exists) stores `{ v: 1, analytics, marketing, savedAt }` in localStorage `zc_consent` and loads the tags only after consent (GA + GTM after "analytics"; this site has no Meta Pixel). The removed head/noscript tag code and the GTM preconnect mean **no request to Google before consent**. The footer "Cookie preferences" link reopens the banner; withdrawing sends a Consent Mode update. Shared helper: `utils/consent.util.js` (keep in sync with the other storefront).
+- **FR-1.9 / FE-24.** No hard-coded fallback GA/GTM ids: an unset env id loads no tag (the owner sets the production ids in hosting).
+- **FR-1.9 / FE-12.** `store/auth-store.jsx` persists only `{ isLoggedIn, userId }` (`partialize`, version 1; the migration rewrites the old `user-data` entry without the profile). `context/AuthContext.jsx` reloads the profile from `getMyProfile` after a page reload; the checkout fills the email once the profile arrives.
+- **FE-24.** `view_item` (and item price) uses the lowest variant price when no variant is chosen, instead of 0 (`utils/analytics.js`, as rare).
+- **UX-32 (partial).** Privacy policy `[DeVeSheDreams]` → "DeVeSheDreams", plus one factual consent sentence. **Owner text needed:** `[Jurisdiction]` (`pages/terms-of-service/index.jsx:57`).
+- **UX-34.** `PASSWORD_MIN_LENGTH = 8` (`utils/Constant.jsx`) in signup, checkout and reset (signup was 6).
+- **UX-31.** Mobile bag and menu icons and the desktop bag/account icons are labelled buttons/links; the bag drawer and the mobile menu are dialogs with `hooks/useDialogA11y.jsx` (focus in, Tab trapped, Escape, focus back, `inert` while closed, so the clipped menu's links leave the tab order).
+- **UX-36.** `pages/_error.jsx` (branded "Something went wrong" with Try again / Back to home); the 404 gains a home link.
+- **UX-37.** Bag drawer: "Loading your bag…" and an error with "Try again" instead of "no items"; drawer adds go through `runWithGuestId` (one retry on `INVALID_GUEST_ID`).
+- UX-39 has no storefront part.
+
+## 1b. What changed (Wave 2, W2-STORE, 2026-10-26)
+
+- **Search (UX-28):** `/search?q=` (`src/pages/search/index.jsx`, server-rendered first page through `ProductListing`, `noindex`, `trackSearch`), search icon in `Navbar`/`NavbarMobile`. **Sort not built:** the backend `sort` argument arrived after this workstream; a control is a follow-up.
+- **Newsletter (UX-29):** footer `NewsletterForm.jsx` (`subscribeNewsletter`; the old button linked to `/`); the checkout "Email me" box is **unticked by default** (it was pre-ticked) and writes `updateMyProfile` only on a real change; `/profile` email preferences are one real checkbox (`EmailPreferences.jsx`).
+- **Reviews:** approved reviews on the PDP (`ProductReviews.jsx`, latest 10, hidden when none); no form (owner decision: `createReview` has no purchase check).
+- **SEO (UX-33):** PDP meta from the product, Product JSON-LD (`ProductSchema.jsx`, `utils/product-offers.util.js`, no availability until PRD-020), canonical without query or hash (`SeoHeader.jsx`), SiteNavigation JSON-LD fixed, `pages/robots.txt.js` and `pages/sitemap.xml.js` (`utils/sitemap.util.js`, from `Const.ClientLink`); `test/seo-helpers.test.mjs` (4).
+
 ## 2. Contract
+
+**Wave 2 (2026-10-26):** 36/36 operations valid (with variable shapes). New: `subscribeNewsletter`; `getReviews` also on the PDP; `getClientSideProducts` with `filters.search`. Backend source of truth: `zcom-backend` PRD-014 §5.4.
+
+Wave 0:
 
 Operations: **33/33 valid** against the composed supergraph (was 31). New: `getClientSideCategories` (`graphql/queries/category.gql.jsx`) and `getReviews` (`graphql/queries/review.gql.jsx`). Changed selection: `createCheckoutSessionFromCart` and `getCheckoutSession` select `pricing` (with `pricesIncludeTax`, `isFreeShipping`). `createOrder` is not used (backend removes it, §5).
 
@@ -69,3 +93,12 @@ Operations: **33/33 valid** against the composed supergraph (was 31). New: `getC
   - **Kept.** A kept order still shows its stored session's pricing (`getCheckoutSession` by `checkoutId`) on reload or retry, with no confirmation and no new hold; the confirm button is hidden while an order is kept or while paying. Stale answers are still ignored (request id). "Pay now" with confirmed, unchanged details sends the same variables, so the backend returns the confirmed active session (R2-C8: cart fingerprint, addresses and total match; `attribution` is not part of the fingerprint); a "Pay now" pressed while a confirmation is in flight bumps the request id and the backend's reuse or unique-index race (VBUG-5) prevents a second session.
   - **Holds.** A hold now starts only from "Show final total" or "Pay now", and lasts `CHECKOUT_SESSION_TTL_MS` or until confirmed new details replace it. A non-reserving quote (`checkoutQuote`) is the Wave 1 follow-up (backend, T1 contract; audit W0V2-02 option b).
   - **rare-element.** Its `utils/pending-order.js` twin now has the same optional `checkoutId` field (unused there), so the two entries match.
+- 2026-10-25 · W1-STORE · FR-1.9 consent banner + Consent Mode v2, no PII in localStorage (FE-12), no fallback tag ids, FE-24, UX-32 (partial), UX-31, UX-34, UX-36 (`_error.jsx`), UX-37. Build green, contract 33/33; not browser-tested.
+- 2026-10-25 · FU-STORE (Wave 1 follow-up) · ₹0 orders (COM-08): `COMPLETE_CHECKOUT` selects `pricing { total }`, and a total of 0 skips `createPaymentSession` (the backend already placed the order PAID) (`src/pages/checkout/[id]/index.jsx`). `SHIPPING_UNAVAILABLE` has its own copy and focuses the address; `VARIANT_REQUIRED` on cart remove has fallback copy through `REMOVE_ITEM_OVERRIDES` in `components/cart/CartDrawer.jsx` (refetches the bag) (`src/utils/api-error.util.js`). Contract 33/33.
+- 2026-10-25 · W1-CI / TEST-B (FR-1.6, FR-1.7 QA-12) · `npm run validate:ops` (operations and variable shapes, through the backend's `scripts/validate-clients`; the committed manifest is checked in the backend CodeBuild). `npm test` runs `test/middleware.test.mjs` with `node:test` and module hooks (no new dependency, Node ≥ 22.15): 10 tests over the `/v1/graphql` proxy (client tenant and `x-zcom-*` headers stripped, Origin/Referer dropped, edge headers added, fail closed without a tenant domain).
+- 2026-10-25 · Wave 1 verification (lead) · Build passes; `npm test` 10/10; `validate:clients` 33/33, 0 failures. Open: owner legal text (UX-32), the tag ids in hosting, the Playwright "no tag before consent" proof; not run in a browser or against a live gateway.
+- 2026-10-25 · Wave 1 fix round (re-audit W1V) · W1V-C-03: order attribution (`utils/ga-attribution.util.js`) is consent-gated (`startVisitAttribution`); without analytics consent nothing is captured and checkout sends `null`. W1V-C-05: `utils/consent.util.js` pushes `zc_consent_update` with `zcConsentAnalytics`/`zcConsentMarketing` before `gtm.js`; the GTM container must fire non-Google tags only on a marketing trigger (owner, UAT checklist). Second verification: `npm test` 14/14, build passes, `validate:clients` 33/33. Not run in a browser.
+- 2026-10-26 · W2-STORE + Wave 2 verification (lead) · Items in §1b. Build passes; `npm test` 18/18; `validate:clients` 36/36, 0 failures. Open: the sort control, the review form (purchase check, owner), Playwright `data-testid`s; not run in a browser, against a live gateway or a payment sandbox.
+- 2026-10-26 · Wave 2 fix round (re-audit W2V) · Listing sort on `/products`, `/category/[slug]` and `/search` (`?sort=` → `ClientProductSort`, read in `getServerSideProps`; `utils/listing-sort.util.js`, twin of rare's). `npm test` 22/22, build passes, `validate:clients` 36/36.
+- 2026-10-26 · Wave 2 exit · Second verification PASS WITH NOTES (backend audit Appendix J); no deveshe finding open.
+- 2026-10-26 · Close-out · K-01: UX-01 and UX-02 regression tests (`catalog-listing` 4, `checkout-address` 7) on extracted `src/utils/catalog-listing.util.js` and `src/utils/checkout-address.util.js`; `prebuild` runs `npm test` (owner: Vercel build command `npm run build`, Node ≥ 22.15); Playwright test ids `pdp-option-choice`, `pdp-add-to-cart`, `product-card-link`, `cart-checkout`, `checkout-pay-now`. Final verification: `npm test` 33/33, build passes, `validate:clients` 36/36. Final re-audit: backend audit Appendix K. Not run in a browser.

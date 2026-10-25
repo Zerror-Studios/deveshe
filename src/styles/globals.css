@@ -651,3 +651,20 @@ input[type="number"] {
     height: 2.2vw;
   }
 }
+/* PRD-014 UX-31: icon controls are real buttons */
+.icon_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+#menu-btn.icon_btn {
+  display: flex;
+  flex-direction: column;
+  align-items: normal;
+  justify-content: space-between;
+}

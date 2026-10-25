@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { addressType } from "@/helpers/Data";
-import { EmailSubscribedStatus } from "@/utils/Constant";
+import {
+  EmailSubscribedStatus,
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_MIN_MESSAGE,
+} from "@/utils/Constant";
 
 const addressEnum = addressType.map((item) => item.value);
 
@@ -29,7 +33,7 @@ export const CheckoutSchema = z
     }).default(EmailSubscribedStatus.SUBSCRIBED),
     password: z
       .string()
-      .min(6, "Password must be at least 6 characters")
+      .min(PASSWORD_MIN_LENGTH, PASSWORD_MIN_MESSAGE)
       .regex(/[A-Z]/, "Must contain an uppercase letter")
       .regex(/[0-9]/, "Must contain a number")
       .optional(),

@@ -9,7 +9,7 @@ const privacyPolicy = ({ meta }) => {
         <h2>Privacy Policy</h2>
         <div className="legal-container">
           <p>
-            [DeVeSheDreams] ("we" or "us") values your privacy and is committed
+            DeVeSheDreams ("we" or "us") values your privacy and is committed
             to protecting your personal information. Here's a summary of how we
             collect, use, and share your data:
           </p>
@@ -31,6 +31,9 @@ const privacyPolicy = ({ meta }) => {
           <p>
             <strong>Cookies and Tracking:</strong> We use cookies to enhance
             your browsing experience and deliver personalized content and ads.
+            Analytics and marketing cookies are used only if you accept them,
+            and you can change your choice at any time from
+            &ldquo;Cookie preferences&rdquo; in the footer.
           </p>
           <p>
             <strong>Data Security:</strong> We take reasonable measures to

@@ -10,7 +10,10 @@
 import { createApolloClient } from "@/lib/apolloClient";
 import { getEdgeSecretHeaders } from "@/lib/edge-headers.server";
 import { GET_CATEGORIES, GET_PRODUCTS } from "@/graphql";
-import { ProductStatus } from "@/utils/Constant";
+import {
+  toListingFilters,
+  toProductPageVariables,
+} from "@/utils/catalog-listing.util";
 
 // ─── Constants ────────────────────────────────────────────────────────────
 
@@ -22,20 +25,19 @@ const LISTING_CATEGORY_LIMIT = 50;
 export const createServerCatalogClient = () =>
   createApolloClient({ headers: getEdgeSecretHeaders() });
 
-/** Published products only; the server enforces PUBLISHED as well. */
-export const toListingFilters = (filters = {}) => ({
-  ...filters,
-  status: ProductStatus.PUBLISHED,
-});
+export { toListingFilters };
 
-/** One page of `getClientSideProducts`: `{ products, totalCount }`. */
+/**
+ * One page of `getClientSideProducts`: `{ products, totalCount }`, in the
+ * listing's `sort` (W2-STORE; the default NEWEST is not sent).
+ */
 export const fetchProductPage = async (
   client,
-  { filters = {}, limit, offset = 0 },
+  { filters = {}, limit, offset = 0, sort },
 ) => {
   const { data } = await client.query({
     query: GET_PRODUCTS,
-    variables: { offset, limit, filters: toListingFilters(filters) },
+    variables: toProductPageVariables({ filters, limit, offset, sort }),
   });
   const page = data?.getClientSideProducts;
   return {

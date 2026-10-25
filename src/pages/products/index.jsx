@@ -1,8 +1,8 @@
 /**
  * All products (PRD-014 FR-0.8, UX-01 / D9)
  *
- * Every published product, newest first as the server orders them, 12 per
- * page with "Load more", plus the category chips. Server rendered so the
+ * Every published product, newest first unless `?sort=` asks otherwise
+ * (W2-STORE), 12 per page with "Load more", plus the category chips. Server rendered so the
  * first page is indexable; a failed load renders an error state.
  */
 
@@ -19,6 +19,7 @@ import {
   toListingFilters,
 } from "@/lib/catalog-listing.server";
 import { Const } from "@/utils/Constant";
+import { parseListingSort } from "@/utils/listing-sort.util";
 
 const PRODUCTS_TITLE = "Shop All – DeVeSheDreams";
 const PRODUCTS_DESCRIPTION =
@@ -30,16 +31,20 @@ const ProductsPage = ({
   totalCount,
   categories,
   filters,
+  sort,
   loadError,
 }) => {
   return (
     <>
       <SeoHeader meta={meta} />
       <ProductListing
+        // A new sort starts a new list (no stale "Load more" state).
+        key={sort}
         title="Shop all"
         products={products}
         totalCount={totalCount}
         filters={filters}
+        sort={sort}
         categories={categories}
         listName="All products"
         loadError={loadError}
@@ -50,7 +55,8 @@ const ProductsPage = ({
 
 export default ProductsPage;
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ query }) {
+  const sort = parseListingSort(query?.sort);
   const meta = {
     title: PRODUCTS_TITLE,
     description: PRODUCTS_DESCRIPTION,
@@ -69,7 +75,11 @@ export async function getServerSideProps() {
   const filters = toListingFilters();
   const client = createServerCatalogClient();
   const [productResult, categoryResult] = await Promise.allSettled([
-    fetchProductPage(client, { filters, limit: LISTING_PAGE_SIZE }),
+    fetchProductPage(client, {
+      filters,
+      sort,
+      limit: LISTING_PAGE_SIZE,
+    }),
     fetchCategories(client),
   ]);
   if (productResult.status === "rejected") {
@@ -80,6 +90,7 @@ export async function getServerSideProps() {
     props: {
       meta,
       filters,
+      sort,
       products: productResult.value?.products || [],
       totalCount: productResult.value?.totalCount || 0,
       categories: categoryResult.value || [],

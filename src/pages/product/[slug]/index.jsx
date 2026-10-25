@@ -8,15 +8,21 @@ import {
   createServerCatalogClient,
   fetchProductPage,
 } from "@/lib/catalog-listing.server";
-import { ADD_ITEM_TO_CART, CREATE_BACK_IN_STOCK_REQUEST, GET_PRODUCT_BY_ID } from "@/graphql";
+import {
+  ADD_ITEM_TO_CART,
+  CREATE_BACK_IN_STOCK_REQUEST,
+  GET_PRODUCT_BY_ID,
+  GET_PRODUCT_REVIEWS,
+} from "@/graphql";
 import SeoHeader from "@/components/seo/SeoHeader";
 import ProductListGrid from "@/components/product/ProductListGrid";
+import ProductReviews from "@/components/product/ProductReviews";
 import ProductModalPreview from "@/components/product/ProductModalPreview";
 import ProductImageGrid from "@/components/product/ProductImageGrid";
 import ProductContent from "@/components/product/ProductContent";
 import SizeAssistance from "@/components/product/SizeAssistance";
 import { toast } from 'react-toastify';
-import { ProductStatus } from "@/utils/Constant";
+import { Const, ProductStatus } from "@/utils/Constant";
 import { trackEcomEvent } from "@/utils/analytics";
 import {
   CtaEnum,
@@ -35,8 +41,58 @@ import { getLoginPath } from "@/utils/redirect.util";
 
 // "You may also like": products from the same category (PRD-014 FR-0.8).
 const RELATED_PRODUCT_LIMIT = 5;
+// PRD-014 FR-2.8: the latest approved reviews shown on the page.
+const PRODUCT_REVIEW_LIMIT = 10;
+const SITE_NAME = "DeVeSheDreams";
+const META_DESCRIPTION_MAX_LENGTH = 160;
 
-const ProductDetail = ({ meta, data, productList }) => {
+// Text only, for meta descriptions (the product description is HTML).
+const toPlainText = (html = "") =>
+  String(html || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+/**
+ * PRD-014 FR-2.8 (UX-33): per-product meta. A merchant SEO field wins;
+ * otherwise the product's own name, description and first image, never
+ * the home page's title. The canonical is the slug URL without a query.
+ */
+const toProductMeta = (product) => {
+  const seo = product.seo || {};
+  const title = seo.title || `${product.name} – ${SITE_NAME}`;
+  const description = (
+    seo.description || toPlainText(product.description)
+  ).slice(0, META_DESCRIPTION_MAX_LENGTH);
+  const image = seo.og?.image || product.assets?.[0]?.path || "";
+  return {
+    title,
+    description,
+    keywords: seo.keywords?.length ? seo.keywords.join(", ") : "",
+    author: seo.author || SITE_NAME,
+    robots: seo.robots || "index, follow",
+    canonical: seo.canonical || `${Const.ClientLink}/product/${product.slug}`,
+    og: {
+      title: seo.og?.title || title,
+      description: seo.og?.description || description,
+      image,
+    },
+    twitter: {
+      card: seo.twitter?.card || "summary_large_image",
+      title: seo.twitter?.title || title,
+      description: seo.twitter?.description || description,
+      image: seo.twitter?.image || image,
+    },
+  };
+};
+
+const ProductDetail = ({
+  meta,
+  data,
+  productList,
+  reviews = [],
+  reviewCount = 0,
+}) => {
   const router = useRouter();
   const { runWithGuestId } = useVisitor();
   const basePrice = useMemo(() => getLowestPrice(data?.variants), [data]);
@@ -136,7 +192,7 @@ const ProductDetail = ({ meta, data, productList }) => {
 
   return (
     <>
-      <SeoHeader meta={meta} />
+      <SeoHeader meta={meta} productData={data} />
       <div className="ProductDetails_wrapper">
         <div className="ProductDetails_cntr">
           <div className="ProductDets_main"></div>
@@ -178,6 +234,7 @@ const ProductDetail = ({ meta, data, productList }) => {
 
         {showSizeAssist && <SizeAssistance onClose={handleClose} />}
       </div>
+      <ProductReviews reviews={reviews} totalCount={reviewCount} />
       <ProductModalPreview
         data={selectedAsset}
         isOpen={isPreviewOpen}
@@ -192,15 +249,6 @@ export default ProductDetail;
 
 export async function getServerSideProps({ params }) {
   const slug = params?.slug || "";
-  const meta = {
-    title: "DeVeSheDreams – Wear Your Imagination",
-    description:
-      "DeVeSheDreams is a fashion label that turns dreams into wearable art. Collaborating with artists from different disciplines, we create capsule collections that reflect vibrant expression and individuality.",
-    keywords:
-      "DeVeSheDreams, wearable art, capsule collections, fashion collaborations, expressive clothing, artistic fashion",
-    author: "DeVeSheDreams",
-    robots: "index, follow",
-  };
 
   try {
     const client = createServerCatalogClient();
@@ -222,11 +270,25 @@ export async function getServerSideProps({ params }) {
         ...(categoryId ? { categoryIds: [categoryId] } : {}),
       },
     }).catch(() => ({ products: [] }));
+    // Reviews are optional as well: a failure hides the section.
+    const reviews = await client
+      .query({
+        query: GET_PRODUCT_REVIEWS,
+        variables: {
+          offset: 0,
+          limit: PRODUCT_REVIEW_LIMIT,
+          filter: { productId: product._id },
+        },
+      })
+      .then(({ data }) => data?.getReviews)
+      .catch(() => null);
     return {
       props: {
-        meta: product.seo?.title ? product.seo : meta,
+        meta: toProductMeta(product),
         data: product,
         productList: related.products,
+        reviews: reviews?.data || [],
+        reviewCount: reviews?.totalCount || 0,
       },
     };
   } catch (error) {

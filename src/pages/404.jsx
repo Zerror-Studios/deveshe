@@ -1,3 +1,4 @@
+import Link from "next/link";
 import SeoHeader from "@/components/seo/SeoHeader";
 
 const Custom404 = ({ meta }) => {
@@ -7,6 +8,10 @@ const Custom404 = ({ meta }) => {
       <div style={style}>
         <p>Sorry, we couldn't find the page you're looking for.</p>
         <p>Page not found</p>
+        {/* PRD-014 UX-36: a way back instead of a dead end */}
+        <Link href="/" style={linkStyle}>
+          Back to home
+        </Link>
       </div>
     </>
   );
@@ -50,3 +55,9 @@ const style = {
   paddingRight: '1.5rem',
 }
 
+
+const linkStyle = {
+  marginTop: '1.5rem',
+  fontSize: '1rem',
+  textDecoration: 'underline',
+}

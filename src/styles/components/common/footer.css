@@ -157,3 +157,78 @@
     padding: 25px;
   }
 }
+
+/* PRD-014 FR-1.9: "Cookie Preferences" looks like the other footer links */
+.footer_consent_btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+  font-family: paragraph;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.35;
+  margin-top: 4px;
+  cursor: pointer;
+}
+.footer_consent_btn:hover {
+  text-decoration: underline;
+}
+
+/* PRD-014 FR-2.8 (UX-29): newsletter sign-up */
+.newsletter_form {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: paragraph;
+}
+.newsletter_label {
+  font-family: heading;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+}
+.newsletter_field {
+  display: flex;
+  width: 100%;
+  border: 1px solid #000;
+  background-color: #fff;
+}
+.newsletter_input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 0;
+  background: transparent;
+  font-family: paragraph;
+  font-size: 14px;
+  outline: none;
+}
+.newsletter_input:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: -2px;
+}
+.newsletter_submit {
+  padding: 0 16px;
+  border: 0;
+  border-left: 1px solid #000;
+  background-color: #000;
+  color: #fff;
+  font-family: paragraph;
+  font-size: 13px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.newsletter_submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.newsletter_message {
+  min-height: 16px;
+  font-size: 13px;
+}
+.newsletter_message.is_error {
+  color: #b00020;
+}

@@ -5,10 +5,14 @@ import WebPageSchema from "./WebPageSchema";
 import NewsMediaOrganizationSchema from "./NewsMediaOrganizationSchema";
 import { Const } from "@/utils/Constant";
 import SiteNavigationSchema from "./SiteNavigationSchema";
+import ProductSchema from "./ProductSchema";
 
-const SeoHeader = ({ meta }) => {
+const SeoHeader = ({ meta, productData }) => {
   const router = useRouter();
-  const canonical = `${Const.ClientLink}/${router.asPath?.slice(1)}`;
+  // PRD-014 FR-2.8 (UX-33): the canonical never carries a query string or
+  // hash (tracking parameters, `?q=`), so one page has one URL.
+  const path = (router.asPath || "/").split(/[?#]/)[0] || "/";
+  const canonical = `${Const.ClientLink}${path}`;
   return (
     <Head>
       <title>{meta?.title ?? ""}</title>
@@ -17,10 +21,7 @@ const SeoHeader = ({ meta }) => {
       <meta name="author" content={meta?.author ?? "DeVeSheDreams"} />
       <meta
         name="robots"
-        content={
-          `${meta?.robots}, max-image-preview:large` ??
-          "index,follow, max-image-preview:large"
-        }
+        content={`${meta?.robots || "index, follow"}, max-image-preview:large`}
       />
       <link rel="canonical" href={meta?.canonical ?? canonical} />
       {/* OG Tags */}
@@ -91,6 +92,7 @@ const SeoHeader = ({ meta }) => {
         ]}
       />
       <SiteNavigationSchema />
+      {productData && <ProductSchema product={productData} />}
     </Head>
   );
 };

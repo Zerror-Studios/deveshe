@@ -1,7 +1,15 @@
 import { useRouter } from "next/router";
 import React from "react";
 
-const CommonButton = ({ title, href, onClick, loading = false, type = "submit" }) => {
+// `testId` is a stable hook for the Playwright suites (QA-05).
+const CommonButton = ({
+  title,
+  href,
+  onClick,
+  loading = false,
+  type = "submit",
+  testId,
+}) => {
   const router = useRouter();
 
   const handleClick = () => {
@@ -18,6 +26,7 @@ const CommonButton = ({ title, href, onClick, loading = false, type = "submit" }
       type={type}
       onClick={handleClick}
       disabled={loading}
+      data-testid={testId}
     >
       {loading ? (
         <div className="common_btn_loadin">

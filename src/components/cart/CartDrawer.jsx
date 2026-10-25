@@ -6,12 +6,15 @@ import { useMutation, useQuery } from "@apollo/client/react";
 import { ADD_ITEM_TO_CART, CART_LIST, REMOVE_ITEM_FROM_CART } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
 import { useVisitor } from "@/hooks/useVisitor";
+import { useDialogA11y } from "@/hooks/useDialogA11y";
 import { formatePrice, getCartItemCount } from "@/utils/Util";
 import gsap from "gsap";
 import CartProduct from "@/components/cart/CartProduct";
 import CommonButton from "../common/CommonButton";
 import {
+  REMOVE_ITEM_OVERRIDES,
   getErrorMessage,
+  getErrorReason,
   isInvalidGuestIdError,
 } from "@/utils/api-error.util";
 import { getLoginPath } from "@/utils/redirect.util";
@@ -21,8 +24,10 @@ const CartDrawer = ({ isOpen, closeCart }) => {
   const router = useRouter();
   const drawerRef = useRef(null);
   const backdropRef = useRef(null);
-  const { visitorId, resetVisitorId } = useVisitor();
+  const { visitorId, resetVisitorId, runWithGuestId } = useVisitor();
   const { isLoggedIn } = useAuthStore((state) => state);
+  // PRD-014 UX-31: focus trap, Escape and inert-while-closed.
+  useDialogA11y(drawerRef, isOpen, closeCart);
 
   const [isBtnLoading, setIsBtnLoading] = useState(false);
 
@@ -71,12 +76,14 @@ const CartDrawer = ({ isOpen, closeCart }) => {
   const count = getCartItemCount(cart);
   const handleAddItem = async (productId, variantId) => {
     try {
-      const payload = {
-        input: { productId, variantId, qty: 1 },
-        ...(!isLoggedIn && visitorId ? { guestId: visitorId } : {}),
-      };
+      const input = { productId, variantId, qty: 1 };
 
-      const { data: response } = await addCartItem({ variables: payload });
+      // PRD-014 UX-37: guests re-issue a rejected id once, as on the PDP.
+      const { data: response } = isLoggedIn
+        ? await addCartItem({ variables: { input } })
+        : await runWithGuestId((guestId) =>
+          addCartItem({ variables: { input, guestId } }),
+        );
       const message = response?.addItemToCart;
       if (!message) return;
       toast.success(message || "Item added successfully!");
@@ -108,7 +115,11 @@ const CartDrawer = ({ isOpen, closeCart }) => {
     } catch (err) {
       console.error(err);
       handleGuestError(err);
-      toast.error(getErrorMessage(err, "Failed to remove item from cart"));
+      toast.error(
+        getErrorMessage(err, "Failed to remove item from cart", REMOVE_ITEM_OVERRIDES)
+      );
+      // COM-32: the bag is out of date (several lines of this product).
+      if (getErrorReason(err) === "VARIANT_REQUIRED") await refetch();
     }
   };
 
@@ -160,18 +171,49 @@ const CartDrawer = ({ isOpen, closeCart }) => {
 
   return (
     <div id="card_drawer" onClick={closeCart} ref={backdropRef}>
-      <div id="drawer" onClick={(e) => e.stopPropagation()} ref={drawerRef}>
+      <div
+        id="drawer"
+        onClick={(e) => e.stopPropagation()}
+        ref={drawerRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="drawer_title"
+        tabIndex={-1}
+      >
         <div id="drawer_header">
-          <span>
+          <span id="drawer_title">
             Bag <sup>({count})</sup>
           </span>
-          <button id="close" onClick={closeCart}>
-            <RxCross2 />
+          <button
+            type="button"
+            id="close"
+            onClick={closeCart}
+            aria-label="Close bag"
+          >
+            <RxCross2 aria-hidden="true" />
           </button>
         </div>
 
         <div id="drawer_products" data-lenis-prevent>
-          {cart?.length > 0 ? (
+          {/* PRD-014 UX-37: loading and error are not "no items" */}
+          {cartError && !isInvalidGuestIdError(cartError) ? (
+            <div id="no_item" role="alert">
+              <span>
+                {getErrorMessage(cartError, "We couldn't load your bag.")}
+              </span>
+              <button
+                type="button"
+                className="cart_retry_btn"
+                onClick={() => refetch()}
+              >
+                Try again
+              </button>
+            </div>
+          ) : loading && !cartResponse ? (
+            <span id="no_item" role="status">
+              Loading your bag…
+            </span>
+          ) : cart?.length > 0 ? (
             cart.map((item, i) => (
               <CartProduct
                 key={`cart-product-item-${i}`}
@@ -203,6 +245,7 @@ const CartDrawer = ({ isOpen, closeCart }) => {
               title={"Checkout"}
               onClick={navigateCheckout}
               loading={isBtnLoading}
+              testId="cart-checkout"
             />
           </div>
         </div>

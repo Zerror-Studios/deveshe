@@ -36,6 +36,7 @@ const ProductCard = ({
     <Link
       href={href}
       onClick={handleSelect}
+      data-testid="product-card-link"
       className={`common_product_card ${
         !isMobile ? "skeleton-loading" : ""
       }`}

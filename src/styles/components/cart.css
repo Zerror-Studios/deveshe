@@ -236,3 +236,15 @@
   }
 }
 
+
+/* PRD-014 UX-37: bag load error retry */
+#no_item .cart_retry_btn {
+  display: block;
+  margin-top: 12px;
+  padding: 8px 16px;
+  border: 1px solid #000;
+  background: none;
+  font-family: heading;
+  text-transform: uppercase;
+  cursor: pointer;
+}

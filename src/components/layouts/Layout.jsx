@@ -4,6 +4,7 @@ import Navbar from "@/components/common/Navbar";
 import NavbarMobile from "@/components/common/NavbarMobile";
 import CartDrawer from "../cart/CartDrawer";
 import Footer from "../common/Footer";
+import ConsentBanner from "../common/ConsentBanner";
 const Layout = ({ children }) => {
   const { isCartOpen, openCart, closeCart } = useCartStore((state) => state);
 
@@ -15,6 +16,7 @@ const Layout = ({ children }) => {
         {children}
         <Footer />
         <CartDrawer isOpen={isCartOpen} closeCart={closeCart} />
+        <ConsentBanner />
       </div>
     </>
   );

@@ -62,6 +62,11 @@ import {
 // and the backend returns that same active session (R2-C8); changed
 // details need a new confirmation, and the backend then replaces the
 // session and releases its hold.
+//
+// PRD-014 Wave 1: a ₹0 total (COM-08) is placed PAID by `completeCheckout`,
+// so no payment session is opened and the shopper goes to thank-you.
+// `SHIPPING_UNAVAILABLE` (no shipping zone covers the address) keeps the
+// form open and scrolls to the delivery address so it can be changed.
 const RESERVATION_POLL_INTERVAL_MS = 1000;
 const RESERVATION_POLL_ATTEMPTS = 20;
 const ORDER_ADDRESS_FIELDS = [
@@ -127,7 +132,7 @@ const CheckoutPage = ({ meta }) => {
   // True from opening the payment window until its result or close (RBUG-15).
   const [isAwaitingPayment, setIsAwaitingPayment] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
-  const { isLoggedIn, user } = useAuthStore((state) => state);
+  const { isLoggedIn, user, setUser } = useAuthStore((state) => state);
   const submittingRef = useRef(false);
   const verifyingRef = useRef(false);
   // Unpaid order for this cart, kept across reloads (RBUG-8/RBUG-9):
@@ -240,16 +245,31 @@ const CheckoutPage = ({ meta }) => {
         country: "India",
         primary: false,
       },
-      emailSubscribedStatus: EmailSubscribedStatus.SUBSCRIBED,
+      // PRD-014 FR-2.8 (UX-29): marketing email is opt-in, never pre-ticked;
+      // the box shows the profile's own choice once it loads.
+      emailSubscribedStatus: EmailSubscribedStatus.UNSUBSCRIBED,
       useShippingAsBilling: true,
     },
   });
 
+  // The profile loads after a page reload (FE-12: it isn't persisted), so
+  // fill the email once it arrives, without overwriting a typed one.
   useEffect(() => {
-    if (isLoggedIn) {
-      setValue("email", user?.email);
+    if (isLoggedIn && user?.email && !watch("email")) {
+      setValue("email", user.email);
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, user?.email]);
+
+  useEffect(() => {
+    if (!isLoggedIn || user?.emailSubscribedStatus === undefined) return;
+    setValue(
+      "emailSubscribedStatus",
+      user.emailSubscribedStatus ===
+        EMAIL_SUBSCRIBED_STATUS_CODE[EmailSubscribedStatus.SUBSCRIBED]
+        ? EmailSubscribedStatus.SUBSCRIBED
+        : EmailSubscribedStatus.UNSUBSCRIBED,
+    );
+  }, [isLoggedIn, user?.emailSubscribedStatus]);
 
   // ─── Server pricing before "Pay now" (W0V-C-03, W0V2-02) ────────────────
 
@@ -434,11 +454,12 @@ const CheckoutPage = ({ meta }) => {
 
   // Creates the UN_PAID order once; a retried payment reuses it while the
   // email and addresses are unchanged. A shopper who closes Nimbbl and edits
-  // them gets a new order with the new details (VBUG-4).
+  // them gets a new order with the new details (VBUG-4). Returns
+  // `{ orderId, isFree }`; a ₹0 order is already PAID (COM-08).
   const placeOrder = async (formData) => {
     const details = toCheckoutDetails(formData);
     if (PendingOrder.matches(pendingOrderRef.current, details)) {
-      return pendingOrderRef.current.orderId;
+      return { orderId: pendingOrderRef.current.orderId, isFree: false };
     }
     if (pendingOrderRef.current) forgetPendingOrder();
 
@@ -465,6 +486,9 @@ const CheckoutPage = ({ meta }) => {
     });
     const orderId = completed?.completeCheckout?.orderId;
     if (!orderId) throw createReasonError("CHECKOUT_FAILED");
+    if (completed.completeCheckout.pricing?.total === 0) {
+      return { orderId, isFree: true };
+    }
 
     pendingOrderRef.current = PendingOrder.save(
       cartData,
@@ -473,7 +497,7 @@ const CheckoutPage = ({ meta }) => {
       session.id
     );
     setHasPendingOrder(true);
-    return orderId;
+    return { orderId, isFree: false };
   };
 
   const handleOrderPayment = async (payload, paymentSession, orderId) => {
@@ -565,13 +589,24 @@ const CheckoutPage = ({ meta }) => {
   };
 
   // Best effort: the "email me" checkbox updates the customer profile.
+  // PRD-014 FR-2.8 (UX-29): only a real change is written, so an unticked
+  // box never turns "never subscribed" into "unsubscribed".
   const saveEmailPreference = (status) => {
-    const code = EMAIL_SUBSCRIBED_STATUS_CODE[status];
-    if (code === undefined || code === user?.emailSubscribedStatus) return;
+    const subscribedCode =
+      EMAIL_SUBSCRIBED_STATUS_CODE[EmailSubscribedStatus.SUBSCRIBED];
+    const wantsEmail = status === EmailSubscribedStatus.SUBSCRIBED;
+    const isSubscribed = user?.emailSubscribedStatus === subscribedCode;
+    if (wantsEmail === isSubscribed) return;
+    const code = EMAIL_SUBSCRIBED_STATUS_CODE[
+      wantsEmail ? EmailSubscribedStatus.SUBSCRIBED : EmailSubscribedStatus.UNSUBSCRIBED
+    ];
     client
       .mutate({
         mutation: UPDATE_MY_PROFILE,
         variables: { input: { emailSubscribedStatus: code } },
+      })
+      .then(({ data }) => {
+        if (data?.updateMyProfile) setUser({ ...user, ...data.updateMyProfile });
       })
       .catch(() => {});
   };
@@ -641,8 +676,17 @@ const CheckoutPage = ({ meta }) => {
     }
     let orderId = null;
     try {
-      orderId = await placeOrder(data);
+      const placed = await placeOrder(data);
+      orderId = placed.orderId;
       saveEmailPreference(data.emailSubscribedStatus);
+      if (placed.isFree) {
+        finishCheckout();
+        await router.push({
+          pathname: "/checkout/thank-you",
+          query: { orderId },
+        });
+        return;
+      }
       const { data: paymentResponse } = await client.mutate({
         mutation: CREATE_PAYMENT_SESSION,
         variables: { input: { orderId } },
@@ -689,6 +733,13 @@ const CheckoutPage = ({ meta }) => {
         refetch(cartListPayload);
       }
       toast.error(getAnyErrorMessage(err, "Checkout failed. Please try again."));
+      // No shipping zone covers the address: point the shopper at it.
+      if (reason === "SHIPPING_UNAVAILABLE") {
+        setSubmitError(getAnyErrorMessage(err));
+        document
+          .querySelector(".Delivery_container")
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     } finally {
       submittingRef.current = false;
       setIsLoading(false);
@@ -777,6 +828,7 @@ const CheckoutPage = ({ meta }) => {
               title={"Pay now"}
               loading={isLoading || isAwaitingPayment}
               onClick={() => trackCtaClick(CtaEnum.PAY_NOW)}
+              testId="checkout-pay-now"
             />
           </form>
         </div>

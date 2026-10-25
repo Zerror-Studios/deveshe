@@ -52,6 +52,32 @@
   background-color: black;
 }
 
+/* Sort control (PRD-014 W2-STORE) */
+.listing_sort {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1.2rem;
+  font-family: paragraph;
+  font-size: 13px;
+}
+
+.listing_sort select {
+  padding: 6px 28px 6px 14px;
+  border: 1px solid black;
+  border-radius: 50px;
+  background-color: white;
+  font-family: paragraph;
+  font-size: 13px;
+  color: black;
+  cursor: pointer;
+}
+
+.listing_sort select:focus-visible {
+  outline: 2px solid black;
+  outline-offset: 3px;
+}
+
 .listing_grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -181,5 +207,114 @@
   .listing_grid .common_product_card:nth-child(4n) {
     border-right: none;
     border-bottom: none;
+  }
+}
+
+/* PRD-014 FR-2.8 (UX-28): /search form above the shared listing */
+.search_page {
+  width: 100%;
+  padding-top: 90px;
+}
+.search_page .listing_wrapper {
+  padding-top: 0;
+}
+.search_form {
+  padding: 2vw 3vw 1.5vw;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 720px;
+}
+.search_label {
+  font-family: heading;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+.search_field {
+  display: flex;
+  border: 2px solid black;
+}
+.search_field input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 0;
+  outline: none;
+  font-family: paragraph;
+  font-size: 16px;
+  background: transparent;
+}
+.search_field input:focus-visible {
+  outline: 2px solid black;
+  outline-offset: -4px;
+}
+.search_field button {
+  width: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-left: 2px solid black;
+  background: black;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* PRD-014 FR-2.8: approved reviews on /product/[slug] */
+.product_reviews {
+  width: 100%;
+  padding: 3vw;
+  border-top: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.product_reviews_title {
+  font-family: heading;
+  font-weight: 400;
+  font-size: 2.4vw;
+  text-transform: uppercase;
+}
+.product_reviews_list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.product_review {
+  padding: 18px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: paragraph;
+}
+.product_review_stars {
+  display: flex;
+  gap: 2px;
+}
+.product_review_comment {
+  font-size: 15px;
+  line-height: 1.5;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.product_review_meta,
+.product_reviews_more {
+  font-size: 13px;
+  color: #555;
+}
+@media (max-width: 768px) {
+  .product_reviews {
+    padding: 24px 20px;
+  }
+  .product_reviews_title {
+    font-size: 24px;
+  }
+  .product_reviews_list {
+    grid-template-columns: 1fr;
   }
 }

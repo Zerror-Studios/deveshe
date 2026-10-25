@@ -313,7 +313,7 @@ const Navbar = ({ openCart }) => {
             </p>
           </div>
         )}
-        <Link href="/" id="logo-container">
+        <Link href="/" id="logo-container" aria-label="DeVeSheDreams home">
           <p>new emotions?</p>
           <Image
             width={1000}
@@ -358,8 +358,33 @@ const Navbar = ({ openCart }) => {
         </div>
         <div id="nav-btns">
           <p>looking for</p>
-          <button className="nav_btn_items" onClick={openCart}>
+          {/* PRD-014 FR-2.8 (UX-28): site search */}
+          <Link className="nav_btn_items" href="/search" aria-label="Search">
             <svg
+              aria-hidden="true"
+              className="icon-search"
+              width="17"
+              height="17"
+              viewBox="0 0 17 17"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="7.2" cy="7.2" r="6" strokeWidth="1.2"></circle>
+              <path
+                d="M11.6 11.6L16 16"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+              ></path>
+            </svg>
+          </Link>
+          <button
+            type="button"
+            className="nav_btn_items"
+            onClick={openCart}
+            aria-label="Open bag"
+          >
+            <svg
+              aria-hidden="true"
               className="icon-cart"
               width="15"
               height="18"
@@ -383,8 +408,10 @@ const Navbar = ({ openCart }) => {
           <Link
             className="nav_btn_items"
             href={isLoggedIn ? "/profile" : "/login"}
+            aria-label="My account"
           >
             <svg
+              aria-hidden="true"
               className="icon-account"
               width="16"
               height="18"

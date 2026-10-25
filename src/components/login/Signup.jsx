@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import {
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_MIN_MESSAGE,
+} from "@/utils/Constant";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { PhoneInput } from "react-international-phone";
@@ -22,7 +26,7 @@ const SignupSchema = z
     email: z.string().min(1, "Email is required").email("Invalid email"),
     password: z
       .string()
-      .min(6, "Password must be at least 6 characters")
+      .min(PASSWORD_MIN_LENGTH, PASSWORD_MIN_MESSAGE)
       .regex(/[A-Z]/, "Must contain an uppercase letter")
       .regex(/[0-9]/, "Must contain a number"),
     confirmPassword: z.string().min(1, "Confirm password is required"),
