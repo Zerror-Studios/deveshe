@@ -37,6 +37,7 @@ import {
   getErrorReason,
 } from "@/utils/api-error.util";
 import { getLowestPrice, isVariantUnavailable } from "@/utils/catalog.util";
+import { getNotifyMeSuccessMessage } from "@/utils/back-in-stock.util";
 import { useVariantAvailability } from "@/hooks/useVariantAvailability";
 import {
   getStockNote,
@@ -213,7 +214,8 @@ const ProductDetail = ({
 
       await createNotifyRequest({ variables: payload });
       trackNotifyMe(analyticsItemId, variantMatched?.sku);
-      toast.success("You’ll be notified when this item is back in stock!");
+      // CP-22: a guest's alert starts only after the emailed link is opened.
+      toast.success(getNotifyMeSuccessMessage(isLoggedIn));
       if (!isLoggedIn) setNotifyEmail("");
     } catch (err) {
       console.error(err);

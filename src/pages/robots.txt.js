@@ -3,7 +3,7 @@
  *
  * Points crawlers at this site's own sitemap (`Const.ClientLink`, the same
  * origin as the canonical URLs) and keeps private or thin pages
- * (account, checkout, search, API) out of the crawl.
+ * (account, checkout, search, back-in-stock links, API) out of the crawl.
  */
 
 import { Const } from "@/utils/Constant";
@@ -11,7 +11,15 @@ import { Const } from "@/utils/Constant";
 // ─── Constants ────────────────────────────────────────────────────────────
 
 const ROBOTS_CACHE_SECONDS = 86400;
-const DISALLOWED_PATHS = ["/profile", "/checkout", "/search", "/api/"];
+// `/back-in-stock/` holds single-use email links (CP-22): a crawler that
+// runs scripts must not confirm someone's alert.
+const DISALLOWED_PATHS = [
+  "/profile",
+  "/checkout",
+  "/search",
+  "/back-in-stock/",
+  "/api/",
+];
 
 // ─── Route ────────────────────────────────────────────────────────────────
 
