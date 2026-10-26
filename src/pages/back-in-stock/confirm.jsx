@@ -7,8 +7,9 @@
  *
  * Reads `token` once, removes it from the address bar (so it doesn't
  * linger in history or analytics page URLs), then calls
- * `confirmBackInStock`. `true` confirms the alert; `false` or any other
- * server error means the link is unknown, used or expired; `RATE_LIMITED`
+ * `confirmBackInStock`. `true` confirms every pending alert of the
+ * address (CP2-03); `false` or any other server error means the link is
+ * unknown, used, replaced or expired; `RATE_LIMITED`
  * (by `extensions.reason`) and network failures offer a retry.
  *
  * Keep in sync with
@@ -103,15 +104,19 @@ const BackInStockConfirm = () => {
             <h2>
               You&apos;re <span>in</span>
             </h2>
-            <p>We&apos;ll email you when this item is back in stock.</p>
+            <p>
+              We&apos;ll email you when the items you asked about are back in
+              stock.
+            </p>
           </>
         )}
         {status === StatusEnum.INVALID_LINK && (
           <>
             <h2>Link expired</h2>
             <p>
-              This link has expired or was already used. Tap &quot;Notify
-              me&quot; on the product again for a new link.
+              This link has expired, was already used or was replaced by a
+              newer email. Use the newest link we sent, or tap &quot;Notify
+              me&quot; again tomorrow for a new one.
             </p>
           </>
         )}
