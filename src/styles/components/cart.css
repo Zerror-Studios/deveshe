@@ -248,3 +248,13 @@
   text-transform: uppercase;
   cursor: pointer;
 }
+
+/* PRD-020 FR-13: bag line stock (text, never colour alone) */
+.cart_stock_note,
+.cart_sold_out_note {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}

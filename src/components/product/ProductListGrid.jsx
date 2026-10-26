@@ -6,6 +6,7 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { StockStatus } from "@/utils/Constant";
 import { CtaEnum, trackCtaClick } from "@/utils/analytics-events.util";
+import { SOLD_OUT_LABEL } from "@/utils/stock-signal.util";
 gsap.registerPlugin(ScrollTrigger);
 
 // 2 / 3 / 5 columns (styles/home.css `.Similar_prd_cntr`), RPERF-12.
@@ -16,8 +17,11 @@ const ProductListGrid = ({
   title = "You may also like",
   data,
   isOutOfStock,
+  isSoldOut = false,
   loading,
+  notifyLoading,
   handleAddToCart,
+  handleNotifyMe,
   cartBtn,
   finalPrice,
   analyticsItemId,
@@ -34,9 +38,17 @@ const ProductListGrid = ({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // PRD-020 FR-13: the mobile bag button mirrors the PDP's state.
+  const unavailableLabel = isSoldOut ? SOLD_OUT_LABEL : StockStatus.UNAVAILABLE;
+
   const handleAddToBagClick = () => {
     trackCtaClick(CtaEnum.ADD_TO_CART, { itemId: analyticsItemId });
     handleAddToCart();
+  };
+
+  const handleNotifyClick = () => {
+    trackCtaClick(CtaEnum.NOTIFY_ME, { itemId: analyticsItemId });
+    handleNotifyMe?.();
   };
 
   useLayoutEffect(() => {
@@ -107,15 +119,30 @@ const ProductListGrid = ({
           ) : (
             <>
               <span className="ProductDets_ntfy_btn_slect_size">
-                {!cartBtn ? "Select a Size" : isOutOfStock ? StockStatus.UNAVAILABLE : "Add to Bag"}
+                {!cartBtn ? "Select a Size" : isOutOfStock ? unavailableLabel : "Add to Bag"}
               </span>
-              <span className="ProductDets_ntfy_btn_AddtoBeg">{isOutOfStock ? StockStatus.UNAVAILABLE : "Add to Bag"}</span>
+              <span className="ProductDets_ntfy_btn_AddtoBeg">{isOutOfStock ? unavailableLabel : "Add to Bag"}</span>
               <div className="ProductDets_ntfy_btn_price">
                 <span>{finalPrice} INR</span>
               </div>
             </>
           )}
         </button>
+        {isOutOfStock && handleNotifyMe && (
+          <button
+            className="ProductDets_ntfy_btn ProductDets_ntfy_btn_grid"
+            style={notifyLoading ? { backgroundColor: "black" } : {}}
+            onClick={handleNotifyClick}
+          >
+            {notifyLoading ? (
+              <div className="ani-wrap">
+                <div className="ani-main" />
+              </div>
+            ) : (
+              <span className="ProductDets_ntfy_btn_AddtoBeg">Notify me</span>
+            )}
+          </button>
+        )}
         <p className="ProductDets_info_text sql38zc _1l9nr81o">
           Complimentary shipping on orders above 5000 INR.
         </p>

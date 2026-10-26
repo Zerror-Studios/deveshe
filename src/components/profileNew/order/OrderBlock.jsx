@@ -10,8 +10,7 @@ const columns = [
   "Order Date",
   "Price",
   "Status",
-  "AWB Code",
-  "Track",
+  "Details",
 ];
 
 const OrderBlock = () => {

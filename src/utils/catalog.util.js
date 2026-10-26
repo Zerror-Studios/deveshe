@@ -2,10 +2,14 @@
  * Catalog helpers for the current product contract (PRD-002 SF-1).
  *
  * Prices live on variants (`Variant.price`); options are matched through
- * `Variant.optionValues`. The storefront API exposes no stock level, so a
- * variant is only unavailable when it is ARCHIVED; the server re-checks
- * availability when the cart is reserved at checkout.
+ * `Variant.optionValues`. A variant is unavailable when it is ARCHIVED or
+ * the PRD-020 stock signal says OUT_OF_STOCK (the rendered value, or the
+ * fresh `getVariantAvailability` answer when there is one); `null` means no
+ * signal, as before. The server re-checks stock when the cart is reserved
+ * at checkout.
  */
+
+import { isSoldOut, resolveVariantSignal } from "@/utils/stock-signal.util";
 
 // ─── Constants ────────────────────────────────────────────────────────────
 
@@ -29,9 +33,10 @@ export const findVariantByOptions = (variants = [], selectedValues = []) => {
   );
 };
 
-export const isVariantUnavailable = (variant) =>
+export const isVariantUnavailable = (variant, fresh) =>
   Boolean(variant) &&
-  UNAVAILABLE_VARIANT_STATUSES.includes(variant.status);
+  (UNAVAILABLE_VARIANT_STATUSES.includes(variant.status) ||
+    isSoldOut(resolveVariantSignal(variant, fresh)));
 
 /** Lowest variant price, or 0 when the product has no priced variant. */
 export const getLowestPrice = (variants = []) => {

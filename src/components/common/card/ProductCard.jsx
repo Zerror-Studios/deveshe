@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { trackSelectItem } from "@/utils/analytics-events.util";
+import { getListingBadge } from "@/utils/stock-signal.util";
 
 // Square product shots; the card is a quarter of the viewport on desktop
 // (half of the 50% product section) and half on phones (RPERF-12).
@@ -28,6 +29,10 @@ const ProductCard = ({
     return () => window.removeEventListener("resize", checkScreen);
   }, []);
 
+  // PRD-020 FR-13: "Sold out" / "Low stock" from `product.availability`
+  // (null = no badge, as before).
+  const badge = getListingBadge(product?.availability);
+
   const handleSelect = () => {
     if (product) trackSelectItem(product, listName);
   };
@@ -50,6 +55,7 @@ const ProductCard = ({
         alt={alt}
       />
 
+      {badge && <span className="product_card_badge">{badge}</span>}
       <div className="product_card_details">
         <h4>{name}</h4>
         <h4>{price}</h4>

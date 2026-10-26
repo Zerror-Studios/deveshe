@@ -1,7 +1,7 @@
 /**
  * SEO helpers (PRD-014 FR-2.8, UX-33)
  *
- * Product JSON-LD offers (no availability without a stock signal) and the
+ * Product JSON-LD offers (availability only from the PRD-020 signal) and the
  * sitemap XML (escaped, invalid dates dropped).
  *
  * Keep in sync with the other storefront's `test/seo-helpers.test.mjs`.

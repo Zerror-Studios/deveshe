@@ -8,7 +8,8 @@
  * - INVALID_AUTH_TOKEN / TENANT_MISMATCH, or a refused
  *   refresh → the local session is cleared (pages and middleware handle
  *   the redirect); TENANT_NOT_FOUND → one "store unavailable" notice
- *   (PRD-002 R2-C5).
+ *   (PRD-002 R2-C5), or with the reason TENANT_SUSPENDED one reload to
+ *   the middleware's 503 page (PRD-018 FR-1.6).
  *
  * `_app.jsx` creates one browser client (`useState`); server code creates
  * one per request with `createApolloClient({ headers })`, passing the
@@ -27,6 +28,10 @@ import { ErrorLink } from "@apollo/client/link/error";
 import { toast } from "react-toastify";
 import { getGraphqlUri, getTenantHeaders } from "@/lib/api-config.util";
 import { CustomerSession } from "@/lib/customer-session.service";
+import {
+  claimSuspendedReload,
+  isStoreSuspendedError,
+} from "@/lib/store-status.util";
 import { TokenManager } from "@/utils/tokenManager";
 
 // ─── Constants ────────────────────────────────────────────────────────────
@@ -70,6 +75,14 @@ const errorLink = new ErrorLink(({ error, operation, forward }) => {
   const codes = error.errors.map((item) => item.extensions?.code);
   const context = operation.getContext();
 
+  // PRD-018 FR-1.6: suspended while the page was open → the 503 page
+  if (
+    isStoreSuspendedError(error.errors) &&
+    claimSuspendedReload(window.sessionStorage)
+  ) {
+    window.location.reload();
+    return;
+  }
   if (codes.includes("TENANT_NOT_FOUND")) {
     toast.error("This store is unavailable right now. Please try later.", {
       toastId: STORE_UNAVAILABLE_TOAST_ID,

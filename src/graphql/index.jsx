@@ -15,3 +15,4 @@ export * from "@/graphql/mutations/checkout.mutation";
 export * from "@/graphql/mutations/contact-form.mutation";
 export * from "@/graphql/mutations/back-in-stock-request.mutation";
 export * from "@/graphql/mutations/newsletter.mutation";
+export * from "@/graphql/mutations/order.mutation";

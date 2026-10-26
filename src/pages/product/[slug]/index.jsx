@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useVisitor } from "@/hooks/useVisitor";
 import { useMutation } from "@apollo/client/react";
@@ -37,7 +37,12 @@ import {
   getErrorReason,
 } from "@/utils/api-error.util";
 import { getLowestPrice, isVariantUnavailable } from "@/utils/catalog.util";
-import { getLoginPath } from "@/utils/redirect.util";
+import { useVariantAvailability } from "@/hooks/useVariantAvailability";
+import {
+  getStockNote,
+  isSoldOut,
+  resolveVariantSignal,
+} from "@/utils/stock-signal.util";
 
 // "You may also like": products from the same category (PRD-014 FR-0.8).
 const RELATED_PRODUCT_LIMIT = 5;
@@ -45,6 +50,8 @@ const RELATED_PRODUCT_LIMIT = 5;
 const PRODUCT_REVIEW_LIMIT = 10;
 const SITE_NAME = "DeVeSheDreams";
 const META_DESCRIPTION_MAX_LENGTH = 160;
+// A guest's "Notify me" needs an email (PRD-020 FR-13); the server checks it.
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Text only, for meta descriptions (the product description is HTML).
 const toPlainText = (html = "") =>
@@ -109,9 +116,35 @@ const ProductDetail = ({
   // variant, an ARCHIVED variant or a PRODUCT_UNAVAILABLE answer shows
   // "Unavailable / Notify me" instead of a silent Add to Bag.
   const [isRejected, setIsRejected] = useState(false);
+  const [notifyEmail, setNotifyEmail] = useState("");
+  // PRD-020 FR-13: the stock signal (null = today's behaviour). The SSR
+  // value shows first; the fresh read on mount and on variant change
+  // overrides it, and a failed read keeps it.
+  const variantIds = useMemo(
+    () => (data?.variants || []).map((variant) => variant?._id),
+    [data],
+  );
+  const { fresh: freshStock, refresh: refreshStock } = useVariantAvailability(
+    variantIds,
+    { skip: !data?._id },
+  );
+  // Re-read on a variant change (the mount read already covers the first).
+  const lastVariantIdRef = useRef(null);
+  useEffect(() => {
+    const variantId = variantMatched?._id || null;
+    if (variantId && lastVariantIdRef.current && variantId !== lastVariantIdRef.current) {
+      refreshStock();
+    }
+    if (variantId) lastVariantIdRef.current = variantId;
+  }, [variantMatched?._id]);
+  const variantSignal = resolveVariantSignal(variantMatched, freshStock);
+  const soldOut = Boolean(variantMatched) && isSoldOut(variantSignal);
+  const stockNote = cartBtn && variantMatched ? getStockNote(variantSignal) : null;
   const isMissingCombination = cartBtn && !variantMatched;
   const isOutOfStock =
-    isRejected || isMissingCombination || isVariantUnavailable(variantMatched);
+    isRejected ||
+    isMissingCombination ||
+    isVariantUnavailable(variantMatched, freshStock);
   const [createNotifyRequest, { loading: notifyLoading }] = useMutation(CREATE_BACK_IN_STOCK_REQUEST);
   // PRD-013: the same item_id the e-commerce events send (variant SKU).
   const analyticsItemId = getAnalyticsItemId(data, variantMatched);
@@ -159,7 +192,12 @@ const ProductDetail = ({
 
   const handleNotifyMe = async () => {
     if (!isOutOfStock) return;
-    if (!isLoggedIn) return router.push(getLoginPath(router.asPath));
+    // PRD-020 FR-13: guests subscribe with an email, no login needed.
+    const email = isLoggedIn ? user?.email : notifyEmail.trim();
+    if (!isLoggedIn && !EMAIL_PATTERN.test(email)) {
+      toast.error("Enter your email to be notified.");
+      return;
+    }
     try {
       const productId = data?._id;
       if (!productId) throw new Error("Product ID not found");
@@ -168,7 +206,7 @@ const ProductDetail = ({
       const payload = {
         input: {
           productId,
-          email: user?.email,
+          ...(email ? { email } : {}),
           ...(variantMatched?._id ? { variantId: variantMatched._id } : {}),
         },
       };
@@ -176,6 +214,7 @@ const ProductDetail = ({
       await createNotifyRequest({ variables: payload });
       trackNotifyMe(analyticsItemId, variantMatched?.sku);
       toast.success("You’ll be notified when this item is back in stock!");
+      if (!isLoggedIn) setNotifyEmail("");
     } catch (err) {
       console.error(err);
       toast.error(getErrorMessage(err, "Failed to notify"));
@@ -210,6 +249,12 @@ const ProductDetail = ({
               loading={loading}
               notifyLoading={notifyLoading}
               isOutOfStock={isOutOfStock}
+              isSoldOut={soldOut}
+              stockNote={stockNote}
+              freshStock={freshStock}
+              showNotifyEmail={!isLoggedIn}
+              notifyEmail={notifyEmail}
+              setNotifyEmail={setNotifyEmail}
               setFinalPrice={setFinalPrice}
               setCartBtn={setCartBtn}
               setVariantMatched={setVariantMatched}
@@ -224,8 +269,11 @@ const ProductDetail = ({
             key={router.asPath}
             data={productList}
             isOutOfStock={isOutOfStock}
+            isSoldOut={soldOut}
             loading={loading}
+            notifyLoading={notifyLoading}
             handleAddToCart={handleAddToCart}
+            handleNotifyMe={handleNotifyMe}
             cartBtn={cartBtn}
             finalPrice={finalPrice}
             analyticsItemId={analyticsItemId}

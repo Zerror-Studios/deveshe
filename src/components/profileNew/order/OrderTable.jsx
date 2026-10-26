@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { FiArrowRight } from "react-icons/fi";
+import { getOrderStatusLabel } from "@/utils/order-detail.util";
 
 const OrderTable = ({ data, columns, loading }) => {
   return (
@@ -56,33 +57,34 @@ const OrderTable = ({ data, columns, loading }) => {
                     <td>{formatDateTime(item?.createdAt || "")}</td>
                     <td>{formatePrice(item?.orderPrice ?? item?.discountedPrice ?? 0)}</td>
                     <td>
+                      {/* PRD-015 FR-18: the server's display status when
+                          present, else today's Paid/Unpaid */}
                       <span
-                        className={`status ${item.paymentStatus === "PAID"
-                          ? "paid"
-                          : "unpaid"
+                        className={`status ${item.displayStatus
+                          ? "order_status"
+                          : item.paymentStatus === "PAID"
+                            ? "paid"
+                            : "unpaid"
                           }`}
                       >
-                        {item && item.paymentStatus === "PAID"
-                          ? "Paid"
-                          : "Unpaid"}
+                        {getOrderStatusLabel(
+                          item?.displayStatus,
+                          item?.paymentStatus === "PAID" ? "Paid" : "Unpaid",
+                        )}
                       </span>
                     </td>
-                    <td>{item?.awb_code || "NA"}</td>
                     <td>
-                      {item?.awb_code ? (
-                        <Link
-                          id="common_black_btn"
-                          href={`https://shiprocket.co/tracking/${item?.awb_code}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="track-btn"
-                        >
-                          Track
-                          <FiArrowRight />
-                        </Link>
-                      ) : (
-                        "NA"
-                      )}
+                      {/* PRD-015 FR-20: tracking, cancel and returns live on
+                          the order page (no hard-coded tracking link) */}
+                      <Link
+                        id="common_black_btn"
+                        href={`/profile/orders/${item?._id}`}
+                        className="track-btn"
+                        aria-label={`View order ${item?.orderNo || ""}`}
+                      >
+                        View
+                        <FiArrowRight aria-hidden="true" />
+                      </Link>
                     </td>
                   </tr>
                 );

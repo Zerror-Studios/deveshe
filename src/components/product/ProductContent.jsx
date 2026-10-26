@@ -12,6 +12,12 @@ import {
   trackSelectVariant,
 } from "@/utils/analytics-events.util";
 import gsap from "gsap";
+import {
+  SOLD_OUT_LABEL,
+  isChoiceSoldOut,
+  resolveVariantSignal,
+  toInStockFlag,
+} from "@/utils/stock-signal.util";
 
 const ProductContent = ({
   data = {},
@@ -19,6 +25,12 @@ const ProductContent = ({
   loading,
   notifyLoading,
   isOutOfStock,
+  isSoldOut = false,
+  stockNote = null,
+  freshStock,
+  showNotifyEmail = false,
+  notifyEmail = "",
+  setNotifyEmail,
   cartBtn,
   setFinalPrice,
   setVariantMatched,
@@ -91,14 +103,17 @@ const ProductContent = ({
       Object.keys(updated).length === data.productOptions?.length;
     setCartBtn(complete);
     const matched = updatePriceBasedOnVariant(updated);
-    // PRD-013 select_variant: the API has no stock level, so only an
-    // ARCHIVED (or missing) variant counts as out of stock.
+    // PRD-013 select_variant: "in stock" is the PRD-020 signal when the
+    // store has one, else "a variant exists and isn't ARCHIVED".
     trackSelectVariant({
       itemId: getAnalyticsItemId(data, matched),
       variantId: matched?.sku,
       variantLabel: Object.values(updated).join(" / "),
       inStock: complete
-        ? Boolean(matched) && !isVariantUnavailable(matched)
+        ? toInStockFlag(
+            resolveVariantSignal(matched, freshStock),
+            Boolean(matched) && !isVariantUnavailable(matched),
+          )
         : undefined,
     });
   };
@@ -112,6 +127,19 @@ const ProductContent = ({
     trackCtaClick(CtaEnum.NOTIFY_ME, { itemId: analyticsItemId });
     handleNotifyMe();
   };
+
+  const unavailableLabel = isSoldOut ? SOLD_OUT_LABEL : StockStatus.UNAVAILABLE;
+  // PRD-020 FR-13: a choice whose variants (with the other selected
+  // options) are all sold out is struck through, still selectable.
+  const choiceSoldOut = (optionName, choiceName) =>
+    isChoiceSoldOut(
+      data?.variants,
+      choiceName,
+      Object.entries(selectedVariants)
+        .filter(([name]) => name !== optionName)
+        .map(([, value]) => value),
+      freshStock,
+    );
 
   const wrapperRef = useRef(null);
 
@@ -173,15 +201,16 @@ const ProductContent = ({
                 {colorOption.choices.map((choice, i) => {
                   const selected =
                     selectedVariants[colorOption.optionName] === choice.name;
+                  const soldOut = choiceSoldOut(colorOption.optionName, choice.name);
                   return (
                     <div
                       key={i}
-                      aria-label={choice.name}
+                      aria-label={soldOut ? `${choice.name}, sold out` : choice.name}
                       onClick={() => {
                         handleVariants(colorOption.optionName, choice.name);
                       }}
                       className={`shop-card_grid collection_grid ${selected ? "Product_active_color" : ""
-                        }`}
+                        } ${soldOut ? "Product_option_sold_out" : ""}`}
                     >
                       <div className="ProductDets_collection_imgs_grid_cntr">
                         <div className="ProductDets_imgs_grid_cntr ProductDets_imgs_grid_cntr2">
@@ -211,6 +240,10 @@ const ProductContent = ({
                       const selected =
                         selectedVariants[productOption.optionName] ===
                         `${choice.name}`;
+                      const soldOut = choiceSoldOut(
+                        productOption.optionName,
+                        choice.name,
+                      );
                       return (
                         <div
                           key={j}
@@ -220,9 +253,10 @@ const ProductContent = ({
                               choice.name
                             );
                           }}
+                          aria-label={soldOut ? `${choice.name}, sold out` : undefined}
                           data-testid="pdp-option-choice"
                           className={`ProductDets-size_numbers ${selected ? "acitve" : ""
-                            }`}
+                            } ${soldOut ? "Product_option_sold_out" : ""}`}
                         >
                           {choice.name}
                         </div>
@@ -243,6 +277,24 @@ const ProductContent = ({
             ))}
           </div>
 
+          {stockNote && (
+            <p className="ProductDets_stock_note">{stockNote}</p>
+          )}
+          {isOutOfStock && showNotifyEmail && (
+            <div className="ProductDets_notify_email">
+              <label htmlFor="notify-email" className="sr-only">
+                Email for back-in-stock notice
+              </label>
+              <input
+                id="notify-email"
+                type="email"
+                autoComplete="email"
+                placeholder="Your email for a back-in-stock notice"
+                value={notifyEmail}
+                onChange={(event) => setNotifyEmail?.(event.target.value)}
+              />
+            </div>
+          )}
           <div className="ProductDets_Notify_wrap desktop_add_btn">
             <button
               className={`ProductDets_ntfy_btn ${!isOutOfStock ? "ProductDets_ntfy_btn_grid" : "BtnOutline_Grid"}`}
@@ -258,10 +310,10 @@ const ProductContent = ({
               ) : (
                 <>
                   <span className="ProductDets_ntfy_btn_slect_size">
-                    {!cartBtn ? "Select a Size" : isOutOfStock ? StockStatus.UNAVAILABLE : "Add to Bag"}
+                    {!cartBtn ? "Select a Size" : isOutOfStock ? unavailableLabel : "Add to Bag"}
                   </span>
                   <span className="ProductDets_ntfy_btn_AddtoBeg">
-                    {isOutOfStock ? StockStatus.UNAVAILABLE : "Add to Bag"}
+                    {isOutOfStock ? unavailableLabel : "Add to Bag"}
                   </span>
                   <div className="ProductDets_ntfy_btn_price">
                     <span>{finalPrice} INR</span>

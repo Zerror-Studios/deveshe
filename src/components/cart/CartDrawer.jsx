@@ -19,6 +19,12 @@ import {
 } from "@/utils/api-error.util";
 import { getLoginPath } from "@/utils/redirect.util";
 import { CtaEnum, trackCtaClick } from "@/utils/analytics-events.util";
+import { useVariantAvailability } from "@/hooks/useVariantAvailability";
+import {
+  SOLD_OUT_CHECKOUT_MESSAGE,
+  getCartLineStockId,
+  hasSoldOutLine,
+} from "@/utils/stock-signal.util";
 
 const CartDrawer = ({ isOpen, closeCart }) => {
   const router = useRouter();
@@ -74,6 +80,15 @@ const CartDrawer = ({ isOpen, closeCart }) => {
   } = cartResponse?.getCart || {};
 
   const count = getCartItemCount(cart);
+
+  // PRD-020 FR-13: a fresh stock read when the bag opens. A sold-out line
+  // blocks checkout until it is removed; no signal changes nothing, and
+  // checkout's own reservation stays the authority.
+  const { fresh: freshStock } = useVariantAvailability(
+    cart.map(getCartLineStockId),
+    { skip: !isOpen },
+  );
+  const blockedBySoldOut = hasSoldOutLine(cart, freshStock);
   const handleAddItem = async (productId, variantId) => {
     try {
       const input = { productId, variantId, qty: 1 };
@@ -125,6 +140,10 @@ const CartDrawer = ({ isOpen, closeCart }) => {
 
   const navigateCheckout = async () => {
     if (!_id || cart.length === 0) return;
+    if (blockedBySoldOut) {
+      toast.error(SOLD_OUT_CHECKOUT_MESSAGE);
+      return;
+    }
     trackCtaClick(CtaEnum.CHECKOUT);
     try {
       setIsBtnLoading(true);
@@ -221,6 +240,7 @@ const CartDrawer = ({ isOpen, closeCart }) => {
                 item={item}
                 handleAddItem={handleAddItem}
                 handleRemoveItem={handleRemoveItem}
+                freshStock={freshStock}
               />
             ))
           ) : (
@@ -247,6 +267,11 @@ const CartDrawer = ({ isOpen, closeCart }) => {
               loading={isBtnLoading}
               testId="cart-checkout"
             />
+            {blockedBySoldOut && (
+              <span className="cart_sold_out_note" role="status">
+                {SOLD_OUT_CHECKOUT_MESSAGE}
+              </span>
+            )}
           </div>
         </div>
       </div>

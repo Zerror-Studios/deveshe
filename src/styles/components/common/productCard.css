@@ -57,3 +57,17 @@
 /* Desktops */
 @media (min-width: 993px) and (max-width: 1200px) {
 }
+
+/* PRD-020 FR-13: stock badge (text, never colour alone) */
+.product_card_badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  padding: 4px 8px;
+  background-color: #fff;
+  color: #000;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
