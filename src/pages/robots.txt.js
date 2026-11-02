@@ -12,12 +12,14 @@ import { Const } from "@/utils/Constant";
 
 const ROBOTS_CACHE_SECONDS = 86400;
 // `/back-in-stock/` holds single-use email links (CP-22): a crawler that
-// runs scripts must not confirm someone's alert.
+// runs scripts must not confirm someone's alert. `/pay/` links are a
+// shopper's payment link (PRD-028 FR-5.4).
 const DISALLOWED_PATHS = [
   "/profile",
   "/checkout",
   "/search",
   "/back-in-stock/",
+  "/pay/",
   "/api/",
 ];
 

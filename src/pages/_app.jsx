@@ -28,6 +28,7 @@ import "@/styles/components/lookBook.css";
 import "@/styles/components/contact.css";
 import "@/styles/components/cart.css";
 import "@/styles/components/success.css";
+import "@/styles/components/pay.css";
 import "@/styles/components/newPorfile.css";
 import "@/styles/components/common/polaroid.css";
 import "@/styles/components/common/productCard.css";

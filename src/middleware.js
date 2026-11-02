@@ -45,7 +45,12 @@ import {
 // ─── Constants ────────────────────────────────────────────────────────────
 
 const SESSION_COOKIES = ["__Host-zc_cust_rt", "zc_cust_rt"];
-const PUBLIC_CHECKOUT_PATHS = ["/checkout/payment-failed"];
+// PRD-028 FR-10.1: a guest paying a store's payment link (`/pay/<token>`)
+// comes back from a redirect payment app through payment-return
+const PUBLIC_CHECKOUT_PATHS = [
+  "/checkout/payment-failed",
+  "/checkout/payment-return",
+];
 const PROTECTED_PATH_PATTERN = /^\/(profile|checkout)(\/|$)/;
 const BRAND = {
   brandName: "Deveshe Dreams",
