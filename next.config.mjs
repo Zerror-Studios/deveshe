@@ -54,6 +54,18 @@ const PAYMENT_FRAME_SOURCES =
 const PAYMENT_CONNECT_SOURCES =
   "https://api.razorpay.com https://lumberjack.razorpay.com https://*.cashfree.com";
 const PAYMENT_IMG_SOURCES = "https://*.razorpay.com https://*.cashfree.com";
+// PRD-032 FR-P1: shopper review photos post straight to the media bucket
+// (presigned POST) and are shown from it. Add the bucket's exact host (or
+// its CDN) with REVIEW_UPLOAD_HOSTS when it isn't one of these.
+const REVIEW_UPLOAD_SOURCES = [
+  "https://*.s3.amazonaws.com",
+  "https://*.s3.ap-south-1.amazonaws.com",
+  ...(process.env.REVIEW_UPLOAD_HOSTS || "")
+    .split(",")
+    .map((host) => host.trim())
+    .filter(Boolean)
+    .map((host) => (host.startsWith("https://") ? host : `https://${host}`)),
+].join(" ");
 const PAYMENT_FORM_SOURCES =
   "https://test.payu.in https://secure.payu.in https://api.razorpay.com " +
   "https://*.cashfree.com";
@@ -68,12 +80,13 @@ const CONTENT_SECURITY_POLICY = [
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} ` +
     `${GOOGLE_SOURCES} ${NIMBBL_SOURCES} ${PAYMENT_SCRIPT_SOURCES}`,
   "style-src 'self' 'unsafe-inline'",
-  `img-src 'self' data: blob: ${ASSET_SOURCES} ${GOOGLE_SOURCES} ${PAYMENT_IMG_SOURCES}`,
+  `img-src 'self' data: blob: ${ASSET_SOURCES} ${GOOGLE_SOURCES} ${PAYMENT_IMG_SOURCES} ` +
+    REVIEW_UPLOAD_SOURCES,
   `media-src 'self' blob: ${ASSET_SOURCES}`,
   "font-src 'self' data:",
   `connect-src 'self' ${GOOGLE_SOURCES} ${NIMBBL_SOURCES} ` +
     "https://checkip.amazonaws.com https://m1.openfpcdn.io " +
-    PAYMENT_CONNECT_SOURCES,
+    `${PAYMENT_CONNECT_SOURCES} ${REVIEW_UPLOAD_SOURCES}`,
   `frame-src ${NIMBBL_SOURCES} ${PAYMENT_FRAME_SOURCES} https://www.googletagmanager.com`,
   "worker-src 'self' blob:",
   "object-src 'none'",

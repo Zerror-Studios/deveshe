@@ -20,8 +20,9 @@ const formatReviewDate = (value) => {
 };
 
 // PRD-014 FR-0.9 (UX-35): only real, APPROVED reviews (`getReviews`, read on
-// the server in pages/index.jsx). The server never exposes the reviewer, so
-// none is named; with no approved review the section is not rendered.
+// the server in pages/index.jsx; PRD-032 FR-D6: the store's pinned ones
+// first). Each shows the reviewer's display name ("Priya S."), never the
+// account; with no approved review the section is not rendered.
 const ReviewSection = ({ reviews = [] }) => {
   const hasReviews = reviews.length > 0;
 
@@ -106,7 +107,7 @@ const ReviewSection = ({ reviews = [] }) => {
                     alt=""
                   />
                   <div className="author">
-                    <div className="name">Customer review</div>
+                    <div className="name">{review.displayName || "Customer review"}</div>
                     <span
                       role="img"
                       aria-label={`Rated ${rating} out of ${MAX_RATING}`}

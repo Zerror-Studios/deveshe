@@ -8,6 +8,7 @@ import {
   fetchProductPage,
 } from "@/lib/catalog-listing.server";
 import { GET_REVIEWS } from "@/graphql";
+import { pickHomeReviews } from "@/utils/review.util";
 import VisionSection from "@/components/home/VisionSection";
 import ProductSection from "@/components/home/ProductSection";
 import ReviewSection from "@/components/home/ReviewSection";
@@ -108,20 +109,31 @@ export async function getServerSideProps() {
   };
 
   const client = createServerCatalogClient();
-  const [productResult, reviewResult] = await Promise.allSettled([
+  // PRD-032 FR-D6: reviews the store pinned first, else the latest ones.
+  const [productResult, reviewResult, featuredResult] = await Promise.allSettled([
     fetchProductPage(client, { limit: HOME_FEATURED_LIMIT }),
     client.query({
       query: GET_REVIEWS,
       variables: { offset: 0, limit: HOME_REVIEW_FETCH_LIMIT },
+    }),
+    client.query({
+      query: GET_REVIEWS,
+      variables: {
+        offset: 0,
+        limit: HOME_REVIEW_FETCH_LIMIT,
+        filter: { featured: true },
+      },
     }),
   ]);
   if (productResult.status === "rejected") {
     console.error("Home products failed:", productResult.reason?.message);
   }
   // Reviews are optional: without them the section is simply not shown.
-  const reviews = (reviewResult.value?.data?.getReviews?.data || [])
-    .filter((review) => review?.comment?.trim() && review?.rating > 0)
-    .slice(0, HOME_REVIEW_LIMIT);
+  const reviews = pickHomeReviews(
+    featuredResult.value?.data?.getReviews?.data,
+    reviewResult.value?.data?.getReviews?.data,
+    HOME_REVIEW_LIMIT,
+  );
 
   return {
     props: {

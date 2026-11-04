@@ -6,6 +6,8 @@ const tabs = [
   { id: 0, label: "My Profile" },
   { id: 1, label: "Saved Addresses" },
   { id: 2, label: "Order History" },
+  // PRD-032 FR-D4
+  { id: 3, label: "My Reviews" },
 ];
 
 const ProfileHeader = ({ activeTab, setTab }) => {

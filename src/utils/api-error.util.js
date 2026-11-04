@@ -86,6 +86,13 @@ export const REASON_MESSAGES = {
   RETURN_CHANGED: "This return was updated. Please refresh and try again.",
   // CP-22: notify-me (and other public) limits; neutral, never the server text.
   RATE_LIMITED: "We’ve had a lot of requests. Please try again later.",
+  // PRD-032: reviews (the review forms use utils/review.util.js too).
+  REVIEW_NOT_ALLOWED: "Only customers who received this product can review it.",
+  REVIEWS_DISABLED: "Reviews are switched off for this store.",
+  INVALID_REVIEW_LINK: "This link has expired. Log in to review your purchases.",
+  INVALID_PHOTO: "That photo couldn't be added. Use a JPEG, PNG or WebP image.",
+  FILE_TOO_LARGE: "Photos can be at most 5 MB.",
+  TOO_MANY_PHOTOS: "Add at most 5 photos.",
 };
 
 // PRD-014 COM-32: `removeItemFromCart` without the line's variant is

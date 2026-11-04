@@ -13,6 +13,7 @@ import {
   CREATE_BACK_IN_STOCK_REQUEST,
   GET_PRODUCT_BY_ID,
   GET_PRODUCT_REVIEWS,
+  GET_PRODUCT_REVIEW_SUMMARY,
 } from "@/graphql";
 import SeoHeader from "@/components/seo/SeoHeader";
 import ProductListGrid from "@/components/product/ProductListGrid";
@@ -47,7 +48,7 @@ import {
 
 // "You may also like": products from the same category (PRD-014 FR-0.8).
 const RELATED_PRODUCT_LIMIT = 5;
-// PRD-014 FR-2.8: the latest approved reviews shown on the page.
+// PRD-014 FR-2.8 / PRD-032 FR-D1: the first page of approved reviews.
 const PRODUCT_REVIEW_LIMIT = 10;
 const SITE_NAME = "DeVeSheDreams";
 const META_DESCRIPTION_MAX_LENGTH = 160;
@@ -100,6 +101,7 @@ const ProductDetail = ({
   productList,
   reviews = [],
   reviewCount = 0,
+  reviewSummary = null,
 }) => {
   const router = useRouter();
   const { runWithGuestId } = useVisitor();
@@ -233,7 +235,11 @@ const ProductDetail = ({
 
   return (
     <>
-      <SeoHeader meta={meta} productData={data} />
+      {/* PRD-032 FR-D1: the rating JSON-LD comes from the same reviews */}
+      <SeoHeader
+        meta={meta}
+        productData={data ? { ...data, reviewSummary, jsonLdReviews: reviews } : data}
+      />
       <div className="ProductDetails_wrapper">
         <div className="ProductDetails_cntr">
           <div className="ProductDets_main"></div>
@@ -284,7 +290,13 @@ const ProductDetail = ({
 
         {showSizeAssist && <SizeAssistance onClose={handleClose} />}
       </div>
-      <ProductReviews reviews={reviews} totalCount={reviewCount} />
+      <ProductReviews
+        key={data?._id}
+        productId={data?._id}
+        summary={reviewSummary}
+        reviews={reviews}
+        totalCount={reviewCount}
+      />
       <ProductModalPreview
         data={selectedAsset}
         isOpen={isPreviewOpen}
@@ -320,18 +332,27 @@ export async function getServerSideProps({ params }) {
         ...(categoryId ? { categoryIds: [categoryId] } : {}),
       },
     }).catch(() => ({ products: [] }));
-    // Reviews are optional as well: a failure hides the section.
-    const reviews = await client
-      .query({
-        query: GET_PRODUCT_REVIEWS,
-        variables: {
-          offset: 0,
-          limit: PRODUCT_REVIEW_LIMIT,
-          filter: { productId: product._id },
-        },
-      })
-      .then(({ data }) => data?.getReviews)
-      .catch(() => null);
+    // Reviews are optional as well: a failure shows an empty section. The
+    // summary is its own query, so the reviews service can never break
+    // the catalog read above (PRD-032 FR-C2).
+    const [reviews, reviewSummary] = await Promise.all([
+      client
+        .query({
+          query: GET_PRODUCT_REVIEWS,
+          variables: {
+            offset: 0,
+            limit: PRODUCT_REVIEW_LIMIT,
+            sort: "NEWEST",
+            filter: { productId: product._id },
+          },
+        })
+        .then(({ data }) => data?.getReviews)
+        .catch(() => null),
+      client
+        .query({ query: GET_PRODUCT_REVIEW_SUMMARY, variables: { slug } })
+        .then(({ data }) => data?.getClientSideProductById?.reviewSummary || null)
+        .catch(() => null),
+    ]);
     return {
       props: {
         meta: toProductMeta(product),
@@ -339,6 +360,7 @@ export async function getServerSideProps({ params }) {
         productList: related.products,
         reviews: reviews?.data || [],
         reviewCount: reviews?.totalCount || 0,
+        reviewSummary,
       },
     };
   } catch (error) {

@@ -35,6 +35,7 @@ import "@/styles/components/common/productCard.css";
 import "@/styles/components/common/footer.css";
 import "@/styles/components/common/consent-banner.css";
 import "@/styles/components/product-listing.css";
+import "@/styles/components/reviews.css";
 
 export default function App({ Component, pageProps }) {
   // One client per browser session (SF-19); server pages create their own.

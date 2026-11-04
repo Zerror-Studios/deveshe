@@ -22,6 +22,7 @@ npm run dev        # http://localhost:3000
 - `NEXT_PUBLIC_SUPPORT_EMAIL` (optional): the contact address on the suspended-store page (PRD-018 FR-1.6); defaults to `deveshedreams@gmail.com`.
 - `CSP_REPORT_ONLY` (optional): `true` sends the CSP as `Content-Security-Policy-Report-Only` (rollout switch).
 - `IMAGE_REMOTE_HOSTS` (optional): extra `next/image` hosts, comma-separated (e.g. the tenant's S3 bucket).
+- `REVIEW_UPLOAD_HOSTS` (optional, PRD-032): the media bucket or CDN host that shopper review photos are posted to and shown from, comma-separated, when it isn't `*.s3.amazonaws.com` or `*.s3.ap-south-1.amazonaws.com`; added to the CSP `connect-src` and `img-src`.
 - `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_GTM_ID`: analytics IDs. No defaults since PRD-014 FR-1.9: **set the production IDs in hosting** (an unset id loads no tag); tags load only after cookie consent.
 
 Every `NEXT_PUBLIC_*` value is public in the browser bundle. The old `NEXT_PUBLIC_DB_TOKEN`, `NEXT_PUBLIC_BACKEND_ENDPOINT`, `NEXT_PUBLIC_NIMBBL_BASE_URL` and `NEXT_PUBLIC_GRAPHQL_API_URL` are no longer read.

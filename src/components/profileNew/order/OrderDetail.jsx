@@ -9,6 +9,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useQuery } from "@apollo/client/react";
 import { GET_ORDER_DETAIL } from "@/graphql";
 import { formatDateTime, formatePrice } from "@/utils/Util";
@@ -113,6 +114,12 @@ const OrderDetail = ({ orderId }) => {
                   <p className="product-name">{item?.name || ""}</p>
                   <p>{`Qty : ${item?.qty || ""}`}</p>
                   <p>{formatePrice(item?.finalPrice || 0)}</p>
+                  {/* PRD-032 FR-D4: delivered items can be reviewed */}
+                  {order.displayStatus === "DELIVERED" && item?.productId && (
+                    <Link href="/profile?tab=reviews" className="order_link_btn">
+                      Review
+                    </Link>
+                  )}
                 </div>
               </li>
             ))}
