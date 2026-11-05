@@ -6,7 +6,8 @@
  *   cookie are same-origin.
  * - Images only from the brand's asset hosts (no localhost, no third
  *   parties), plus optional extra hosts from IMAGE_REMOTE_HOSTS.
- * - Security headers, including a CSP for GTM/GA, Nimbbl and the assets.
+ * - Security headers, including a CSP for GTM/GA, Google Ads, the Meta
+ *   Pixel (PRD-034), Nimbbl and the assets.
  */
 
 // ─── Environment ──────────────────────────────────────────────────────────
@@ -43,6 +44,18 @@ const GOOGLE_SOURCES = [
   "https://*.google-analytics.com",
   "https://*.analytics.google.com",
 ].join(" ");
+// PRD-034 FR-1.2: the Google Ads conversion tag (loaded through gtag.js
+// from googletagmanager.com) pings these hosts and may open a measurement
+// iframe on td.doubleclick.net.
+const GOOGLE_ADS_SOURCES = [
+  "https://www.googleadservices.com",
+  "https://googleads.g.doubleclick.net",
+  "https://www.google.com",
+].join(" ");
+const GOOGLE_ADS_FRAME_SOURCES = "https://td.doubleclick.net";
+// PRD-034: the Meta Pixel script, and its pixel/beacon endpoint.
+const META_SCRIPT_SOURCES = "https://connect.facebook.net";
+const META_SOURCES = "https://www.facebook.com";
 const NIMBBL_SOURCES = "https://*.nimbbl.tech";
 // PRD-011 FR-4.2: every payment app's checkout hosts, in one place.
 // Razorpay Checkout.js (script, iframe, API, event log), Cashfree JS SDK
@@ -78,16 +91,19 @@ const CONTENT_SECURITY_POLICY = [
   // GTM custom-HTML tags need 'unsafe-inline' or per-tag nonces. Roll out
   // with CSP_REPORT_ONLY=true first.
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} ` +
-    `${GOOGLE_SOURCES} ${NIMBBL_SOURCES} ${PAYMENT_SCRIPT_SOURCES}`,
+    `${GOOGLE_SOURCES} ${GOOGLE_ADS_SOURCES} ${META_SCRIPT_SOURCES} ` +
+    `${NIMBBL_SOURCES} ${PAYMENT_SCRIPT_SOURCES}`,
   "style-src 'self' 'unsafe-inline'",
   `img-src 'self' data: blob: ${ASSET_SOURCES} ${GOOGLE_SOURCES} ${PAYMENT_IMG_SOURCES} ` +
-    REVIEW_UPLOAD_SOURCES,
+    `${GOOGLE_ADS_SOURCES} ${META_SOURCES} ${REVIEW_UPLOAD_SOURCES}`,
   `media-src 'self' blob: ${ASSET_SOURCES}`,
   "font-src 'self' data:",
-  `connect-src 'self' ${GOOGLE_SOURCES} ${NIMBBL_SOURCES} ` +
+  `connect-src 'self' ${GOOGLE_SOURCES} ${GOOGLE_ADS_SOURCES} ${META_SOURCES} ` +
+    `${NIMBBL_SOURCES} ` +
     "https://checkip.amazonaws.com https://m1.openfpcdn.io " +
     `${PAYMENT_CONNECT_SOURCES} ${REVIEW_UPLOAD_SOURCES}`,
-  `frame-src ${NIMBBL_SOURCES} ${PAYMENT_FRAME_SOURCES} https://www.googletagmanager.com`,
+  `frame-src ${NIMBBL_SOURCES} ${PAYMENT_FRAME_SOURCES} https://www.googletagmanager.com ` +
+    `${GOOGLE_ADS_FRAME_SOURCES} ${META_SOURCES}`,
   "worker-src 'self' blob:",
   "object-src 'none'",
   "base-uri 'self'",

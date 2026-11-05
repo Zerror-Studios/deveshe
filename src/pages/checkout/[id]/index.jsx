@@ -40,7 +40,10 @@ import {
   getCartFingerprint,
   getCheckoutDetailsFingerprint,
 } from "@/utils/pending-order.util";
-import { getOrderAttribution } from "@/utils/ga-attribution.util";
+import {
+  getCheckoutAttribution,
+  getCheckoutConsent,
+} from "@/utils/ad-click-ids.util";
 import {
   CheckoutStepEnum,
   CtaEnum,
@@ -404,7 +407,8 @@ const CheckoutPage = ({ meta }) => {
             cartId: cartData?._id,
             shippingAddress: pricingDetails.shippingAddress,
             billingAddress: pricingDetails.billingAddress,
-            attribution: getOrderAttribution(),
+            attribution: getCheckoutAttribution(),
+            consent: getCheckoutConsent(),
           },
         });
         if (!isCurrent()) return;
@@ -469,8 +473,10 @@ const CheckoutPage = ({ meta }) => {
         cartId: cartData?._id,
         shippingAddress: details.shippingAddress,
         billingAddress: details.billingAddress,
-        // PRD-012: GA ids and UTMs so the order can be attributed
-        attribution: getOrderAttribution(),
+        // PRD-012: GA ids and UTMs (analytics consent); PRD-034 FR-1.4:
+        // ad click ids and Meta cookies (marketing consent) + the choice
+        attribution: getCheckoutAttribution(),
+        consent: getCheckoutConsent(),
       },
     });
     // Same details as the pricing step: the backend returns that session

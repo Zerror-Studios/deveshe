@@ -228,6 +228,26 @@ describe("deveshe-dreams middleware: profile and checkout guard", () => {
     );
     assert.equal(legacy.status, 307);
   });
+
+  it("lets a guest open the ads checkout link (PRD-034 FR-1.9) but not checkout itself", async () => {
+    const { middleware } = await loadMiddleware(PRODUCTION);
+    stubGateway(ACTIVE_ANSWER);
+    const start = await middleware(
+      new NextRequest("https://shop.example/checkout/start?products=a:1"),
+    );
+    assert.equal(start.headers.get("x-middleware-next"), "1");
+    const checkout = await middleware(new NextRequest("https://shop.example/checkout/abc"));
+    assert.equal(checkout.status, 307);
+  });
+});
+
+describe("deveshe-dreams middleware: server events context (PRD-034 FR-1.4)", () => {
+  it("forwards the browser's real user agent to the gateway", async () => {
+    const { middleware } = await loadMiddleware(PRODUCTION);
+    const userAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)";
+    const response = middleware(graphqlRequest({ "user-agent": userAgent }));
+    assert.equal(forwarded(response).headers["user-agent"], userAgent);
+  });
 });
 
 // ─── Suspended store (PRD-018 FR-1.6) ─────────────────────────────────────

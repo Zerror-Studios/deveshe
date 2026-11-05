@@ -36,12 +36,24 @@ export const ORDER_LIST = gql`
   }
 `;
 
-// One order of the signed-in customer (thank-you page)
+// One order of the signed-in customer (thank-you page). `userData` and the
+// shipping phone feed Google enhanced conversions, hashed in the browser
+// and only with marketing consent (PRD-034 FR-1.6).
 export const GET_ORDER_BY_ID = gql`
   query MyOrder($id: ID!) {
     myOrder(id: $id) {
       _id
       orderNo
+      userData {
+        email
+        phoneNumber
+        countryCode
+      }
+      shippingAddress {
+        email
+        phone
+        countryCode
+      }
       orderPrice
       totalprice
       discountedPrice

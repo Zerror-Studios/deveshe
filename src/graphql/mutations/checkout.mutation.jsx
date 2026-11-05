@@ -1,6 +1,7 @@
 import { gql } from "@apollo/client";
 
-// 1. Price the cart on the server and request the stock hold
+// 1. Price the cart on the server and request the stock hold. `attribution`
+//    and `consent` (PRD-034 FR-1.4) come from `utils/ad-click-ids.util.js`.
 export const CREATE_CHECKOUT_SESSION = gql`
   mutation CreateCheckoutSessionFromCart(
     $cartId: ID!
@@ -8,6 +9,7 @@ export const CREATE_CHECKOUT_SESSION = gql`
     $billingAddress: OrderAddressInput
     $promotionCode: String
     $attribution: OrderAttributionInput
+    $consent: CheckoutConsentInput
   ) {
     createCheckoutSessionFromCart(
       cartId: $cartId
@@ -15,6 +17,7 @@ export const CREATE_CHECKOUT_SESSION = gql`
       billingAddress: $billingAddress
       promotionCode: $promotionCode
       attribution: $attribution
+      consent: $consent
     ) {
       id
       status

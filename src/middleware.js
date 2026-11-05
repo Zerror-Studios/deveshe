@@ -46,10 +46,13 @@ import {
 
 const SESSION_COOKIES = ["__Host-zc_cust_rt", "zc_cust_rt"];
 // PRD-028 FR-10.1: a guest paying a store's payment link (`/pay/<token>`)
-// comes back from a redirect payment app through payment-return
+// comes back from a redirect payment app through payment-return.
+// PRD-034 FR-1.9: `/checkout/start` (the ads checkout link) fills a guest
+// bag too, then sends the guest to login before checkout.
 const PUBLIC_CHECKOUT_PATHS = [
   "/checkout/payment-failed",
   "/checkout/payment-return",
+  "/checkout/start",
 ];
 const PROTECTED_PATH_PATTERN = /^\/(profile|checkout)(\/|$)/;
 const BRAND = {

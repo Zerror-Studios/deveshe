@@ -5,7 +5,9 @@
  *   tag and sets every Google consent type to "denied" (a stored choice is
  *   applied right after, so returning shoppers keep their answer).
  * - No tag script is requested before consent: GTM and gtag.js load only
- *   once "analytics" is granted, the Meta Pixel only once "marketing" is.
+ *   once "analytics" is granted, the Meta Pixel and the Google Ads tag
+ *   only once "marketing" is (PRD-034 FR-1.3, D8: ad signals are denied
+ *   until the shopper agrees). The ids come from `utils/tracking-config.util.js`.
  * - The choice lives in localStorage (`zc_consent`, no PII) and can be
  *   changed from the footer ("Cookie preferences"), which dispatches
  *   `CONSENT_OPEN_EVENT` for the banner.
@@ -125,6 +127,28 @@ function loadGoogleTag(gaId) {
   injectScript(`${GTAG_SCRIPT_URL}?id=${encodeURIComponent(gaId)}`);
 }
 
+// PRD-034 FR-1.3: the Google Ads tag (marketing consent only). Enhanced
+// conversions (FR-1.6) are allowed on the tag only when the store turned
+// them on; `user_data` is set per purchase, hashed (`ads-tracking.util.js`).
+function loadGoogleAdsTag(googleAds) {
+  const conversionId = googleAds?.conversionId;
+  if (!conversionId || loadedTags.has("ads")) return;
+  loadedTags.add("ads");
+  if (!loadedTags.has("ga")) window.gtag("js", new Date());
+  window.gtag(
+    "config",
+    conversionId,
+    googleAds.enhancedConversions ? { allow_enhanced_conversions: true } : {},
+  );
+  injectScript(`${GTAG_SCRIPT_URL}?id=${encodeURIComponent(conversionId)}`);
+}
+
+/** True once the Google Ads tag was loaded on this page. */
+export const isGoogleAdsTagLoaded = () => loadedTags.has("ads");
+
+/** True once the Meta Pixel was loaded on this page. */
+export const isMetaPixelLoaded = () => loadedTags.has("pixel");
+
 function loadMetaPixel(pixelId) {
   if (!pixelId || loadedTags.has("pixel")) return;
   loadedTags.add("pixel");
@@ -165,7 +189,9 @@ export function readConsent() {
 
 /**
  * Applies a choice: Consent Mode update, then loads the tags it allows.
- * `tagIds` = `{ gaId, gtmId, pixelId }`; an empty id loads nothing.
+ * `tagIds` = `{ gaId, gtmId, pixelId, googleAds }`; an empty id loads
+ * nothing. Withdrawing "marketing" revokes the Pixel's consent and the
+ * Consent Mode update turns the `ad_*` types back to denied.
  */
 export function applyConsent(consent, tagIds = {}) {
   if (typeof window === "undefined") return;
@@ -187,6 +213,7 @@ export function applyConsent(consent, tagIds = {}) {
   if (choice.marketing) {
     if (loadedTags.has("pixel")) window.fbq?.("consent", "grant");
     loadMetaPixel(tagIds.pixelId);
+    loadGoogleAdsTag(tagIds.googleAds);
   }
 }
 

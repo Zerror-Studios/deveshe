@@ -10,7 +10,9 @@
  * The four GA4 e-commerce events (`view_item`, `add_to_cart`,
  * `begin_checkout`, `purchase`) stay in `utils/analytics.js`
  * (`trackEcomEvent`). Everything else goes through `trackEvent`, which:
- * - is a no-op outside the browser or when `gtag` isn't loaded;
+ * - is a no-op outside the browser, when `gtag` isn't loaded, or without
+ *   "analytics" consent (PRD-034: a gtag.js loaded for Google Ads alone
+ *   never carries GA4 events);
  * - clips every string to `EVENT_PARAMETER_MAX_LENGTH`, drops `null`,
  *   `undefined` and empty values (also inside `items[]`);
  * - never throws: analytics must not break the UI.
@@ -21,11 +23,9 @@
  * No parameter may carry PII (emails, names, phones, addresses).
  */
 
-import {
-  GA_TRACKING_ID,
-  mapLineToGA4Item,
-  mapProductToGA4Item,
-} from "@/utils/analytics";
+import { mapLineToGA4Item, mapProductToGA4Item } from "@/utils/analytics";
+import { readConsent } from "@/utils/consent.util";
+import { getTagIds } from "@/utils/tracking-config.util";
 
 // ─── Vocabulary (mirrors analytics-events.vocabulary.ts) ─────────────────
 
@@ -145,9 +145,12 @@ export function trackEvent(name, params = {}) {
   try {
     if (!name || typeof window === "undefined") return;
     if (typeof window.gtag !== "function") return;
+    // PRD-034: GA4 only with analytics consent, to the store's GA4 id
+    const { gaId } = getTagIds();
+    if (!gaId || readConsent()?.analytics !== true) return;
     window.gtag("event", name, {
       ...sanitizeParams(params),
-      send_to: GA_TRACKING_ID,
+      send_to: gaId,
     });
   } catch {
     // Analytics never breaks the UI.

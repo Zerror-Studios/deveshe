@@ -32,6 +32,19 @@ const markPurchaseTracked = (orderId) => {
   }
 };
 
+// The order's contact for enhanced conversions; the phone and its country
+// code come from the same record.
+const getOrderContact = (order) => {
+  const user = order?.userData;
+  const address = order?.shippingAddress;
+  const phoneSource = user?.phoneNumber ? user : address;
+  return {
+    email: user?.email || address?.email,
+    phone: phoneSource?.phoneNumber || phoneSource?.phone,
+    countryCode: phoneSource?.countryCode,
+  };
+};
+
 const ThankYou = ({ meta }) => {
   const router = useRouter();
   const [time, setTime] = useState(REDIRECT_SECONDS);
@@ -59,12 +72,19 @@ const ThankYou = ({ meta }) => {
     setIsPolling(false);
     PendingOrder.clear();
     if (!markPurchaseTracked(order._id)) return;
+    // PRD-034 FR-1.3: `transaction_id` / Meta `eventID` = the order `_id`
+    // (the backend's server events use it too). The contact is only hashed
+    // for Google enhanced conversions (marketing consent, FR-1.6).
     trackEcomEvent.purchase(
       order._id,
       order.orderPrice ?? order.totalprice,
       order.cart || [],
       order.shippingAmount || 0,
-      order.tax?.totalTax || 0
+      order.tax?.totalTax || 0,
+      {
+        currency: order.currency || undefined,
+        customer: getOrderContact(order),
+      }
     );
   }, [isPaid, order]);
 

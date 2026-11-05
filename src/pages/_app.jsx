@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import Layout from "@/components/layouts/Layout";
 import SmoothScroller from "@/components/common/SmoothScroller";
 import { ToastContainer } from "react-toastify";
@@ -7,6 +8,8 @@ import { createApolloClient } from "@/lib/apolloClient";
 import { AuthProvider } from "@/context/AuthContext";
 import { TokenManager } from "@/utils/tokenManager";
 import { startVisitAttribution } from "@/utils/ga-attribution.util";
+import { startAdClickCapture } from "@/utils/ad-click-ids.util";
+import { pageview as trackPixelPageView } from "@/lib/fpixel";
 import "@/styles/globals.css";
 import "@/styles/home.css";
 import "@/styles/checkout.css";
@@ -40,13 +43,27 @@ import "@/styles/components/reviews.css";
 export default function App({ Component, pageProps }) {
   // One client per browser session (SF-19); server pages create their own.
   const [client] = useState(() => createApolloClient());
+  const router = useRouter();
 
   useEffect(() => {
     TokenManager.clearLegacyStorage();
     // PRD-012: remember the visit's UTMs, referrer and landing page once
-    // (only with analytics consent, W1V-C-03)
-    return startVisitAttribution();
+    // (only with analytics consent, W1V-C-03); PRD-034 FR-1.4: the ad
+    // click ids (session; persisted only with marketing consent)
+    const stopVisitAttribution = startVisitAttribution();
+    const stopAdClickCapture = startAdClickCapture();
+    return () => {
+      stopVisitAttribution();
+      stopAdClickCapture();
+    };
   }, []);
+
+  // PRD-034: a Pixel PageView per client-side navigation (the first one is
+  // sent when the Pixel loads); a no-op without marketing consent.
+  useEffect(() => {
+    router.events.on("routeChangeComplete", trackPixelPageView);
+    return () => router.events.off("routeChangeComplete", trackPixelPageView);
+  }, [router.events]);
 
   return (
     <>

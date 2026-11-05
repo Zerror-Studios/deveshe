@@ -1,19 +1,25 @@
 /**
- * Google Analytics 4 (GA4) Tracking Utility
- * Provides a standardized way to track events across the platform.
+ * E-commerce event dispatcher: GA4, Meta Pixel and Google Ads
+ * (PRD-012, PRD-014 FR-1.9, PRD-034 FR-1.3)
+ *
+ * `trackEcomEvent` is the one place the four e-commerce events start. Each
+ * waits until the tags are ready (`runWhenTrackingReady`), then sends:
+ * - GA4, only with "analytics" consent, to the store's GA4 id
+ *   (`getTagIds().gaId`: the backend's `ga4MeasurementId`, else
+ *   `NEXT_PUBLIC_GA_MEASUREMENT_ID`; no hard-coded fallback, FE-24);
+ * - Meta and Google Ads (`utils/ads-tracking.util.js`), only with
+ *   "marketing" consent.
+ * GA4 items keep the variant SKU as `item_id` (PRD-013 FR-2.2); the ads
+ * networks get the variant id (the product feed's `id`). The purchase
+ * `transaction_id` / `eventID` is the order `_id` everywhere, as the
+ * backend's server-side GA4 and Meta purchases send.
  */
 
-// PRD-014 FR-1.9 (FE-24): no hard-coded fallback ids. An unset id loads
-// no tag, so a build without env never reports into another property.
-export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
-export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || "";
+import { AdsTracking } from "@/utils/ads-tracking.util";
+import { readConsent } from "@/utils/consent.util";
+import { getTagIds, runWhenTrackingReady } from "@/utils/tracking-config.util";
 
-/** Tag ids for `utils/consent.util.js` (loaded only after consent). */
-export const TAG_IDS = Object.freeze({
-  gaId: GA_TRACKING_ID,
-  gtmId: GTM_ID,
-  pixelId: "",
-});
+const DEFAULT_CURRENCY = "INR";
 
 /**
  * Maps an internal product object to the standard GA4 items schema.
@@ -66,15 +72,16 @@ export const mapLineToGA4Item = (line) => ({
  * @param {string} eventName - Standard or custom event name (e.g., 'view_item').
  * @param {Object} params - Event parameters.
  */
+// PRD-034: only with analytics consent, so a gtag.js loaded for Google Ads
+// alone (marketing without analytics) never carries GA4 events.
 export const trackGAEvent = (eventName, params = {}) => {
-  if (typeof window !== "undefined" && window.gtag) {
-    window.gtag("event", eventName, {
-      ...params,
-      send_to: GA_TRACKING_ID
-    });
-  } else {
-    console.warn(`GA4 event "${eventName}" suppressed (gtag not initialized).`, params);
-  }
+  const { gaId } = getTagIds();
+  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
+  if (!gaId || readConsent()?.analytics !== true) return;
+  window.gtag("event", eventName, {
+    ...params,
+    send_to: gaId
+  });
 };
 
 /**
@@ -82,37 +89,63 @@ export const trackGAEvent = (eventName, params = {}) => {
  */
 export const trackEcomEvent = {
   viewItem: (product, variant = null) => {
-    trackGAEvent("view_item", {
-      currency: "INR",
-      value: getVariantPrice(product, variant),
-      items: [mapProductToGA4Item(product, variant)]
+    runWhenTrackingReady(() => {
+      const value = getVariantPrice(product, variant);
+      trackGAEvent("view_item", {
+        currency: DEFAULT_CURRENCY,
+        value,
+        items: [mapProductToGA4Item(product, variant)]
+      });
+      AdsTracking.viewItem(product, variant, value);
     });
   },
 
   addToCart: (product, variant = null, quantity = 1) => {
-    trackGAEvent("add_to_cart", {
-      currency: "INR",
-      value: Number(variant?.price || 0) * quantity,
-      items: [mapProductToGA4Item(product, variant, quantity)]
+    runWhenTrackingReady(() => {
+      const value = Number(variant?.price || 0) * quantity;
+      trackGAEvent("add_to_cart", {
+        currency: DEFAULT_CURRENCY,
+        value,
+        items: [mapProductToGA4Item(product, variant, quantity)]
+      });
+      AdsTracking.addToCart(product, variant, quantity, value);
     });
   },
 
   beginCheckout: (cartItems = [], totalValue = 0) => {
-    trackGAEvent("begin_checkout", {
-      currency: "INR",
-      value: Number(totalValue),
-      items: cartItems.map(mapLineToGA4Item)
+    runWhenTrackingReady(() => {
+      trackGAEvent("begin_checkout", {
+        currency: DEFAULT_CURRENCY,
+        value: Number(totalValue),
+        items: cartItems.map(mapLineToGA4Item)
+      });
+      AdsTracking.beginCheckout(cartItems, totalValue);
     });
   },
 
-  purchase: (orderId, totalValue, items = [], shipping = 0, tax = 0) => {
-    trackGAEvent("purchase", {
-      transaction_id: orderId,
-      value: Number(totalValue),
-      currency: "INR",
-      tax: Number(tax),
-      shipping: Number(shipping),
-      items: items.map(mapLineToGA4Item)
+  /**
+   * `orderId` is the order `_id` (PRD-034 FR-1.3). `options.customer`
+   * (`{ email, phone, countryCode }`) is only hashed for Google enhanced
+   * conversions, never sent to GA4 or Meta.
+   */
+  purchase: (orderId, totalValue, items = [], shipping = 0, tax = 0, options = {}) => {
+    const currency = options.currency || DEFAULT_CURRENCY;
+    runWhenTrackingReady(() => {
+      trackGAEvent("purchase", {
+        transaction_id: orderId,
+        value: Number(totalValue),
+        currency,
+        tax: Number(tax),
+        shipping: Number(shipping),
+        items: items.map(mapLineToGA4Item)
+      });
+      AdsTracking.purchase({
+        orderId,
+        value: totalValue,
+        currency,
+        lines: items,
+        customer: options.customer,
+      });
     });
   }
 };
