@@ -31,12 +31,12 @@ Every `NEXT_PUBLIC_*` value is public in the browser bundle. The old `NEXT_PUBLI
 - set the two required variables in Vercel, make sure the domain is an ACTIVE tenant in the backend's `db_configs`, and add the storefront origin to the gateway's `CORS_ORIGINS`;
 - set `EDGE_SHARED_SECRET` in Vercel **at the same moment** as on Elastic Beanstalk and the CloudFront origin header (that turns on the gateway's strict mode), in the **same deploy** as backend PRD-002 round 3 (its 30/min per-IP login bucket would otherwise see every shopper as this host's IP), and confirm the host's client IP source (`x-vercel-forwarded-for` on Vercel, else the right-most `x-forwarded-for` hop);
 - roll the CSP out with `CSP_REPORT_ONLY=true` first;
-- `git rm --cached .npmrc` and rotate the GSAP token (still tracked, SF-2);
+- rotate the old GreenSock token: it is no longer in `.npmrc` (2026-11-11) but stays in git history (SF-2);
 - run a browser and Nimbbl sandbox checkout before go-live.
 
 Shopper-visible effects: existing shoppers log in once (the old JS refresh cookie is removed) and old guest bags are dropped once (guest ids are now server-issued); login without `?next=` lands on `/`; checkout is locked while an unpaid order exists, and a coupon change creates a new order; the thank-you page never shows success before payment is confirmed; a missing store shows a "store unavailable" notice.
 
-Installing needs GreenSock business registry access (`.npmrc`). Ask the team for credentials; never commit or print the token.
+GSAP comes from the public npm registry (`gsap` 3.15, every plugin free since 3.13); no GreenSock registry access is needed. If your own `~/.npmrc` still maps `@gsap` to `npm.greensock.com`, point it at `https://registry.npmjs.org/` or installs hang. `.npmrc` names `GITHUB_TOKEN` (for `@zcom/storefront-kit`, Kit PRD-002) from the environment only; never put a token in it.
 
 ## Scripts
 

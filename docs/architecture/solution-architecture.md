@@ -125,7 +125,7 @@ A retry reuses the same unpaid order, also after a reload (`utils/pending-order.
 |---|---|
 | Styling | Global CSS in `styles/` (page sheets imported in `_app.jsx`) + a few `*.module.css`. MUI, emotion and styled-components removed |
 | Fonts | `@font-face` in `globals.css` |
-| Motion | GSAP **business** (`gsap` aliased to `@gsap/business`; ScrollTrigger, SplitText, ScrollToPlugin) registered per component, each cleaning up only its own timelines; Lenis + Tempus in `SmoothScroller`, resized by a `ResizeObserver` |
+| Motion | GSAP 3.15 from the public npm registry (ScrollTrigger, SplitText, ScrollToPlugin) registered per component, each cleaning up only its own timelines; Lenis + Tempus in `SmoothScroller`, resized by a `ResizeObserver` |
 | 3D | `PhoneModal` (three / R3F), dynamic import with `ssr: false` |
 | Media | Swiper; `next/image` with a `remotePatterns` allowlist (asset domains + `IMAGE_REMOTE_HOSTS`); product cards pass real dimensions and `sizes` (RPERF-12) |
 | SEO | `SeoHeader` + JSON-LD schema components serialised with `toJsonLd` |
@@ -137,7 +137,7 @@ A retry reuses the same unpaid order, also after a reload (`utils/pending-order.
 
 ```mermaid
 flowchart LR
-    NPMRC[".npmrc → GreenSock private registry<br/>(still tracked in git ⚠; now in .gitignore)"] --> CI["npm ci"] --> NB["next build<br/>(production build needs API_GATEWAY_URL<br/>and NEXT_PUBLIC_TENANT_DOMAIN)"] --> HOST["Vercel<br/>env: + EDGE_SHARED_SECRET (server-only), CSP_REPORT_ONLY"]
+    NPMRC[".npmrc → GITHUB_TOKEN reference only<br/>(no token; GSAP from public npm)"] --> CI["npm ci"] --> NB["next build<br/>(production build needs API_GATEWAY_URL<br/>and NEXT_PUBLIC_TENANT_DOMAIN)"] --> HOST["Vercel<br/>env: + EDGE_SHARED_SECRET (server-only), CSP_REPORT_ONLY"]
 ```
 
 `react-tooltip` and `cross-fetch` were removed (RMAINT-9), and the lockfile no longer lists MUI/emotion/styled-components.
@@ -147,7 +147,7 @@ flowchart LR
 | # | Gap | Path |
 |---|---|---|
 | 1 | Backend gaps: lookbook, password change, account deactivation (the stock signal exists since PRD-020 and is off per store until the owner enables it) | Backend T1 PRDs (contract doc §2) |
-| 2 | `.npmrc` still tracked; GSAP token and old `NEXT_PUBLIC_DB_TOKEN` need rotation | Owner (PRD-002 §7) |
+| 2 | Old GSAP token (in git history; `.npmrc` holds none since 2026-11-11) and old `NEXT_PUBLIC_DB_TOKEN` need rotation | Owner (PRD-002 §7) |
 | 3 | Strict tenant mode is off until `EDGE_SHARED_SECRET` is set; meanwhile the backend's per-IP login bucket sees every shopper as this host's IP | Code done (R2-C1); owner sets it here, on EB and on the CloudFront origin header at the same moment, in the same deploy as backend round 3, and confirms the host's client IP source |
 | 4 | Shared logic duplicated with rare-element (files carry "Keep in sync" headers, RMAINT-7) | ADR for a shared package |
 | 5 | No ESLint config, no tests, no end-to-end checkout run | T2 / owner sandbox run |
