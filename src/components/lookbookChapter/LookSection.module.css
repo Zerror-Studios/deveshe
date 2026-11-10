@@ -1,0 +1,196 @@
+/* Backend lookbook looks (PRD-027), in the lookbook chapter style
+   (`styles/components/lookBook.css`: pink ground, heading / paragraphStyleB). */
+
+.look {
+  width: 100%;
+  background-color: #fadcde;
+  padding-bottom: 4rem;
+}
+
+/* ─── Text ─────────────────────────────────────────────────────────────── */
+
+.lookText {
+  width: 100%;
+  padding: 6rem 21.666vw 4rem 30vw;
+  color: black;
+}
+
+.lookHeading {
+  font-family: heading;
+  font-size: 4vw;
+  font-weight: 400;
+  line-height: 1;
+  margin-bottom: 1.5rem;
+}
+
+.lookBody {
+  font-family: paragraphStyleB;
+  font-size: 2.2vw;
+  font-weight: 500;
+}
+
+/* ─── Media ────────────────────────────────────────────────────────────── */
+
+.lookFull {
+  width: 100%;
+}
+
+.lookSplit,
+.lookGrid {
+  width: 100%;
+  padding: 0 40px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.6%;
+  align-items: start;
+}
+
+.lookSplit .lookText {
+  padding: 4rem 0 0;
+}
+
+.lookImage {
+  position: relative;
+  width: 100%;
+}
+
+/* Tagged images keep their own aspect ratio (no crop, PRD-027 §6) */
+.lookImageImg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.lookVideo {
+  position: relative;
+  width: 100%;
+}
+
+.lookVideo video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.lookVideoToggle {
+  position: absolute;
+  right: 40px;
+  bottom: 30px;
+  background: none;
+  border: none;
+  color: white;
+  font-family: paragraph;
+  font-size: 14px;
+  text-transform: uppercase;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ─── Hotspots ─────────────────────────────────────────────────────────── */
+
+.hotspot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+/* 28 px: above the 24 px minimum target (PRD-027 §6) */
+.hotspotDot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background-color: rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+  transition: transform ease 0.3s;
+}
+
+.hotspotDot:hover,
+.hotspotDot[aria-expanded="true"] {
+  transform: scale(1.15);
+}
+
+.hotspotDot:focus-visible {
+  outline: 2px solid black;
+  outline-offset: 2px;
+}
+
+.hotspotCard {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 180px;
+  padding: 12px 14px;
+  background-color: white;
+  color: black;
+  font-family: var(--primary-font-Hel);
+  font-size: 12px;
+  line-height: 1.35;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.hotspotName {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.hotspotPrice {
+  margin-bottom: 8px;
+}
+
+.hotspotLink {
+  text-decoration: underline;
+}
+
+/* ─── Products and CTA ─────────────────────────────────────────────────── */
+
+.lookProducts {
+  width: 100%;
+  padding: 3rem 40px 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2.6%;
+}
+
+.lookCta {
+  display: flex;
+  justify-content: center;
+  padding-top: 2rem;
+}
+
+@media (max-width: 767px) {
+  .lookText {
+    padding: 4rem 20px 2rem;
+  }
+
+  .lookHeading {
+    font-size: 8.5vw;
+  }
+
+  .lookBody {
+    font-size: 6vw;
+  }
+
+  .lookSplit,
+  .lookGrid {
+    grid-template-columns: 1fr;
+    padding: 0;
+    gap: 0;
+  }
+
+  .lookSplit .lookText {
+    padding: 2rem 20px 0;
+  }
+
+  .lookProducts {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 2rem 0 0;
+    gap: 0;
+  }
+
+  .lookVideoToggle {
+    right: 20px;
+    bottom: 20px;
+  }
+}

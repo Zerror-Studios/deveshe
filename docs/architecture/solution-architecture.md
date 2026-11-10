@@ -35,10 +35,10 @@ flowchart TB
         IDX["/ (11 newest products + 'View all', approved reviews)"]
         PL["/products · /category/[slug] · /search (12 per page + Load more)"]
         PD["/product/[slug] (notFound when unknown) · /pay/[token] (shopper IP)"]
-        LBS["/lookbook/[slug] (404 while empty)"]
+        LBS["/lookbook/[slug] (backend lookbook, kit getLookbook; old slug 308, unknown 404)"]
     end
     subgraph STATIC["Static pages (metadata only, were getStaticProps / client pages)"]
-        ST["/about · /contact · /login · /profile · legal · /lookbook ('Coming soon')<br/>checkout start/thank-you/payment-failed/payment-return · token pages"]
+        ST["/about · /contact · /login · /profile · legal · /lookbook (backend list, kit getLookbooks)<br/>checkout start/thank-you/payment-failed/payment-return · token pages"]
     end
     LOAD["lib/page-data/*.server.js<br/>(the old getServerSideProps code, once per request via cache())<br/>→ lib/server-query.js (kit zcomFetch, never cached)"]
     VIEWS["src/views/*View.jsx (client)<br/>the old page components on next/navigation"]
@@ -136,7 +136,7 @@ A retry reuses the same unpaid order, also after a reload (`utils/pending-order.
 | Fonts | `@font-face` in `globals.css` |
 | Motion | GSAP 3.15 from the public npm registry (ScrollTrigger, SplitText, ScrollToPlugin) registered per component, each cleaning up only its own timelines; `lenis` 1.3 (its own `autoRaf` loop) in `SmoothScroller`, resized by a `ResizeObserver` |
 | 3D | `PhoneModal` (three 0.187 / R3F 9 / drei 10), dynamic import with `ssr: false` in the contact view |
-| Media | Swiper; `next/image` with a `remotePatterns` allowlist (asset domains + `IMAGE_REMOTE_HOSTS`); product cards pass real dimensions and `sizes` (RPERF-12) |
+| Media | Swiper; `next/image` with a `remotePatterns` allowlist (asset domains, the platform media CDN `media.zerrorstudios.com` / `media-uat.zerrorstudios.com` (PRD-039) + `IMAGE_REMOTE_HOSTS`); product cards pass real dimensions and `sizes` (RPERF-12) |
 | SEO | `generateMetadata` / `metadata` from `lib/seo-metadata.util.js` + `PageSchemas` (JSON-LD components serialised with `toJsonLd`) |
 | CMS HTML | `utils/sanitize-html.util.js` allowlist (no scripts, handlers, `javascript:` URLs, iframes or svg; every link gets `rel="noopener noreferrer"`; styles with `\` dropped, RSEC-11) |
 | Security headers | The kit's `buildSecurityHeaders` (`next.config.mjs`): CSP for the payment apps, GTM/GA, the Meta and Google ad tags, the platform media CDN, S3 uploads and the store's asset hosts, `frame-ancestors 'none'`; nosniff, Referrer-Policy, X-Frame-Options, Permissions-Policy, HSTS in production. `script-src 'unsafe-inline'` is kept (SF-9 partial: a nonce would make every static page dynamic, and GTM custom-HTML tags need it); `CSP_REPORT_ONLY=true` switches to report-only for rollout |
@@ -155,7 +155,7 @@ flowchart LR
 
 | # | Gap | Path |
 |---|---|---|
-| 1 | Backend gaps: lookbook, password change, account deactivation (the stock signal exists since PRD-020 and is off per store until the owner enables it) | Backend T1 PRDs (contract doc §2) |
+| 1 | Backend gaps: password change, account deactivation (the stock signal exists since PRD-020 and is off per store until the owner enables it) | Backend T1 PRDs (contract doc §2) |
 | 2 | Old GSAP token (in git history; `.npmrc` holds none since 2026-11-11) and old `NEXT_PUBLIC_DB_TOKEN` need rotation | Owner (PRD-002 §7) |
 | 3 | Strict tenant mode is off until `EDGE_SHARED_SECRET` is set; meanwhile the backend's per-IP login bucket sees every shopper as this host's IP | Code done (R2-C1); owner sets it here, on EB and on the CloudFront origin header at the same moment, in the same deploy as backend round 3, and confirms the host's client IP source |
 | 4 | Store code still duplicated with rare-element (error copy, sanitiser, checkout view; "Keep in sync" headers, RMAINT-7); the plumbing is shared through `@zcom/storefront-kit` since 2026-11-11 | Backend ADR-010, kit PRD-002 |

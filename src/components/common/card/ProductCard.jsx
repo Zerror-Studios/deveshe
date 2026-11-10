@@ -19,6 +19,8 @@ const ProductCard = ({
   // PRD-013 select_item: optional, the card works without them.
   product,
   listName,
+  // PRD-027 F10: the lookbook's GA4 item_list_id
+  listId,
 }) => {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -34,7 +36,7 @@ const ProductCard = ({
   const badge = getListingBadge(product?.availability);
 
   const handleSelect = () => {
-    if (product) trackSelectItem(product, listName);
+    if (product) trackSelectItem(product, listName, listId);
   };
 
   return (

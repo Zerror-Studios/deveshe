@@ -1,34 +1,64 @@
 "use client";
 
 /**
- * Lookbook chapter (was `pages/lookbook/[slug]/index.jsx`): static editorial
- * content until a lookbook backend exists.
+ * One lookbook (backend PRD-027), in the chapter design: the hero (cover,
+ * title, subtitle, intro), the featured products, then each look in its
+ * layout (`components/lookbookChapter/LookSection.jsx`). Sends
+ * `lookbook_view` once per lookbook and `lookbook_hotspot_click` per opened
+ * dot; product clicks carry the lookbook's `item_list_id` (PRD-027 FR-8,
+ * F10).
  */
 
-import React from "react";
+import React, { useEffect } from "react";
 import LookBookHero from "@/components/lookbookChapter/LookBookHero";
+import LookSection from "@/components/lookbookChapter/LookSection";
 import ProductContainer from "@/components/lookbookChapter/ProductContainer";
-import VideoContainer from "@/components/lookbookChapter/VideoContainer";
-import BannerContainer from "@/components/lookbookChapter/BannerContainer";
-import ImageSectionOne from "@/components/lookbookChapter/ImageSectionOne";
-import ImageSectionTwo from "@/components/lookbookChapter/ImageSectionTwo";
-import ImageSectionThree from "@/components/lookbookChapter/ImageSectionThree";
+import {
+  lookbookItemListId,
+  trackLookbookHotspotClick,
+  trackLookbookView,
+} from "@/utils/analytics-events.util";
+import { featuredProducts, sortLooks } from "@/utils/lookbook.util";
 
-const LookbookDetail = ({ data }) => {
+// ─── View ─────────────────────────────────────────────────────────────────
+
+const LookbookDetail = ({ lookbook }) => {
+  const slug = lookbook?.slug || "";
+  const listName = `Lookbook: ${lookbook?.title || ""}`;
+  const listId = lookbookItemListId(slug);
+
+  useEffect(() => {
+    if (slug) trackLookbookView(slug);
+  }, [slug]);
+
+  const openHotspot = (position, itemId) =>
+    trackLookbookHotspotClick(slug, position, itemId);
+
   return (
     <>
       <LookBookHero
-        title={data?.name || ""}
-        subheading={data?.subName || ""}
-        description={data?.description || ""}
-        asset={data?.assets?.[0] || {}}
+        title={lookbook?.title || ""}
+        subheading={lookbook?.subtitle || ""}
+        description={lookbook?.intro || ""}
+        asset={{
+          path: lookbook?.cover?.url || "",
+          altText: lookbook?.cover?.alt || "",
+        }}
       />
-      <ProductContainer data={data?.products || []} />
-      <VideoContainer data={data?.sections?.[0] || {}} />
-      <BannerContainer data={data?.sections?.[1] || {}} />
-      <ImageSectionOne data={data?.sections?.[2] || {}}/>
-      <ImageSectionTwo leftData={data?.sections?.[3] || {}} rightData={data?.sections?.[4] || {}} />
-      <ImageSectionThree leftData={data?.sections?.[5] || {}} rightData={data?.sections?.[6] || {}}/>
+      <ProductContainer
+        data={featuredProducts(lookbook)}
+        listName={listName}
+        listId={listId}
+      />
+      {sortLooks(lookbook?.looks).map((look) => (
+        <LookSection
+          key={look._id}
+          look={look}
+          listName={listName}
+          listId={listId}
+          onHotspotOpen={openHotspot}
+        />
+      ))}
     </>
   );
 };

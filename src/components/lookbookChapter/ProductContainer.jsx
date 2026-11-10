@@ -2,7 +2,8 @@ import React from "react";
 import { getProductPriceLabel } from "@/utils/Util";
 import ProductCard from "../common/card/ProductCard";
 
-const ProductContainer = ({ data }) => {
+// `listName` / `listId`: GA4 select_item from a lookbook (PRD-027 F10).
+const ProductContainer = ({ data, listName = "Lookbook", listId }) => {
   if (!data || data.length === 0) return;
   return (
     <div id="prodcut-container">
@@ -17,7 +18,8 @@ const ProductContainer = ({ data }) => {
             name={item?.name || ""}
             price={getProductPriceLabel(item?.variants)}
             product={item}
-            listName="Lookbook"
+            listName={listName}
+            listId={listId}
           />
         );
       })}

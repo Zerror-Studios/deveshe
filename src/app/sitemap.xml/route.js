@@ -13,6 +13,7 @@ import {
   createServerCatalogClient,
   fetchCategories,
 } from "@/lib/catalog-listing.server";
+import { getLookbooks } from "@zcom/storefront-kit/server";
 import { GET_SITEMAP_PRODUCTS } from "@/graphql";
 import { Const, ProductStatus } from "@/utils/Constant";
 import { buildSitemapXml, toLastModified } from "@/utils/sitemap.util";
@@ -22,8 +23,10 @@ import { buildSitemapXml, toLastModified } from "@/utils/sitemap.util";
 const SITEMAP_PAGE_SIZE = 100;
 const SITEMAP_PRODUCT_LIMIT = 1000;
 const SITEMAP_CACHE_SECONDS = 3600;
+const SITEMAP_LOOKBOOK_LIMIT = 50;
 
-// `/lookbook` is a "Coming soon" page today, so it is not listed.
+// `/lookbook` is listed only while at least one lookbook is published
+// (otherwise it is a "Coming soon" page).
 const STATIC_PATHS = [
   "/",
   "/products",
@@ -82,9 +85,10 @@ export async function GET() {
   const entries = STATIC_PATHS.map((path) => ({ loc: toUrl(path) }));
   try {
     const client = createServerCatalogClient();
-    const [categories, products] = await Promise.allSettled([
+    const [categories, products, lookbooks] = await Promise.allSettled([
       fetchCategories(client),
       fetchProductEntries(client),
+      getLookbooks({ limit: SITEMAP_LOOKBOOK_LIMIT }),
     ]);
     if (categories.status === "fulfilled") {
       categories.value.forEach((category) =>
@@ -94,6 +98,17 @@ export async function GET() {
       );
     }
     if (products.status === "fulfilled") entries.push(...products.value);
+    const published =
+      lookbooks.status === "fulfilled" ? lookbooks.value.lookbooks : [];
+    if (published.length) {
+      entries.push({ loc: toUrl("/lookbook") });
+      published.forEach((lookbook) =>
+        entries.push({
+          loc: toUrl(`/lookbook/${encodeURIComponent(lookbook.slug)}`),
+          lastmod: toLastModified(lookbook.publishedAt),
+        }),
+      );
+    }
   } catch (error) {
     console.error("Sitemap catalog read failed:", error.message);
   }

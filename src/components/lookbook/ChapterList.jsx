@@ -141,7 +141,7 @@ const ChapterList = ({ data = [] }) => {
       <div id="lookbookList" className={styles.lookbookList}>
         {data.map((item, index) => (
           <Link
-            href={`/lookbook/${item._id}`}
+            href={`/lookbook/${item.slug || item._id}`}
             className={`${styles.elem} ${styles.elem1} skeleton-loading`}
             id={`elem${index + 1}`}
             key={item._id}

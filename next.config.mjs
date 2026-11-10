@@ -27,8 +27,17 @@ if (!isDev && missingEnv.length) {
 
 // ─── Images ───────────────────────────────────────────────────────────────
 
-/** Brand asset / CDN hosts; add the tenant's S3 bucket host via env. */
-const DEFAULT_IMAGE_HOSTS = ["assets.deveshedreams.com", "cdn.deveshedreams.com"];
+/**
+ * Brand asset / CDN hosts, plus the platform media CDN every store's files
+ * are served from since backend PRD-039 (2026-11-10; the UAT one too).
+ * Without it the image optimiser refuses product and lookbook images.
+ */
+const DEFAULT_IMAGE_HOSTS = [
+  "assets.deveshedreams.com",
+  "cdn.deveshedreams.com",
+  "media.zerrorstudios.com",
+  "media-uat.zerrorstudios.com",
+];
 
 const IMAGE_HOSTS = [
   ...DEFAULT_IMAGE_HOSTS,

@@ -3,11 +3,9 @@
 import React, { Suspense } from "react";
 import ChapterList from "@/components/lookbook/ChapterList";
 import CommonButton from "@/components/common/CommonButton";
-import { LookbookChapters } from "@/helpers/LookbookData";
 
-// Static editorial content: there is no lookbook backend yet.
-const Lookbook = () => {
-  const data = LookbookChapters;
+// The lookbooks come from the server page (PRD-027 FR-6.1).
+const Lookbook = ({ data = [] }) => {
   return (
     <>
       {data?.length > 0 ? (
