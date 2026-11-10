@@ -6,17 +6,21 @@
  * that can't be paid has only its status) and pays with
  * `payPaymentRequest(token)`. These helpers turn an answer or an error
  * into one view state, so the page never reads message text. The token
- * is the credential: it is kept only in `sessionStorage` while the
- * shopper is at a redirect or form-post payment app, so the return page
- * can send them back here. The provider's answer is checked with
+ * is the credential: while the shopper is at a redirect or form-post
+ * payment app it is kept only in the kit's `PaymentLinkTokenStore`
+ * (sessionStorage, 2 hours, token-shape checked; kit PRD-002 FR-4.1),
+ * which the kit's `usePaymentReturn` reads, so the return page can send
+ * them back here. The provider's answer is checked with
  * `verifyPaymentRequestPayment(token, payload)` (a guest can't call
  * `verifyPayment`); polling `getPaymentRequest` stays as the fallback
  * while the backend waits for the provider's webhook.
  *
- * Pure functions, no imports, so `node:test` loads them directly.
+ * Pure functions plus the kit's token store, so `node:test` loads them.
  *
  * Keep in sync with `storefronts/rare-element/src/utils/payment-request.js`.
  */
+
+import { PaymentLinkTokenStore } from "@zcom/storefront-kit/core";
 
 // ─── Constants ────────────────────────────────────────────────────────────
 
@@ -89,12 +93,6 @@ export const RETRYABLE_VIEWS = [
   PayViewEnum.RATE_LIMITED,
   PayViewEnum.ERROR,
 ];
-
-/** sessionStorage key for the token while the shopper is at the provider. */
-export const PAY_RETURN_STORAGE_KEY = "zc_pay_request";
-
-/** A stored return older than this is ignored (a payment session's life). */
-export const PAY_RETURN_MAX_AGE_MS = 2 * 60 * 60 * 1000;
 
 /** Confirming polls this often, this long (then "check again"). */
 export const PAY_CONFIRM_POLL_MS = 3 * 1000;
@@ -181,37 +179,23 @@ export function formatExpiry(value) {
 }
 
 // ─── Return from a redirect payment app ───────────────────────────────────
+// `storage` stays in the signatures for the existing callers; the kit
+// picks the session storage itself.
 
 /** Remembers the link while the shopper is at the payment app. */
-export function savePayReturn(storage, token, now = Date.now()) {
-  if (!storage || !isPaymentRequestToken(token)) return;
-  try {
-    storage.setItem(PAY_RETURN_STORAGE_KEY, JSON.stringify({ token, at: now }));
-  } catch {
-    // Storage blocked: the return page falls back to its usual flow
-  }
+export function savePayReturn(_storage, token, now = Date.now()) {
+  if (!isPaymentRequestToken(token)) return;
+  PaymentLinkTokenStore.save(token, now);
 }
 
 /** The remembered link (once: it is removed), or null when stale or none. */
-export function takePayReturn(storage, now = Date.now()) {
-  if (!storage) return null;
-  let saved = null;
-  try {
-    saved = JSON.parse(storage.getItem(PAY_RETURN_STORAGE_KEY) || "null");
-    storage.removeItem(PAY_RETURN_STORAGE_KEY);
-  } catch {
-    return null;
-  }
-  if (!saved || !isPaymentRequestToken(saved.token)) return null;
-  if (!(now - Number(saved.at) <= PAY_RETURN_MAX_AGE_MS)) return null;
-  return saved.token;
+export function takePayReturn(_storage, now = Date.now()) {
+  const token = PaymentLinkTokenStore.get(now);
+  PaymentLinkTokenStore.clear();
+  return token;
 }
 
 /** Forgets the remembered link (paid, or the shopper left). */
-export function clearPayReturn(storage) {
-  try {
-    storage?.removeItem(PAY_RETURN_STORAGE_KEY);
-  } catch {
-    // Nothing to clear
-  }
+export function clearPayReturn() {
+  PaymentLinkTokenStore.clear();
 }

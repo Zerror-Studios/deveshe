@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Approved** 2026-11-10 (owner) · step 4 (Deveshe to the App Router) **implemented in the working tree** 2026-11-11 (D11: started before step 3's browser checks) |
+| Status | **Approved** 2026-11-10 (owner) · step 4 (Deveshe to the App Router) **implemented** 2026-11-11, pushed `984faf7` (D11: started before step 3's browser checks) · step 5 (onto the kit) **implemented in the working tree** 2026-11-11 |
 | Source-of-truth PRD | `../../../../zcom-storefront-kit/docs/prd/PRD-002-storefronts-onto-the-kit.md` (the kit repo; it changes no backend contract, backend ADR-010) |
 | Repos affected | zcom-storefront-kit · storefronts/rare-element · storefronts/deveshe-dreams (this repo) · zcom-backend (client manifests only) |
 
@@ -27,4 +27,23 @@ This repo keeps only Deveshe Dreams' notes. Decisions D1–D11, the gap review a
 
 **Not run yet (FR-6.2, owner):** the kit's `zcom-live-check` against a running backend and the manual browser pass, which also covers the library majors (three 0.187 / r3f 9 contact scene, Swiper 14, html-react-parser 6, lenis 1.3) and the GSAP pages.
 
-**Next:** step 5, Deveshe Dreams onto the kit (FR-4.x).
+## Deveshe Dreams (step 5: onto the kit, FR-4.1)
+
+**Moved onto `@zcom/storefront-kit` v1.0.2** (installed from its GitHub tag; `allowScripts` approves its build-on-install pinned to the tag's commit; `vercel.json` installs it with the shared `GITHUB_TOKEN`):
+- `src/proxy.js` → the kit's `createZcomMiddleware`: proxy, store identity, branded 503 (`buildStoreUnavailableHtml`), login guard for `/profile` and `/checkout` (payment-failed, payment-return and start stay public).
+- `lib/apolloClient.jsx`, `lib/customer-session.service.js` and `utils/tokenManager.js` → the kit's `ZcomSsrProvider` and session; `context/AuthContext.jsx` signs in, signs up and out through the kit's `useAuth` and keeps `useAuthStore` in step; Login and Signup call it.
+- Server reads: `lib/server-apollo.server.js`, `lib/edge-headers.server.js` and `lib/api-config.util.js` → `lib/server-query.js` on the kit's `zcomFetch` (never cached; `createServerQueryClient` keeps the loaders' code); `/pay/[token]` passes the shopper's IP from `getRequestClientIp`.
+- Consent, tags and attribution (`utils/consent.util.js`, `utils/tracking-config.util.js`, `lib/fpixel.js`, `utils/ads-tracking.util.js`, `utils/ads-hash.util.js`, `utils/ga-attribution.util.js`, `utils/ad-click-ids.util.js`, the `STOREFRONT_TRACKING_CONFIG` document) → the kit's `CONSENT_DEFAULT_SCRIPT`, `ZcomTags`, `updateConsent`, `openConsentPreferences`, `buildAttribution`, `buildCheckoutConsent`, `trackEvent` and ads functions; `utils/analytics.js` and `analytics-events.util.js` keep Deveshe's item mapping (GA4 `item_id` = SKU, ads id = variant id) and still send the GA4 purchase (deduplicated on the order id).
+- Payments: `utils/payment-checkout.util.js` on the kit's `launchPayment` (`nimbbl_sonic` removed), the payment-return page on `usePaymentReturn`, the return route = the kit's `paymentReturnHandler`, the payment-link return in `PaymentLinkTokenStore`.
+- `/checkout/start` on `useCheckoutStart` (Deveshe's `?resume=1` after login kept, so the merged customer bag opens); the guest cart id (`useVisitor` on `guestCartStore`), the fresh stock read (`useStockSignal`), the stock, sort, redirect and JSON-LD rules, the security headers (`buildSecurityHeaders`), `lib/store-status.util.js` and `lib/store-identity.server.js` (in the kit's proxy).
+- `js-cookie` and `nimbbl_sonic` removed; `rxjs` and `@apollo/client-integration-nextjs` added (kit peers, Nahara's versions).
+
+**Still Deveshe's (by design):** the checkout view's own flow and pending-order store, the sanitiser, the consent banner UI, error copy (passed to the kit as `errorMessages`), the SEO meta and JSON-LD components, the token pages' views.
+
+**Tests:** the proxy, store-status, consent, attribution and ads suites (55 tests) moved to the kit's own tests; 74 store tests remain.
+
+**Checks (2026-11-11):** `npm run build` (74/74 tests); no edge secret in `.next/static`; a `next start` smoke test with a local echo gateway (proxy headers, login guard, payment return 303 with a relative `Location`, `/pay` headers, CSP, store identity, consent script); backend `validate:clients` 57/57 operations.
+
+**Differences to know:** off Vercel the kit's proxy sends no client IP (only `trustedIpHeader`; Vercel's own header on Vercel); the GTM dataLayer event is the kit's `zcom_consent_update` with `zcomConsentAnalytics` / `zcomConsentAds` (was `zc_consent_update` with `zcConsentAnalytics` / `zcConsentMarketing`; a stored v1 choice is carried over); a payment-link return stored under `zc_pay_request` before the deploy isn't carried over (minutes-lived).
+
+**Not run yet (FR-6.2, owner):** the live check and the browser pass (steps 4 and 5 together).

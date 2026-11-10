@@ -2,13 +2,13 @@
  * Maps GraphQL errors to shopper-facing messages (PRD-002 SF-1).
  *
  * Branches on `extensions.reason` and `extensions.code`, never on message
- * text. Works with Apollo Client 4 errors (`CombinedGraphQLErrors`).
+ * text. Works with Apollo Client 4 errors and the kit's errors (its `getErrorInfo`).
  *
  * Keep in sync with `storefronts/rare-element/src/utils/errors.js` and the
  * reason codes in zcom-backend (`packages/core/src/utils/` and the
  * commerce/payment services); see PRD-002 RMAINT-7.
  */
-import { CombinedGraphQLErrors } from "@apollo/client/errors";
+import { getErrorInfo as readKitError } from "@zcom/storefront-kit/core";
 
 // ─── Messages ─────────────────────────────────────────────────────────────
 
@@ -117,8 +117,17 @@ const CODE_MESSAGES = {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
 
-const firstGraphqlError = (error) =>
-  CombinedGraphQLErrors.is(error) ? error.errors?.[0] : null;
+// The first GraphQL error of an Apollo answer or of the kit's server reads
+// and hooks (kit PRD-002 FR-4.1): the kit's reader understands both.
+const firstGraphqlError = (error) => {
+  if (!error) return null;
+  const info = readKitError(error);
+  if (!info.code && !info.reason) return null;
+  return {
+    message: info.rawMessage,
+    extensions: { code: info.code, reason: info.reason },
+  };
+};
 
 export const getErrorCode = (error) =>
   firstGraphqlError(error)?.extensions?.code || null;

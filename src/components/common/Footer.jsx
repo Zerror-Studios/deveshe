@@ -2,7 +2,7 @@ import { MenuData } from "@/helpers/MenuData";
 import Link from "next/link";
 import React from "react";
 import NewsletterForm from "./NewsletterForm";
-import { openConsentPreferences } from "@/utils/consent.util";
+import { openConsentPreferences } from "@zcom/storefront-kit/core";
 
 const Footer = () => {
   return (

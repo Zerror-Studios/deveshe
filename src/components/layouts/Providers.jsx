@@ -1,79 +1,62 @@
 "use client";
 
 /**
- * Client providers for the App Router (kit PRD-002 FR-3.2): what
- * `pages/_app.jsx` did, around every page.
+ * Client providers (kit PRD-002 FR-3.2, FR-4.1).
  *
- * - One Apollo client per browser session (SF-19); server pages create
- *   their own (`lib/catalog-listing.server.js`).
- * - Auth, the site layout (nav, bag drawer, footer, consent banner), the
- *   single Lenis scroller and the toasts.
- * - Once per load: legacy token clean-up, the visit attribution (PRD-012,
- *   analytics consent only) and the ad click ids (PRD-034 FR-1.4).
- * - A Meta Pixel PageView on each client-side navigation (PRD-034); the
- *   first one is sent when the Pixel loads, so the first path is skipped.
+ * - The kit's `ZcomSsrProvider`: one Apollo Client 4 shared with the
+ *   store's own queries, the customer session (in-memory token, HttpOnly
+ *   refresh cookie), the guest cart id, the visit attribution and ad click
+ *   ids (consent-gated), and the one-time move of the pre-kit storage keys
+ *   (sign-in hint, guest bag, consent, click ids).
+ * - The kit's `ZcomTags`: GA4 / GTM with analytics consent, the Meta Pixel
+ *   and Google Ads with ads (marketing) consent, a Pixel PageView per
+ *   navigation. The backend's `storefrontTrackingConfig` ids win; GA4 and
+ *   GTM fall back to env (PRD-034: no env fallback for the ads ids).
+ * - The store's auth context, layout, single Lenis scroller and toasts.
  */
 
-import React, { Suspense, useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
-import { ApolloProvider } from "@apollo/client/react";
-import { ToastContainer } from "react-toastify";
+import React, { Suspense } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import { ZcomSsrProvider } from "@zcom/storefront-kit/ssr";
+import { ZcomTags } from "@zcom/storefront-kit/client";
 import Layout from "@/components/layouts/Layout";
 import SmoothScroller from "@/components/common/SmoothScroller";
-import { createApolloClient } from "@/lib/apolloClient";
 import { AuthProvider } from "@/context/AuthContext";
-import { TokenManager } from "@/utils/tokenManager";
-import { startVisitAttribution } from "@/utils/ga-attribution.util";
-import { startAdClickCapture } from "@/utils/ad-click-ids.util";
-import { pageview as trackPixelPageView } from "@/lib/fpixel";
+import { zcomConfig } from "@/zcom.config";
 
-// ─── Page views ───────────────────────────────────────────────────────────
+// ─── Constants ────────────────────────────────────────────────────────────
 
-const PixelPageViews = () => {
-  const pathname = usePathname();
-  const firstPathRef = useRef(true);
-
-  useEffect(() => {
-    if (firstPathRef.current) {
-      firstPathRef.current = false;
-      return;
-    }
-    trackPixelPageView();
-  }, [pathname]);
-
-  return null;
+const STORE_UNAVAILABLE_TOAST_ID = "store-unavailable";
+const TAG_ID_FALLBACK = {
+  ga4MeasurementId: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
+  gtmId: process.env.NEXT_PUBLIC_GTM_ID,
 };
+
+// PRD-002 R2-C5: one notice while the gateway answers TENANT_NOT_FOUND
+const showStoreUnavailable = () =>
+  toast.error("This store is unavailable right now. Please try later.", {
+    toastId: STORE_UNAVAILABLE_TOAST_ID,
+  });
 
 // ─── Providers ────────────────────────────────────────────────────────────
 
-const Providers = ({ children }) => {
-  const [client] = useState(() => createApolloClient());
-
-  useEffect(() => {
-    TokenManager.clearLegacyStorage();
-    const stopVisitAttribution = startVisitAttribution();
-    const stopAdClickCapture = startAdClickCapture();
-    return () => {
-      stopVisitAttribution();
-      stopAdClickCapture();
-    };
-  }, []);
-
-  return (
-    <ApolloProvider client={client}>
-      <AuthProvider>
-        <Layout>
-          {/* useSearchParams needs a Suspense boundary (static pages) */}
-          <Suspense fallback={null}>
-            <SmoothScroller />
-          </Suspense>
-          <PixelPageViews />
-          {children}
-        </Layout>
-      </AuthProvider>
-      <ToastContainer position="top-right" />
-    </ApolloProvider>
-  );
-};
+const Providers = ({ children }) => (
+  <ZcomSsrProvider
+    config={zcomConfig}
+    onStoreUnavailable={showStoreUnavailable}
+  >
+    <ZcomTags fallback={TAG_ID_FALLBACK} />
+    <AuthProvider>
+      <Layout>
+        {/* useSearchParams needs a Suspense boundary (static pages) */}
+        <Suspense fallback={null}>
+          <SmoothScroller />
+        </Suspense>
+        {children}
+      </Layout>
+    </AuthProvider>
+    <ToastContainer position="top-right" />
+  </ZcomSsrProvider>
+);
 
 export default Providers;

@@ -8,7 +8,6 @@
  * this dynamic page, so no shared cache keeps it.
  */
 
-import { headers } from "next/headers";
 import PageSchemas from "@/components/seo/PageSchemas";
 import PayView from "@/views/PayView";
 import { loadPayPage } from "@/lib/page-data/pay.server";
@@ -50,7 +49,6 @@ export default async function Page({ params, searchParams }) {
   const data = await loadPayPage(
     typeof token === "string" ? token : "",
     await searchParams,
-    await headers(),
   );
   return (
     <>

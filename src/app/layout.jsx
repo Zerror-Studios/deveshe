@@ -2,14 +2,15 @@
  * Root layout (kit PRD-002 FR-3.2): `pages/_document.jsx` and the global
  * CSS of `pages/_app.jsx`.
  *
- * PRD-014 FR-1.9 (UX-05): only the Consent Mode v2 defaults ("denied")
- * run in the head. GA and GTM load after consent
- * (`components/common/ConsentBanner.jsx`), so no tag request happens
- * before the shopper answers.
+ * PRD-014 FR-1.9 (UX-05): only the Consent Mode v2 defaults run in the
+ * head: the kit's `CONSENT_DEFAULT_SCRIPT` ("denied", then a returning
+ * shopper's stored choice). The kit's `ZcomTags` loads GA, GTM and the ad
+ * tags only after consent (`components/common/ConsentBanner.jsx`), so no
+ * tag request happens before the shopper answers.
  */
 
 import Providers from "@/components/layouts/Providers";
-import { getConsentDefaultScript } from "@/utils/consent.util";
+import { CONSENT_DEFAULT_SCRIPT } from "@zcom/storefront-kit/core";
 import { Const } from "@/utils/Constant";
 
 import "@/styles/globals.css";
@@ -70,7 +71,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <script
-          dangerouslySetInnerHTML={{ __html: getConsentDefaultScript() }}
+          dangerouslySetInnerHTML={{ __html: CONSENT_DEFAULT_SCRIPT }}
         />
       </head>
       <body>

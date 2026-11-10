@@ -1,12 +1,14 @@
 # deveshe-dreams — Deveshe Dreams storefront
 
-This is a custom-designed shopper storefront on the **ZCommerce** platform by Zerror Studios. It's built with Next.js 16 with the App Router (React 19.3; moved from the Pages Router on 2026-11-11, `docs/adr/ADR-001-app-router.md`) in JavaScript, and it consumes the shared ZCommerce GraphQL gateway (`../../zcom-backend`). Payments go through Nimbbl.
+This is a custom-designed shopper storefront on the **ZCommerce** platform by Zerror Studios. It's built with Next.js 16 with the App Router (React 19.3; moved from the Pages Router on 2026-11-11, `docs/adr/ADR-001-app-router.md`) in JavaScript, and it consumes the shared ZCommerce GraphQL gateway (`../../zcom-backend`) through `@zcom/storefront-kit` (since 2026-11-11, kit PRD-002 step 5: proxy, session, consent and tags, payments, server reads). Payments go through the store's payment app (Razorpay, Cashfree or PayU).
 
 > Working here with Claude Code or as a new engineer? Read [`CLAUDE.md`](CLAUDE.md), then [`docs/README.md`](docs/README.md). The API contract every storefront follows is in `../../zcom-backend/docs/architecture/storefront-api-contract.md`.
 
-**Integration status: current.** Since PRD-002 (2026-10-14, rounds 1 to 3) every operation validates against the backend schema (29/29 then; 36/36 operations with variable shapes after the PRD-014 close-out; 41/41 with the PRD-020 stock signal and the PRD-015 order page `/profile/orders/[id]`; 42/42 with `confirmBackInStock`, CP-22, 2026-10-26), including the newsletter `/unsubscribe` page and the guest back-in-stock confirmation page `/back-in-stock/confirm`. The site calls the API same-origin at `/v1/graphql` (proxied to the gateway by `src/proxy.js`, Next 16's middleware, which adds the edge headers: client IP, tenant domain and the optional edge secret), picks the tenant by its domain, uses server-issued guest cart ids, keeps the access token in memory and uses the HttpOnly customer cookie for refresh. Checkout requires login. Not yet tested end to end against a running backend or the Nimbbl sandbox.
+**Integration status: current.** Since PRD-002 (2026-10-14, rounds 1 to 3) every operation validates against the backend schema (29/29 then; 36/36 operations with variable shapes after the PRD-014 close-out; 41/41 with the PRD-020 stock signal and the PRD-015 order page `/profile/orders/[id]`; 42/42 with `confirmBackInStock`, CP-22, 2026-10-26), including the newsletter `/unsubscribe` page and the guest back-in-stock confirmation page `/back-in-stock/confirm`. The site calls the API same-origin at `/v1/graphql` (proxied to the gateway by `src/proxy.js`, the kit's `createZcomMiddleware`, which adds the edge headers: client IP, tenant domain and the edge secret), picks the tenant by its domain, uses server-issued guest cart ids, keeps the access token in memory and uses the HttpOnly customer cookie for refresh (the kit's session). Checkout requires login. Not yet tested end to end against a running backend or a payment sandbox.
 
 ## Getting started
+
+`npm ci` installs `@zcom/storefront-kit` from the private `Zerror-Studios/zcom-storefront-kit` repo, so your git needs read access to it (your own GitHub login locally; on Vercel the shared `GITHUB_TOKEN` through `vercel.json`).
 
 ```bash
 npm ci
@@ -32,7 +34,9 @@ Every `NEXT_PUBLIC_*` value is public in the browser bundle. The old `NEXT_PUBLI
 - set `EDGE_SHARED_SECRET` in Vercel **at the same moment** as on Elastic Beanstalk and the CloudFront origin header (that turns on the gateway's strict mode), in the **same deploy** as backend PRD-002 round 3 (its 30/min per-IP login bucket would otherwise see every shopper as this host's IP), and confirm the host's client IP source (`x-vercel-forwarded-for` on Vercel, else the right-most `x-forwarded-for` hop);
 - roll the CSP out with `CSP_REPORT_ONLY=true` first;
 - rotate the old GreenSock token: it is no longer in `.npmrc` (2026-11-11) but stays in git history (SF-2);
-- run a browser and Nimbbl sandbox checkout before go-live.
+- run a browser and payment-sandbox checkout before go-live;
+- add `GITHUB_TOKEN` (the shared Vercel team variable) to the project: `vercel.json` uses it to install the private `@zcom/storefront-kit` from GitHub;
+- rename any merchant GTM trigger on `zc_consent_update` / `zcConsentMarketing` to the kit's `zcom_consent_update` / `zcomConsentAds` (and `zcConsentAnalytics` to `zcomConsentAnalytics`).
 
 Shopper-visible effects: existing shoppers log in once (the old JS refresh cookie is removed) and old guest bags are dropped once (guest ids are now server-issued); login without `?next=` lands on `/`; checkout is locked while an unpaid order exists, and a coupon change creates a new order; the thank-you page never shows success before payment is confirmed; a missing store shows a "store unavailable" notice.
 
@@ -48,7 +52,7 @@ GSAP comes from the public npm registry (`gsap` 3.15, every plugin free since 3.
 | Contract check | `npm run validate:ops` (operations and `variables` shapes against the composed supergraph; needs `../../zcom-backend` installed and built; PRD-014 FR-1.6) |
 | Lint | `npm run lint` (currently not functional; see `CLAUDE.md` §4) |
 
-Tests: `npm test` runs `test/*.test.mjs` with `node:test` (Node ≥ 22.15, no extra dependency) and **runs before every `npm run build`** (`prebuild`, PRD-014 K-01), so a failing test stops the deploy; keep the host's Build Command at `npm run build` (the Vercel default; a `next build` override skips the tests) and its Node at 22.15+. 129 tests (2026-11-05), among them 21 over the PRD-034 ads tracking (`test/ads-tracking.test.mjs`: consent gating, tag ids and the GA env fallback, purchase ids, hashing, click ids, the checkout payload, `/checkout/start`) and 10 over the `/v1/graphql` proxy in `src/proxy.js` (`test/middleware.test.mjs`, PRD-014 QA-12), 4 over the consent gate on order attribution (`test/attribution-consent.test.mjs`, W1V-C-03), 4 over the SEO helpers (`test/seo-helpers.test.mjs`, PRD-014 Wave 2), 4 over the listing sort values (`test/listing-sort.test.mjs`), 4 over the catalog listing query (`test/catalog-listing.test.mjs`, UX-01 regression: no hard-coded category id) 7 over saved-address checkout (`test/checkout-address.test.mjs`, UX-02 regression: preselect and validation), 14 over the PRD-020 stock-signal helpers and `isVariantUnavailable` (`test/stock-signal.test.mjs`) and 12 over the PRD-015 order helpers and error reasons (`test/order-detail.test.mjs`, also PRD-016 `STORE_ORDERS_PAUSED`). There are no page or component tests.
+Tests: `npm test` runs `test/*.test.mjs` with `node:test` (Node ≥ 22.15, no extra dependency) and **runs before every `npm run build`** (`prebuild`, PRD-014 K-01), so a failing test stops the deploy; keep the host's Build Command at `npm run build` (the Vercel default; a `next build` override skips the tests) and its Node at 22.15+. 74 tests (2026-11-11, on the kit: the proxy, store status, consent, attribution and ads suites are now the kit's own tests) over the SEO helpers, the listing sort, the catalog listing query (UX-01), saved-address checkout (UX-02), the PRD-020 stock helpers, the PRD-015 order helpers and error reasons, the CP-22 notify-me confirmation, PRD-032 reviews and the PRD-028 payment-request view states. There are no page or component tests.
 
 ## Structure
 

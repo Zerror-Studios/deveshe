@@ -3,17 +3,13 @@
  * of `pages/pay/[token].jsx`, kit PRD-002 FR-3.1).
  *
  * Reads `getPaymentRequest(token)` with the edge headers and the shopper's
- * IP (the backend limits reads per IP). `confirm=1` (back from a redirect
+ * IP (the backend limits reads per IP; the kit's `getRequestClientIp`). `confirm=1` (back from a redirect
  * payment app, already verified on payment-return) starts the page in
  * CONFIRMING while the link still reads payable.
  */
 
-import { createServerApolloClient } from "@/lib/server-apollo.server";
-import {
-  CLIENT_IP_HEADER,
-  getClientIp,
-  getEdgeSecretHeaders,
-} from "@/lib/edge-headers.server";
+import { getRequestClientIp } from "@zcom/storefront-kit/server";
+import { serverQuery } from "@/lib/server-query";
 import { GET_PAYMENT_REQUEST } from "@/graphql";
 import { getErrorCode, getErrorReason } from "@/utils/api-error.util";
 import {
@@ -25,28 +21,17 @@ import {
 
 // ─── Loader ───────────────────────────────────────────────────────────────
 
-/** `requestHeaders`: the incoming request's headers (`headers()`). */
-export async function loadPayPage(token, query, requestHeaders) {
+export async function loadPayPage(token, query) {
   if (!isPaymentRequestToken(token)) {
     return { token: "", request: null, initialView: PayViewEnum.NOT_FOUND };
   }
 
-  const clientIp = getClientIp({ headers: requestHeaders });
-  const server = createServerApolloClient({
-    headers: {
-      ...getEdgeSecretHeaders(),
-      ...(clientIp ? { [CLIENT_IP_HEADER]: clientIp } : {}),
-    },
-  });
+  const clientIp = await getRequestClientIp();
 
   let request = null;
   let view;
   try {
-    const { data } = await server.query({
-      query: GET_PAYMENT_REQUEST,
-      variables: { token },
-      fetchPolicy: "no-cache",
-    });
+    const data = await serverQuery(GET_PAYMENT_REQUEST, { token }, { clientIp });
     request = data?.getPaymentRequest ?? null;
     view = viewFromRequest(request);
   } catch (error) {

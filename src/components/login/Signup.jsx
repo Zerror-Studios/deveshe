@@ -9,11 +9,10 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { PhoneInput } from "react-international-phone";
-import { useApolloClient } from "@apollo/client/react";
 import { toast } from 'react-toastify';
 import "react-international-phone/style.css";
 import CommonButton from "../common/CommonButton";
-import { CustomerSession } from "@/lib/customer-session.service";
+import { useAuth } from "@/context/AuthContext";
 import { getErrorMessage } from "@/utils/api-error.util";
 import { getSafeNextPath } from "@/utils/redirect.util";
 
@@ -41,7 +40,7 @@ const Signup = ({ setToggle }) => {
   const searchParams = useSearchParams();
   const [visible, setVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
-  const client = useApolloClient();
+  const { signup } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const {
@@ -59,8 +58,11 @@ const Signup = ({ setToggle }) => {
     setLoading(true);
     try {
       const { confirmPassword, ...input } = data;
-      await CustomerSession.signup(client, input);
+      const { mergeFailed } = await signup(input);
       toast.success("Account created successfully!");
+      if (mergeFailed) {
+        toast.info("Some items from your bag are no longer available.");
+      }
       router.replace(getSafeNextPath(searchParams.get("next"), "/"));
     } catch (err) {
       console.error(err);

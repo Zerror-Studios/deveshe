@@ -41,10 +41,9 @@ import {
   getCartFingerprint,
   getCheckoutDetailsFingerprint,
 } from "@/utils/pending-order.util";
-import {
-  getCheckoutAttribution,
-  getCheckoutConsent,
-} from "@/utils/ad-click-ids.util";
+// PRD-034 FR-1.4: GA ids and UTMs with analytics consent, the ad click
+// ids with marketing consent, and the consent snapshot (the kit)
+import { buildAttribution, buildCheckoutConsent } from "@zcom/storefront-kit/core";
 import {
   CheckoutStepEnum,
   CtaEnum,
@@ -412,8 +411,8 @@ const CheckoutPage = () => {
             cartId: cartData?._id,
             shippingAddress: pricingDetails.shippingAddress,
             billingAddress: pricingDetails.billingAddress,
-            attribution: getCheckoutAttribution(),
-            consent: getCheckoutConsent(),
+            attribution: buildAttribution(),
+            consent: buildCheckoutConsent(),
           },
         });
         if (!isCurrent()) return;
@@ -480,8 +479,8 @@ const CheckoutPage = () => {
         billingAddress: details.billingAddress,
         // PRD-012: GA ids and UTMs (analytics consent); PRD-034 FR-1.4:
         // ad click ids and Meta cookies (marketing consent) + the choice
-        attribution: getCheckoutAttribution(),
-        consent: getCheckoutConsent(),
+        attribution: buildAttribution(),
+        consent: buildCheckoutConsent(),
       },
     });
     // Same details as the pricing step: the backend returns that session

@@ -1,44 +1,100 @@
-import React, { createContext, useContext, useEffect } from "react";
+"use client";
+
+/**
+ * Customer session context on the kit (kit PRD-002 FR-4.1).
+ *
+ * The kit owns the session: the in-memory access token, the HttpOnly
+ * refresh cookie, the single-flight refresh, and the one `mergeGuestCart`
+ * at login (an invalid guest id is dropped). This keeps the store's
+ * `useAuthStore` (the `isLoggedIn` flag and the profile components read)
+ * in step with it, loads the profile after a sign-in or a reload (the
+ * profile is never persisted, PRD-014 FE-12), and says when the server
+ * ended the session.
+ */
+
+import React, { createContext, useCallback, useContext, useEffect } from "react";
 import { useApolloClient } from "@apollo/client/react";
+import { toast } from "react-toastify";
+import {
+  tokenManager,
+  useAuth as useKitAuth,
+  useSession,
+} from "@zcom/storefront-kit/client";
 import { GET_MY_PROFILE } from "@/graphql";
-import { CustomerSession } from "@/lib/customer-session.service";
 import { useAuthStore } from "@/store/auth-store";
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
+
+// ─── Provider ─────────────────────────────────────────────────────────────
 
 export const AuthProvider = ({ children }) => {
   const client = useApolloClient();
+  const kit = useKitAuth();
+  const session = useSession();
+  const { clearAuth, setUser, setIsLoggedIn } = useAuthStore((state) => state);
 
-  // The profile isn't persisted (PRD-014 FE-12): reload it after a page
-  // reload. The auth link refreshes the token before this query goes out;
-  // a refused session is cleared there.
+  const loadProfile = useCallback(async () => {
+    const { data } = await client.query({
+      query: GET_MY_PROFILE,
+      fetchPolicy: "network-only",
+    });
+    const user = data?.getMyProfile || null;
+    if (user && tokenManager.getState().status === "customer") setUser(user);
+    return user;
+  }, [client, setUser]);
+
+  // Follow the kit's session: signed in after a reload, or ended
   useEffect(() => {
-    const { isLoggedIn, user } = useAuthStore.getState();
-    if (!isLoggedIn || user) return;
-    client
-      .query({ query: GET_MY_PROFILE, fetchPolicy: "network-only" })
-      .then(({ data }) => {
-        const state = useAuthStore.getState();
-        if (data?.getMyProfile && state.isLoggedIn) {
-          state.setUser(data.getMyProfile);
-        }
-      })
-      .catch(() => {
-        // Transient errors keep the hint; the next page load retries.
-      });
-  }, [client]);
+    if (session.status === "customer") {
+      setIsLoggedIn(true);
+      if (!useAuthStore.getState().user) loadProfile().catch(() => undefined);
+    } else if (session.status === "guest") {
+      clearAuth();
+    }
+  }, [clearAuth, loadProfile, session.status, setIsLoggedIn]);
 
-  // Revokes the cookie session, clears the token, the profile and the cache.
+  useEffect(
+    () =>
+      tokenManager.onSessionEnded(() => {
+        toast.info("Your session has ended. Please log in again.");
+      }),
+    [],
+  );
+
+  /**
+   * Signs in, merges the guest bag and loads the profile. Resolves
+   * `{ profile, mergeFailed }`.
+   */
+  const login = async ({ email, password }) => {
+    const auth = await kit.login(email, password);
+    setIsLoggedIn(true);
+    const profile = await loadProfile();
+    return { profile, mergeFailed: auth.merge === "failed" };
+  };
+
+  /** Creates the account (CONFLICT on a used email), then signs in. */
+  const signup = async (input) => {
+    const auth = await kit.signup(input);
+    setIsLoggedIn(true);
+    const profile = await loadProfile();
+    return { profile, mergeFailed: auth.merge === "failed" };
+  };
+
+  /** Revokes the cookie session, then clears the token, profile and cache. */
   const logout = async () => {
     try {
-      await CustomerSession.logout(client);
+      await kit.logout();
     } catch (err) {
       console.error("Logout error:", err);
+    } finally {
+      clearAuth();
     }
   };
 
   return (
-    <AuthContext.Provider value={{ logout }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ login, signup, logout }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 

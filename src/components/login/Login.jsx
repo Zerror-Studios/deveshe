@@ -4,10 +4,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
-import { useApolloClient } from "@apollo/client/react";
 import { toast } from 'react-toastify';
 import CommonButton from "../common/CommonButton";
-import { CustomerSession } from "@/lib/customer-session.service";
+import { useAuth } from "@/context/AuthContext";
 import { getErrorMessage } from "@/utils/api-error.util";
 import { getSafeNextPath } from "@/utils/redirect.util";
 import Link from "next/link";
@@ -22,7 +21,7 @@ const Login = ({ setToggle }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [visible, setVisible] = useState(false);
-  const client = useApolloClient();
+  const { login } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const {
@@ -37,12 +36,9 @@ const Login = ({ setToggle }) => {
     if (loading) return;
     setLoading(true);
     try {
-      const { failedMergeCount } = await CustomerSession.login(
-        client,
-        formData,
-      );
+      const { mergeFailed } = await login(formData);
       toast.success("Login successful!");
-      if (failedMergeCount > 0) {
+      if (mergeFailed) {
         toast.info("Some items from your bag are no longer available.");
       }
       router.replace(getSafeNextPath(searchParams.get("next"), "/"));
