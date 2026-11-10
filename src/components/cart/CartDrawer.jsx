@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from 'react-toastify';
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { RxCross2 } from "react-icons/rx";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { ADD_ITEM_TO_CART, CART_LIST, REMOVE_ITEM_FROM_CART } from "@/graphql";
@@ -150,7 +150,9 @@ const CartDrawer = ({ isOpen, closeCart }) => {
       // Checkout is customer-only; guests log in first (the guest bag is
       // merged into the customer bag at login).
       await router.push(
-        isLoggedIn ? `/checkout/${_id}` : getLoginPath(router.asPath),
+        isLoggedIn
+          ? `/checkout/${_id}`
+          : getLoginPath(`${window.location.pathname}${window.location.search}`),
       );
       closeCart();
     } catch (err) {

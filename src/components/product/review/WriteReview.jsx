@@ -10,7 +10,7 @@
  */
 
 import React, { useState } from "react";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useMutation, useQuery } from "@apollo/client/react";
 import {
@@ -28,7 +28,7 @@ import { reviewErrorFeedback, reviewStatusText } from "@/utils/review.util";
 const MY_REVIEWS_LIMIT = 100;
 
 const WriteReview = ({ productId }) => {
-  const router = useRouter();
+  const pathname = usePathname();
   const { isLoggedIn } = useAuthStore((state) => state);
   const [isEditing, setIsEditing] = useState(false);
   const [notice, setNotice] = useState("");
@@ -49,7 +49,7 @@ const WriteReview = ({ productId }) => {
   if (!isLoggedIn) {
     return (
       <div id="write-review" className="review_write">
-        <Link href={getLoginPath(router.asPath)} className="review_link_btn">
+        <Link href={getLoginPath(pathname)} className="review_link_btn">
           Log in to write a review
         </Link>
       </div>

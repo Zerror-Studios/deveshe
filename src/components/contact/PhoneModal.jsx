@@ -1,15 +1,14 @@
-import React, { useRef, useEffect } from 'react'
+import React from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Environment } from '@react-three/drei'
-import * as THREE from 'three'
 import PhoneModel from '../../../public/models/PhoneModel'
 
 const AnimatedCamera = () => {
   const { camera } = useThree()
-  const clock = useRef(new THREE.Clock())
 
-  useFrame(() => {
-    const t = clock.current.getElapsedTime()
+  // r3f's own clock (THREE.Clock is deprecated in current three)
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime()
     camera.position.x = 5 + Math.sin(t) * 5 
     camera.position.y = 20
     camera.position.z = 45

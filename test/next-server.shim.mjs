@@ -3,7 +3,7 @@
  *
  * The installed `next/server` is CommonJS with exports Node can't detect
  * statically, so `import { NextResponse } from "next/server"` in
- * `src/middleware.js` is pointed here by `register-hooks.mjs`.
+ * `src/proxy.js` is pointed here by `register-hooks.mjs`.
  *
  * Keep in sync with `storefronts/rare-element/test/next-server.shim.mjs`.
  */

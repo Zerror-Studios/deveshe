@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { useAuthStore } from "@/store/auth-store";
@@ -9,7 +9,9 @@ import { MenuData } from "@/helpers/MenuData";
 gsap.registerPlugin(ScrollTrigger);
 
 const Navbar = ({ openCart }) => {
-  const router = useRouter();
+  // The real path (the Pages Router gave the route pattern; every check
+  // here compares with "/" or a fixed link, so both read the same).
+  const pathname = usePathname();
   const { isLoggedIn } = useAuthStore((state) => state);
   const [percent, setPercent] = useState(0);
 
@@ -53,7 +55,7 @@ const Navbar = ({ openCart }) => {
         currentX += width + spacing;
       });
 
-     if (router.pathname !== "/" || window.location.hash === "#shop") {
+     if (pathname !== "/" || window.location.hash === "#shop") {
         gsap.set("html,body", { overflow: "visible" });
         gsap.set("#logo-container img", { filter: "invert(0)" });
         gsap.set(".nav-link a", { color: "#000" });
@@ -301,12 +303,12 @@ const Navbar = ({ openCart }) => {
       scrollTimeline?.scrollTrigger?.kill();
       scrollTimeline?.kill();
     };
-  }, [router.asPath]);
+  }, [pathname]);
 
   return (
     <>
       <div id="nav">
-        {router.pathname === "/" && (
+        {pathname === "/" && (
           <div id="loader_slider">
             <p>
               loading... <span>{percent}%</span>
@@ -349,7 +351,7 @@ const Navbar = ({ openCart }) => {
             <Link
               key={idx}
               href={link.link}
-              className={`${router.pathname === link.link ? "active" : ""}`}
+              className={`${pathname === link.link ? "active" : ""}`}
             >
               {link.name}
               <div className="hoverline"></div>

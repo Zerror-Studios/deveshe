@@ -1,5 +1,5 @@
 /**
- * `/v1/graphql` proxy security in `src/middleware.js` (PRD-014 FR-1.7, QA-12)
+ * `/v1/graphql` proxy security in `src/proxy.js` (PRD-014 FR-1.7, QA-12)
  *
  * Runs the real middleware with Next's real `NextRequest` / `NextResponse`
  * (see `register-hooks.mjs`). A rewrite is read the way Next applies it:
@@ -41,7 +41,9 @@ async function loadMiddleware(env) {
   for (const name of ENV_NAMES) delete process.env[name];
   Object.assign(process.env, env);
   caseNumber += 1;
-  return await import(`../src/middleware.js?case=${caseNumber}`);
+  // Next 16 names the file `proxy.js` and its export `proxy`
+  const module = await import(`../src/proxy.js?case=${caseNumber}`);
+  return { middleware: module.proxy, config: module.config };
 }
 
 function graphqlRequest(headers = {}, url = "https://shop.example/v1/graphql") {

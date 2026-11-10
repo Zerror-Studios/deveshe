@@ -2,7 +2,7 @@
  * Reset password form (PRD-003 FR-0.5)
  *
  * Reads `token` once from the query string, removes it from the address
- * bar (`router.replace`, shallow), then lets the shopper choose a new
+ * bar (a shallow `history.replaceState`), then lets the shopper choose a new
  * password. `customerResetPassword` consumes the token once; an invalid,
  * used or expired token answers `INVALID_RESET_TOKEN`, which shows the
  * "request a new link" state.
@@ -12,7 +12,6 @@
  */
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -49,12 +48,9 @@ const ResetPasswordSchema = z
     path: ["confirmPassword"],
   });
 
-const firstValue = (value) => (Array.isArray(value) ? value[0] : value) || "";
-
 // ─── Component ────────────────────────────────────────────────────────────
 
 const ResetPassword = () => {
-  const router = useRouter();
   const tokenRef = useRef(null);
   const [status, setStatus] = useState(StatusEnum.FORM);
   const [visible, setVisible] = useState(false);
@@ -70,12 +66,13 @@ const ResetPassword = () => {
 
   /* ----- Effects ----- */
   useEffect(() => {
-    // Once per page view, after the query string is available.
-    if (!router.isReady || tokenRef.current !== null) return;
-    tokenRef.current = firstValue(router.query.token);
-    router.replace(PAGE_PATH, undefined, { shallow: true });
+    // Once per page view: read the token, then drop it from the address bar.
+    if (tokenRef.current !== null) return;
+    tokenRef.current =
+      new URLSearchParams(window.location.search).get("token") || "";
+    window.history.replaceState(null, "", PAGE_PATH);
     if (!tokenRef.current) setStatus(StatusEnum.INVALID_LINK);
-  }, [router]);
+  }, []);
 
   /* ----- Handlers ----- */
   const onSubmit = async (formData) => {

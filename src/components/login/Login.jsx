@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,6 +20,7 @@ const LoginSchema = z.object({
 
 const Login = ({ setToggle }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [visible, setVisible] = useState(false);
   const client = useApolloClient();
   const [loading, setLoading] = useState(false);
@@ -44,7 +45,7 @@ const Login = ({ setToggle }) => {
       if (failedMergeCount > 0) {
         toast.info("Some items from your bag are no longer available.");
       }
-      router.replace(getSafeNextPath(router.query.next, "/"));
+      router.replace(getSafeNextPath(searchParams.get("next"), "/"));
     } catch (err) {
       console.error("Login error:", err);
       toast.error(

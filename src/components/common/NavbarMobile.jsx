@@ -8,7 +8,7 @@ import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { FiSearch } from "react-icons/fi";
 import Button from "./Button";
 import { useAuthStore } from "@/store/auth-store";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import CommonButton from "./CommonButton";
 import { useDialogA11y } from "@/hooks/useDialogA11y";
 gsap.registerPlugin(ScrollTrigger);
@@ -18,6 +18,9 @@ const NavbarMobile = ({ openCart }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuTL = useRef(null);
   const router = useRouter();
+  // The real path (the Pages Router gave the route pattern; every check
+  // here compares with "/" or a fixed link, so both read the same).
+  const pathname = usePathname();
   const [percent, setPercent] = useState(0);
   const sideNavRef = useRef(null);
 
@@ -122,7 +125,7 @@ const NavbarMobile = ({ openCart }) => {
   };
 
   useEffect(() => {
-    if (router.pathname !== "/" || window.location.hash === "#shop") {
+    if (pathname !== "/" || window.location.hash === "#shop") {
       gsap.set(".navbar-mobile-wrap", {
         y: "0%",
         opacity: 1,
@@ -165,7 +168,7 @@ const NavbarMobile = ({ openCart }) => {
       tl.kill();
       clearInterval(loaderIntervalRef.current);
     };
-  }, [router.pathname]); // ✅ re-run if route changes
+  }, [pathname]); // ✅ re-run if route changes
 
   const handleLoginBtn = () => {
     router.push("/login");
@@ -182,12 +185,12 @@ const NavbarMobile = ({ openCart }) => {
 
       return () => window.removeEventListener("hashchange", handleHashChange);
     }
-  }, [router.pathname]);
+  }, [pathname]);
 
   return (
     <>
       <div className="navbar-mobile">
-        {router.pathname === "/" && hash !== "#shop" && (
+        {pathname === "/" && hash !== "#shop" && (
           <div id="loader_slider">
             <p>
               loading... <span>{percent}%</span>

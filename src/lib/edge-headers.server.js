@@ -1,10 +1,10 @@
 /**
  * Gateway edge headers (PRD-002 ROPS-1, contract R2-C1) — SERVER ONLY
  *
- * Import this module only from `middleware.js` and server code
- * (`getServerSideProps`, where Next strips the import from the browser
- * bundle): it reads the server-only `EDGE_SHARED_SECRET`, which
- * must never reach the browser bundle.
+ * Import this module only from `proxy.js` and server code (server pages,
+ * route handlers, `lib/page-data/*.server.js`; never a "use client"
+ * file): it reads the server-only `EDGE_SHARED_SECRET`, which must never
+ * reach the browser bundle.
  *
  * The gateway trusts `x-tenant-domain` and `x-zcom-client-ip` only when
  * the request also carries a valid `x-zcom-edge-secret`. The `/v1/graphql`

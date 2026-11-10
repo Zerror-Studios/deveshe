@@ -9,7 +9,7 @@
  * storefront at a verified domain is this store's and holds the
  * platform's edge secret. The nonce makes each answer single-use: a fixed
  * signature of the slug alone could be copied and replayed by any site
- * (child-PRD review CP-18, PRD-018). Served by `middleware.js` (Web
+ * (child-PRD review CP-18, PRD-018). Served by `proxy.js` (Web
  * Crypto, so it runs on the Edge runtime as well as in `node:test`).
  *
  * The slug comes from the server-only `ZCOM_STORE_SLUG` (the store's

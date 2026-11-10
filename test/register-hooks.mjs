@@ -1,5 +1,5 @@
 /**
- * Test harness: loads `src/middleware.js` in plain Node (PRD-014 FR-1.7, QA-12)
+ * Test harness: loads `src/proxy.js` in plain Node (PRD-014 FR-1.7, QA-12)
  *
  * No test framework and no new dependency: `node --test` with module
  * hooks (Node >= 22.15) that

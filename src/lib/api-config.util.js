@@ -3,9 +3,9 @@
  *
  * The tenant is chosen by host (the backend has no db-token, PRD-007):
  *  - browser: same-origin `/v1/graphql`, proxied to the gateway by
- *    `middleware.js` (with the R2-C1 edge headers), so the customer
+ *    `proxy.js` (with the R2-C1 edge headers), so the customer
  *    refresh cookie is first-party;
- *  - server (SSR / getServerSideProps): `${API_GATEWAY_URL}/v1/graphql`
+ *  - server (server components, route handlers): `${API_GATEWAY_URL}/v1/graphql`
  *    with `x-tenant-domain` / `x-forwarded-host` set to the brand domain.
  */
 

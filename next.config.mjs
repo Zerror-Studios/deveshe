@@ -1,7 +1,7 @@
 /**
  * Next.js config for the Deveshe Dreams storefront (PRD-002 SF-7/9/15).
  *
- * - `/v1/graphql` is proxied to the gateway by `src/middleware.js` (with
+ * - `/v1/graphql` is proxied to the gateway by `src/proxy.js` (with
  *   the PRD-002 R2-C1 edge headers) so the API and the HttpOnly customer
  *   cookie are same-origin.
  * - Images only from the brand's asset hosts (no localhost, no third
@@ -136,14 +136,19 @@ const SECURITY_HEADERS = [
       ]),
 ];
 
+// PRD-028 FR-5.4: a shopper's payment link (`/pay/<token>`) is never
+// indexed and never sent on as a referrer (the URL holds the token).
+// Dynamic pages already get a private, no-store Cache-Control from Next.
+const PAY_LINK_HEADERS = [
+  { key: "X-Robots-Tag", value: "noindex, nofollow" },
+  { key: "Referrer-Policy", value: "no-referrer" },
+];
+
 // ─── Config ───────────────────────────────────────────────────────────────
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  devIndicators: {
-    autoPrerender: false,
-  },
   images: {
     remotePatterns: IMAGE_HOSTS.map((hostname) => ({
       protocol: "https",
@@ -152,7 +157,11 @@ const nextConfig = {
     })),
   },
   async headers() {
-    return [{ source: "/:path*", headers: SECURITY_HEADERS }];
+    // Later entries win for the same header name (Referrer-Policy).
+    return [
+      { source: "/:path*", headers: SECURITY_HEADERS },
+      { source: "/pay/:path*", headers: PAY_LINK_HEADERS },
+    ];
   },
 };
 

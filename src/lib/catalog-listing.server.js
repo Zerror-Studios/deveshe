@@ -1,13 +1,14 @@
 /**
  * Catalog listing reads for server rendering (PRD-014 FR-0.8) — SERVER ONLY
  *
- * Used by `getServerSideProps` of `/`, `/products`, `/category/[slug]` and
- * `/product/[slug]`. Each call builds the server Apollo client with the
- * edge headers, so import this module only from `getServerSideProps` (Next
- * strips it from the browser bundle there).
+ * Used by the server loaders in `lib/page-data/` (`/`, `/products`,
+ * `/category/[slug]`, `/product/[slug]`) and the sitemap route. Each call
+ * builds the server Apollo client with the edge headers, so import this
+ * module only from server files (server pages, route handlers and the
+ * page-data loaders), never from a "use client" file.
  */
 
-import { createApolloClient } from "@/lib/apolloClient";
+import { createServerApolloClient } from "@/lib/server-apollo.server";
 import { getEdgeSecretHeaders } from "@/lib/edge-headers.server";
 import { GET_CATEGORIES, GET_PRODUCTS } from "@/graphql";
 import {
@@ -23,7 +24,7 @@ const LISTING_CATEGORY_LIMIT = 50;
 // ─── Helpers ──────────────────────────────────────────────────────────────
 
 export const createServerCatalogClient = () =>
-  createApolloClient({ headers: getEdgeSecretHeaders() });
+  createServerApolloClient({ headers: getEdgeSecretHeaders() });
 
 export { toListingFilters };
 

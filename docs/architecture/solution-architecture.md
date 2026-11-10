@@ -2,10 +2,10 @@
 
 | | |
 |---|---|
-| **Status** | Living document. Verified against code on **2026-10-14** (after the PRD-002 WS-F2 migration and round 2, R2-W6) |
+| **Status** | Living document. Verified against code on **2026-11-11** (App Router, ADR-001); earlier sections on **2026-10-14** (PRD-002 WS-F2, R2-W6) |
 | **Parent** | Workspace `../../ARCHITECTURE.md` · `../../storefronts/CLAUDE.md` |
 | **API contract** | `../../zcom-backend/docs/architecture/storefront-api-contract.md` |
-| **Integration maturity** | **Current contract** (29/29 operations valid). Host-based tenant, same-origin API proxied by middleware with edge headers, server-issued guest ids, cookie refresh. Not yet tested end to end |
+| **Integration maturity** | **Current contract** (58/58 operations valid, 2026-11-11). Host-based tenant, same-origin API proxied by `proxy.js` with edge headers, server-issued guest ids, cookie refresh. Not yet tested end to end |
 
 ---
 
@@ -15,34 +15,43 @@ This is the brand storefront for Deveshe Dreams: an editorial home page, lookboo
 
 ```mermaid
 flowchart LR
-    SH(["👤 Shopper"]) --> NX["deveshe-dreams<br/>Next.js 15 Pages Router<br/>(Vercel)"]
-    NX -- "browser: same-origin /v1/graphql<br/>middleware.js proxy → API_GATEWAY_URL<br/>Authorization: Bearer (memory) · cookie __Host-zc_cust_rt<br/>+ x-zcom-client-ip · x-tenant-domain · x-zcom-edge-secret (optional)" --> GW["ZCommerce gateway"]
-    NX -- "SSR: API_GATEWAY_URL/v1/graphql<br/>x-tenant-domain / x-forwarded-host = NEXT_PUBLIC_TENANT_DOMAIN<br/>+ x-zcom-edge-secret (optional)" --> GW
+    SH(["👤 Shopper"]) --> NX["deveshe-dreams<br/>Next.js 16 App Router<br/>(Vercel)"]
+    NX -- "browser: same-origin /v1/graphql<br/>proxy.js → API_GATEWAY_URL<br/>Authorization: Bearer (memory) · cookie __Host-zc_cust_rt<br/>+ x-zcom-client-ip · x-tenant-domain · x-zcom-edge-secret (optional)" --> GW["ZCommerce gateway"]
+    NX -- "server pages: API_GATEWAY_URL/v1/graphql<br/>x-tenant-domain / x-forwarded-host = NEXT_PUBLIC_TENANT_DOMAIN<br/>+ x-zcom-edge-secret (optional)" --> GW
     NX -- "Nimbbl checkout (token from createPaymentSession)" --> NB["Nimbbl"]
     NX -- "GA + GTM after consent (IDs from env)" --> AN["Analytics"]
 ```
 
 ## 2. Rendering architecture
 
+App Router on Next 16 since 2026-11-11 (ADR-001, kit PRD-002 step 4); every URL is unchanged.
+
 ```mermaid
 flowchart TB
-    MW["middleware.js<br/>/v1/graphql → proxy with edge headers<br/>/profile, /checkout/* (not payment-failed)<br/>no session cookie → /login?next=…"]
-    APP["pages/_app.jsx<br/>global CSS · one Apollo client (useState)<br/>AuthContext · toast · SmoothScroller (Lenis + Tempus)"]
-    DOC["pages/_document.jsx<br/>Consent Mode v2 defaults"]
-    subgraph SSR["getServerSideProps (fresh each request)"]
+    PX["src/proxy.js (Next 16 proxy, Node runtime)<br/>/v1/graphql → gateway with edge headers<br/>/profile, /checkout/* (not payment-failed, payment-return, start)<br/>no session cookie → /login?next=…<br/>suspended store → branded 503 · /.well-known/zcom-store"]
+    LAYOUT["app/layout.jsx (server)<br/>Consent Mode v2 defaults in &lt;head&gt; · global CSS<br/>favicons · viewport"]
+    PROV["components/layouts/Providers.jsx (client)<br/>one Apollo client (useState) · AuthContext · Layout<br/>SmoothScroller (lenis, autoRaf) · toasts<br/>attribution + click ids · Pixel PageView per pathname"]
+    subgraph DYN["Server pages, dynamic (were getServerSideProps)"]
         IDX["/ (11 newest products + 'View all', approved reviews)"]
-        PL["/products · /category/[slug] (12 per page + Load more; PRD-014 FR-0.8)"]
-        PD["/product/[slug] (notFound when unknown)"]
-        LB["/lookbook ('Coming soon') · /lookbook/[slug] (404 while empty)"]
-        CO["/checkout/[id] · thank-you · payment-failed"]
+        PL["/products · /category/[slug] · /search (12 per page + Load more)"]
+        PD["/product/[slug] (notFound when unknown) · /pay/[token] (shopper IP)"]
+        LBS["/lookbook/[slug] (404 while empty)"]
     end
-    subgraph SSG["getStaticProps (SEO meta only)"]
-        ST["/about · /contact · /login · /profile · legal · 404"]
+    subgraph STATIC["Static pages (metadata only, were getStaticProps / client pages)"]
+        ST["/about · /contact · /login · /profile · legal · /lookbook ('Coming soon')<br/>checkout start/thank-you/payment-failed/payment-return · token pages"]
     end
-    MW --> APP
-    APP --> SSR & SSG
-    ST -. "/profile also wrapped by withAuth (client fallback)" .-> WA["lib/withAuth.jsx"]
+    LOAD["lib/page-data/*.server.js<br/>(the old getServerSideProps code, once per request via cache())<br/>→ lib/server-apollo.server.js + edge headers"]
+    VIEWS["src/views/*View.jsx (client)<br/>the old page components on next/navigation"]
+    PX --> LAYOUT --> PROV
+    PROV --> DYN & STATIC
+    DYN --> LOAD
+    DYN & STATIC --> VIEWS
+    ST -. "/profile, /profile/orders/[id]: withAuth (client fallback)" .-> WA["lib/withAuth.jsx"]
 ```
+
+- **Metadata:** each page exports `metadata` or `generateMetadata` built by `lib/seo-metadata.util.js` from the page's `meta` object (the tags `SeoHeader` used to write; canonical without query or hash); `components/seo/PageSchemas.jsx` renders the JSON-LD (WebPage, organisation, site navigation, Product) in the page.
+- **Errors:** `app/not-found.jsx` (404), `app/error.jsx` (branded, client), `app/global-error.jsx` (the layout itself failed).
+- **Route handlers:** `/sitemap.xml`, `/robots.txt` and `/api/payments/return` (PayU form post or Cashfree redirect → 303 with a relative `Location` to `/checkout/payment-return`).
 
 ## 3. Data access
 
@@ -51,22 +60,22 @@ flowchart LR
     Q["useQuery / useMutation"] --> EL["errorLink (Apollo 4 ErrorLink)<br/>TOKEN_EXPIRED / UNAUTHENTICATED → refresh once, retry once<br/>INVALID_AUTH_TOKEN / TENANT_MISMATCH / INVALID_DB_TOKEN → clear session<br/>TENANT_NOT_FOUND → 'store unavailable' toast"]
     EL --> AL["authLink<br/>Bearer access token from memory<br/>(waits for a refresh when the isLoggedIn hint is set)"]
     AL --> HL["httpLink → /v1/graphql (browser)<br/>or API_GATEWAY_URL (server, + edge secret)<br/>credentials: include"]
-    HL -- "browser" --> PX["middleware.js proxy<br/>strip client x-zcom-*, x-tenant-domain, x-forwarded-host<br/>add x-zcom-client-ip (x-vercel-forwarded-for on Vercel,<br/>else request.ip, else right-most XFF hop)<br/>x-tenant-domain · x-zcom-edge-secret<br/>no tenant domain → 500"]
+    HL -- "browser" --> PX["proxy.js<br/>strip client x-zcom-*, x-tenant-domain, x-forwarded-host<br/>add x-zcom-client-ip (x-vercel-forwarded-for on Vercel,<br/>else request.ip, else right-most XFF hop)<br/>x-tenant-domain · x-zcom-edge-secret<br/>no tenant domain → 500"]
     PX --> GW["Gateway"]
     HL -- "server" --> GW
 ```
 
-**Edge headers (PRD-002 R2-C1).** `lib/edge-headers.server.js` (server-only; never imported by browser code) builds them. The gateway trusts `x-tenant-domain` and `x-zcom-client-ip` only with a valid `x-zcom-edge-secret`; until `EDGE_SHARED_SECRET` is set here and on the gateway, it runs in legacy mode. A `next.config.mjs` rewrite can't set request headers, so the proxy lives in `middleware.js`.
+**Edge headers (PRD-002 R2-C1).** `lib/edge-headers.server.js` (server-only: `proxy.js`, server pages, route handlers and `lib/page-data/*.server.js`; never a "use client" file) builds them. Server reads use `lib/server-apollo.server.js` (tenant + edge headers, none of the browser links); the browser client in `lib/apolloClient.jsx` is created once in `Providers`. The gateway trusts `x-tenant-domain` and `x-zcom-client-ip` only with a valid `x-zcom-edge-secret`; until `EDGE_SHARED_SECRET` is set here and on the gateway, it runs in legacy mode. A `next.config.mjs` rewrite can't set request headers, so the proxy lives in `proxy.js`.
 
-**Client IP and tenant (PRD-002 round 3, VSEC-3/VSEC-4).** `getClientIp` takes `x-vercel-forwarded-for` only when `VERCEL` is set, then `request.ip`, then the right-most `x-forwarded-for` hop; the first hop and `x-real-ip` are never trusted. The proxy strips client `x-tenant-domain` and `x-forwarded-host` and fails closed (500) without `NEXT_PUBLIC_TENANT_DOMAIN`. `getServerSideProps` calls (`/`, `/products`, `/category/[slug]`, `/product/[slug]`; catalog reads through `lib/catalog-listing.server.js`) send the tenant and the edge secret but no `x-zcom-client-ip`. The backend's 30/min per-IP login bucket across tenants (`AUTH_IP_RATE_LIMIT_PER_MIN`) makes setting `EDGE_SHARED_SECRET` in the same deploy as backend round 3 necessary.
+**Client IP and tenant (PRD-002 round 3, VSEC-3/VSEC-4).** `getClientIp` takes `x-vercel-forwarded-for` only when `VERCEL` is set, then `request.ip`, then the right-most `x-forwarded-for` hop; the first hop and `x-real-ip` are never trusted. The proxy strips client `x-tenant-domain` and `x-forwarded-host` and fails closed (500) without `NEXT_PUBLIC_TENANT_DOMAIN`. Server page reads (`/`, `/products`, `/category/[slug]`, `/search`, `/product/[slug]`; catalog reads through `lib/catalog-listing.server.js`) send the tenant and the edge secret but no `x-zcom-client-ip`; `/pay/[token]` sends the shopper's IP (`headers()`). The backend's 30/min per-IP login bucket across tenants (`AUTH_IP_RATE_LIMIT_PER_MIN`) makes setting `EDGE_SHARED_SECRET` in the same deploy as backend round 3 necessary.
 
-**Unsubscribe (VCON-1).** `pages/unsubscribe/index.jsx` (`noindex`) reads `?email=&token=` once, strips them from the URL (`router.replace`), and calls `unsubscribeNewsletter(email, token)`; the backend signs the link (`https://<tenant domain>/unsubscribe?…`) with `NEWSLETTER_TOKEN_SECRET` and answers uniformly, so the page shows one neutral message.
+**Unsubscribe (VCON-1).** `/unsubscribe` (`views/UnsubscribeView.jsx`, `noindex`) reads `?email=&token=` once, strips them from the URL (`history.replaceState`), and calls `unsubscribeNewsletter(email, token)`; the backend signs the link (`https://<tenant domain>/unsubscribe?…`) with `NEWSLETTER_TOKEN_SECRET` and answers uniformly, so the page shows one neutral message.
 
-**Back-in-stock confirmation (PRD-020, CP-22).** A guest's `requestBackInStock` is stored unconfirmed and the backend mails a link to `/back-in-stock/confirm?token=…`. `pages/back-in-stock/confirm.jsx` (`noindex`, disallowed in `robots.txt`) reads the token once, strips it from the URL (`router.replace`) and calls `confirmBackInStock(token)`: confirmed, expired-or-used, rate-limited (by `extensions.reason`) and network states. After a guest taps Notify me the toast says to check the email; signed-in shoppers keep the old copy (`utils/back-in-stock.util.js`, twin of rare `utils/back-in-stock.js`).
+**Back-in-stock confirmation (PRD-020, CP-22).** A guest's `requestBackInStock` is stored unconfirmed and the backend mails a link to `/back-in-stock/confirm?token=…`. `/back-in-stock/confirm` (`views/BackInStockConfirmView.jsx`, `noindex`, disallowed in `robots.txt`) reads the token once, strips it from the URL (`history.replaceState`) and calls `confirmBackInStock(token)`: confirmed, expired-or-used, rate-limited (by `extensions.reason`) and network states. After a guest taps Notify me the toast says to check the email; signed-in shoppers keep the old copy (`utils/back-in-stock.util.js`, twin of rare `utils/back-in-stock.js`).
 
-**Search, newsletter, reviews and SEO (PRD-014 FR-2.8).** `pages/search/index.jsx` (`noindex, follow`) renders the first page of `getClientSideProducts` with `filters.search` on the server and pages on through `ProductListing`; the footer `NewsletterForm` calls `subscribeNewsletter`; `/product/[slug]` reads the latest 10 approved reviews with the page, builds its meta from the product (merchant SEO fields win) and emits Product JSON-LD (offers, no availability until PRD-020); `pages/sitemap.xml.js` and `pages/robots.txt.js` are server-rendered from `Const.ClientLink`, the sitemap capped at 1000 products and cached for an hour at the edge.
+**Search, newsletter, reviews and SEO (PRD-014 FR-2.8).** `/search` (`noindex, follow`) renders the first page of `getClientSideProducts` with `filters.search` on the server and pages on through `ProductListing`; the footer `NewsletterForm` calls `subscribeNewsletter`; `/product/[slug]` reads the latest 10 approved reviews with the page, builds its meta from the product (merchant SEO fields win) and emits Product JSON-LD (offers, no availability until PRD-020); `app/sitemap.xml/route.js` and `app/robots.txt/route.js` are route handlers built from `Const.ClientLink`, the sitemap capped at 1000 products and cached for an hour at the edge.
 
-**Password reset (PRD-003 FR-0.5).** `pages/forgot-password.jsx` (`components/login/ForgotPassword.jsx`) calls `customerRequestPasswordReset` and shows one neutral state; the emailed link opens `pages/reset-password.jsx` (`components/login/ResetPassword.jsx`), which reads `?token=` once, strips it from the URL (`router.replace`, shallow) and calls `customerResetPassword`; `INVALID_RESET_TOKEN` shows the "request a new link" state. Both pages are `noindex`.
+**Password reset (PRD-003 FR-0.5).** `/forgot-password` (`components/login/ForgotPassword.jsx`) calls `customerRequestPasswordReset` and shows one neutral state; the emailed link opens `/reset-password` (`components/login/ResetPassword.jsx`), which reads `?token=` once, strips it from the URL (`history.replaceState`, shallow) and calls `customerResetPassword`; `INVALID_RESET_TOKEN` shows the "request a new link" state. Both pages are `noindex`.
 
 **Operations in use (29, all ✅):** `issueGuestCartId`, `mergeGuestCart`, `customerLogin`, `customerSignup`, `customerRefreshToken`, `customerLogout`, `getMyProfile`, `updateMyProfile`; `getClientSideProducts`, `getClientSideProductById`; `getCart`, `addItemToCart`, `removeItemFromCart`, `applyCartPromotion`, `removeCartPromotion`; `createCheckoutSessionFromCart`, `getCheckoutSession`, `completeCheckout`, `createPaymentSession`, `verifyPayment`; `myOrders`, `myOrder`; `getAddresses`, `createAddress`, `updateAddress`, `deleteAddress`; `submitContactForm`, `requestBackInStock`, `unsubscribeNewsletter`; PRD-003 FR-0.5 (2026-10-15) adds `customerRequestPasswordReset`, `customerResetPassword` (31 in total). PRD-014 FR-0.8/FR-0.9 add `getClientSideCategories` and `getReviews`; FR-2.8 (2026-10-25) adds `subscribeNewsletter`, a PDP `getReviews` read and a sitemap read of `getClientSideProducts`. PRD-020 FR-13 (2026-10-26) adds `getVariantAvailability` (the fresh stock read on the PDP and the bag) and selects `availability` on products and variants; PRD-015 FR-20 adds a `myOrder` detail read and `cancelMyOrder`, `createReturnRequest`, `cancelMyReturnRequest`. 41 documents, validated with `npm run validate:ops` against the composed supergraph.
 
@@ -92,7 +101,7 @@ On first load of this version, old localStorage tokens and the legacy JS `refres
 sequenceDiagram
     autonumber
     actor S as Shopper (logged in)
-    participant P as pages/checkout/[id]
+    participant P as /checkout/[id] (views/CheckoutView)
     participant GW as Gateway
     participant NB as Nimbbl
     participant TY as thank-you
@@ -123,15 +132,15 @@ A retry reuses the same unpaid order, also after a reload (`utils/pending-order.
 
 | Concern | Implementation |
 |---|---|
-| Styling | Global CSS in `styles/` (page sheets imported in `_app.jsx`) + a few `*.module.css`. MUI, emotion and styled-components removed |
+| Styling | Global CSS in `styles/` (page sheets imported in `app/layout.jsx`) + a few `*.module.css`. MUI, emotion and styled-components removed |
 | Fonts | `@font-face` in `globals.css` |
-| Motion | GSAP 3.15 from the public npm registry (ScrollTrigger, SplitText, ScrollToPlugin) registered per component, each cleaning up only its own timelines; Lenis + Tempus in `SmoothScroller`, resized by a `ResizeObserver` |
-| 3D | `PhoneModal` (three / R3F), dynamic import with `ssr: false` |
+| Motion | GSAP 3.15 from the public npm registry (ScrollTrigger, SplitText, ScrollToPlugin) registered per component, each cleaning up only its own timelines; `lenis` 1.3 (its own `autoRaf` loop) in `SmoothScroller`, resized by a `ResizeObserver` |
+| 3D | `PhoneModal` (three 0.187 / R3F 9 / drei 10), dynamic import with `ssr: false` in the contact view |
 | Media | Swiper; `next/image` with a `remotePatterns` allowlist (asset domains + `IMAGE_REMOTE_HOSTS`); product cards pass real dimensions and `sizes` (RPERF-12) |
-| SEO | `SeoHeader` + JSON-LD schema components serialised with `toJsonLd` |
+| SEO | `generateMetadata` / `metadata` from `lib/seo-metadata.util.js` + `PageSchemas` (JSON-LD components serialised with `toJsonLd`) |
 | CMS HTML | `utils/sanitize-html.util.js` allowlist (no scripts, handlers, `javascript:` URLs, iframes or svg; every link gets `rel="noopener noreferrer"`; styles with `\` dropped, RSEC-11) |
 | Security headers | CSP (GTM/GA, `*.nimbbl.tech`, asset hosts, `frame-ancestors 'none'`), nosniff, Referrer-Policy, X-Frame-Options, Permissions-Policy, HSTS in production (`next.config.mjs`). `script-src 'unsafe-inline'` is kept (SF-9 partial: a nonce would make every static page dynamic, and GTM custom-HTML tags need it); `CSP_REPORT_ONLY=true` switches to report-only for rollout |
-| Analytics | Consent first (PRD-014 FR-1.9, D10): `_document.jsx` runs only the Google Consent Mode v2 defaults ("denied"); `components/common/ConsentBanner.jsx` + `utils/consent.util.js` load GA and GTM after "analytics" consent, choice in localStorage `zc_consent`, reopened from the footer "Cookie Preferences"; IDs from env, no defaults. `utils/analytics.js` (`trackEcomEvent`, the GA4 e-commerce events), `utils/analytics-events.util.js` (PRD-013 event layer: `select_item`, `select_variant`, `cta_click`, `gallery_interaction`, `size_guide_open`, `notify_me`, `coupon_apply`/`coupon_failed`, `add_shipping_info`, `add_payment_info`, `checkout_error`; `item_id` = variant SKU), `utils/ga-attribution.util.js` (PRD-012 order attribution) |
+| Analytics | Consent first (PRD-014 FR-1.9, D10): `app/layout.jsx` runs only the Google Consent Mode v2 defaults ("denied"); `components/common/ConsentBanner.jsx` + `utils/consent.util.js` load GA and GTM after "analytics" consent, choice in localStorage `zc_consent`, reopened from the footer "Cookie Preferences"; IDs from env, no defaults. `utils/analytics.js` (`trackEcomEvent`, the GA4 e-commerce events), `utils/analytics-events.util.js` (PRD-013 event layer: `select_item`, `select_variant`, `cta_click`, `gallery_interaction`, `size_guide_open`, `notify_me`, `coupon_apply`/`coupon_failed`, `add_shipping_info`, `add_payment_info`, `checkout_error`; `item_id` = variant SKU), `utils/ga-attribution.util.js` (PRD-012 order attribution) |
 
 ## 7. Build and dependencies
 
@@ -151,8 +160,8 @@ flowchart LR
 | 3 | Strict tenant mode is off until `EDGE_SHARED_SECRET` is set; meanwhile the backend's per-IP login bucket sees every shopper as this host's IP | Code done (R2-C1); owner sets it here, on EB and on the CloudFront origin header at the same moment, in the same deploy as backend round 3, and confirms the host's client IP source |
 | 4 | Shared logic duplicated with rare-element (files carry "Keep in sync" headers, RMAINT-7) | ADR for a shared package |
 | 5 | No ESLint config, no tests, no end-to-end checkout run | T2 / owner sandbox run |
-| 6 | Router choice: Pages Router vs App Router | ADR |
-| 7 | Every browser API call runs through the Edge middleware (VPERF-4); `'unsafe-inline'` in the CSP (SF-9) | Accepted (R3-D7) |
+| 6 | ~~Router choice: Pages Router vs App Router~~ | Done: App Router, ADR-001 (2026-11-11) |
+| 7 | Every browser API call runs through the proxy (VPERF-4; Node runtime since Next 16); `'unsafe-inline'` in the CSP (SF-9) | Accepted (R3-D7) |
 
 ## PRD-014 Wave 0 (2026-10-25)
 
@@ -166,5 +175,5 @@ flowchart LR
 ## PRD-020 stock signal and PRD-015 post-purchase (2026-10-26, not browser-tested)
 
 - **Stock (FR-13, FR-14):** `utils/stock-signal.util.js` (twin of rare `utils/stock-signal.js`) maps the nullable `availability` / `availableQuantity` to states; `null` is today's behaviour everywhere. `utils/catalog.util.js` `isVariantUnavailable` keeps the ARCHIVED rule and adds OUT_OF_STOCK. The PDP reads the SSR value, then `hooks/useVariantAvailability.jsx` (`getVariantAvailability`, ≤ 50 ids, never cached server-side) on mount and on a variant change; a failed read keeps the SSR value. Sold-out size and colour choices are struck through (`aria-label="<value>, sold out"`, still selectable); a sold-out selection shows "Sold out" + "Notify me" (also in the mobile bag bar; an email field for guests, no login); `LOW_STOCK` shows "Only N left" (opt-in count) or "Low stock". Product cards (`/products`, `/category/[slug]`, home, related) show "Sold out" / "Low stock" badges from `Product.availability`; the store's `SHOW | SORT_LAST | HIDE` is applied by the server. The bag re-reads on open: a sold-out line shows "Sold out" (Remove stays) and checkout is held with "Remove sold-out items to continue". JSON-LD `offers.availability` comes from the rollup (`utils/product-offers.util.js`). `select_variant.in_stock` uses the signal when non-null.
-- **Post-purchase (FR-20):** new `/profile/orders/[id]` (`pages/profile/orders/[id].jsx` + `components/profileNew/order/OrderDetail.jsx`, `withAuth`, client data): the server's `displayStatus`, a tracking block (`shipment { courier awb trackingUrl tracking }`; https only; the latest five scans), Cancel when `canCancel` (inline confirmation, `cancelMyOrder`), "Request a return" while `returnableItems` is non-empty (per-line steppers capped at `returnableQty`, reason, condition, return-by date, link to `/shipping-returns`; `createReturnRequest` with line ids) and the order's `returnRequests` with "Withdraw" on a REQUESTED one. The profile order table shows `displayStatus` and a "View" link instead of the hard-coded Shiprocket link. Helpers in `utils/order-detail.util.js`; every refusal reason is mapped in `utils/api-error.util.js` (also PRD-016 `STORE_ORDERS_PAUSED`).
+- **Post-purchase (FR-20):** new `/profile/orders/[id]` (`app/profile/orders/[id]/page.jsx`, `views/OrderDetailView.jsx` + `components/profileNew/order/OrderDetail.jsx`, `withAuth`, client data): the server's `displayStatus`, a tracking block (`shipment { courier awb trackingUrl tracking }`; https only; the latest five scans), Cancel when `canCancel` (inline confirmation, `cancelMyOrder`), "Request a return" while `returnableItems` is non-empty (per-line steppers capped at `returnableQty`, reason, condition, return-by date, link to `/shipping-returns`; `createReturnRequest` with line ids) and the order's `returnRequests` with "Withdraw" on a REQUESTED one. The profile order table shows `displayStatus` and a "View" link instead of the hard-coded Shiprocket link. Helpers in `utils/order-detail.util.js`; every refusal reason is mapped in `utils/api-error.util.js` (also PRD-016 `STORE_ORDERS_PAUSED`).
 - Tests: `test/stock-signal.test.mjs`, `test/order-detail.test.mjs`.

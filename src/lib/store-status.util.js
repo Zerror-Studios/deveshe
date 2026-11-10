@@ -4,7 +4,7 @@
  * When the platform suspends a store, the gateway answers every edge-signed
  * storefront request with `TENANT_NOT_FOUND` and
  * `extensions.reason: TENANT_SUSPENDED` (DELETED and unknown stores stay a
- * plain `TENANT_NOT_FOUND`). `middleware.js` probes the gateway once per
+ * plain `TENANT_NOT_FOUND`). `proxy.js` probes the gateway once per
  * `STORE_STATUS_TTL_MS` (one small anonymous catalog read, single-flight)
  * and, while the store is suspended, answers page requests itself with a
  * branded "temporarily unavailable" page: HTTP 503, `Retry-After`,

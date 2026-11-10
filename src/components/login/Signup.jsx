@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -38,6 +38,7 @@ const SignupSchema = z
 
 const Signup = ({ setToggle }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [visible, setVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
   const client = useApolloClient();
@@ -60,7 +61,7 @@ const Signup = ({ setToggle }) => {
       const { confirmPassword, ...input } = data;
       await CustomerSession.signup(client, input);
       toast.success("Account created successfully!");
-      router.replace(getSafeNextPath(router.query.next, "/"));
+      router.replace(getSafeNextPath(searchParams.get("next"), "/"));
     } catch (err) {
       console.error(err);
       toast.error(

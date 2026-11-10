@@ -1,6 +1,7 @@
+"use client";
+
 import React, { useEffect, useLayoutEffect, useRef } from "react";
-import Tempus from "@studio-freight/tempus";
-import Lenis from "@studio-freight/lenis";
+import Lenis from "lenis";
 import { usePathname, useSearchParams } from "next/navigation";
 
 export default function SmoothScroller() {
@@ -13,16 +14,20 @@ export default function SmoothScroller() {
   }, [pathname, searchParams]);
 
   useLayoutEffect(() => {
+    // The options @studio-freight/lenis 1.0.42 actually applied (it ignored
+    // `smooth`, `smoothTouch`, `direction` and `gestureDirection`): smooth
+    // wheel, native touch, vertical. `autoRaf` replaces the Tempus loop.
     lenis.current = new Lenis({
       duration: 1.2,
       easing: (t) => 1 - Math.pow(1 - t, 3),
-      smooth: true,
-      smoothTouch: true,
-      direction: "vertical",
-      gestureDirection: "vertical",
+      smoothWheel: true,
+      syncTouch: false,
+      orientation: "vertical",
+      gestureOrientation: "vertical",
       wheelMultiplier: 0.8,
       touchMultiplier: 1.2,
       infinite: false,
+      autoRaf: true,
     });
 
     // Re-measure only when the page content changes size (SF-17); Lenis
@@ -42,14 +47,7 @@ export default function SmoothScroller() {
     resizeObserver?.observe(document.body);
     window.addEventListener("load", scheduleResize);
 
-    function onFrame(time) {
-      if (lenis.current) lenis.current.raf(time);
-    }
-
-    const unsubscribe = Tempus.add(onFrame);
-
     return () => {
-      unsubscribe();
       resizeObserver?.disconnect();
       window.removeEventListener("load", scheduleResize);
       if (resizeFrame) cancelAnimationFrame(resizeFrame);

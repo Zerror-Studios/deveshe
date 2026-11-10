@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { getProductPriceLabel } from "@/utils/Util";
 import ProductCard from "../common/card/ProductCard";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { StockStatus } from "@/utils/Constant";
@@ -27,7 +27,7 @@ const ProductListGrid = ({
   analyticsItemId,
 }) => {
   if (!data && data.length === 0) return;
-  const router = useRouter();
+  const pathname = usePathname();
   const [isMobile, setIsMobile] = useState(false);
 
   // detect mobile screen
@@ -81,7 +81,7 @@ const ProductListGrid = ({
       clearTimeout(refreshTimer);
       ctx.revert();
     };
-  }, [router.asPath, data]);
+  }, [pathname, data]);
   return (
     <div className="Similar_prd_wrap">
       <h2 className="Similar_prd_head">

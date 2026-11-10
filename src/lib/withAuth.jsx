@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
 import { getLoginPath } from "@/utils/redirect.util";
 
-// Client-side guard; `middleware.js` already redirects when there is no
+// Client-side guard; `proxy.js` already redirects when there is no
 // session cookie, this handles a session that ended in the browser.
 const withAuth = (WrappedComponent) => {
   return function AuthenticatedComponent(props) {
@@ -17,7 +17,10 @@ const withAuth = (WrappedComponent) => {
 
     useEffect(() => {
       if (isHydrated && !isLoggedIn) {
-        router.replace(getLoginPath(router.asPath));
+        // The current path and query, as the shopper opened it
+        router.replace(
+          getLoginPath(`${window.location.pathname}${window.location.search}`),
+        );
       }
     }, [isLoggedIn, isHydrated]);
 

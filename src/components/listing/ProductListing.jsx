@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Product listing (PRD-014 FR-0.8, UX-01 / D9)
  *
@@ -12,7 +14,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useApolloClient } from "@apollo/client/react";
 
 import ProductCard from "@/components/common/card/ProductCard";
@@ -25,10 +27,11 @@ import {
   LISTING_SORT_OPTIONS,
   toSortQueryValue,
 } from "@/utils/listing-sort.util";
+import { LISTING_PAGE_SIZE } from "./listing.constants";
 
 // ─── Constants ────────────────────────────────────────────────────────────
 
-export const LISTING_PAGE_SIZE = 12;
+export { LISTING_PAGE_SIZE };
 
 // 2 / 3 / 4 columns (styles/components/product-listing.css), RPERF-12.
 const LISTING_GRID_SIZES =
@@ -60,6 +63,8 @@ const ProductListing = ({
   emptyMessage = "There are no products here yet.",
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const client = useApolloClient();
   const [products, setProducts] = useState(initialProducts);
   const [totalCount, setTotalCount] = useState(initialTotalCount);
@@ -99,18 +104,18 @@ const ProductListing = ({
     }
   };
 
-  const handleRetry = () => router.replace(router.asPath);
+  // Renders the route again on the server (the first page's data).
+  const handleRetry = () => router.refresh();
 
   // A new sort starts the list again from the first page on the server;
   // the pages remount this listing per sort (their `key`).
   const handleSortChange = (event) => {
-    const { sort: _previous, ...query } = router.query;
+    const query = new URLSearchParams(searchParams.toString());
     const next = toSortQueryValue(event.target.value);
-    router.push(
-      { pathname: router.pathname, query: next ? { ...query, sort: next } : query },
-      undefined,
-      { scroll: false },
-    );
+    if (next) query.set("sort", next);
+    else query.delete("sort");
+    const search = query.toString();
+    router.push(search ? `${pathname}?${search}` : pathname, { scroll: false });
   };
 
   /* ----- Render ----- */

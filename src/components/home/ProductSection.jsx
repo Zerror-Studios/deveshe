@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import ProductCard from "../common/card/ProductCard";
 import { getProductPriceLabel } from "@/utils/Util";
 
@@ -30,7 +30,7 @@ const ProductSection = ({ data, sectionRef, totalCount = 0, loadError }) => {
           <button
             type="button"
             className="listing_button"
-            onClick={() => router.replace(router.asPath)}
+            onClick={() => router.refresh()}
           >
             Try again
           </button>
