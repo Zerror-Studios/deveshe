@@ -11,6 +11,8 @@
 # env files (can opt-in for committing if needed)
 # local env files
 .env
+# written by the Amplify build (amplify.yml), never committed
+.env.production
 .env*.local
 *.env
 *.env.local
