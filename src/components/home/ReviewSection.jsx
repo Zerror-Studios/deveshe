@@ -125,7 +125,7 @@ const ReviewSection = ({ reviews = [] }) => {
                   <div className="bird" aria-hidden="true">
                     <Image
                       width={1000}
-                      height={1000}
+                      height={1218}
                       src="/scrapbook/letter.png"
                       alt=""
                     />

@@ -94,3 +94,9 @@
     max-width: 480px;
   }
 }
+
+/* A stored choice: the kit's head script marks <html> before the first
+   paint, so the server-rendered banner never flashes (kit 1.0.5). */
+html[data-zcom-consent] .consent_banner[data-initial] {
+  display: none;
+}

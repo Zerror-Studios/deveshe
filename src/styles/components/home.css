@@ -153,7 +153,7 @@
 .explore_center_card {
   width: 27%;
   height: 100%;
-  background-image: url(/frame.png);
+  background-image: url(/frame.webp);
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center;
@@ -257,9 +257,11 @@
   z-index: 1;
 }
 
-.explore_inspired_container h5 {
+/* A label, not a heading (it would skip heading levels) */
+.explore_inspired_container .explore_inspired_kicker {
   font-size: 2vw;
   font-family: paragraphStyle;
+  font-weight: bold;
 }
 .explore_inspired_container h3 {
   font-size: 5.5vw;
@@ -289,8 +291,10 @@
   overflow: hidden;
   cursor: pointer;
 }
-.inspired_button_wrap h4 {
+/* A button label, not a heading (it would break the heading order) */
+.inspired_button_wrap .btn_label {
   font-family: heading;
+  font-weight: bold;
   font-size: 3.5vw;
   line-height: 1;
   text-transform: uppercase;
@@ -435,8 +439,10 @@
 .vision_text2 {
   width: 50%;
 }
-.vision_text2 h6 {
+/* A label, not a heading (it would skip heading levels) */
+.vision_text2 .vision_kicker {
   font-family: heading;
+  font-weight: bold;
   font-size: 2vw;
   line-height: 0.9;
   color: red;
@@ -578,7 +584,7 @@
   font-size: 18px;
   font-weight: 500;
   font-family: paragraph;
-  color: #767676;
+  color: #595959;
 }
 
 .bird img {
@@ -600,12 +606,12 @@
   align-items: center;
   font-size: 18px;
   font-weight: 500;
-  color: #767676;
+  color: #595959;
 }
 
 .tweet-footer .tag {
   text-decoration: none;
-  color: #767676;
+  color: #595959;
 }
 
 /* review section end */
@@ -727,7 +733,7 @@
   .explore_inspired_container {
     margin-top: 16vw;
   }
-  .explore_inspired_container h5 {
+  .explore_inspired_container .explore_inspired_kicker {
     font-size: 5vw;
   }
 
@@ -771,7 +777,7 @@
   .inspired_button_wrap {
     height: 5vw;
   }
-  .inspired_button_wrap h4 {
+  .inspired_button_wrap .btn_label {
     font-size: 5vw;
   }
 
@@ -805,13 +811,13 @@
     padding: 4vw;
     padding-top: 2vw;
   }
-  .common_product_card .product_card_details h4:nth-child(1) {
+  .common_product_card .product_card_details p:nth-child(1) {
     font-family: heading;
     font-size: 16px;
   }
-  .common_product_card .product_card_details h4:nth-child(2) {
+  .common_product_card .product_card_details p:nth-child(2) {
     font-size: 12px;
-    color: #767676;
+    color: #595959;
   }
   #vision_section {
     padding: 20vw 20px;
@@ -840,7 +846,7 @@
   .vision_text2 {
     width: 100%;
   }
-  .vision_text2 h6 {
+  .vision_text2 .vision_kicker {
     font-size: 7vw;
   }
   .vision_text2 p {
@@ -1011,7 +1017,7 @@
   .explore_inspired_container {
     margin-top: 16vw;
   }
-  .explore_inspired_container h5 {
+  .explore_inspired_container .explore_inspired_kicker {
     font-size: 5vw;
   }
 
@@ -1055,7 +1061,7 @@
   .inspired_button_wrap {
     height: 5vw;
   }
-  .inspired_button_wrap h4 {
+  .inspired_button_wrap .btn_label {
     font-size: 5vw;
   }
 
@@ -1089,13 +1095,13 @@
     padding: 4vw;
     padding-top: 2vw;
   }
-  .common_product_card .product_card_details h4:nth-child(1) {
+  .common_product_card .product_card_details p:nth-child(1) {
     font-family: heading;
     font-size: 16px;
   }
-  .common_product_card .product_card_details h4:nth-child(2) {
+  .common_product_card .product_card_details p:nth-child(2) {
     font-size: 12px;
-    color: #767676;
+    color: #595959;
   }
   #vision_section {
     padding: 20vw 20px;
@@ -1124,7 +1130,7 @@
   .vision_text2 {
     width: 100%;
   }
-  .vision_text2 h6 {
+  .vision_text2 .vision_kicker {
     font-size: 4vw;
   }
   .vision_text2 p {

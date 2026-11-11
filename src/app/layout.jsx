@@ -70,6 +70,21 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        {/* The two fonts above the fold (headings and body text) */}
+        <link
+          rel="preload"
+          href="/assets/fonts/cob/font-ea9181547d67e56abd65.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/assets/fonts/cob/font-69130470425c85950313.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         <script
           dangerouslySetInnerHTML={{ __html: CONSENT_DEFAULT_SCRIPT }}
         />

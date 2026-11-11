@@ -1,21 +1,29 @@
 @font-face {
   font-family: heading;
-  src: url(/assets/fonts/cob/font-ea9181547d67e56abd65.woff2);
+  src: url(/assets/fonts/cob/font-ea9181547d67e56abd65.woff2) format("woff2");
+  /* Text shows in a fallback font at once instead of waiting for this */
+  font-display: swap;
 }
 
 @font-face {
   font-family: paragraph;
-  src: url(/assets/fonts/cob/font-69130470425c85950313.woff2);
+  src: url(/assets/fonts/cob/font-69130470425c85950313.woff2) format("woff2");
+  /* Text shows in a fallback font at once instead of waiting for this */
+  font-display: swap;
 }
 
 @font-face {
   font-family: paragraphStyle;
-  src: url(/assets/fonts/dd34dea82ffd23ec2838.woff);
+  src: url(/assets/fonts/dd34dea82ffd23ec2838.woff) format("woff");
+  /* Text shows in a fallback font at once instead of waiting for this */
+  font-display: swap;
 }
 
 @font-face {
   font-family: paragraphStyleB;
-  src: url(/assets/fonts/bd8de66be4175fed48a7.woff);
+  src: url(/assets/fonts/bd8de66be4175fed48a7.woff) format("woff");
+  /* Text shows in a fallback font at once instead of waiting for this */
+  font-display: swap;
 }
 
 body::-webkit-scrollbar {
@@ -656,6 +664,9 @@ input[type="number"] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  /* At least a 24 px tap target (WCAG 2.2 target size) */
+  min-width: 24px;
+  min-height: 24px;
   padding: 0;
   border: 0;
   background: none;

@@ -21,6 +21,8 @@ const ProductCard = ({
   listName,
   // PRD-027 F10: the lookbook's GA4 item_list_id
   listId,
+  // The first row of a listing: loaded at once, it is the page's LCP
+  preload = false,
 }) => {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -53,14 +55,17 @@ const ProductCard = ({
         width={CARD_IMAGE_SIZE_PX}
         height={CARD_IMAGE_SIZE_PX}
         sizes={sizes}
+        preload={preload}
+        fetchPriority={preload ? "high" : undefined}
         src={src}
         alt={alt}
       />
 
       {badge && <span className="product_card_badge">{badge}</span>}
       <div className="product_card_details">
-        <h4>{name}</h4>
-        <h4>{price}</h4>
+        {/* Text, not headings: a card title would break the heading order */}
+        <p>{name}</p>
+        <p>{price}</p>
       </div>
     </Link>
   );

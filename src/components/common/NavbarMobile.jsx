@@ -200,26 +200,26 @@ const NavbarMobile = ({ openCart }) => {
         <div className="navbar-mobile-wrap">
           <Link href="/" id="nav-logo" aria-label="DeVeSheDreams home">
             <Image
-              width={1000}
-              height={1000}
+              width={63}
+              height={41}
               src="/assets/images/logo/d.webp"
               alt="D"
             />
             <Image
-              width={1000}
-              height={1000}
+              width={66}
+              height={41}
               src="/assets/images/logo/v.webp"
               alt="V"
             />
             <Image
-              width={1000}
-              height={1000}
+              width={105}
+              height={41}
               src="/assets/images/logo/s.webp"
               alt="S"
             />
             <Image
-              width={1000}
-              height={1000}
+              width={196}
+              height={41}
               src="/assets/images/logo/m.webp"
               alt="M"
             />

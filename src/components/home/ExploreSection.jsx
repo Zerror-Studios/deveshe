@@ -18,7 +18,7 @@ const ExploreSection = ({ sectionRef }) => {
       });
     };
     splitText(".explore_text_container h2");
-    splitText(".inspired_button_wrap h4");
+    splitText(".inspired_button_wrap .btn_label");
 
     const ctx = gsap.context(() => {
       // Heading animation
@@ -122,16 +122,18 @@ const ExploreSection = ({ sectionRef }) => {
       <div className="explore_polaroid_container">
         <div className="explore_side_card explore_side_card1">
           <Image
-            width={1000}
-            height={1000}
+            width={3001}
+            height={4502}
+            sizes="19vw"
             src="/assets/images/home/explore3.jpg"
             alt="explore"
           />
         </div>
         <div className="explore_center_card">
           <Image
-            width={1000}
-            height={1000}
+            width={2300}
+            height={3450}
+            sizes="(max-width: 576px) 58vw, 27vw"
             src="/assets/images/home/explore1.jpg"
             alt="explore"
           />
@@ -141,15 +143,16 @@ const ExploreSection = ({ sectionRef }) => {
         </div>
         <div className="explore_side_card explore_side_card2">
           <Image
-            width={1000}
-            height={1000}
+            width={3001}
+            height={4502}
+            sizes="19vw"
             src="/assets/images/home/explore2.jpg"
             alt="explore"
           />
         </div>
       </div>
       <div className="explore_inspired_container">
-        <h5>All inspired by</h5>
+        <div className="explore_inspired_kicker">All inspired by</div>
         <div>
           <h3>
             Creativity,
@@ -161,21 +164,23 @@ const ExploreSection = ({ sectionRef }) => {
         <div onClick={handleScrollTo} onMouseEnter={enterHandler} className="explore_inspired_button">
           [
           <div className="inspired_button_wrap" id="btn-text-wrap">
-            <h4 className="text1-btn">Shop Now</h4>
-            <h4 className="text2-btn">Shop Now</h4>
+            <div className="text1-btn btn_label">Shop Now</div>
+            <div className="text2-btn btn_label">Shop Now</div>
           </div>
           ]
         </div>
         <Image
-          width={1000}
-          height={1000}
+          width={730}
+          height={3655}
+          sizes="(max-width: 768px) 16vw, 30vh"
           className="explore_strip1"
           src="/assets/images/home/hero_strip1.webp"
           alt="explore"
         />
         <Image
-          width={1000}
-          height={1000}
+          width={730}
+          height={3655}
+          sizes="(max-width: 768px) 16vw, 30vh"
           className="explore_strip2"
           src="/assets/images/home/hero_strip2.webp"
           alt="explore"

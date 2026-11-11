@@ -289,7 +289,7 @@
   -moz-osx-font-smoothing: grayscale;
   font-size: 13px;
   line-height: 1.2;
-  color: #767676;
+  color: #595959;
   grid-area: sizes;
   display: flex;
   height: 18px;
@@ -947,7 +947,7 @@ button {
 }
 
 .ProductDets_colorVariant_wrap span:nth-child(2) {
-  color: #767676;
+  color: #595959;
 }
 
 .ProductDets_collection-wrap {
@@ -1359,7 +1359,7 @@ button {
 }
 
 .ProductDets_shipping_para {
-  color: #767676;
+  color: #595959;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -1378,7 +1378,7 @@ button {
 }
 
 .ProductDets_info-btn:hover {
-  color: #767676;
+  color: #595959;
 }
 
 .ProductDets_info-btn {
@@ -1522,7 +1522,7 @@ button {
 
   .mobile_add_btn p {
     margin-top: 0.5rem;
-    color: #767676;
+    color: #595959;
     text-align: center;
     font-size: 13px;
   }
@@ -1805,7 +1805,7 @@ button {
     /* text-decoration: underline !important; */
     background: transparent !important;
     padding: 0 !important;
-    color: #767676 !important;
+    color: #595959 !important;
   }
 }
 
@@ -1857,7 +1857,7 @@ button {
 
   .ProductDets_common_style span {
     font-size: 12px;
-    color: #767676;
+    color: #595959;
   }
 
   .ProductDets_size_wrap {

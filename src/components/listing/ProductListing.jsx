@@ -34,6 +34,8 @@ import { LISTING_PAGE_SIZE } from "./listing.constants";
 export { LISTING_PAGE_SIZE };
 
 // 2 / 3 / 4 columns (styles/components/product-listing.css), RPERF-12.
+// The first row (two cards on a phone, four on desktop) is the LCP
+const LISTING_PRELOAD_COUNT = 4;
 const LISTING_GRID_SIZES =
   "(max-width: 576px) 50vw, (max-width: 1000px) 33vw, 25vw";
 
@@ -189,9 +191,10 @@ const ProductListing = ({
       ) : (
         <>
           <div className="listing_grid">
-            {products.map((product) => (
+            {products.map((product, index) => (
               <ProductCard
                 key={product._id}
+                preload={index < LISTING_PRELOAD_COUNT}
                 href={`/product/${product.slug || ""}`}
                 src={product.assets?.[0]?.path || ""}
                 alt={product.assets?.[0]?.altText || product.name || ""}

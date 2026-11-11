@@ -52,7 +52,7 @@ const OurProcess = () => {
       <div className="process_container">
         <div className="process_strip">
           <div className="porcess_content">
-            <h4>Our Process</h4>
+            <h3>Our Process</h3>
             <p>
               We’re committed to a seamless process that balances innovation,
               communication, and execution.
@@ -66,6 +66,7 @@ const OurProcess = () => {
                 <Image
                 width={1000}
                 height={1000}
+                sizes="(max-width: 768px) 80vw, 29vw"
                 src="/assets/images/about/process1.webp"
                 alt="process image 1"
               />
@@ -87,6 +88,7 @@ const OurProcess = () => {
                   <Image
                 width={1000}
                 height={1000}
+                sizes="(max-width: 768px) 80vw, 29vw"
                 src="/assets/images/about/process3.webp"
                 alt="process image 1"
               />
@@ -110,6 +112,7 @@ const OurProcess = () => {
                 <Image
                   width={1000}
                   height={1000}
+                  sizes="(max-width: 768px) 80vw, 29vw"
                   src="/assets/images/about/process2.webp"
                   alt="process image 1"
                 />
@@ -130,6 +133,7 @@ const OurProcess = () => {
                 <Image
                   width={1000}
                   height={1000}
+                  sizes="(max-width: 768px) 80vw, 29vw"
                   src="/assets/images/about/process4.webp"
                   alt="process image 1"
                 />

@@ -65,6 +65,8 @@ const ProductImageGrid = ({ assets = [], setSelectedAsset, setIsPreviewOpen, ite
                                 width={1000}
                                 height={1000}
                                 sizes={DESKTOP_GRID_SIZES}
+                                preload={index === 0}
+                                fetchPriority={index === 0 ? "high" : undefined}
                                 src={item?.path || ""}
                                 alt={item?.altText || ""}
                               />
@@ -110,6 +112,8 @@ const ProductImageGrid = ({ assets = [], setSelectedAsset, setIsPreviewOpen, ite
                               width={1000}
                               height={1000}
                               sizes={DESKTOP_GRID_SIZES}
+                              preload={index === 0}
+                              fetchPriority={index === 0 ? "high" : undefined}
                               src={item?.path || ""}
                               alt={item?.altText || ""}
                             />
@@ -154,6 +158,9 @@ const ProductImageGrid = ({ assets = [], setSelectedAsset, setIsPreviewOpen, ite
                       width={1000}
                       height={1000}
                       sizes="100vw"
+                      // The first photo is the page's LCP on a phone
+                      preload={index === 0}
+                      fetchPriority={index === 0 ? "high" : undefined}
                       src={item?.path || ""}
                       alt={item?.altText || ""}
                     />

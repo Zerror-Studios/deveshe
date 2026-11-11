@@ -214,7 +214,7 @@ a {
   width: 100%;
   display: block;
   cursor: pointer;
-  color: #767676;
+  color: #595959;
   font-family: paragraph;
   font-size: 0.75rem;
 }
@@ -350,11 +350,11 @@ a {
   font-size: 0.857143rem;
 
   margin: 0.6rem 0 0 0;
-  /* border: 1px solid #767676; */
+  /* border: 1px solid #595959; */
   width: 100%;
   display: block;
   cursor: pointer;
-  color: #767676;
+  color: #595959;
   font-family: paragraph;
   background-color: rgb(245 243 243 / 60%);
 }
@@ -390,7 +390,7 @@ a {
   font-family: paragraph;
   font-size: 0.75rem;
 
-  color: #767676;
+  color: #595959;
 }
 
 .payment_inner_container_bg {
@@ -547,7 +547,7 @@ a {
   border: none;
   width: 100%;
   /* margin: 1.2rem 0 0 0; */
-  /* border: 1px solid #767676; */
+  /* border: 1px solid #595959; */
   width: 100%;
   display: block;
   cursor: pointer;

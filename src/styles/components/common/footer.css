@@ -40,7 +40,9 @@
   font-weight: 400;
   font-size: 14px;
   line-height: 1.35;
-  margin-top: 4px;
+  /* A 24 px tap target (WCAG 2.2 target size), not overlapped by the next
+     link (the 4 px margin is folded into the padding) */
+  padding: 3px 0;
 }
 .footer_link_wrap a::before {
   content: "";

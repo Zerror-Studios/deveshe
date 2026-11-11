@@ -111,7 +111,7 @@ const VisionSection = () => {
       <Image
         ref={imageRef}
         width={1000}
-        height={1000}
+        height={1086}
         src="/scrapbook/2girl.png"
         alt="image"
       />
@@ -122,7 +122,7 @@ const VisionSection = () => {
       </div>
 
       <div className="vision_text2">
-        <h6>Built on artistic instinct and expression</h6>
+        <div className="vision_kicker">Built on artistic instinct and expression</div>
         <p>
           Born from a love for daydreaming and storytelling through clothes,
           DeVeSheDreams turns imagination into
@@ -136,8 +136,8 @@ const VisionSection = () => {
         >
           [
           <div className="inspired_button_wrap" id="btn-text-wrap">
-            <h4 className="text1-btn">Read More</h4>
-            <h4 className="text2-btn">Read More</h4>
+            <div className="text1-btn btn_label">Read More</div>
+            <div className="text2-btn btn_label">Read More</div>
           </div>
           ]
         </div>

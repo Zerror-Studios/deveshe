@@ -510,7 +510,7 @@ const OurJourney = () => {
         <div className="journey_bottom">
           <div className="joruney_wrap">
             <div className="text_container">
-              <h4>Where it all began</h4>
+              <h3>Where it all began</h3>
               <p>
                 Raised in Mumbai and trained at Parsons, I turn daydreams into
                 fabric. <strong>Fashion is my language</strong>, where I
@@ -522,14 +522,16 @@ const OurJourney = () => {
               <Image
                 className="frame1"
                 width={1000}
-                height={1000}
+                height={1282}
+                sizes="(max-width: 768px) 100vw, 23vw"
                 src="/assets/images/about/frame1.webp"
                 alt="frame"
               />
               <Image
                 className="frame2"
                 width={1000}
-                height={1000}
+                height={1236}
+                sizes="(max-width: 768px) 60vw, 14vw"
                 src="/assets/images/about/frame2.webp"
                 alt="frame"
               />

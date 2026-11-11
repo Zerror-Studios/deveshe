@@ -318,29 +318,29 @@ const Navbar = ({ openCart }) => {
         <Link href="/" id="logo-container" aria-label="DeVeSheDreams home">
           <p>new emotions?</p>
           <Image
-            width={1000}
-            height={1000}
+            width={63}
+            height={41}
             src="/assets/images/logo/d.webp"
             alt="D"
             className="logo"
           />
           <Image
-            width={1000}
-            height={1000}
+            width={66}
+            height={41}
             src="/assets/images/logo/v.webp"
             alt="V"
             className="logo"
           />
           <Image
-            width={1000}
-            height={1000}
+            width={105}
+            height={41}
             src="/assets/images/logo/s.webp"
             alt="S"
             className="logo"
           />
           <Image
-            width={1000}
-            height={1000}
+            width={196}
+            height={41}
             src="/assets/images/logo/m.webp"
             alt="M"
             className="logo"

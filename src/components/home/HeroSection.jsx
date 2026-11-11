@@ -22,6 +22,9 @@ const HeroSection = () => {
           type: "lines",
           mask: "lines", // creates overflow hidden mask divs
           linesClass: "line",
+          // A line split keeps the text readable; "auto" would put an
+          // aria-label on the <p>, which a paragraph may not carry
+          aria: "none",
         });
 
         splitInstances.current.push(split);
@@ -105,8 +108,11 @@ const HeroSection = () => {
   return (
     <div id="home_hero" className="skeleton-loading">
       <Image
-        width={1000}
-        height={1000}
+        width={5350}
+        height={6526}
+        sizes="100vw"
+        preload
+        fetchPriority="high"
         src="/assets/images/home/home_banner.webp"
         alt="home_banner"
       />
