@@ -13,6 +13,9 @@
  *   navigation. The backend's `storefrontTrackingConfig` ids win; GA4 and
  *   GTM fall back to env (PRD-034: no env fallback for the ads ids).
  * - The store's auth context, layout, single Lenis scroller and toasts.
+ * - The brush page transition between routes (main's design,
+ *   `next-transition-router`); checkout routes skip it.
+ * - The nav's lookbook list is fetched once per session (cache-first).
  */
 
 import React, { Suspense } from "react";
@@ -21,6 +24,8 @@ import { ZcomSsrProvider } from "@zcom/storefront-kit/ssr";
 import { registerNimbblCheckout, ZcomTags } from "@zcom/storefront-kit/client";
 import Layout from "@/components/layouts/Layout";
 import SmoothScroller from "@/components/common/SmoothScroller";
+import NavApolloWarmup from "@/components/layouts/NavApolloWarmup";
+import TransitionWrapper from "@/components/pagetransition/TransitionWrapper";
 import { AuthProvider } from "@/context/AuthContext";
 import { zcomConfig } from "@/zcom.config";
 
@@ -50,14 +55,17 @@ const Providers = ({ children }) => (
     onStoreUnavailable={showStoreUnavailable}
   >
     <ZcomTags fallback={TAG_ID_FALLBACK} />
+    <NavApolloWarmup />
     <AuthProvider>
-      <Layout>
-        {/* useSearchParams needs a Suspense boundary (static pages) */}
-        <Suspense fallback={null}>
-          <SmoothScroller />
-        </Suspense>
-        {children}
-      </Layout>
+      <TransitionWrapper>
+        <Layout>
+          {/* useSearchParams needs a Suspense boundary (static pages) */}
+          <Suspense fallback={null}>
+            <SmoothScroller />
+          </Suspense>
+          {children}
+        </Layout>
+      </TransitionWrapper>
     </AuthProvider>
     <ToastContainer position="top-right" />
   </ZcomSsrProvider>

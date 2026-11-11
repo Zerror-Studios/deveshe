@@ -10,7 +10,6 @@ import { useDialogA11y } from "@/hooks/useDialogA11y";
 import { formatePrice, getCartItemCount } from "@/utils/Util";
 import gsap from "gsap";
 import CartProduct from "@/components/cart/CartProduct";
-import CommonButton from "../common/CommonButton";
 import {
   REMOVE_ITEM_OVERRIDES,
   getErrorMessage,
@@ -25,6 +24,8 @@ import {
   getCartLineStockId,
   hasSoldOutLine,
 } from "@/utils/stock-signal.util";
+import CartEmptyState from "@/components/cart/CartEmptyState";
+import BracketSlideCta from "@/components/common/BracketSlideCta";
 
 const CartDrawer = ({ isOpen, closeCart }) => {
   const router = useRouter();
@@ -80,6 +81,7 @@ const CartDrawer = ({ isOpen, closeCart }) => {
   } = cartResponse?.getCart || {};
 
   const count = getCartItemCount(cart);
+  const isEmpty = !cart?.length;
 
   // PRD-020 FR-13: a fresh stock read when the bag opens. A sold-out line
   // blocks checkout until it is removed; no signal changes nothing, and
@@ -215,7 +217,11 @@ const CartDrawer = ({ isOpen, closeCart }) => {
           </button>
         </div>
 
-        <div id="drawer_products" data-lenis-prevent>
+        <div
+          id="drawer_products"
+          className={isEmpty ? "is-empty" : ""}
+          data-lenis-prevent
+        >
           {/* PRD-014 UX-37: loading and error are not "no items" */}
           {cartError && !isInvalidGuestIdError(cartError) ? (
             <div id="no_item" role="alert">
@@ -246,36 +252,39 @@ const CartDrawer = ({ isOpen, closeCart }) => {
               />
             ))
           ) : (
-            <span id="no_item">There are currently no items in your bag.</span>
+            <CartEmptyState active={isOpen} />
           )}
         </div>
 
-        <div id="drawer_bottom">
-          <div className="total_price">
-            <span>Total</span>
-            {totalprice !== discountedPrice && (
-              <span>{formatePrice(totalprice)}</span>
-            )}
-            <span>{formatePrice(discountedPrice)}</span>
-          </div>
-          <div className="checkout_btn_container">
-            <span>
+        {!isEmpty && (
+          <div id="drawer_bottom">
+            <p className="cart-delivery-note">
               Our outfits are made to order! The delivery time for our products
               is approx. 2 weeks
-            </span>
-            <CommonButton
-              title={"Checkout"}
-              onClick={navigateCheckout}
-              loading={isBtnLoading}
-              testId="cart-checkout"
-            />
+            </p>
+            <div className="total_price">
+              <span>Total</span>
+              {totalprice !== discountedPrice && (
+                <span>{formatePrice(totalprice)}</span>
+              )}
+              <span>{formatePrice(discountedPrice)}</span>
+            </div>
+            <div className="checkout_btn_container" data-testid="cart-checkout">
+              <BracketSlideCta
+                label="Checkout"
+                onClick={navigateCheckout}
+                loading={isBtnLoading}
+                className="cart-checkout-cta"
+                ariaLabel="Checkout"
+              />
+            </div>
             {blockedBySoldOut && (
               <span className="cart_sold_out_note" role="status">
                 {SOLD_OUT_CHECKOUT_MESSAGE}
               </span>
             )}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

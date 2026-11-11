@@ -28,7 +28,11 @@ const Delivery = ({
   const [selectedAddress, setSelectedAddress] = useState(null);
   // True while the selection is ours, not the shopper's.
   const isAutoSelectedRef = useRef(true);
-  const shippingAddress = useWatch({ control, name: "shippingAddress" });
+  const shippingPhone = useWatch({ control, name: "shippingAddress.phone" });
+  const shippingCountryCode = useWatch({
+    control,
+    name: "shippingAddress.countryCode",
+  });
   const { isLoggedIn } = useAuthStore((state) => state);
   const {
     data: addressResponse,
@@ -320,8 +324,7 @@ const Delivery = ({
             <div className="Phone_input_cntr div-name">
               <PhoneInput
                 defaultCountry="in"
-                value={`+${shippingAddress?.countryCode?.replace("+", "") || "91"
-                  }${shippingAddress?.phone || ""}`}
+                value={`+${shippingCountryCode?.replace("+", "") || "91"}${shippingPhone || ""}`}
                 className="delivery__phone_btn"
                 inputClassName="delivery__input__phone"
                 onChange={(value, metadata) => {

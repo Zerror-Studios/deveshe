@@ -1,21 +1,26 @@
 /**
  * Home page data — SERVER ONLY (was `getServerSideProps` of `pages/index.jsx`).
  *
- * PRD-014 FR-0.8: the newest published products (one large card + a grid
- * of ten); FR-0.9 (UX-35): up to four approved reviews with a comment,
- * the ones the store pinned first (PRD-032 FR-D6).
+ * The live design (main, 2026-05): "Top Picks" are the first eight
+ * published products of the curated collection (resolved by its slug, so a
+ * renamed id never breaks it), "Latest Blogs" the newest published post.
+ * PRD-014 FR-0.9 (UX-35): up to four approved reviews with a comment, the
+ * ones the store pinned first (PRD-032 FR-D6). Every part is optional: a
+ * failed read leaves its section empty or hidden, never the page.
  */
 
 import {
   createServerCatalogClient,
+  curatedListingFilters,
   fetchProductPage,
 } from "@/lib/catalog-listing.server";
-import { GET_REVIEWS } from "@/graphql";
+import { GET_CLIENT_SIDE_BLOGS, GET_REVIEWS } from "@/graphql";
+import { mapBlogForListing } from "@/data/blogs";
 import { pickHomeReviews } from "@/utils/review.util";
 
 // ─── Constants ────────────────────────────────────────────────────────────
 
-const HOME_FEATURED_LIMIT = 11;
+const HOME_CURATED_LIMIT = 8;
 const HOME_REVIEW_LIMIT = 4;
 const HOME_REVIEW_FETCH_LIMIT = 12;
 
@@ -50,11 +55,26 @@ export const HOME_META = {
 
 // ─── Loader ───────────────────────────────────────────────────────────────
 
+/** The curated collection's first products; [] when it can't be read. */
+const loadCuratedProducts = async (client) => {
+  // Without the collection, the newest published products stand in.
+  const filters = await curatedListingFilters(client);
+  const page = await fetchProductPage(client, {
+    filters,
+    limit: HOME_CURATED_LIMIT,
+  });
+  return page.products;
+};
+
 export async function loadHomePage() {
   const client = createServerCatalogClient();
-  const [productResult, reviewResult, featuredResult] =
+  const [productResult, blogResult, reviewResult, featuredResult] =
     await Promise.allSettled([
-      fetchProductPage(client, { limit: HOME_FEATURED_LIMIT }),
+      loadCuratedProducts(client),
+      client.query({
+        query: GET_CLIENT_SIDE_BLOGS,
+        variables: { limit: 1, offset: 0 },
+      }),
       client.query({
         query: GET_REVIEWS,
         variables: { offset: 0, limit: HOME_REVIEW_FETCH_LIMIT },
@@ -79,9 +99,10 @@ export async function loadHomePage() {
   );
 
   return {
-    productData: productResult.value?.products || [],
-    productTotal: productResult.value?.totalCount || 0,
-    productError: productResult.status === "rejected",
+    productData: productResult.value || [],
+    latestBlog: mapBlogForListing(
+      blogResult.value?.data?.getClientSideBlogs?.blogs?.[0],
+    ),
     reviews,
   };
 }

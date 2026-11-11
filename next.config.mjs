@@ -37,6 +37,11 @@ const DEFAULT_IMAGE_HOSTS = [
   "cdn.deveshedreams.com",
   "media.zerrorstudios.com",
   "media-uat.zerrorstudios.com",
+  // Live-site content (main): material photos and the blog fallback image
+  // are hot-linked from these hosts; the profile avatar fallback is DiceBear.
+  "a.storyblok.com",
+  "ark8.net",
+  "api.dicebear.com",
 ];
 
 const IMAGE_HOSTS = [
@@ -67,6 +72,9 @@ const REVIEW_UPLOAD_ORIGINS = (process.env.REVIEW_UPLOAD_HOSTS || "")
 const SECURITY_HEADERS = buildSecurityHeaders({
   imageHosts: ASSET_ORIGINS,
   uploadHosts: REVIEW_UPLOAD_ORIGINS,
+  // The contact page's 3D phone: GLTFLoader fetches its embedded textures
+  // from blob: URLs it creates itself.
+  extraConnectHosts: ["blob:"],
   development: isDev,
   reportOnly: process.env.CSP_REPORT_ONLY === "true",
 });
@@ -96,6 +104,16 @@ const nextConfig = {
     return [
       { source: "/:path*", headers: SECURITY_HEADERS },
       { source: "/pay/:path*", headers: PAY_LINK_HEADERS },
+    ];
+  },
+  async redirects() {
+    return [
+      // The live site linked the co-ord sets with the legacy slug.
+      {
+        source: "/shop/co-cord-sets",
+        destination: "/shop/co-ord-sets",
+        permanent: true,
+      },
     ];
   },
 };

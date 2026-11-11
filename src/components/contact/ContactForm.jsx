@@ -1,4 +1,6 @@
-import React, { useEffect } from "react";
+"use client";
+
+import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { toast } from 'react-toastify';
 import { useForm } from "react-hook-form";
@@ -6,7 +8,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client/react";
 import { CREATE_CONTACT_FORM } from "@/graphql";
-import CommonButton from "../common/CommonButton";
+import BracketSlideCta from "@/components/common/BracketSlideCta";
 import { getErrorMessage } from "@/utils/api-error.util";
 
 // Contact Form Validation
@@ -25,9 +27,13 @@ const contactSchema = z.object({
   message: z.string().min(5, "Message must be at least 5 characters"),
 });
 const ContactForm = () => {
+  const formRef = useRef(null);
   const [createContact, { loading }] = useMutation(CREATE_CONTACT_FORM);
   useEffect(() => {
-    // Listeners are tracked so they are removed on unmount (SF-20).
+    // Scoped to this form (it renders in a drawer portal), and listeners
+    // are tracked so they are removed on unmount (SF-20).
+    const form = formRef.current;
+    if (!form) return undefined;
     const cleanups = [];
     const listen = (element, type, handler) => {
       element.addEventListener(type, handler);
@@ -35,24 +41,23 @@ const ContactForm = () => {
     };
 
     // Handle input and textarea focus and blur
-    document
-      .querySelectorAll("#right form .input, #right form .textarea")
-      .forEach((i) => {
-        const field = i.querySelector("input, textarea");
-        if (!field) return;
-        listen(field, "focus", () => {
-          i.classList.add("active");
-        });
-        listen(field, "blur", () => {
-          if (field.value === "") {
-            i.classList.remove("active");
-          }
-        });
+    form.querySelectorAll(".input, .textarea").forEach((i) => {
+      const field = i.querySelector("input, textarea");
+      if (!field) return;
+      listen(field, "focus", () => {
+        i.classList.add("active");
       });
+      listen(field, "blur", () => {
+        if (field.value === "") {
+          i.classList.remove("active");
+        }
+      });
+    });
 
     // Handle line animation
-    document.querySelectorAll(".lineanime").forEach((i) => {
+    form.querySelectorAll(".lineanime").forEach((i) => {
       const line = i.querySelector(".linei");
+      if (!line) return;
       listen(i, "mouseenter", () => {
         gsap.to(line, {
           scaleX: 1,
@@ -105,10 +110,9 @@ const ContactForm = () => {
   };
 
   return (
-    <div id="form">
-      <div id="left"></div>
+    <div id="form" className="contact-form-panel">
       <div id="right">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
           <div className="input lineanime">
             <input type="text" {...register("name")} />
             <h6>name*</h6>
@@ -179,7 +183,15 @@ const ContactForm = () => {
             )}
           </div>
 
-          <CommonButton title={"Submit"} loading={loading} />
+          <div className="contact-form-submit-wrap">
+            <BracketSlideCta
+              label="Submit"
+              type="submit"
+              loading={loading}
+              className="contact-form-submit"
+              ariaLabel="Submit contact form"
+            />
+          </div>
         </form>
       </div>
     </div>

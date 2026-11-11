@@ -27,6 +27,20 @@ export const GET_PRODUCTS = gql`
         slug
         status
         badgeIds
+        # The shop's client-side filters (product type, size)
+        categoryIds
+        categories {
+          _id
+          name
+          slug
+        }
+        productOptions {
+          optionName
+          showInProductPageAs
+          choices {
+            name
+          }
+        }
         variants {
           _id
           title

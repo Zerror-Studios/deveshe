@@ -1,15 +1,17 @@
 "use client";
 
 /**
- * Home (was `pages/index.jsx`). Data comes from `lib/page-data/home.server.js`.
+ * Home (was `pages/index.jsx`), in the live site's design (main, 2026-05):
+ * the four-collection hero, Top Picks, the collection row, the latest blog
+ * post and the reviews. Data comes from `lib/page-data/home.server.js`.
  */
 
-import React, { useRef, useEffect } from "react";
+import React, { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import HeroSection from "@/components/home/HeroSection";
-import ExploreSection from "@/components/home/ExploreSection";
-import VisionSection from "@/components/home/VisionSection";
-import ProductSection from "@/components/home/ProductSection";
+import HeroSectionHome from "@/components/home/HeroSectionHome";
+import CuratedProducts from "@/components/home/CuratedProducts";
+import CategoryExplore from "@/components/home/CategoryExplore";
+import FeaturedArticle from "@/components/home/FeaturedArticle";
 import ReviewSection from "@/components/home/ReviewSection";
 
 // ─── Constants ────────────────────────────────────────────────────────────
@@ -19,8 +21,7 @@ const HASH_SCROLL_DELAY_MS = 500;
 
 // ─── View ─────────────────────────────────────────────────────────────────
 
-const Home = ({ productData, productTotal, productError, reviews }) => {
-  const sectionRef = useRef(null);
+const Home = ({ productData = [], latestBlog = null, reviews = [] }) => {
   const pathname = usePathname();
 
   // Scroll to the URL's #anchor after mount, after a navigation back to
@@ -43,15 +44,10 @@ const Home = ({ productData, productTotal, productError, reviews }) => {
 
   return (
     <>
-      <HeroSection />
-      <ExploreSection sectionRef={sectionRef} />
-      <ProductSection
-        sectionRef={sectionRef}
-        data={productData}
-        totalCount={productTotal}
-        loadError={productError}
-      />
-      <VisionSection />
+      <HeroSectionHome />
+      <CuratedProducts products={productData} />
+      <CategoryExplore />
+      <FeaturedArticle blog={latestBlog} />
       <ReviewSection reviews={reviews} />
     </>
   );

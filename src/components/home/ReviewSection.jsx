@@ -19,11 +19,53 @@ const formatReviewDate = (value) => {
   }).format(date);
 };
 
-// PRD-014 FR-0.9 (UX-35): only real, APPROVED reviews (`getReviews`, read on
-// the server in pages/index.jsx; PRD-032 FR-D6: the store's pinned ones
-// first). Each shows the reviewer's display name ("Priya S."), never the
-// account; with no approved review the section is not rendered.
-const ReviewSection = ({ reviews = [] }) => {
+// The live site's customer quotes (owner decision 2026-11-11, an exception
+// to PRD-014 FR-0.9): shown only while the store has no approved review.
+const STORE_TESTIMONIALS = [
+  {
+    _id: "testimonial-1",
+    displayName: "Sachi Bhansali",
+    rating: 5,
+    comment:
+      "I love the blue ombré top I got! It’s so comfortable and fits so well! I love the silver detailing on the sleeves too, just the right amount of accent needed to elevate the top!",
+    tag: "De Ve She Dreams",
+    createdAt: "2025-02-12",
+  },
+  {
+    _id: "testimonial-2",
+    displayName: "Nami Shah",
+    rating: 4,
+    comment:
+      "The designs for each piece feel thoughtful and unique while maintaining consistent quality. Great statement pieces to add to any wardrobe!",
+    tag: "De Ve She Dreams",
+    createdAt: "2025-03-28",
+  },
+  {
+    _id: "testimonial-3",
+    displayName: "Vrishali Pispati",
+    rating: 4,
+    comment:
+      "I bought this printed poplin shirt for my son and he absolutely loves it. It’s comfortable and looks great on him.",
+    tag: "De Ve She Dreams",
+    createdAt: "2025-05-09",
+  },
+  {
+    _id: "testimonial-4",
+    displayName: "Aruja Kothari",
+    rating: 5,
+    comment:
+      "The collection at De Ve She Dreams is super versatile! Love the way they use motifs along with abstract patterns. The fabric is so comfortable and you can easily style the pieces up or down! 100% recommended 😍",
+    tag: "De Ve She Dreams",
+    createdAt: "2025-06-14",
+  },
+];
+
+// Approved reviews (`getReviews`, read on the server; PRD-032 FR-D6: the
+// store's pinned ones first) show the reviewer's display name ("Priya S."),
+// never the account. Without any, the live site's quotes stand in.
+const ReviewSection = ({ reviews: approvedReviews = [] }) => {
+  const reviews =
+    approvedReviews.length > 0 ? approvedReviews : STORE_TESTIMONIALS;
   const hasReviews = reviews.length > 0;
 
   useEffect(() => {
@@ -50,8 +92,8 @@ const ReviewSection = ({ reviews = [] }) => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: "#review_section",
-          start: "top 30%",
-          end: "top 0%",
+          start: "top 95%",
+          end: "top 55%",
           // scrub: true,
           // markers: true,
         },
@@ -136,10 +178,13 @@ const ReviewSection = ({ reviews = [] }) => {
                 <p className="tweet-body">{review.comment}</p>
 
                 {/* Footer */}
-                {(date || review.product?.slug) && (
+                {(date || review.product?.slug || review.tag) && (
                   <div className="tweet-footer">
                     {date && <span>{date}</span>}
-                    {date && review.product?.slug && <span>·</span>}
+                    {date && (review.product?.slug || review.tag) && <span>·</span>}
+                    {review.tag && !review.product?.slug && (
+                      <span className="tag">{review.tag}</span>
+                    )}
                     {review.product?.slug && (
                       <Link
                         href={`/product/${review.product.slug}`}

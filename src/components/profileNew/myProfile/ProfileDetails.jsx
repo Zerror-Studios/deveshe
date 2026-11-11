@@ -27,6 +27,12 @@ const ProfileDetails = () => {
   const [updateUser, { loading }] = useMutation(UPDATE_MY_PROFILE);
   const { user, setUser } = useAuthStore((state) => state);
 
+  // A local placeholder: no third-party avatar service sees the name.
+  const rawProfileImg = typeof user?.profileImg === "string" ? user.profileImg.trim() : "";
+  const avatarSrc = rawProfileImg || "/placeholder/user.png";
+  const avatarUnoptimized =
+    /\.svg(\?|$)/i.test(avatarSrc) || avatarSrc.startsWith("data:");
+
   const {
     register,
     handleSubmit,
@@ -75,11 +81,12 @@ const ProfileDetails = () => {
       <div className="profile_right_container">
         <div className="profile_avatar">
           <Image
-            src={user?.profileImg || "/placeholder/user.png"}
+            src={avatarSrc}
             alt="avatar"
-            width={100}
-            height={100}
-            layout="responsive"
+            fill
+            sizes="140px"
+            unoptimized={avatarUnoptimized}
+            priority
           />
         </div>
         <CommonButton title="Upload Avatar" />

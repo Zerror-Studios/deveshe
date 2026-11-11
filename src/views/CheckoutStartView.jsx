@@ -86,7 +86,7 @@ const CheckoutStart = () => {
               Let&rsquo;s find <br /> your <span>pieces</span>
             </h2>
             <p>{getCheckoutStartMessage(error)}</p>
-            <CommonButton title={"Go to the shop"} href={"/products"} />
+            <CommonButton title={"Go to the shop"} href={"/shop"} />
           </>
         ) : (
           <>

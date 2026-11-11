@@ -4,16 +4,34 @@ import React, { useEffect, useLayoutEffect, useRef } from "react";
 import Lenis from "lenis";
 import { usePathname, useSearchParams } from "next/navigation";
 
+function isCheckoutRoute(pathname) {
+  return pathname?.startsWith("/checkout") ?? false;
+}
+
 export default function SmoothScroller() {
   const lenis = useRef(null);
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const disableSmoothScroll = isCheckoutRoute(pathname);
 
   useEffect(() => {
+    if (disableSmoothScroll) {
+      window.scrollTo(0, 0);
+      return;
+    }
     if (lenis.current) lenis.current.scrollTo(0, { immediate: true });
-  }, [pathname, searchParams]);
+  }, [pathname, searchParams, disableSmoothScroll]);
 
   useLayoutEffect(() => {
+    if (disableSmoothScroll) {
+      if (lenis.current) {
+        lenis.current.destroy();
+        lenis.current = null;
+      }
+      document.documentElement.style.removeProperty("overflow");
+      return;
+    }
+
     // The options @studio-freight/lenis 1.0.42 actually applied (it ignored
     // `smooth`, `smoothTouch`, `direction` and `gestureDirection`): smooth
     // wheel, native touch, vertical. `autoRaf` replaces the Tempus loop.
@@ -56,7 +74,7 @@ export default function SmoothScroller() {
         lenis.current = null;
       }
     };
-  }, []);
+  }, [disableSmoothScroll]);
 
   return null;
 }

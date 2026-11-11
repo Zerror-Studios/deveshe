@@ -3,7 +3,8 @@
 /**
  * Product listing (PRD-014 FR-0.8, UX-01 / D9)
  *
- * Shared by `/products` (every published product) and `/category/[slug]`.
+ * Used by `/search` (the shop itself is `/shop`, live site design, which
+ * filters on the client). Cards are the shop's curated grid cards.
  * The first page is rendered on the server; "Load more" asks
  * `getClientSideProducts` for the next page with the same filters, so every
  * published product is reachable by navigation. A failed load shows an
@@ -17,9 +18,8 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useApolloClient } from "@apollo/client/react";
 
-import ProductCard from "@/components/common/card/ProductCard";
+import ProductGridCard from "@/components/common/card/ProductGridCard";
 import { GET_PRODUCTS } from "@/graphql";
-import { getProductPriceLabel } from "@/utils/Util";
 import { getErrorMessage } from "@/utils/api-error.util";
 import { toProductPageVariables } from "@/utils/catalog-listing.util";
 import {
@@ -33,11 +33,9 @@ import { LISTING_PAGE_SIZE } from "./listing.constants";
 
 export { LISTING_PAGE_SIZE };
 
-// 2 / 3 / 4 columns (styles/components/product-listing.css), RPERF-12.
+// The shop's curated grid (styles/components/home/curated-products.css).
 // The first row (two cards on a phone, four on desktop) is the LCP
 const LISTING_PRELOAD_COUNT = 4;
-const LISTING_GRID_SIZES =
-  "(max-width: 576px) 50vw, (max-width: 1000px) 33vw, 25vw";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
 
@@ -132,7 +130,7 @@ const ProductListing = ({
         {categories.length > 0 && (
           <nav className="listing_categories" aria-label="Shop by category">
             <Link
-              href="/products"
+              href="/shop"
               className={`listing_category ${!activeSlug ? "active" : ""}`}
               aria-current={!activeSlug ? "page" : undefined}
             >
@@ -141,7 +139,7 @@ const ProductListing = ({
             {categories.map((category) => (
               <Link
                 key={category._id}
-                href={`/category/${encodeURIComponent(category.slug)}`}
+                href={`/shop/${encodeURIComponent(category.slug)}`}
                 className={`listing_category ${
                   activeSlug === category.slug ? "active" : ""
                 }`}
@@ -183,24 +181,18 @@ const ProductListing = ({
         <div className="listing_state">
           <p>{emptyMessage}</p>
           {(activeSlug || filters.search) && (
-            <Link href="/products" className="listing_button">
+            <Link href="/shop" className="listing_button">
               View all products
             </Link>
           )}
         </div>
       ) : (
         <>
-          <div className="listing_grid">
+          <div className="curated-grid">
             {products.map((product, index) => (
-              <ProductCard
+              <ProductGridCard
                 key={product._id}
                 preload={index < LISTING_PRELOAD_COUNT}
-                href={`/product/${product.slug || ""}`}
-                src={product.assets?.[0]?.path || ""}
-                alt={product.assets?.[0]?.altText || product.name || ""}
-                name={product.name || ""}
-                price={getProductPriceLabel(product.variants)}
-                sizes={LISTING_GRID_SIZES}
                 product={product}
                 listName={listName}
               />

@@ -106,3 +106,53 @@ export const toSafeCtaHref = (href) => {
     return null;
   }
 };
+
+// ─── Chapter layout (the live site's lookbook design) ───────────────────
+
+/**
+ * The live design has seven fixed slots after the products: video,
+ * banner, one image, two images, image + scrolling image (the legacy
+ * `sections[0..6]`, migrated in order into looks, PRD-027 FR-9).
+ */
+export const CHAPTER_SLOT_COUNT = 7;
+
+const CHAPTER_LAYOUTS = new Set([
+  LookLayoutEnum.VIDEO,
+  LookLayoutEnum.FULL_BLEED,
+  LookLayoutEnum.TEXT,
+]);
+
+/** A look the chapter slots can show without losing anything. */
+const isChapterLook = (look) =>
+  CHAPTER_LAYOUTS.has(look?.layout) &&
+  (look?.media || []).length <= 1 &&
+  !look?.heading &&
+  !look?.cta &&
+  !(look?.products || []).length &&
+  !(look?.media || []).some(
+    (item) => (item?.hotspots || []).length || (item?.mobileHotspots || []).length,
+  );
+
+/** A look as a legacy section: `{ imageUrl, videourl, paragraph }`. */
+export const lookToSection = (look) => {
+  const media = (look?.media || [])[0];
+  const isVideo = media?.type === "VIDEO";
+  return {
+    imageUrl: (isVideo ? media?.posterUrl : media?.url) || "",
+    videourl: isVideo ? media?.url || "" : "",
+    paragraph: look?.body || "",
+  };
+};
+
+/**
+ * The lookbook's looks as the seven chapter sections, or null when a look
+ * needs the flexible layout (hotspots, tagged products, a CTA, a heading,
+ * SPLIT/GRID, or more looks than slots): those lookbooks were built in the
+ * dashboard and keep `LookSection`.
+ */
+export const toChapterSections = (looks = []) => {
+  const sorted = sortLooks(looks);
+  if (!sorted.length || sorted.length > CHAPTER_SLOT_COUNT) return null;
+  if (!sorted.every(isChapterLook)) return null;
+  return sorted.map(lookToSection);
+};

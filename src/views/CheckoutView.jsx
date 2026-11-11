@@ -26,7 +26,6 @@ import { openPaymentCheckout } from "@/utils/payment-checkout.util";
 import { useParams, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
 import Loader from "@/components/checkout/Loader";
-import gsap from "gsap";
 import CommonButton from "@/components/common/CommonButton";
 import { trackEcomEvent } from "@/utils/analytics";
 import {
@@ -239,6 +238,8 @@ const CheckoutPage = () => {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(CheckoutSchema),
+    mode: "onBlur",
+    reValidateMode: "onBlur",
     defaultValues: {
       shippingAddress: {
         addressType: "HOME",
@@ -751,32 +752,11 @@ const CheckoutPage = () => {
       setIsLoading(false);
     }
   };
-  const leftRef = useRef(null);
-  const rightRef = useRef(null);
-
-  useEffect(() => {
-    const tl = gsap.timeline({
-      defaults: { duration: 0.8, ease: "power3.out" },
-    });
-
-    gsap.set([leftRef.current, rightRef.current], {
-      opacity: 0,
-      y: 100,
-    });
-
-    tl.to([leftRef.current, rightRef.current], {
-      opacity: 1,
-      y: 0,
-      duration: 1,
-    });
-
-    return () => tl.kill();
-  }, []);
 
   return (
     <>
-      <div className="checkout-cont">
-        <div className="checkout-left" ref={leftRef}>
+      <div className="checkout-cont" data-lenis-prevent>
+        <div className="checkout-left">
           <Heading />
           <form
             onSubmit={handleSubmit(onSubmit, onInvalid)}
@@ -837,7 +817,7 @@ const CheckoutPage = () => {
             />
           </form>
         </div>
-        <div className="checkout-right" ref={rightRef}>
+        <div className="checkout-right">
           <OrderSummary
             data={cartData}
             pricing={sessionPricing}

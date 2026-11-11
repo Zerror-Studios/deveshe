@@ -48,6 +48,9 @@ const ALLOWED_TAGS = new Set([
   "code",
   "div",
   "em",
+  // Blog image blocks (`utils/parseBlogContent.js`)
+  "figcaption",
+  "figure",
   "h1",
   "h2",
   "h3",

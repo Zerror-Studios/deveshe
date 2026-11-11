@@ -21,7 +21,7 @@ const Lookbook = ({ data = [] }) => {
             Our next chapters are being styled. Meanwhile, discover the
             collection.
           </p>
-          <CommonButton title={"Shop the Collection"} href={"/products"} />
+          <CommonButton title={"Shop the Collection"} href={"/shop"} />
         </div>
       )}
     </>

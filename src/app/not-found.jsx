@@ -1,8 +1,10 @@
 /**
- * 404 (was `pages/404.jsx`; PRD-014 UX-36: a way back instead of a dead end).
+ * 404 (was `pages/404.jsx`; PRD-014 UX-36: a way back instead of a dead end),
+ * in the live site's status design (main).
  */
 
-import Link from "next/link";
+import React from "react";
+import CommonButton from "@/components/common/CommonButton";
 import { toMetadata } from "@/lib/seo-metadata.util";
 
 // ─── Metadata ─────────────────────────────────────────────────────────────
@@ -28,36 +30,17 @@ const META = {
 
 export const metadata = toMetadata(META, "/404");
 
-// ─── Styles ───────────────────────────────────────────────────────────────
-
-const style = {
-  height: "100vh",
-  fontSize: "1.875rem",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  textAlign: "center",
-  paddingLeft: "1.5rem",
-  paddingRight: "1.5rem",
-};
-
-const linkStyle = {
-  marginTop: "1.5rem",
-  fontSize: "1rem",
-  textDecoration: "underline",
-};
-
 // ─── Page ─────────────────────────────────────────────────────────────────
 
-const NotFound = () => (
-  <div style={style}>
-    <p>Sorry, we couldn't find the page you're looking for.</p>
-    <p>Page not found</p>
-    <Link href="/" style={linkStyle}>
-      Back to home
-    </Link>
-  </div>
-);
-
-export default NotFound;
+export default function NotFoundPage() {
+  return (
+    <div id="status_section">
+      <h2>Oops! Page Not Found</h2>
+      <p>
+        The page you are looking for might have been removed, renamed, or is
+        temporarily unavailable.
+      </p>
+      <CommonButton title="Go Back to Home" href="/" type="button" />
+    </div>
+  );
+}

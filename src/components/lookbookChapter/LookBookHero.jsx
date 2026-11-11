@@ -1,3 +1,5 @@
+"use client";
+
 import { htmlParser } from "@/utils/Util";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
@@ -77,7 +79,8 @@ const LookBookHero = ({ title, subheading, description, asset }) => {
           duration: 1,
           ease: "none",
         });
-    }, sectionRef);
+      // The element, not the ref: React clears the ref before the cleanup
+    }, sectionRef.current);
 
     return () => ctx.revert(); // cleanup
   }, [title, pathname]); // 🔁 rerun when title or route changes
@@ -94,10 +97,8 @@ const LookBookHero = ({ title, subheading, description, asset }) => {
           </div>
         </div>
         <div className="lb-header-image" ref={headerImageRef}>
-          <Image
+          <img
             ref={imgRef}
-            width={1000}
-            height={1000}
             src={asset?.path || ""}
             alt={asset?.altText || ""}
           />

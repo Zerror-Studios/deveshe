@@ -60,3 +60,21 @@ export const fetchCategories = async (client, filter) => {
     (category) => category?._id && category?.slug,
   );
 };
+
+// ─── Curated collection ───────────────────────────────────────────────────
+
+/**
+ * The collection the live site shows as "Top Picks" on `/` and `/shop`
+ * (it hard-coded its id; found here by slug).
+ */
+export const CURATED_CATEGORY_SLUG = "basically-iconic";
+
+/** Listing filters for the curated collection; every product without it. */
+export async function curatedListingFilters(client) {
+  const [category] = await fetchCategories(client, {
+    slug: CURATED_CATEGORY_SLUG,
+  }).catch(() => []);
+  return toListingFilters(
+    category?._id ? { categoryIds: [category._id] } : {},
+  );
+}

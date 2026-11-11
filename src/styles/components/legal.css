@@ -5,12 +5,8 @@
   flex-direction: column;
   width: 100%;
   margin: 0 auto;
-  background-color: #fadcde;
-  background-image: url(/grainy-lg-bg.svg);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: bottom;
   position: relative;
+  z-index: 10;
 }
 
 #legal-page h2 {

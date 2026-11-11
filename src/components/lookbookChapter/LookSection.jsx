@@ -1,6 +1,7 @@
 /**
  * One look of a backend lookbook (backend PRD-027 FR-2, §6), in the
- * lookbook chapter style (pink ground, `heading` / `paragraphStyleB` type).
+ * lookbook chapter style of the live site (red `heading` /
+ * `paragraphStyleB` type on the page ground, products in the curated grid).
  *
  * Layouts: FULL_BLEED (one wide image), SPLIT (image beside the text, or two
  * images), GRID (up to four images), TEXT (heading and copy only), VIDEO
@@ -12,9 +13,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./LookSection.module.css";
 import LookHotspotImage from "./LookHotspotImage";
-import ProductCard from "../common/card/ProductCard";
+import ProductGridCard from "../common/card/ProductGridCard";
 import CommonButton from "../common/CommonButton";
-import { getProductPriceLabel, htmlParser } from "@/utils/Util";
+import { htmlParser } from "@/utils/Util";
 import {
   LOOKBOOK_MOBILE_MAX_WIDTH_PX,
   LookLayoutEnum,
@@ -91,15 +92,13 @@ const LookVideo = ({ media }) => {
 
 const LookProducts = ({ products, listName, listId }) =>
   products.length > 0 ? (
-    <div className={styles.lookProducts} aria-label="Shop this look">
+    <div
+      className={`curated-grid ${styles.lookProducts}`}
+      aria-label="Shop this look"
+    >
       {products.map((product) => (
-        <ProductCard
+        <ProductGridCard
           key={product._id}
-          href={`/product/${product.slug || product._id}`}
-          src={product.assets?.[0]?.path || ""}
-          alt={product.assets?.[0]?.altText || product.name || ""}
-          name={product.name || ""}
-          price={getProductPriceLabel(product.variants)}
           sizes={STRIP_CARD_SIZES}
           product={product}
           listName={listName}

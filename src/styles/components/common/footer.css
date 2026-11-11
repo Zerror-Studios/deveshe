@@ -1,236 +1,294 @@
-#footer {
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 50px;
-  border-top: 1px solid lightgray;
+/* ── FOOTER WRAPPER ── */
+footer {
+  padding: 0;
+  z-index: 10;
   position: relative;
   background-color: #fadcde;
+  overflow: hidden;
+  color: #fe0000;
 }
 
-#footer_top {
-  width: 100%;
+footer .footer-hero,
+footer .footer-description,
+footer .footer-divider,
+footer .footer-bottom {
+  position: relative;
+  z-index: 2;
+}
+
+/* ── HERO SECTION ── */
+.footer-hero {
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
-}
-
-#footer_links {
-  width: 50%;
-  display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
+  padding: 120px 32px 120px;
   gap: 24px;
 }
-.footer_link_wrap {
-  width: 100%;
-  max-width: 200px;
-  display: flex;
-  flex-direction: column;
-}
-.footer_link_wrap p {
+
+.footer-hero-headline {
+  margin: 0;
+  color: #fe0000;
+  max-width: 65%;
   font-family: heading;
-  font-weight: 400;
-  font-size: 14px;
-  margin-bottom: 5px;
-  letter-spacing: 0.3px;
-}
-.footer_link_wrap a {
-  position: relative;
-  font-family: paragraph;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.35;
-  /* A 24 px tap target (WCAG 2.2 target size), not overlapped by the next
-     link (the 4 px margin is folded into the padding) */
-  padding: 3px 0;
-}
-.footer_link_wrap a::before {
-  content: "";
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background-color: #000;
-  border-radius: 50px;
-  left: -5px;
-  top: 50%;
-  transform: translateY(-50%);
-  opacity: 0;
-  transition: all ease 0.3s;
-}
-.footer_link_wrap a:hover:before {
-  left: -12px;
-  opacity: 1;
-}
-#footer_btn {
-  width: 50%;
-  display: flex;
-  justify-content: flex-end;
+  font-size: 6.5vw;
+  line-height: 0.9;
+  text-transform: uppercase;
 }
 
-#footer_bottom {
-  width: 100%;
+.footer-hero-headline__line {
+  display: block;
+}
+
+.footer-copyright-badge {
+  color: #fe0000;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  font-family: heading;
+  font-size: 6.5vw;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.footer-copyright-badge .copy-symbol {
+  margin-right: 4px;
+  font-family: heading;
+  font-size: 6.5vw;
+  line-height: 0.9;
+}
+
+/* ── DESCRIPTION ── */
+.footer-description {
+  padding: 0 32px 32px;
+  margin: 0;
+  font-family: subTitleFont, sans-serif;
+  font-size: clamp(12px, 1vw, 14px);
+  font-weight: 400;
+  line-height: 1.6;
+  color: #fe0000;
+  max-width: 420px;
+}
+
+.footer-description__line {
+  display: block;
+}
+
+/* ── DIVIDER ── */
+.footer-divider {
+  border: none;
+  border-top: 1.5px solid #fe0000;
+  margin: 0 32px;
+}
+
+/* ── BOTTOM ROW ── */
+.footer-bottom {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 24px;
+  padding: 28px 32px 40px;
+  align-items: start;
+  font-family: subTitleFont;
+}
+
+/* Column 1 – Brand */
+.footer-brand {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  text-align: right;
-  gap: 5px;
-  font-family: paragraph;
+  gap: 4px;
+}
+
+.footer-brand p {
+  font-size: clamp(12px, 1vw, 14px);
   font-weight: 400;
-  font-size: 14px;
+  color: #fe0000;
+  line-height: 1.6;
+  margin: 0;
 }
 
-#footer_bottom a {
-  font-weight: 600;
-  position: relative;
-}
-#footer_bottom a::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 0.1vw;
-  background-color: black;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform ease 0.3s;
-}
-#footer_bottom a:hover::before {
-  transform: scaleX(1);
-  transform-origin: left;
+.footer-brand__name {
+  font-weight: 700;
+  font-size: clamp(13px, 1.1vw, 15px);
 }
 
-@media (max-width: 576px) {
-  #footer {
-    gap: 40px;
-    padding: 30px 20px;
-  }
-  #footer_top {
-    flex-direction: column;
-    gap: 15px;
-  }
-  #footer_links {
-    width: 100%;
-    flex-wrap: wrap;
-    gap: 0;
-  }
-  .footer_link_wrap {
-    width: 50%;
-    max-width: 50%;
-    margin-bottom: 25px;
-  }
-  #footer_bottom {
-    text-align: left;
-    align-items: flex-start;
-  }
-  #footer_btn {
-    width: 100%;
-  }
-}
-
-/* Tablets (portrait) */
-@media (min-width: 577px) and (max-width: 768px) {
-  #footer {
-    padding: 25px;
-  }
-  #footer_links {
-    flex-wrap: wrap;
-  }
-  .footer_link_wrap {
-    width: 45%;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 890px) {
-  #contact_form #address {
-    height: auto;
-    flex-direction: column;
-    gap: 2vw;
-  }
-  #contact_form #address .elem {
-    width: 100%;
-}
-  #contact_form .elem-lf h5 {
-    width: 50%;
-  }
-}
-@media (min-width: 769px) and (max-width: 992px) {
-  #footer {
-    padding: 25px;
-  }
-}
-
-/* PRD-014 FR-1.9: "Cookie Preferences" looks like the other footer links */
-.footer_consent_btn {
-  padding: 0;
-  border: 0;
-  background: none;
-  color: inherit;
-  text-align: left;
-  font-family: paragraph;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.35;
+.footer-dev-credit {
   margin-top: 4px;
-  cursor: pointer;
 }
-.footer_consent_btn:hover {
+
+.footer-dev-credit a {
+  color: #fe0000;
+  font-weight: bold;
+  text-underline-offset: 2px;
+}
+
+.footer-dev-credit a:hover {
+  opacity: 0.5;
+}
+
+/* Column 2 – Pages */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-links a {
+  font-size: clamp(12px, 1vw, 14px);
+  font-weight: 400;
+  color: #fe0000;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
   text-decoration: underline;
 }
 
-/* PRD-014 FR-2.8 (UX-29): newsletter sign-up */
-.newsletter_form {
-  width: 100%;
-  max-width: 380px;
+/* Column 3 – Policy */
+.footer-policy {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  font-family: paragraph;
+  gap: 8px;
 }
-.newsletter_label {
-  font-family: heading;
-  font-size: 14px;
-  letter-spacing: 0.3px;
+
+.footer-policy a {
+  font-size: clamp(12px, 1vw, 14px);
+  font-weight: 400;
+  color: #fe0000;
+  text-decoration: none;
 }
-.newsletter_field {
+
+.footer-policy a:hover {
+  text-decoration: underline;
+}
+
+/* Column 4 – Social */
+.footer-social {
   display: flex;
-  width: 100%;
-  border: 1px solid #000;
-  background-color: #fff;
+  flex-direction: column;
+  gap: 8px;
 }
-.newsletter_input {
-  flex: 1;
-  min-width: 0;
-  padding: 10px 12px;
+
+.footer-social a {
+  font-size: clamp(12px, 1vw, 14px);
+  font-weight: 400;
+  color: #fe0000;
+  text-decoration: none;
+}
+
+.footer-social a:hover {
+  text-decoration: underline;
+}
+
+@media (min-width: 993px) {
+  .footer-hero {
+    padding: 140px 32px 140px;
+  }
+}
+
+/* ── TABLET (≤1024px) ── */
+@media (max-width: 1024px) {
+  .footer-hero-headline {
+    max-width: 60%;
+  }
+
+  .footer-bottom {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 24px;
+  }
+}
+
+/* ── MOBILE LANDSCAPE / LARGE PHONE (≤768px) ── */
+@media (max-width: 768px) {
+  .footer-hero {
+    padding: 32px 20px 48px;
+    gap: 16px;
+  }
+
+  .footer-hero-headline {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .footer-hero-headline__line {
+    display: block;
+  }
+
+  .footer-description {
+    padding: 0 20px 28px;
+    max-width: none;
+  }
+
+  .footer-description__line {
+    display: inline;
+  }
+
+  .footer-description__line + .footer-description__line::before {
+    content: " ";
+  }
+
+  .footer-divider {
+    margin: 0 20px;
+  }
+
+  .footer-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 24px 20px 36px;
+    gap: 28px 20px;
+  }
+
+  /* Row 1: pages | policy — Row 2: social | copyright */
+  .footer-links {
+    order: 1;
+  }
+
+  .footer-policy {
+    order: 2;
+  }
+
+  .footer-social {
+    order: 3;
+  }
+
+  .footer-brand {
+    order: 4;
+    grid-column: 1 / -1;
+  }
+}
+
+/* ── SMALL PHONE (≤480px) ── */
+@media (max-width: 480px) {
+  .footer-hero {
+    padding: 24px 16px 40px;
+  }
+
+  .footer-description {
+    padding: 0 16px 24px;
+  }
+
+  .footer-divider {
+    margin: 0 16px;
+  }
+
+  .footer-bottom {
+    padding: 20px 16px 32px;
+    gap: 24px 16px;
+  }
+}
+/* PRD-014 FR-1.9: "Cookie Preferences" reopens the consent banner and looks
+   like the other policy links */
+.footer-policy .footer_consent_btn {
+  padding: 0;
   border: 0;
-  background: transparent;
-  font-family: paragraph;
-  font-size: 14px;
-  outline: none;
-}
-.newsletter_input:focus-visible {
-  outline: 2px solid #000;
-  outline-offset: -2px;
-}
-.newsletter_submit {
-  padding: 0 16px;
-  border: 0;
-  border-left: 1px solid #000;
-  background-color: #000;
-  color: #fff;
-  font-family: paragraph;
-  font-size: 13px;
-  text-transform: uppercase;
+  background: none;
+  text-align: left;
+  font: inherit;
+  font-size: clamp(12px, 1vw, 14px);
+  font-weight: 400;
+  color: #fe0000;
   cursor: pointer;
 }
-.newsletter_submit:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.newsletter_message {
-  min-height: 16px;
-  font-size: 13px;
-}
-.newsletter_message.is_error {
-  color: #b00020;
+
+.footer-policy .footer_consent_btn:hover {
+  text-decoration: underline;
 }

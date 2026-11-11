@@ -7,6 +7,10 @@
  * shopper's stored choice). The kit's `ZcomTags` loads GA, GTM and the ad
  * tags only after consent (`components/common/ConsentBanner.jsx`), so no
  * tag request happens before the shopper answers.
+ *
+ * The stylesheets are the live site's (main, 2026-05 redesign: nav, buttons,
+ * blogs, material index, home sections, shop hero) plus the microservice
+ * pages' own (password reset, pay links, consent, listing, reviews).
  */
 
 import Providers from "@/components/layouts/Providers";
@@ -18,13 +22,13 @@ import "@/styles/home.css";
 import "@/styles/checkout.css";
 import "@/styles/checkout2.css";
 import "@/styles/address.css";
-import "@/styles/profile.css";
 import "@/styles/productLoader.css";
 import "swiper/css";
 import "swiper/css/pagination";
 
 import "@/styles/components/sizeAssistance.css";
-import "@/styles/components/navbar.css";
+import "@/styles/components/common/navbar.css";
+import "@/styles/components/common/common-button.css";
 import "@/styles/components/login.css";
 import "@/styles/components/password-reset.css";
 import "@/styles/components/home.css";
@@ -38,7 +42,19 @@ import "@/styles/components/pay.css";
 import "@/styles/components/newPorfile.css";
 import "@/styles/components/common/polaroid.css";
 import "@/styles/components/common/productCard.css";
+import "@/styles/components/common/blog-card.css";
+import "@/styles/components/blogs/blogs-listing.css";
+import "@/styles/components/blogs/blog-post.css";
+import "@/styles/components/common/material-card.css";
+import "@/styles/components/material-index/material-listing.css";
+import "@/styles/components/material-index/material-modal.css";
 import "@/styles/components/common/footer.css";
+import "@/styles/components/common/bracket-slide-cta.css";
+import "@/styles/components/home/curated-products.css";
+import "@/styles/components/home/category-explore.css";
+import "@/styles/components/home/featured-article.css";
+import "@/styles/components/shop/hero-section.css";
+import "@/styles/components/fonts.css";
 import "@/styles/components/common/consent-banner.css";
 import "@/styles/components/product-listing.css";
 import "@/styles/components/reviews.css";
@@ -49,6 +65,10 @@ const FAVICON = "/favicon.jpeg";
 
 export const metadata = {
   metadataBase: new URL(Const.ClientLink),
+  // Pages set their own title; this is the fallback (not-found, errors)
+  title: "DeVeSheDreams",
+  description:
+    "DeVeSheDreams is a fashion label that turns dreams into wearable art.",
   icons: {
     icon: [
       { url: FAVICON, sizes: "16x16", type: "image/png" },
@@ -68,7 +88,9 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    // suppressHydrationWarning: the kit consent script adds data-zcom-consent
+    // to <html> before React hydrates (kit 1.0.5), which is expected
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* The two fonts above the fold (headings and body text) */}
         <link

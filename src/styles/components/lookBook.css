@@ -1,7 +1,8 @@
 #lookbook-Sec1 {
   width: 100%;
   height: auto;
-  background-color: #fadcde;
+  z-index: 10;
+  position: relative;
 }
 .lb-header-wrapper {
   width: 100%;
@@ -18,8 +19,6 @@
   z-index: 5;
   padding: 1.5rem 3vw;
   text-align: center;
-  mix-blend-mode: difference;
-  color: #fadcde;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,10 +26,11 @@
 .lb-header-text h2 {
   width: 80%;
   font-family: heading;
-  font-size: 8vw;
+  font-size: 6.5vw;
   line-height: 0.9;
   text-transform: uppercase;
   text-align: center;
+  color: #fe0000;
 }
 .lb-header-text h2 span {
   display: inline-block;
@@ -43,6 +43,7 @@
   font-size: 1.5rem;
   opacity: 0;
   margin-bottom: 1vw;
+  color: #fe0000;
 }
 .word {
   display: inline-block;
@@ -70,15 +71,25 @@
   padding-left: 30vw;
   font-family: paragraphStyleB;
   font-size: 2.2vw;
-  color: black;
+  color: #fe0000 !important;
   font-weight: 500;
-  background-color: #fadcde;
+  z-index: 10;
+  position: relative;
+}
+
+#lb-text-container span{
+  color: #fe0000 !important;
+}
+
+#lb-text-container * {
+  color: #fe0000;
 }
 
 #lb-video-container {
   width: 100%;
   height: 105vh;
   position: relative;
+  z-index: 10;
 }
 #lb-video-overlay {
   position: absolute;
@@ -120,8 +131,8 @@
 #lb-banner2 {
   width: 100%;
   height: 200vh;
-  background-color: #fadcde;
   position: relative;
+  z-index: 10;
 }
 
 #main-banner-container {
@@ -164,6 +175,10 @@
   font-size: 2.2vw;
   color: white;
 }
+
+#main-banner-text * {
+  color: white;
+}
 #overlay-lb2 {
   position: absolute;
   top: 0;
@@ -178,7 +193,8 @@
   width: 100%;
   padding: 15vh 0;
   padding-left: 16.388vw;
-  background-color: #fadcde;
+  z-index: 10;
+  position: relative;
 }
 #lb-section3-ig {
   width: 46.666vw;
@@ -200,7 +216,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 40px;
-  background-color: #fadcde;
+  z-index: 10;
+  position: relative;
 }
 .lb-sec4-img {
   width: 49.5%;
@@ -223,7 +240,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  background-color: #fadcde;
+  z-index: 10;
+  position: relative;
 }
 .lb-section5-ig-wrap {
   width: 48%;
@@ -252,21 +270,15 @@
   width: 70%;
 }
 
-#prodcut-container {
+#prodcut-container.lookbook-product-grid {
   width: 100%;
-  padding: 0 40px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  background-color: #fadcde;
-  gap: 2.6%;
+  padding: 0 40px 40px;
+  z-index: 10;
+  position: relative;
 }
 
 #prodcut-container.prodcut-container-mobile {
   display: none !important;
-}
-
-#prodcut-container .common_product_card {
-  margin-bottom: 5%;
 }
 
 .product_img_wrap {
@@ -295,6 +307,7 @@
   flex-direction: column;
   gap: 5px;
   padding-top: 5px;
+  color: #fe0000;
 }
 @media (max-width: 576px) {
   #lb-section3-ig img {
@@ -326,17 +339,10 @@
   #main-banner-text p {
     font-size: 6vw;
   }
-  #prodcut-container {
+  #prodcut-container.lookbook-product-grid {
     width: 100%;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    background-color: #fadcde;
-    gap: 0;
-  }
-  #prodcut-container .product-lb {
-    width: 50%;
-    margin-bottom: 0%;
+    padding: 0 20px 20px;
+    gap: 20px;
   }
   .product-lb img {
     height: auto;
@@ -404,9 +410,8 @@
   #main-banner-text p {
     font-size: 3.5vw;
   }
-  #prodcut-container {
-    padding: 0 25px;
-    grid-template-columns: repeat(2, 1fr);
+  #prodcut-container.lookbook-product-grid {
+    padding: 0 25px 25px;
   }
   #main-banner-text {
     width: 80%;
@@ -443,11 +448,10 @@
   #lb-text-container {
     padding: 5rem 10rem;
   }
-  #prodcut-container {
-    padding: 0 25px;
-    grid-template-columns: repeat(2, 1fr);
+  #prodcut-container.lookbook-product-grid {
+    padding: 0 25px 25px;
   }
-  .common_product_card {
+  #prodcut-container.lookbook-product-grid .curated-imageWrapper {
     height: 395px;
   }
   #main-banner-text {

@@ -115,6 +115,9 @@
   .cursorlookbook {
     display: none;
   }
+  .overlay3a .textContainer p{
+    display: none;
+  }
 }
 
 /* Tablets (portrait) */

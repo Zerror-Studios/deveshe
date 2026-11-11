@@ -11,7 +11,14 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-const { featuredProducts, lookProducts, pickLookMedia, sortLooks, toSafeCtaHref } =
+const {
+  featuredProducts,
+  lookProducts,
+  pickLookMedia,
+  sortLooks,
+  toChapterSections,
+  toSafeCtaHref,
+} =
   await import("@/utils/lookbook.util");
 
 const product = (id) => ({ _id: id, name: `P${id}`, slug: `p-${id}` });
@@ -87,5 +94,47 @@ describe("lookbook CTA links", () => {
     assert.equal(toSafeCtaHref("javascript:alert(1)"), null);
     assert.equal(toSafeCtaHref("/\\evil"), null);
     assert.equal(toSafeCtaHref(undefined), null);
+  });
+});
+
+describe("chapter layout (the live site's lookbook design)", () => {
+  const video = {
+    _id: "v",
+    position: 0,
+    layout: "VIDEO",
+    body: "<p>Intro</p>",
+    media: [{ type: "VIDEO", url: "https://cdn/v.mp4", posterUrl: "https://cdn/p.jpg" }],
+  };
+  const image = (id, position) => ({
+    _id: id,
+    position,
+    layout: "FULL_BLEED",
+    media: [{ type: "IMAGE", url: `https://cdn/${id}.jpg` }],
+  });
+
+  it("maps migrated looks onto the slots in order", () => {
+    const sections = toChapterSections([image("b", 1), video, image("c", 2)]);
+    assert.deepEqual(sections[0], {
+      imageUrl: "https://cdn/p.jpg",
+      videourl: "https://cdn/v.mp4",
+      paragraph: "<p>Intro</p>",
+    });
+    assert.equal(sections[1].imageUrl, "https://cdn/b.jpg");
+    assert.equal(sections[2].imageUrl, "https://cdn/c.jpg");
+  });
+
+  it("keeps the flexible layout for dashboard-built looks", () => {
+    const tagged = {
+      ...image("t", 1),
+      media: [{ type: "IMAGE", url: "https://cdn/t.jpg", hotspots: [{ x: 0.5, y: 0.5 }] }],
+    };
+    assert.equal(toChapterSections([video, tagged]), null);
+    assert.equal(toChapterSections([{ ...image("s", 0), layout: "SPLIT" }]), null);
+    assert.equal(toChapterSections([{ ...image("h", 0), heading: "Look 1" }]), null);
+    assert.equal(
+      toChapterSections(Array.from({ length: 8 }, (_, i) => image(`i${i}`, i))),
+      null,
+    );
+    assert.equal(toChapterSections([]), null);
   });
 });

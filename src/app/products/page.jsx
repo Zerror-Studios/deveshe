@@ -1,45 +1,21 @@
 /**
- * /products (kit PRD-002 FR-3.1; was `pages/products/index.jsx` with
- * getServerSideProps). Data: `lib/page-data/listing.server.js`.
+ * /products: moved to /shop (the live site's URL). A permanent redirect
+ * (308) that keeps the query string, so old links and indexed URLs land.
  */
 
-import { cache } from "react";
-import PageSchemas from "@/components/seo/PageSchemas";
-import ProductListing from "@/components/listing/ProductListing";
-import { loadProductsPage } from "@/lib/page-data/listing.server";
-import { toMetadata } from "@/lib/seo-metadata.util";
+import { permanentRedirect } from "next/navigation";
 
-// Rendered per request, as getServerSideProps was.
 export const dynamic = "force-dynamic";
 
-// One read for the metadata and the page (keyed by value, not identity).
-const getPageByKey = cache(
-  async (key) => await loadProductsPage(JSON.parse(key)),
-);
-const getPage = (searchParams) => getPageByKey(JSON.stringify(searchParams));
-
-export async function generateMetadata({ searchParams }) {
-  const { props } = await getPage(await searchParams);
-  return toMetadata(props.meta, "/products");
-}
+const toQueryString = (searchParams = {}) => {
+  const query = new URLSearchParams();
+  for (const [key, value] of Object.entries(searchParams)) {
+    for (const item of [].concat(value ?? [])) query.append(key, item);
+  }
+  const search = query.toString();
+  return search ? `?${search}` : "";
+};
 
 export default async function Page({ searchParams }) {
-  const { props } = await getPage(await searchParams);
-  return (
-    <>
-      <PageSchemas meta={props.meta} path="/products" />
-      <ProductListing
-        // A new sort starts a new list (no stale "Load more" state).
-        key={props.sort}
-        title="Shop all"
-        products={props.products}
-        totalCount={props.totalCount}
-        filters={props.filters}
-        sort={props.sort}
-        categories={props.categories}
-        listName="All products"
-        loadError={props.loadError}
-      />
-    </>
-  );
+  permanentRedirect(`/shop${toQueryString(await searchParams)}`);
 }

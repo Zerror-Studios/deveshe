@@ -1,9 +1,11 @@
-/* Backend lookbook looks (PRD-027), in the lookbook chapter style
-   (`styles/components/lookBook.css`: pink ground, heading / paragraphStyleB). */
+/* Backend lookbook looks (PRD-027), in the live site's lookbook chapter
+   style (`styles/components/lookBook.css`: the page ground, red heading /
+   paragraphStyleB, products in the curated grid). */
 
 .look {
   width: 100%;
-  background-color: #fadcde;
+  position: relative;
+  z-index: 10;
   padding-bottom: 4rem;
 }
 
@@ -12,7 +14,11 @@
 .lookText {
   width: 100%;
   padding: 6rem 21.666vw 4rem 30vw;
-  color: black;
+  color: #fe0000;
+}
+
+.lookText * {
+  color: #fe0000;
 }
 
 .lookHeading {
@@ -145,12 +151,10 @@
 
 /* ─── Products and CTA ─────────────────────────────────────────────────── */
 
+/* The grid itself is `.curated-grid` (curated-products.css) */
 .lookProducts {
   width: 100%;
   padding: 3rem 40px 0;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2.6%;
 }
 
 .lookCta {
@@ -184,9 +188,7 @@
   }
 
   .lookProducts {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 2rem 0 0;
-    gap: 0;
+    padding: 2rem 20px 0;
   }
 
   .lookVideoToggle {

@@ -1,58 +1,24 @@
-import React from "react";
-const ProductLoader = () => {
+const DEFAULT_COUNT = 8;
+
+export default function ProductLoader({ count = DEFAULT_COUNT }) {
   return (
-    <div className="loader-main-div">
-      <div className="loading-card loading-card-desk skeleton-loading"></div>
-      <div className="loading-card-container">
-        <div className="loading-card loading-card-desk skeleton-loading"></div>
-        <div className="loading-card loading-card-desk skeleton-loading"></div>
-        <div className="loading-card loading-card-desk skeleton-loading"></div>
-        <div className="loading-card loading-card-desk skeleton-loading"></div>
-        <div className="loading-card-small">
-          <div className="loading-img skeleton-loading"></div>
-          <div className="loading-details">
-            <span className="skeleton-loading"></span>
-            <span className="skeleton-loading"></span>
+    <div
+      className="curated-grid product-loader"
+      aria-busy="true"
+      aria-label="Loading products"
+    >
+      {Array.from({ length: count }, (_, index) => (
+        <div key={index} className="product-loader__card">
+          <div className="curated-imageWrapper skeleton-loading" aria-hidden />
+          <div className="curated-meta product-loader__meta">
+            <span className="product-loader__line skeleton-loading" aria-hidden />
+            <span
+              className="product-loader__line product-loader__line--price skeleton-loading"
+              aria-hidden
+            />
           </div>
         </div>
-        <div className="loading-card-small">
-          <div className="loading-img skeleton-loading"></div>
-          <div className="loading-details">
-            <span className="skeleton-loading"></span>
-            <span className="skeleton-loading"></span>
-          </div>
-        </div>
-        <div className="loading-card-small">
-          <div className="loading-img skeleton-loading"></div>
-          <div className="loading-details">
-            <span className="skeleton-loading"></span>
-            <span className="skeleton-loading"></span>
-          </div>
-        </div>
-        <div className="loading-card-small">
-          <div className="loading-img skeleton-loading"></div>
-          <div className="loading-details">
-            <span className="skeleton-loading"></span>
-            <span className="skeleton-loading"></span>
-          </div>
-        </div>
-        <div className="loading-card-small">
-          <div className="loading-img skeleton-loading"></div>
-          <div className="loading-details">
-            <span className="skeleton-loading"></span>
-            <span className="skeleton-loading"></span>
-          </div>
-        </div>
-        <div className="loading-card-small">
-          <div className="loading-img skeleton-loading"></div>
-          <div className="loading-details">
-            <span className="skeleton-loading"></span>
-            <span className="skeleton-loading"></span>
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   );
-};
-
-export default ProductLoader;
+}

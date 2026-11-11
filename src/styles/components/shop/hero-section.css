@@ -1,0 +1,83 @@
+.shop_hero_section {
+    max-height: unset;
+    padding-top: 6rem;
+    position: relative;
+    height: 100svh;
+    z-index: 11;
+}
+
+.shop_hero_section_content {
+    width: 100%;
+    top: 8rem;
+    position: sticky;
+    display: flex;
+    flex-direction: column;
+    -webkit-box-align: center;
+    align-items: center;
+    text-align: center;
+}
+
+.shop_hero_section_category_name {
+    font-size: 14px;
+    font-weight: 100;
+    font-family: paragraph;
+    color: #fff;
+    white-space: nowrap;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.shop_hero_section_content p {
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #fff;
+    text-align: center;
+    width: 45ch;
+    padding-bottom: 3rem;
+}
+
+.shop_hero_filter_wrap {
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    will-change: opacity;
+}
+
+/* Avoid early sticky/fixed fight while filter lives inside scrolling hero */
+.shop_hero_filter_wrap .curated-filter-strip:not(.curated-filter-strip--pinned) {
+    position: relative;
+    top: auto;
+    margin-bottom: 0;
+}
+
+.shop_hero_section_inner {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    will-change: transform;
+}
+
+.shop_hero_section_inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+@media (max-width: 768px) {
+    .shop_hero_section_content {
+        top: 6rem;
+        padding: 0 20px;
+    }
+
+    .shop_hero_section_content p {
+        width: min(100%, 34ch);
+        font-size: 1.15rem;
+        padding-bottom: 2rem;
+    }
+}

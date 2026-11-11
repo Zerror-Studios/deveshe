@@ -56,7 +56,7 @@ Tests: `npm test` runs `test/*.test.mjs` with `node:test` (Node ≥ 22.15, no ex
 
 ## Structure
 
-Routes: `/`, `/products` and `/category/[slug]` (catalog listing with Load more, PRD-014), `/product/[slug]`, `/lookbook` and `/lookbook/[slug]` (the store's backend lookbooks, PRD-027), `/checkout/[id]` (+ `thank-you`, `payment-failed`), `/login`, `/profile`, `/about`, `/contact`, and the legal pages, each an `src/app/<route>/page.jsx` (server: metadata, JSON-LD, data through `src/lib/page-data/*.server.js`) with its client view in `src/views/`. `src/proxy.js` sends shoppers without a session to `/login?next=…` for `/profile` and checkout. Source lives under `src/`, using the `@/*` alias. The full map is in `CLAUDE.md` §2.
+Routes: `/`, `/shop` and `/shop/[categories]` (the live site's shop with client-side filters; `/products` and `/category/[slug]` redirect there permanently), `/search`, `/blogs` and `/blogs/[slug]`, `/material-index`, `/product/[slug]`, `/lookbook` and `/lookbook/[slug]` (the store's backend lookbooks, PRD-027), `/checkout/[id]` (+ `thank-you`, `payment-failed`), `/login`, `/profile`, `/about`, `/contact`, and the legal pages, each an `src/app/<route>/page.jsx` (server: metadata, JSON-LD, data through `src/lib/page-data/*.server.js`) with its client view in `src/views/`. `src/proxy.js` sends shoppers without a session to `/login?next=…` for `/profile` and checkout. Source lives under `src/`, using the `@/*` alias. The full map is in `CLAUDE.md` §2.
 
 ## Contributing
 
