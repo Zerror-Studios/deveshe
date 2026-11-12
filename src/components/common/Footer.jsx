@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { openConsentPreferences } from "@zcom/storefront-kit/core";
+import NewsletterForm from "./NewsletterForm";
 
 const Footer = () => {
   return (
@@ -19,18 +20,21 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Description */}
-      <p className="footer-description">
-        <span className="footer-description__line">
-          Created by the DeVeSheDreams team, this store and
-        </span>
-        <span className="footer-description__line">
-          signature collection celebrates our collective creativity
-        </span>
-        <span className="footer-description__line">
-          and passion for apparel. Carefully designed.
-        </span>
-      </p>
+      {/* Description + newsletter (PRD-014 FR-2.8, UX-29) */}
+      <div className="footer-intro">
+        <p className="footer-description">
+          <span className="footer-description__line">
+            Created by the DeVeSheDreams team, this store and
+          </span>
+          <span className="footer-description__line">
+            signature collection celebrates our collective creativity
+          </span>
+          <span className="footer-description__line">
+            and passion for apparel. Carefully designed.
+          </span>
+        </p>
+        <NewsletterForm />
+      </div>
 
       {/* Divider */}
       <hr className="footer-divider" />
