@@ -1,42 +1,5 @@
 import { gql } from "@apollo/client";
 
-// Login: also sets the HttpOnly customer refresh cookie (PRD-001 phase 2)
-export const CUSTOMER_LOGIN = gql`
-  mutation CustomerLogin($input: CustomerLoginInput!) {
-    customerLogin(input: $input) {
-      accessToken
-      expiresIn
-      customerId
-    }
-  }
-`;
-
-// Refresh: rotates the session from the HttpOnly customer cookie
-export const CUSTOMER_REFRESH_TOKEN = gql`
-  mutation CustomerRefreshToken($refreshToken: String) {
-    customerRefreshToken(refreshToken: $refreshToken) {
-      accessToken
-    }
-  }
-`;
-
-// Logout: revokes the session behind the customer cookie (or the argument)
-export const CUSTOMER_LOGOUT = gql`
-  mutation CustomerLogout($refreshToken: String) {
-    customerLogout(refreshToken: $refreshToken)
-  }
-`;
-
-// Sign Up (a duplicate email returns extensions.code CONFLICT)
-export const CUSTOMER_SIGNUP = gql`
-  mutation CustomerSignup($input: CreateUserInput!) {
-    customerSignup(input: $input) {
-      _id
-      email
-    }
-  }
-`;
-
 // Update Profile
 export const UPDATE_MY_PROFILE = gql`
   mutation UpdateMyProfile($input: CreateUserInput!) {

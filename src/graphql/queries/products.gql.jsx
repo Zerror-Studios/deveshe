@@ -140,16 +140,3 @@ export const GET_SITEMAP_PRODUCTS = gql`
   }
 `;
 
-// PRD-020 FR-8: the fresh read for the PDP (mount, variant change) and the
-// bag (open). Never cached server-side; at most 50 ids; unknown and
-// unpublished ids are left out. A failure keeps the rendered value.
-export const GET_VARIANT_AVAILABILITY = gql`
-  query GetVariantAvailability($variantIds: [ID!]!) {
-    getVariantAvailability(variantIds: $variantIds) {
-      productId
-      variantId
-      availability
-      availableQuantity
-    }
-  }
-`;

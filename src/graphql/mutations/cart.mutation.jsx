@@ -45,14 +45,3 @@ export const ISSUE_GUEST_CART_ID = gql`
     issueGuestCartId
   }
 `;
-
-// MERGE GUEST CART (PRD-002 R2-C3): customer-only, idempotent; the server
-// re-prices the moved lines and deletes the guest cart
-export const MERGE_GUEST_CART = gql`
-  mutation MergeGuestCart($guestId: String!) {
-    mergeGuestCart(guestId: $guestId) {
-      _id
-      itemcount
-    }
-  }
-`;
