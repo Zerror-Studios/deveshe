@@ -193,7 +193,7 @@ const OurJourney = () => {
       `.our_journey_vertical .pathcolor`
     );
 
- const isMobile = window.innerWidth <= 576; // adjust breakpoint as needed
+ const isMobile = window.innerWidth <= 768; // the stacked layout's breakpoint (about.css)
 
   const tl = gsap.timeline({
     scrollTrigger: {

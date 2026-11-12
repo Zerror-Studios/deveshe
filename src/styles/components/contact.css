@@ -94,7 +94,7 @@
 .contact-page__eyebrow {
   margin: 0 0 0.75rem;
   font-family: paragraph;
-  font-size: calc(8px + 0.229167vw);
+  font-size: max(11px, calc(8px + 0.229167vw));
   letter-spacing: 0.3px;
   text-transform: uppercase;
   color: #fe0000;

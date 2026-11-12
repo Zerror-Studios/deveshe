@@ -651,7 +651,7 @@
 .ProductDetails_wrapper .product-detail-cta__label,
 .ProductDetails_wrapper .product-detail-cta__price {
   font-family: paragraph;
-  font-size: calc(8px + 0.229167vw);
+  font-size: max(11px, calc(8px + 0.229167vw));
   line-height: 1;
   letter-spacing: 0.3px;
   text-transform: uppercase;

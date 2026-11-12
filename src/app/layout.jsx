@@ -40,7 +40,6 @@ import "@/styles/components/cart.css";
 import "@/styles/components/success.css";
 import "@/styles/components/pay.css";
 import "@/styles/components/newPorfile.css";
-import "@/styles/components/common/polaroid.css";
 import "@/styles/components/common/productCard.css";
 import "@/styles/components/common/blog-card.css";
 import "@/styles/components/blogs/blogs-listing.css";

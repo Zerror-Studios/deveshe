@@ -7,16 +7,6 @@
   z-index: 10;
   position: relative;
 }
-.goback {
-  position: absolute;
-  right: 20px;
-  top: 25px;
-  z-index: 10;
-  cursor: pointer;
-}
-.goback:hover {
-  color: rgba(0, 0, 0, 0.8);
-}
 .react-international-phone-input-container .react-international-phone-input {
   border: none !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3) !important;
@@ -202,27 +192,6 @@
   transform: scaleX(1);
 }
 
-.gender-option {
-  font-size: 14px;
-  align-items: center;
-  display: flex;
-  margin-top: 10px;
-  margin-bottom: 02px;
-}
-
-.gender-cont {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  cursor: pointer;
-  margin: 0px 5px;
-  position: relative;
-}
-
-.gender-inner-cont img {
-  object-fit: contain;
-}
-
 .name-cont {
   display: flex;
   justify-content: space-between;
@@ -258,11 +227,6 @@
   margin: 10px 0 !important;
 }
 
-.gender-name {
-  color: rgba(0, 0, 0, 0.6);
-  padding-left: 5px;
-}
-
 .phone-div {
   margin: 10px 0px;
 }
@@ -272,17 +236,8 @@
   font-size: 13px;
 }
 
-.gender-t {
-  color: rgba(0, 0, 0, 0.8);
-  margin-left: 5px;
-}
-
 .react-tel-input .form-control {
   border: none !important;
-}
-
-.signup-btn {
-  margin-top: 20px !important;
 }
 
 .inp-rel {
@@ -301,9 +256,6 @@
 .phone-error {
   bottom: -19px;
 }
-.gender-err {
-  bottom: -18px;
-}
 .inp-cont {
   width: 100%;
   height: 40px;
@@ -317,20 +269,6 @@
 
 .inp-cont:focus {
   border-bottom: 2px solid black;
-}
-
-.login-svg-cont {
-  width: 40px;
-  background: none;
-  height: 40px;
-}
-
-.login-input {
-  width: calc(100% - 40px);
-  height: 40px;
-  border: none;
-  outline: none;
-  font-size: 15px;
 }
 
 .react-tel-input .form-control {

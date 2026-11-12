@@ -1245,7 +1245,7 @@
   }
   .our_journey_vertical {
         width: 65%;
-        bottom: -310vh;
+        bottom: -345vh; /* starts below the "Where it all began" text */
         height: 400vh !important;
     }
   .journey_text {

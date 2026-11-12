@@ -16,7 +16,7 @@
   background-color: #fff;
   font-family: paragraph;
   font-weight: 100;
-  font-size: calc(8px + 0.229167vw);
+  font-size: max(11px, calc(8px + 0.229167vw));
   line-height: 1;
   letter-spacing: 0.3px;
   text-transform: uppercase;
@@ -96,12 +96,6 @@
 
 .common-btn--danger .loading_line {
   background-color: #fe0000;
-}
-
-.deactivate-actions .common-btn {
-  flex: 1;
-  max-width: none;
-  width: 100%;
 }
 
 #profile_header .common-btn--danger,

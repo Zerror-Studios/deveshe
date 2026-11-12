@@ -100,7 +100,7 @@
   background-color: #fff;
   line-height: 1;
   padding: 0.6875rem 1rem 0.59375rem;
-  font-size: calc(8px + 0.229167vw);
+  font-size: max(11px, calc(8px + 0.229167vw));
   border-radius: 5px;
   letter-spacing: 0.3px;
   z-index: 10;
@@ -288,7 +288,7 @@
   display: flex;
   align-items: center;
   padding: 0.6875rem 1rem 0.59375rem;
-  font-size: calc(8px + 0.229167vw);
+  font-size: max(11px, calc(8px + 0.229167vw));
   border-radius: 5px;
   letter-spacing: 0.3px;
   position: relative;

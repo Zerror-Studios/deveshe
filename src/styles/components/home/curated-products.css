@@ -299,7 +299,7 @@
   background-color: #fff;
   text-decoration: none;
   text-transform: uppercase;
-  font-size: calc(8px + 0.229167vw);
+  font-size: max(11px, calc(8px + 0.229167vw));
   font-weight: 100;
   font-family: paragraph;
   letter-spacing: 0.3px;
@@ -478,7 +478,7 @@
   background-color: #000;
   color: #fff;
   text-transform: uppercase;
-  font-size: calc(8px + 0.229167vw);
+  font-size: max(11px, calc(8px + 0.229167vw));
   font-weight: 400;
   font-family: paragraph;
   letter-spacing: 0.3px;
