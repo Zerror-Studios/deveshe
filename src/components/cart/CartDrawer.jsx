@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { useRouter } from "next/navigation";
 import { RxCross2 } from "react-icons/rx";
 import { useMutation, useQuery } from "@apollo/client/react";
+import { useStoreCheckoutOptions } from "@zcom/storefront-kit/client";
 import { ADD_ITEM_TO_CART, CART_LIST, REMOVE_ITEM_FROM_CART } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
 import { useVisitor } from "@/hooks/useVisitor";
@@ -17,6 +18,7 @@ import {
   isInvalidGuestIdError,
 } from "@/utils/api-error.util";
 import { getLoginPath } from "@/utils/redirect.util";
+import { CHECKOUT_PATH } from "@/utils/checkout-start.util";
 import { CtaEnum, trackCtaClick } from "@/utils/analytics-events.util";
 import { useVariantAvailability } from "@/hooks/useVariantAvailability";
 import {
@@ -33,6 +35,8 @@ const CartDrawer = ({ isOpen, closeCart }) => {
   const backdropRef = useRef(null);
   const { visitorId, resetVisitorId, runWithGuestId } = useVisitor();
   const { isLoggedIn } = useAuthStore((state) => state);
+  // PRD-041: guests check out without signing in unless accounts are REQUIRED
+  const { allowsGuest } = useStoreCheckoutOptions();
   // PRD-014 UX-31: focus trap, Escape and inert-while-closed.
   useDialogA11y(drawerRef, isOpen, closeCart);
 
@@ -149,12 +153,13 @@ const CartDrawer = ({ isOpen, closeCart }) => {
     trackCtaClick(CtaEnum.CHECKOUT);
     try {
       setIsBtnLoading(true);
-      // Checkout is customer-only; guests log in first (the guest bag is
-      // merged into the customer bag at login).
+      // PRD-041 FR-17: straight to checkout, also for a guest (their own
+      // bag). When the store requires accounts a guest signs in first and
+      // comes back to the bag merged at sign-in.
       await router.push(
-        isLoggedIn
-          ? `/checkout/${_id}`
-          : getLoginPath(`${window.location.pathname}${window.location.search}`),
+        isLoggedIn || allowsGuest
+          ? CHECKOUT_PATH
+          : getLoginPath(CHECKOUT_PATH),
       );
       closeCart();
     } catch (err) {

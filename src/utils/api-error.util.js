@@ -8,7 +8,12 @@
  * reason codes in zcom-backend (`packages/core/src/utils/` and the
  * commerce/payment services); see PRD-002 RMAINT-7.
  */
-import { getErrorInfo as readKitError } from "@zcom/storefront-kit/core";
+import {
+  DEFAULT_ERROR_MESSAGES as KIT_MESSAGES,
+  getErrorInfo as readKitError,
+  getErrorMessage as getKitErrorMessage,
+} from "@zcom/storefront-kit/core";
+import { isPromotionReason } from "./coupon.util";
 
 // ─── Messages ─────────────────────────────────────────────────────────────
 
@@ -43,6 +48,10 @@ export const REASON_MESSAGES = {
   PROMOTION_CUSTOMER_LIMIT: "You have already used this discount code.",
   PROMOTION_MINIMUM: "Your bag does not meet this code's minimum amount.",
   PROMOTION_NOT_APPLICABLE: "This discount code does not apply to your bag.",
+  // Who can use a code (backend PRD-036 round 2)
+  PROMOTION_SIGN_IN_REQUIRED: "Sign in to use this discount code.",
+  PROMOTION_NEW_CUSTOMERS_ONLY: "This discount code is for first orders only.",
+  PROMOTION_NOT_ELIGIBLE: "This discount code isn't available for your account.",
   TOO_MANY_LINES: "Your bag has too many items.",
   // R3 (VCON-2): checkout, payment and newsletter reasons.
   CHECKOUT_REPLACED:
@@ -129,6 +138,16 @@ const firstGraphqlError = (error) => {
   };
 };
 
+/**
+ * Its own message for every promotion answer (`PROMOTION_*`): the store's
+ * copy, else the kit's (a reason the backend adds later), never one
+ * generic "not valid" for all of them.
+ */
+export const getPromotionMessage = (reason) =>
+  REASON_MESSAGES[reason] ||
+  KIT_MESSAGES[reason] ||
+  REASON_MESSAGES.PROMOTION_INVALID;
+
 export const getErrorCode = (error) =>
   firstGraphqlError(error)?.extensions?.code || null;
 
@@ -150,8 +169,8 @@ export const getErrorMessage = (
 
   if (reason && overrides[reason]) return overrides[reason];
   if (code && overrides[code]) return overrides[code];
+  if (isPromotionReason(reason)) return getPromotionMessage(reason);
   if (reason && REASON_MESSAGES[reason]) return REASON_MESSAGES[reason];
-  if (reason?.startsWith("PROMOTION_")) return REASON_MESSAGES.PROMOTION_INVALID;
   if (code === "BAD_USER_INPUT") {
     return firstGraphqlError(error)?.message || fallback;
   }
@@ -174,9 +193,23 @@ export const createReasonError = (reason, message) => {
   return error;
 };
 
+/**
+ * Shopper copy for an error key the kit's hooks hold (`useCheckout().error`,
+ * `useCodeSignIn().error`): the kit's own message (backend PRD-041 guest
+ * checkout and code sign-in), so the store reads like the kit says.
+ */
+export const getKitKeyMessage = (key, overrides = {}) => {
+  if (!key) return "";
+  if (isPromotionReason(key) && !overrides[key]) return getPromotionMessage(key);
+  return getKitErrorMessage({ extensions: { reason: key } }, overrides);
+};
+
 /** Like getErrorMessage, but also understands `createReasonError`. */
 export const getAnyErrorMessage = (error, fallback, overrides = {}) => {
   if (error?.reason) {
+    if (isPromotionReason(error.reason) && !overrides[error.reason]) {
+      return getPromotionMessage(error.reason);
+    }
     return overrides[error.reason] || REASON_MESSAGES[error.reason] || fallback;
   }
   return getErrorMessage(error, fallback, overrides);

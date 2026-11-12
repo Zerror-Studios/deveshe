@@ -7,33 +7,41 @@
  * `useCheckoutStart` (kit PRD-002 FR-4.1) checks the link and adds its
  * lines to the shopper's bag (signed-in customer, or the server-issued
  * guest id), once per link and tab, skipping archived or sold-out
- * variants. Then this opens checkout. Checkout is customer-only, so a
- * guest goes to login and comes back to `?resume=1`, which opens the bag
- * merged at login (the merged bag is the customer's own cart, so its id
- * is read after login). A bad link shows a friendly message with a link to
- * the shop. Public route (proxy).
+ * variants. Then this opens checkout: a guest's own bag while the store's
+ * accounts are OPTIONAL (backend PRD-041 FR-17); with REQUIRED accounts a
+ * guest signs in and comes back to `/checkout`, which opens the bag merged
+ * at sign-in. An older `?resume=1` link still opens the merged bag. A bad link shows a friendly message with a link to the
+ * shop. Public route (proxy).
  */
 
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useApolloClient } from "@apollo/client/react";
-import { useCheckoutStart } from "@zcom/storefront-kit/client";
+import {
+  guestCartStore,
+  useCheckoutStart,
+  useStoreCheckoutOptions,
+} from "@zcom/storefront-kit/client";
 import CommonButton from "@/components/common/CommonButton";
 import { CART_LIST } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
 import { getLoginPath } from "@/utils/redirect.util";
 import {
   CHECKOUT_START_OPEN_FAILED,
-  CHECKOUT_START_RESUME_PATH,
+  CHECKOUT_PATH,
   getCheckoutStartMessage,
 } from "@/utils/checkout-start.util";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
 
-/** The signed-in customer's bag id (after the adds, or merged at login). */
-async function findCartId(client) {
+/**
+ * The bag id after the adds: the signed-in customer's (or merged at
+ * sign-in), else the guest's (`guestId`).
+ */
+async function findCartId(client, guestId = null) {
   const { data } = await client.query({
     query: CART_LIST,
+    variables: guestId ? { guestId } : {},
     fetchPolicy: "network-only",
   });
   return data?.getCart?.cart?.length ? data.getCart._id : null;
@@ -46,6 +54,7 @@ const CheckoutStart = () => {
   const searchParams = useSearchParams();
   const client = useApolloClient();
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const { allowsGuest, loading: optionsLoading } = useStoreCheckoutOptions();
   // Back from login: the guest bag was merged into the customer's
   const isResume = Boolean(searchParams.get("resume")) && isLoggedIn;
   // The kit adds the link's items once per link and tab (not on resume)
@@ -60,22 +69,36 @@ const CheckoutStart = () => {
   useEffect(() => {
     if (openedRef.current) return;
     if (!isResume && state.status !== "ready") return;
+    if (!isLoggedIn && optionsLoading) return;
     openedRef.current = true;
 
-    if (!isLoggedIn) {
-      router.replace(getLoginPath(CHECKOUT_START_RESUME_PATH));
+    if (!isLoggedIn && !allowsGuest) {
+      router.replace(getLoginPath(CHECKOUT_PATH));
       return;
     }
-    findCartId(client)
+    const guestId = isLoggedIn ? null : guestCartStore.get();
+    if (!isLoggedIn && !guestId) {
+      setOpenError(CHECKOUT_START_OPEN_FAILED);
+      return;
+    }
+    findCartId(client, guestId)
       .then((cartId) => {
         if (!cartId) {
           setOpenError(CHECKOUT_START_OPEN_FAILED);
           return;
         }
-        router.replace(`/checkout/${encodeURIComponent(cartId)}`);
+        router.replace(CHECKOUT_PATH);
       })
       .catch(() => setOpenError(CHECKOUT_START_OPEN_FAILED));
-  }, [state.status, isResume, isLoggedIn, client, router]);
+  }, [
+    state.status,
+    isResume,
+    isLoggedIn,
+    allowsGuest,
+    optionsLoading,
+    client,
+    router,
+  ]);
 
   return (
     <>

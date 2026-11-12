@@ -3,6 +3,10 @@
 /**
  * Customer session context on the kit (kit PRD-002 FR-4.1).
  *
+ * Sign-in is the kit's email code (`useCodeSignIn`, backend PRD-041 FR-9 to
+ * FR-12; it is also the sign-up), then `completeCodeSignIn`; password
+ * sign-in (`login`) stays for customers who have a password (FR-11).
+ *
  * The kit owns the session: the in-memory access token, the HttpOnly
  * refresh cookie, the single-flight refresh, and the one `mergeGuestCart`
  * at login (an invalid guest id is dropped). This keeps the store's
@@ -72,12 +76,16 @@ export const AuthProvider = ({ children }) => {
     return { profile, mergeFailed: auth.merge === "failed" };
   };
 
-  /** Creates the account (CONFLICT on a used email), then signs in. */
-  const signup = async (input) => {
-    const auth = await kit.signup(input);
+  /**
+   * After the kit's `useCodeSignIn().verifyCode` (backend PRD-041 FR-10):
+   * the kit already started the session and merged the guest bag; this
+   * brings the store's state in step exactly as `login` does. Resolves
+   * `{ profile, mergeFailed }`.
+   */
+  const completeCodeSignIn = async ({ merge } = {}) => {
     setIsLoggedIn(true);
     const profile = await loadProfile();
-    return { profile, mergeFailed: auth.merge === "failed" };
+    return { profile, mergeFailed: merge === "failed" };
   };
 
   /** Revokes the cookie session, then clears the token, profile and cache. */
@@ -92,7 +100,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ login, signup, logout }}>
+    <AuthContext.Provider value={{ login, completeCodeSignIn, logout }}>
       {children}
     </AuthContext.Provider>
   );

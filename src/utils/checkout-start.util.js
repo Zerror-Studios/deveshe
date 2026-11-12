@@ -11,8 +11,11 @@ import { CHECKOUT_START_MAX_QTY } from "@zcom/storefront-kit/core";
 // ─── Constants ────────────────────────────────────────────────────────────
 
 export const CHECKOUT_START_PATH = "/checkout/start";
-/** Where a guest comes back after login (the bag is merged at login). */
-export const CHECKOUT_START_RESUME_PATH = `${CHECKOUT_START_PATH}?resume=1`;
+/**
+ * The checkout: one page for the shopper's own bag, also where a guest
+ * comes back after sign-in (the bag is merged at sign-in).
+ */
+export const CHECKOUT_PATH = "/checkout";
 /** The page's own key: the items went in, but checkout couldn't open. */
 export const CHECKOUT_START_OPEN_FAILED = "CHECKOUT_OPEN_FAILED";
 

@@ -11,6 +11,8 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "@apollo/client/react";
+import { useMyOrderStatusToken } from "@zcom/storefront-kit/client";
+import { orderStatusPath } from "@zcom/storefront-kit/core";
 import { GET_ORDER_DETAIL } from "@/graphql";
 import { formatDateTime, formatePrice } from "@/utils/Util";
 import { getErrorCode } from "@/utils/api-error.util";
@@ -28,6 +30,8 @@ const OrderDetail = ({ orderId }) => {
     fetchPolicy: "network-only",
   });
   const order = data?.myOrder;
+  // PRD-041 FR-14: the same order status page the emails link to
+  const statusPath = orderStatusPath(useMyOrderStatusToken(order?._id ?? null));
 
   const refresh = async () => {
     await refetch();
@@ -79,6 +83,11 @@ const OrderDetail = ({ orderId }) => {
           )}
           {order.deliveredAt && (
             <p>{`Delivered ${formatOrderDate(order.deliveredAt)}`}</p>
+          )}
+          {statusPath && (
+            <Link href={statusPath} className="order_link_btn">
+              View order status
+            </Link>
           )}
         </div>
       </div>

@@ -1,18 +1,12 @@
 import React from "react";
 
 // PRD-014 UX-03 / W0V-C-03: shipping is what the server charges. The
-// checkout session's `pricing` is shown once the shopper asks for it with
-// "Show final total" (`onConfirm`) or presses "Pay now"; a session holds
-// stock, so it is never opened on its own (W0V2-02). Until then (or while
-// it is calculated) the label says so, and only a cart with free shipping
-// can say "Free".
-const Shipping = ({
-  pricing,
-  isPricing = false,
-  error = "",
-  isFreeShippingEnabled = false,
-  onConfirm,
-}) => {
+// checkout session's `pricing` is shown once the shopper presses
+// "Continue to payment" (both checkout paths); a session holds stock, so
+// it is never opened on its own (W0V2-02). Until then (or while it is
+// calculated) the label says so, and only a cart with free shipping can
+// say "Free".
+const Shipping = ({ pricing, isPricing = false, isFreeShippingEnabled = false }) => {
   let label = "Calculated at payment";
   if (pricing) {
     label =
@@ -32,26 +26,6 @@ const Shipping = ({
       </div>
       <div className="Shipping_method_cntr">
         <p aria-live="polite">{label}</p>
-        {error && !pricing && !isPricing && (
-          <p className="error" role="alert">
-            {error}
-          </p>
-        )}
-        {onConfirm && !pricing && !isPricing && (
-          <>
-            <p className="Shipping_confirm_hint">
-              Confirm your details to see the shipping charge and your final
-              total.
-            </p>
-            <button
-              type="button"
-              className="Shipping_confirm_btn"
-              onClick={onConfirm}
-            >
-              Show final total
-            </button>
-          </>
-        )}
       </div>
     </div>
   );

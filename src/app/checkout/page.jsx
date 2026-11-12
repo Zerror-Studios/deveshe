@@ -1,8 +1,12 @@
 /**
- * /checkout/[id] (kit PRD-002 FR-3.1; was `pages/checkout/[id]/index.jsx`).
- * The bag is per customer, so nothing is read on the server; the proxy
- * asks for a session cookie and the view sends a signed-out shopper to
- * login.
+ * /checkout (was `/checkout/[id]` until 2026-11-12). The bag is the
+ * shopper's own (the session's, or the tab's guest cart), never a URL id:
+ * a cart id in the path went stale when sign-in merged the guest bag, and
+ * leaked into history, referrers and analytics page paths. There is no
+ * `/checkout/<id>` route any more. Nothing is read on the server. The view picks
+ * the path (backend PRD-041 FR-17): the customer's checkout, the guest
+ * checkout while the store's accounts are OPTIONAL, or "Sign in to check
+ * out"; the proxy no longer guards `/checkout`.
  */
 
 import PageSchemas from "@/components/seo/PageSchemas";
@@ -38,18 +42,14 @@ const META = {
   }
 };
 
-export async function generateMetadata({ params }) {
-  const { id } = await params;
-  return toMetadata(META, `/checkout/${encodeURIComponent(id)}`);
-}
+export const metadata = toMetadata(META, "/checkout");
 
 // ─── Page ─────────────────────────────────────────────────────────────────
 
-export default async function Page({ params }) {
-  const { id } = await params;
+export default function Page() {
   return (
     <>
-      <PageSchemas meta={META} path={`/checkout/${encodeURIComponent(id)}`} />
+      <PageSchemas meta={META} path="/checkout" />
       <CheckoutView />
     </>
   );

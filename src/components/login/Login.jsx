@@ -17,7 +17,9 @@ const LoginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
-const Login = ({ setToggle }) => {
+// Password sign-in (backend PRD-041 FR-11): only for customers who already
+// have a password; the default is the email code (`CodeSignIn`).
+const Login = ({ onUseCode, inactive = false }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [visible, setVisible] = useState(false);
@@ -56,9 +58,9 @@ const Login = ({ setToggle }) => {
   };
 
   return (
-    <div className="left-two">
+    <div className="left-two" inert={inactive || undefined}>
       <div className="login-inner">
-        <div className="login-t">Login</div>
+        <div className="login-t">Sign in with password</div>
 
         <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
           <div className="inp-rel">
@@ -92,11 +94,21 @@ const Login = ({ setToggle }) => {
           <div className="forgot-link">
             <Link href="/forgot-password">Forgot password?</Link>
           </div>
-          <CommonButton title={"Login"} loading={loading} />
+          <CommonButton title={"Sign in"} loading={loading} />
         </form>
 
         <div className="not-up">
-          Not a member yet? <span onClick={() => setToggle(true)}>Sign up</span>
+          No password?{" "}
+          <span
+            role="button"
+            tabIndex={0}
+            onClick={onUseCode}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") onUseCode();
+            }}
+          >
+            Sign in with an email code
+          </span>
         </div>
       </div>
     </div>
