@@ -4,6 +4,8 @@
  *
  * `/search?q=…` (PRD-014 FR-2.8, UX-28) searches published products by
  * name, description and SKU; `noindex, follow`, canonical without query.
+ * Without a query, or when nothing matches, the page also gets the newest
+ * products as suggestions (`suggestions`; empty when that read fails).
  * The shop listings (`/shop`, `/shop/[categories]`) load in
  * `shop.server.js`; `/products` and `/category/<slug>` redirect there.
  */
@@ -15,7 +17,10 @@ import {
   toListingFilters,
 } from "@/lib/catalog-listing.server";
 import { Const } from "@/utils/Constant";
-import { parseListingSort } from "@/utils/listing-sort.util";
+import {
+  DEFAULT_LISTING_SORT,
+  parseListingSort,
+} from "@/utils/listing-sort.util";
 import {
   SEARCH_TERM_MIN_LENGTH,
   toSearchTerm,
@@ -24,6 +29,25 @@ import {
 // ─── Constants ────────────────────────────────────────────────────────────
 
 const SEARCH_TITLE = "Search – DeVeSheDreams";
+
+/** Products shown with an empty search or one with no match (two rows). */
+const SEARCH_SUGGESTION_COUNT = 8;
+
+// ─── Helpers ──────────────────────────────────────────────────────────────
+
+/** The newest published products; [] when the read fails (never fatal). */
+const fetchSuggestions = async (client) => {
+  try {
+    const page = await fetchProductPage(client, {
+      sort: DEFAULT_LISTING_SORT,
+      limit: SEARCH_SUGGESTION_COUNT,
+    });
+    return page.products;
+  } catch (error) {
+    console.error("Search suggestions failed:", error.message);
+    return [];
+  }
+};
 
 // ─── /search ──────────────────────────────────────────────────────────────
 
@@ -41,14 +65,20 @@ export async function loadSearchPage(query) {
   };
   const filters = toListingFilters(term ? { search: term } : {});
   const base = { meta, term, filters, sort };
+  const client = createServerCatalogClient();
   if (term.length < SEARCH_TERM_MIN_LENGTH) {
     return {
-      props: { ...base, products: [], totalCount: 0, loadError: false },
+      props: {
+        ...base,
+        products: [],
+        totalCount: 0,
+        loadError: false,
+        suggestions: await fetchSuggestions(client),
+      },
     };
   }
 
   try {
-    const client = createServerCatalogClient();
     const page = await fetchProductPage(client, {
       filters,
       sort,
@@ -60,12 +90,20 @@ export async function loadSearchPage(query) {
         products: page.products,
         totalCount: page.totalCount,
         loadError: false,
+        suggestions:
+          page.totalCount === 0 ? await fetchSuggestions(client) : [],
       },
     };
   } catch (error) {
     console.error("Search failed:", error.message);
     return {
-      props: { ...base, products: [], totalCount: 0, loadError: true },
+      props: {
+        ...base,
+        products: [],
+        totalCount: 0,
+        loadError: true,
+        suggestions: [],
+      },
     };
   }
 }

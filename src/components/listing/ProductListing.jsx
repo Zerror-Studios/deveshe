@@ -11,6 +11,8 @@
  * error with a retry instead of an endless skeleton. The sort control
  * (W2-STORE) keeps its value in `?sort=` (NEWEST is the default and left
  * out); changing it reloads the page server-side from the first page.
+ * Without a `title` the header holds only the sort control (the search
+ * page shows its own centred heading) and `listName` labels the section.
  */
 
 import React, { useState } from "react";
@@ -121,11 +123,17 @@ const ProductListing = ({
   /* ----- Render ----- */
 
   return (
-    <section className="listing_wrapper" aria-labelledby="listing_title">
+    <section
+      className="listing_wrapper"
+      aria-labelledby={title ? "listing_title" : undefined}
+      aria-label={title ? undefined : listName}
+    >
       <header className="listing_header">
-        <h1 id="listing_title" className="listing_title">
-          {title}
-        </h1>
+        {title && (
+          <h1 id="listing_title" className="listing_title">
+            {title}
+          </h1>
+        )}
         {description && <p className="listing_description">{description}</p>}
         {categories.length > 0 && (
           <nav className="listing_categories" aria-label="Shop by category">
