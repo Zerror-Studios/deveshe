@@ -92,7 +92,7 @@ const OrderDetail = ({ orderId }) => {
         </div>
       </div>
 
-      <OrderTracking shipment={order.shipment} />
+      <OrderTracking shipment={order.shipment} trackingStatus={order.trackingStatus} />
 
       {order.canCancel && (
         <OrderCancel orderId={order._id} onChanged={refresh} />

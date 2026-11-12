@@ -18,7 +18,7 @@
     "@apollo/client": "^4.3.8",
     "@apollo/client-integration-nextjs": "^0.14.5",
     "@hookform/resolvers": "^7.0.5",
-    "@zcom/storefront-kit": "github:Zerror-Studios/zcom-storefront-kit#v1.2.0",
+    "@zcom/storefront-kit": "github:Zerror-Studios/zcom-storefront-kit#v1.2.1",
     "graphql": "^17.1.0",
     "gsap": "^3.15.1",
     "html-react-parser": "^6.1.9",
@@ -39,6 +39,6 @@
     "zustand": "^5.1.0"
   },
   "allowScripts": {
-    "github:Zerror-Studios/zcom-storefront-kit#3130c746d13e601e12906e791d6820561ca4239d": true
+    "github:Zerror-Studios/zcom-storefront-kit#5850b7c83b1ac23c3694f0f1563a8797b65bd965": true
   }
 }

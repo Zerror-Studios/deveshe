@@ -12,7 +12,6 @@ export const ORDER_LIST = gql`
         discountedPrice
         paymentStatus
         fulfillmentStatus
-        shipmentStatus
         displayStatus
         currency
         cart {
@@ -81,7 +80,9 @@ export const GET_ORDER_BY_ID = gql`
 
 // PRD-015 FR-20: the order detail page (/profile/orders/[id]). Status,
 // tracking, cancel and returns are server-computed fields; the deprecated
-// `awb_code`, `courierName` and `trackInfo` are not selected.
+// `awb_code`, `courierName` and `trackInfo` are not selected. The shipment's
+// progress is `trackingStatus` (ours, backend PRD-044), never Shiprocket's
+// `shipmentStatus` wording or `shipmentStatusId`.
 export const GET_ORDER_DETAIL = gql`
   query MyOrderDetail($id: ID!) {
     myOrder(id: $id) {
@@ -123,6 +124,7 @@ export const GET_ORDER_DETAIL = gql`
         country
         pincode
       }
+      trackingStatus
       shipment {
         awb
         courier

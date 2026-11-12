@@ -3,26 +3,31 @@
  *
  * Courier, AWB, "Track shipment" (the server's https `trackingUrl`,
  * replacing the old hard-coded Shiprocket link) and the latest scans from
- * `shipment.tracking`. Nothing is shown before the shipment has an AWB.
+ * `shipment.tracking`. The status line is the order's `trackingStatus`
+ * (ours, whatever the shipping provider; backend PRD-044) in the kit's
+ * shopper wording. Nothing is shown before the shipment has an AWB.
  */
 
 import React from "react";
 import { FiArrowRight } from "react-icons/fi";
+import { getShipmentStatusLabel } from "@zcom/storefront-kit/core";
 import {
   formatOrderDate,
   getSafeTrackingUrl,
   toTrackingScans,
 } from "@/utils/order-detail.util";
 
-const OrderTracking = ({ shipment }) => {
+const OrderTracking = ({ shipment, trackingStatus = null }) => {
   const trackingUrl = getSafeTrackingUrl(shipment?.trackingUrl);
   const scans = toTrackingScans(shipment?.tracking);
   if (!shipment?.awb && !trackingUrl && scans.length === 0) return null;
+  const statusLabel = getShipmentStatusLabel(trackingStatus);
 
   return (
     <section className="detail_block order_detail_block" aria-labelledby="order_tracking_title">
       <div className="order_detail_column">
         <h4 id="order_tracking_title">Tracking</h4>
+        {statusLabel && <p>{`Status: ${statusLabel}`}</p>}
         {shipment?.courier && <p>{`Courier: ${shipment.courier}`}</p>}
         {shipment?.awb && <p>{`AWB: ${shipment.awb}`}</p>}
         {trackingUrl && (
