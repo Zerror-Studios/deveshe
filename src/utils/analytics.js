@@ -3,7 +3,9 @@
  * (PRD-012, PRD-014 FR-1.9, PRD-034 FR-1.3) on the kit (kit PRD-002
  * FR-4.1).
  *
- * `trackEcomEvent` is the one place the four e-commerce events start:
+ * `trackEcomEvent` is where the store's e-commerce events start (the
+ * checkout's `begin_checkout` and the paid order's events are the kit's,
+ * kit 1.1.0 `useCheckout`; GA4's `purchase` is server-side, PRD-012):
  * - GA4 through the kit's `trackEvent`: only with analytics consent,
  *   queued until GA4 has loaded, sent to the store's GA4 id only (the
  *   backend's `ga4MeasurementId`, else `NEXT_PUBLIC_GA_MEASUREMENT_ID`);
@@ -60,19 +62,6 @@ export const mapProductToGA4Item = (product, variant = null, quantity = 1) => {
   };
 };
 
-/**
- * Maps a server cart or order line (CartItem / OrderItemSnapshot) to GA4.
- * @param {Object} line - The line with productId, name, sku, price, qty.
- * @returns {Object} GA4 item object.
- */
-export const mapLineToGA4Item = (line) => ({
-  item_id: line?.sku || line?.productId,
-  item_name: line?.name || "",
-  price: Number(line?.price || 0),
-  quantity: Number(line?.qty || 1),
-  item_brand: "Deveshe Dreams",
-});
-
 /** The ads item id: the variant id (the product feed's `id`). */
 const toAdsId = (product, variant) =>
   String(variant?._id || product?.variants?.[0]?._id || product?._id || "");
@@ -121,12 +110,12 @@ export const trackEcomEvent = {
     }
   },
 
-  beginCheckout: (cartItems = [], totalValue = 0) => {
-    trackGAEvent("begin_checkout", {
-      currency: DEFAULT_CURRENCY,
-      value: Number(totalValue),
-      items: cartItems.map(mapLineToGA4Item)
-    });
+  /**
+   * The ads networks' begin checkout (Meta `InitiateCheckout`, Google Ads)
+   * when the checkout page opens. GA4's `begin_checkout` is the kit's
+   * (`useCheckout`, once the session is reserved), so it isn't sent here.
+   */
+  adsBeginCheckout: (cartItems = [], totalValue = 0) => {
     trackAdsBeginCheckout(
       null,
       toAdsItems(cartItems),
@@ -136,24 +125,20 @@ export const trackEcomEvent = {
   },
 
   /**
-   * `orderId` is the order `_id` (PRD-034 FR-1.3). `options.customer`
+   * The ads purchase of a PAID order (Meta `Purchase`, Google Ads), once
+   * per order on this browser: the kit's `trackAdsPurchase` dedupes on the
+   * order id, so the checkout tab (the kit sends it once PAID) and a
+   * thank-you page count it once. `orderId` is the order `_id` (PRD-034
+   * FR-1.3). GA4's `purchase` is sent server-side by the backend
+   * (PRD-012), never from the browser. `options.customer`
    * (`{ email, phone, countryCode }`) is only hashed (by the kit) for Google
-   * enhanced conversions, never sent to GA4 or Meta.
+   * enhanced conversions.
    */
-  purchase: (orderId, totalValue, items = [], shipping = 0, tax = 0, options = {}) => {
-    const currency = options.currency || DEFAULT_CURRENCY;
-    trackGAEvent("purchase", {
-      transaction_id: orderId,
-      value: Number(totalValue),
-      currency,
-      tax: Number(tax),
-      shipping: Number(shipping),
-      items: items.map(mapLineToGA4Item)
-    });
+  adsPurchase: (orderId, totalValue, items = [], options = {}) => {
     trackAdsPurchase(null, {
       orderId,
       value: Number(totalValue),
-      currency,
+      currency: options.currency || DEFAULT_CURRENCY,
       items: toAdsItems(items),
       email: options.customer?.email ?? null,
       phone: options.customer?.phone ?? null,

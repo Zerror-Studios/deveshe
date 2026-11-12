@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import Link from "next/link";
 import z from "zod";
 import { useMutation } from "@apollo/client/react";
 import { useForm } from "react-hook-form";
@@ -14,13 +15,27 @@ import {
   getErrorReason,
 } from "@/utils/api-error.util";
 import {
+  COUPON_CODE_MAX_LENGTH,
+  isPromotionReason,
+  isSignInRequiredReason,
+  normaliseCouponCode,
+} from "@/utils/coupon.util";
+import { getLoginPath } from "@/utils/redirect.util";
+import { CHECKOUT_PATH } from "@/utils/checkout-start.util";
+import {
   CtaEnum,
   trackCouponApply,
   trackCouponFailed,
   trackCtaClick,
 } from "@/utils/analytics-events.util";
 
-const couponSchema = z.object({ couponCode: z.string().min(1, "Coupon code is required") });
+const couponSchema = z.object({
+  couponCode: z
+    .string()
+    .trim()
+    .min(1, "Coupon code is required")
+    .max(COUPON_CODE_MAX_LENGTH),
+});
 // `locked` freezes the coupon while an order is being placed or paid
 // (RBUG-9); a later coupon change drops the pending order (fingerprint).
 // `pricing` is the checkout session's server snapshot (PRD-014 UX-03,
@@ -38,7 +53,6 @@ const OrderSummary = ({
     totalprice = 0,
     itemcount = 0,
     isFreeShippingEnabled = false,
-    discountedPrice = 0,
     totalDiscount = 0,
     cart = [],
   } = data || {};
@@ -50,6 +64,12 @@ const OrderSummary = ({
   const { isLoggedIn } = useAuthStore((state) => state);
   const [applyCoupon, { loading }] = useMutation(APPLY_CART_PROMOTION);
   const [removeCoupon, { loading: removeLoading }] = useMutation(REMOVE_CART_PROMOTION);
+  // A refused code: its own message under the field (and "Sign in" when
+  // the code needs an account)
+  const [couponError, setCouponError] = useState(null);
+  // 0 is a real total (a 100% code); only a bag that hasn't loaded has none
+  const discountedPrice =
+    typeof data?.discountedPrice === "number" ? data.discountedPrice : null;
 
   const {
     register,
@@ -73,6 +93,7 @@ const OrderSummary = ({
     if (loading || locked) return;
     const couponCode = data?.couponCode || "";
     trackCtaClick(CtaEnum.APPLY_COUPON);
+    setCouponError(null);
     try {
       const input = {
         ...(!isLoggedIn && visitorId ? { guestId: visitorId } : {}),
@@ -95,13 +116,20 @@ const OrderSummary = ({
         couponCode,
         getErrorReason(err) || getErrorCode(err) || "UNKNOWN",
       );
-      toast.error(getErrorMessage(err, "Failed to apply coupon"));
+      const reason = getErrorReason(err);
+      const message = getErrorMessage(err, "Failed to apply coupon");
+      if (isPromotionReason(reason)) {
+        setCouponError({ message, reason });
+      } else {
+        toast.error(message);
+      }
       reset();
     }
   };
 
   const onRemoveCoupon = async () => {
     if (removeLoading || locked) return;
+    setCouponError(null);
     try {
       const variables = {
         ...(!isLoggedIn && visitorId ? { guestId: visitorId } : {}),
@@ -114,6 +142,9 @@ const OrderSummary = ({
       toast.error(getErrorMessage(err, "Failed to remove coupon"));
     }
   };
+  const applyCode = handleSubmit(onSubmit);
+  const couponField = register("couponCode");
+
   return (
     <div className="final-checkout-cont">
       <div className="checkout-t">Order Summary ({itemcount})</div>
@@ -160,15 +191,26 @@ const OrderSummary = ({
           className="promo-input"
           placeholder="Discount Code or Gift Card"
           disabled={loading || isCouponApplied || locked}
-          {...register("couponCode")}
+          maxLength={COUPON_CODE_MAX_LENGTH}
+          aria-label="Discount code"
+          {...couponField}
+          // Normalise, then tell react-hook-form, so the form value is
+          // always current (Safari keeps focus, so blur never comes)
           onChange={(e) => {
-            let value = e.target.value.replace(/[^a-zA-Z0-9]/g, "");
-            value = value.toUpperCase();
-            e.target.value = value;
+            e.target.value = normaliseCouponCode(e.target.value);
+            setCouponError(null);
+            couponField.onChange(e);
+          }}
+          // Enter applies the code; it never submits anything else
+          onKeyDown={(e) => {
+            if (e.key !== "Enter") return;
+            e.preventDefault();
+            if (!isCouponApplied) applyCode();
           }}
         />
         {isCouponApplied ? (
           <button
+            type="button"
             className="_btn_wrapper _btn_height _w-full RemoveBtn"
             onClick={onRemoveCoupon}
             disabled={removeLoading || locked}
@@ -178,8 +220,9 @@ const OrderSummary = ({
           </button>
         ) : (
           <button
+            type="button"
             className="_btn_wrapper _btn_height _w-full ApplyBtn"
-            onClick={handleSubmit(onSubmit)}
+            onClick={applyCode}
             disabled={loading || locked}
           >
             {loading ? "Applying..." : "Apply"}
@@ -188,6 +231,17 @@ const OrderSummary = ({
       </div>
       {errors.couponCode && (
         <span className="error-text">{errors.couponCode.message}</span>
+      )}
+      {couponError && !errors.couponCode && (
+        <span className="error-text" role="alert">
+          {couponError.message}
+          {isSignInRequiredReason(couponError.reason) && (
+            <>
+              {" "}
+              <Link href={getLoginPath(CHECKOUT_PATH)}>Sign in</Link>
+            </>
+          )}
+        </span>
       )}
       <div className="checkout-price-cont">
         <div className="cpp">
@@ -265,7 +319,7 @@ const OrderSummary = ({
             : "Total before shipping:"}
         {pricing ? (
           <div className="checkout-price">&#8377; {pricing.total}</div>
-        ) : !discountedPrice ? (
+        ) : discountedPrice === null ? (
           //   <FinalpriceLoader2 />
           <></>
         ) : (

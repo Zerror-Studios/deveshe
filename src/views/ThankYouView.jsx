@@ -7,31 +7,21 @@ import CommonButton from "@/components/common/CommonButton";
 import { useQuery } from "@apollo/client/react";
 import { GET_ORDER_BY_ID } from "@/graphql";
 import { trackEcomEvent } from "@/utils/analytics";
-import { PendingOrder } from "@/utils/pending-order.util";
+import { PendingOrderStore } from "@zcom/storefront-kit/core";
 
 // PAID is set asynchronously after verifyPayment, so poll myOrder briefly.
 // After polling ends without PAID the page shows a terminal "not confirmed
 // yet" state, and a missing order never shows success (RBUG-20).
+//
+// The checkout lands here only when the order has no status page token
+// (else it goes to `orderStatusPath`, backend PRD-041 FR-14). Once PAID it
+// forgets the kit's kept unpaid order and sends the ads purchase, which the
+// kit dedupes per order (the paying tab already sent it). GA4's `purchase`
+// is sent server-side by the backend (PRD-012), never from here.
 const ORDER_POLL_INTERVAL_MS = 3000;
 const ORDER_POLL_MAX_MS = 60 * 1000;
 const REDIRECT_SECONDS = 10;
-const PURCHASE_TRACKED_KEY = "ga_purchase_tracked";
 const SUPPORT_EMAIL = "deveshedreams@gmail.com";
-
-// GA purchase fires once per order, also across reloads.
-const markPurchaseTracked = (orderId) => {
-  try {
-    const tracked = JSON.parse(localStorage.getItem(PURCHASE_TRACKED_KEY) || "[]");
-    if (tracked.includes(orderId)) return false;
-    localStorage.setItem(
-      PURCHASE_TRACKED_KEY,
-      JSON.stringify([...tracked, orderId].slice(-20))
-    );
-    return true;
-  } catch {
-    return true;
-  }
-};
 
 // The order's contact for enhanced conversions; the phone and its country
 // code come from the same record.
@@ -72,17 +62,14 @@ const ThankYou = () => {
     if (!isPaid || purchaseTrackedRef.current) return;
     purchaseTrackedRef.current = true;
     setIsPolling(false);
-    PendingOrder.clear();
-    if (!markPurchaseTracked(order._id)) return;
-    // PRD-034 FR-1.3: `transaction_id` / Meta `eventID` = the order `_id`
-    // (the backend's server events use it too). The contact is only hashed
-    // for Google enhanced conversions (marketing consent, FR-1.6).
-    trackEcomEvent.purchase(
+    PendingOrderStore.clear();
+    // PRD-034 FR-1.3: Meta `eventID` / Google `transaction_id` = the order
+    // `_id` (the backend's server events use it too). The contact is only
+    // hashed for Google enhanced conversions (marketing consent, FR-1.6).
+    trackEcomEvent.adsPurchase(
       order._id,
       order.orderPrice ?? order.totalprice,
       order.cart || [],
-      order.shippingAmount || 0,
-      order.tax?.totalTax || 0,
       {
         currency: order.currency || undefined,
         customer: getOrderContact(order),

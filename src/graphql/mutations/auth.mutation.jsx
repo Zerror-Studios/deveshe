@@ -27,16 +27,6 @@ export const CUSTOMER_LOGOUT = gql`
   }
 `;
 
-// Sign Up (a duplicate email returns extensions.code CONFLICT)
-export const CUSTOMER_SIGNUP = gql`
-  mutation CustomerSignup($input: CreateUserInput!) {
-    customerSignup(input: $input) {
-      _id
-      email
-    }
-  }
-`;
-
 // Update Profile
 export const UPDATE_MY_PROFILE = gql`
   mutation UpdateMyProfile($input: CreateUserInput!) {

@@ -7,9 +7,12 @@
  * `analytics_page_daily`, `analytics_product_daily` and
  * `analytics_event_daily`; a name that drifts is simply never counted).
  *
- * The four GA4 e-commerce events (`view_item`, `add_to_cart`,
- * `begin_checkout`, `purchase`) stay in `utils/analytics.js`
- * (`trackEcomEvent`). Everything else goes through `trackEvent`, which:
+ * The GA4 e-commerce events `view_item` and `add_to_cart` stay in
+ * `utils/analytics.js` (`trackEcomEvent`). The checkout's events
+ * (`begin_checkout`, `add_shipping_info`, `add_payment_info`,
+ * `checkout_error`, the place-order and pay-now `cta_click`) are sent by
+ * the kit's `useCheckout` (kit 1.1.0) for both checkouts; GA4's `purchase`
+ * is server-side (PRD-012). Everything else goes through `trackEvent`, which:
  * - clips every string to `EVENT_PARAMETER_MAX_LENGTH`, drops `null`,
  *   `undefined` and empty values (also inside `items[]`);
  * - hands the event to the kit (kit PRD-002 FR-4.1): sent only with
@@ -24,7 +27,7 @@
  */
 
 import { trackEvent as kitTrackEvent } from "@zcom/storefront-kit/core";
-import { mapLineToGA4Item, mapProductToGA4Item } from "@/utils/analytics";
+import { mapProductToGA4Item } from "@/utils/analytics";
 
 // ─── Vocabulary (mirrors analytics-events.vocabulary.ts) ─────────────────
 
@@ -103,8 +106,6 @@ export const CUSTOM_DIMENSION_PARAMETERS = [
 /** Parameter values are clipped to this length before they reach GA4. */
 export const EVENT_PARAMETER_MAX_LENGTH = 100;
 
-const CURRENCY = "INR";
-
 // ─── Sanitising ───────────────────────────────────────────────────────────
 
 const clipValue = (value) => {
@@ -155,8 +156,6 @@ export function trackEvent(name, params = {}) {
 /** The `item_id` the e-commerce events send for this product (+ variant). */
 export const getAnalyticsItemId = (product, variant = null) =>
   mapProductToGA4Item(product, variant)?.item_id;
-
-const toLineItems = (cart) => (cart?.cart || []).map(mapLineToGA4Item);
 
 // ─── Typed helpers ────────────────────────────────────────────────────────
 
@@ -233,26 +232,6 @@ export const trackCouponApply = (coupon) =>
 /** `reason` is the GraphQL `extensions.reason` or code, never a message. */
 export const trackCouponFailed = (coupon, reason) =>
   trackEvent(StorefrontEventEnum.COUPON_FAILED, { coupon, reason });
-
-/** The address step is complete (the checkout form validated). */
-export const trackAddShippingInfo = (cart, shippingTier) =>
-  trackEvent(StorefrontEventEnum.ADD_SHIPPING_INFO, {
-    currency: CURRENCY,
-    value: Number(cart?.discountedPrice || 0),
-    coupon: cart?.promotion?.promotionCode,
-    shipping_tier: shippingTier,
-    items: toLineItems(cart),
-  });
-
-/** The payment window is about to open; `paymentType` is the provider. */
-export const trackAddPaymentInfo = (cart, paymentType) =>
-  trackEvent(StorefrontEventEnum.ADD_PAYMENT_INFO, {
-    currency: CURRENCY,
-    value: Number(cart?.discountedPrice || 0),
-    coupon: cart?.promotion?.promotionCode,
-    payment_type: paymentType,
-    items: toLineItems(cart),
-  });
 
 /**
  * A checkout or payment failure the shopper saw. `step` is a

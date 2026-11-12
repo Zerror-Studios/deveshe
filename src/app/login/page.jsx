@@ -45,7 +45,7 @@ export default function Page() {
   return (
     <>
       <PageSchemas meta={META} path="/login" />
-      {/* Login and Signup read ?next= (useSearchParams) */}
+      {/* The code and password sign-in read ?next= (useSearchParams) */}
       <Suspense fallback={null}>
         <LoginView />
       </Suspense>

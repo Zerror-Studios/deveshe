@@ -1,0 +1,167 @@
+/* Backend PRD-041 FR-13/FR-17: the order status page (`/orders/status/<token>`), mobile first */
+
+#order_status_section {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 7rem 16px 3rem;
+}
+
+#order_status_section .order_status_card {
+  width: 100%;
+  max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  font-family: paragraph;
+}
+
+#order_status_section h1 {
+  font-family: heading;
+  font-size: 2rem;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+#order_status_section h2 {
+  font-family: heading;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+#order_status_section p,
+#order_status_section dt,
+#order_status_section dd {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: black;
+}
+
+#order_status_section a {
+  text-decoration: underline;
+}
+
+#order_status_section .order_status_kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+#order_status_section .order_status_muted {
+  opacity: 0.7;
+}
+
+/* Timeline */
+#order_status_section .order_status_timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+#order_status_section .order_status_step {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  opacity: 0.45;
+}
+
+#order_status_section .order_status_step.is-done {
+  opacity: 1;
+}
+
+#order_status_section .order_status_dot {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  margin-top: 5px;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+
+#order_status_section .order_status_step.is-done .order_status_dot {
+  background: black;
+}
+
+#order_status_section .order_status_step.is-current .order_status_dot {
+  background: red;
+  border-color: red;
+}
+
+#order_status_section .order_status_step_label {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Items and totals */
+#order_status_section .order_status_lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+#order_status_section .order_status_line {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+#order_status_section .order_status_image {
+  flex: 0 0 auto;
+  width: 56px;
+  height: 70px;
+  object-fit: cover;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+#order_status_section .order_status_line_text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+#order_status_section .order_status_totals {
+  margin: 0.75rem 0 0;
+}
+
+#order_status_section .order_status_row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+#order_status_section .order_status_row dd {
+  margin: 0;
+}
+
+#order_status_section .order_status_total dt,
+#order_status_section .order_status_total dd {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+#order_status_section .order_status_grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+}
+
+#order_status_section #common_black_btn {
+  align-self: flex-start;
+}
+
+@media (min-width: 768px) {
+  #order_status_section h1 {
+    font-size: 2.75rem;
+  }
+
+  #order_status_section .order_status_grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

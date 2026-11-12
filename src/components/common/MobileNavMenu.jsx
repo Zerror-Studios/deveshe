@@ -80,7 +80,7 @@ export default function MobileNavMenu({
                 className="nav-mobile-popup__login-btn"
                 onClick={onLogin}
               >
-                Login / Signup
+                Sign in
               </button>
             </div>
           )}

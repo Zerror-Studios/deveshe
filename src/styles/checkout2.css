@@ -1338,15 +1338,6 @@ input:focus {
   font-size: 13px;
 }
 
-/* PRD-014 W0V2-02: pricing (and its stock hold) only on the shopper's ask */
-.Shipping_confirm_hint {
-  margin-top: 0.6rem;
-}
-
-.Shipping_method_cntr .Shipping_confirm_btn {
-  margin-top: 0.8rem;
-}
-
 /* Checkout — brand red text (#fe0000) */
 .checkout-cont,
 .checkout-cont p,
@@ -1507,4 +1498,13 @@ input:focus {
   border-color: rgba(254, 0, 0, 0.35) !important;
   background-color: rgba(254, 0, 0, 0.04) !important;
   color: #fe0000 !important;
+}
+
+/* Backend PRD-041 FR-17: the guest checkout's way to the code sign-in */
+.checkout_signin_hint {
+  font-family: paragraph;
+  font-size: 14px;
+}
+.checkout_signin_hint a {
+  text-decoration: underline;
 }

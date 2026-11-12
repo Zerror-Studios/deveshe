@@ -97,36 +97,40 @@ Since the kit (2026-11-11), its `migrateLegacyStorage` moves the pre-kit keys on
 
 ## 5. Checkout flow
 
+Both checkouts run on the kit's `useCheckout()` (kit 1.1.0, backend PRD-041 FR-17): the signed-in `CustomerCheckout` (`views/CheckoutView.jsx`) with `start` → `pay` / `retryPayment`, the guest checkout (`components/checkout/GuestCheckout.jsx`) with `startGuest` → `pay`. Both follow one flow (owner, 2026-11-12): "Continue to payment" reserves and shows the final total, "Pay now" is enabled only while the session is reserved for exactly the bag, coupon and details on screen (`isReservedFor`), and a closed window gives "Pay again". The ads begin checkout is sent once per page load on both paths (`hooks/useAdsBeginCheckout.jsx`). The signed-in path:
+
 ```mermaid
 sequenceDiagram
     autonumber
-    actor S as Shopper (logged in)
-    participant P as /checkout/[id] (views/CheckoutView)
+    actor S as Shopper (signed in)
+    participant P as /checkout (CustomerCheckout)
+    participant K as kit useCheckout
     participant GW as Gateway
-    participant NB as Payment app (Razorpay / Cashfree / PayU)
-    participant TY as thank-you
+    participant NB as Payment app (Razorpay / Cashfree / PayU / CCAvenue / Nimbbl)
+    participant ST as /orders/status/[token] (else thank-you)
 
-    S->>P: submit address (zod CheckoutSchema)
-    Note over P: pending order in sessionStorage with a matching<br/>cart + coupon fingerprint and details fingerprint<br/>(email, shipping, billing) → skip to createPaymentSession
-    P->>GW: createCheckoutSessionFromCart (server reuses the active session for an unchanged cart)
-    loop every 1 s, up to 20 times
-        P->>GW: getCheckoutSession
+    S->>P: "Continue to payment" (zod CheckoutSchema)
+    P->>K: start({cartId, lines, email, shippingAddress, billingAddress})
+    Note over K: kept unpaid order with the same fingerprint<br/>(PendingOrderStore: cart, lines, email, addresses)<br/>→ its session, no new hold
+    K->>GW: createCheckoutSessionFromCart (+ attribution, consent)
+    loop every 1 s, up to 45 s
+        K->>GW: getCheckoutSession
     end
-    Note over P: RESERVED → continue; FAILED / EXPIRED → error message
-    P->>GW: completeCheckout → orderId + pricing.total (saved as the pending order)
-    Note over P: pricing.total = 0 → the order is already PAID (PRD-014 COM-08):<br/>no payment session, straight to thank-you
-    P->>GW: createPaymentSession({orderId}) → checkout (SDK / REDIRECT / FORM_POST)
-    P->>NB: kit launchPayment (known payment hosts only)
-    NB-->>P: result (handled once per window), or the redirect back through /api/payments/return
-    P->>GW: verifyPayment(payload; providerOrderId from the session if missing)
-    P->>TY: redirect
-    loop up to 60 s
-        TY->>GW: myOrder(orderId)
-    end
-    Note over TY: PAID → GA purchase (once per order) and countdown<br/>polling → "confirming"; missing or still unpaid → "not confirmed yet" (never a false success)
+    K-->>P: session.pricing (shown; begin_checkout, add_shipping_info)
+    S->>P: "Pay now" (enabled only while reserved for these exact details)
+    P->>K: pay()
+    K->>GW: completeCheckout → orderId (kept in PendingOrderStore)
+    Note over K: pricing.total = 0 → PAID at once (COM-08), no payment
+    K->>GW: createPaymentSession({orderId}) → checkout (SDK / REDIRECT / FORM_POST)
+    K->>NB: launchPayment (known payment hosts only; add_payment_info)
+    NB-->>K: result, or the redirect back through /api/payments/return → usePaymentReturn
+    K->>GW: verifyPayment, then myOrder until PAID (60 s)
+    K-->>P: paid + statusToken (ads purchase sent, kept order forgotten)
+    P->>ST: orderStatusPath(statusToken), else /checkout/thank-you?orderId=…
+    Note over P: dismissed → toast, "Pay again" (retryPayment; the kit sends checkout_error)<br/>failed with a kept order → /checkout/payment-failed?orderId=… (retryPayment)<br/>stock, price, coupon, address → message beside the button
 ```
 
-A retry reuses the same unpaid order, also after a reload (`utils/pending-order.util.js`, RBUG-8). A changed bag or coupon drops the pending order and starts a new one, so the charged total is never stale (RBUG-9); the coupon controls are locked while an order is placed or paid, and the pay button stays disabled until the payment window's result or close (RBUG-15). Failures go to `payment-failed`. Guests are sent to login first. PRD-014 Wave 1: a ₹0 order skips the payment steps; `SHIPPING_UNAVAILABLE` (no shipping zone for the address) is shown at the pricing step or the "Pay now" button and scrolls to the delivery step; a `VARIANT_REQUIRED` cart remove refetches the bag.
+A retry reuses the same unpaid order, also after a reload (the kit's `PendingOrderStore`, this tab, 2 h): its saved address is preselected and its pricing shown. A changed email or address places a new order (the backend cancels the old one, PRD-015 FR-14); a changed bag or coupon drops the kept order and the confirmation, so the charged total is never stale (RBUG-9); the coupon controls are locked while the kit places or pays (RBUG-15). The thank-you fallback polls `myOrder` and never shows success without PAID (RBUG-20); it sends only the ads purchase (deduplicated per order by the kit), and GA4's `purchase` is server-side (backend PRD-012). `SHIPPING_UNAVAILABLE` (no shipping zone for the address) is shown beside the buttons and scrolls to the delivery step; a `VARIANT_REQUIRED` cart remove refetches the bag.
 
 ## 6. Presentation layer
 
@@ -166,9 +170,9 @@ flowchart LR
 ## PRD-014 Wave 0 (2026-10-25)
 
 - **Catalog (FR-0.8, UX-01):** `/products` and `/category/[slug]` (`components/listing/ProductListing.jsx`) page through `getClientSideProducts` (12 per page, Load more); the category comes from `getClientSideCategories(filter: { slug })`. The home `#shop` reads the 11 newest published products (no hard-coded category) and links to `/products`; failures render an error state, never an endless skeleton. PDP related products come from the product's own category.
-- **Checkout (UX-02, UX-03, W0V-C-03, W0V2-02):** the kept order's saved address (on a retry), else the primary one, is preselected; validation errors are visible outside the hidden form and at the "Pay now" button; a checkout session (15-minute stock hold) is opened only when the shopper presses "Show final total" at the shipping step or "Pay now" (never on page load, a preselected address or typing), and the summary and shipping then show its server `pricing`; "Pay now" with unchanged details reuses that same active session (R2-C8), and changed details need a new confirmation. Without pricing: "Total before shipping" (or "Estimated total" with free shipping) and shipping "Calculated at payment". A reload or retry re-reads the kept order's session pricing (`checkoutId` in `pending-order.util.js`).
+- **Checkout (UX-02, UX-03, W0V-C-03, W0V2-02):** the kept order's saved address (on a retry), else the primary one, is preselected; validation errors are visible outside the hidden form and at the "Pay now" button; a checkout session (15-minute stock hold) is opened only when the shopper presses "Show final total" at the shipping step or "Pay now" (never on page load, a preselected address or typing), and the summary and shipping then show its server `pricing`; "Pay now" with unchanged details reuses that same active session (R2-C8), and changed details need a new confirmation. Without pricing: "Total before shipping" (or "Estimated total" with free shipping) and shipping "Calculated at payment". A reload or retry shows the kept order's session pricing (in `pending-order.util.js` then; the kit's `PendingOrderStore` since 2026-11-12). Since 2026-11-12 "Show final total" and the self-starting "Pay now" are replaced by "Continue to payment" → "Pay now" (§5).
 - **PDP (UX-09):** a missing option combination, an ARCHIVED variant or `PRODUCT_UNAVAILABLE` shows "Unavailable / Notify me".
-- **Payment failed (FR-0.12, UX-04):** "Retry payment" returns to the kept unpaid order's checkout (`PendingOrder.findCartId`), "Back to cart" opens the drawer.
+- **Payment failed (FR-0.12, UX-04):** "Retry payment" returned to the kept unpaid order's checkout (`PendingOrder.findCartId`; since 2026-11-12 it pays the kit's kept order in place with `retryPayment`), "Back to cart" opens the drawer.
 - **Home reviews (UX-35):** approved `getReviews` only; the section is hidden when there are none.
 - Details and verification: `../prd/PRD-014-production-readiness-remediation.md`.
 
