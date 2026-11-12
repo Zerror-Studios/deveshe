@@ -328,7 +328,8 @@
   position: relative;
 }
 
-.Phone_input_cntr input {
+.Phone_input_cntr input,
+.Phone_input_cntr select {
   position: relative;
   padding-block: 1rem;
   padding-inline: 1rem;
@@ -688,27 +689,6 @@ input:focus {
   width: 100%;
 }
 
-.delivery__input__phone {
-  font-family: unset !important;
-  height: 100% !important;
-  position: relative;
-  padding: 1rem !important;
-  border: 1px solid #dedede !important;
-  font-size: 0.75rem !important;
-  background-color: rgb(245 243 243 / 60%) !important;
-  width: 100% !important;
-}
-
-.react-international-phone-input-container .react-international-phone-input.delivery__input__phone {
-  border: 1px solid #dedede !important;
-}
-
-.delivery__phone_btn .react-international-phone-country-selector-button {
-  border: 1px solid #dedede !important;
-  background-color: rgb(245 243 243 / 60%) !important;
-  height: 100%;
-}
-
 @media (max-width: 576px) {
   .checkout-cont {
     flex-direction: column-reverse;
@@ -918,13 +898,13 @@ input:focus {
 .checkout-cont .Address_input_cntr input,
 .checkout-cont .Appartment_input_cntr input,
 .checkout-cont .Phone_input_cntr input,
+.checkout-cont .Phone_input_cntr select,
 .checkout-cont .Delivery_input_cntr select,
 .checkout-cont .card_details_input_cntr input,
 .checkout-cont .Name_on_card_input_cntr input,
 .checkout-cont .card_details_cover_cntr input,
 .checkout-cont .promo-input,
 .checkout-cont .sinp,
-.checkout-cont .delivery__input__phone,
 .checkout-cont .cards_inner_content,
 .checkout-cont .card_details_cntr,
 .checkout-cont .Shipping_method_cntr,
@@ -973,12 +953,6 @@ input:focus {
   background-color: #fff !important;
   color: #000 !important;
   font-weight: 600;
-}
-
-.checkout-cont .delivery__phone_btn .react-international-phone-country-selector-button {
-  border-color: rgba(254, 0, 0, 0.35) !important;
-  background-color: rgba(254, 0, 0, 0.04) !important;
-  color: #fe0000 !important;
 }
 
 /* Backend PRD-041 FR-17: the guest checkout's way to the code sign-in */

@@ -1,0 +1,30 @@
+/*
+ * Phone field (components/common/PhoneInput.jsx, 2026-11-12): the country
+ * selector and the number side by side. The look (borders, background,
+ * font) comes from each form's own input and select rules.
+ */
+.phone_field {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+}
+
+.phone_field .phone_field_country {
+  flex: 0 0 auto;
+  width: 11rem;
+  max-width: 45%;
+  min-width: 0;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.phone_field .phone_field_number {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.phone_field select:disabled,
+.phone_field input:disabled {
+  cursor: not-allowed;
+}

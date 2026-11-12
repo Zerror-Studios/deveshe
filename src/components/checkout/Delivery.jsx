@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useWatch } from "react-hook-form";
-import { PhoneInput } from "react-international-phone";
 import { countriesData, addressType } from "@/helpers/Data";
-import "react-international-phone/style.css";
 import { IoLocationOutline } from "react-icons/io5";
 import CommonButton from "../common/CommonButton";
+import PhoneInput from "../common/PhoneInput";
 import { useAuthStore } from "@/store/auth-store";
 import { useQuery } from "@apollo/client/react";
 import { USER_ADDRESS_LIST } from "@/graphql";
@@ -323,32 +322,24 @@ const Delivery = ({
 
             <div className="Phone_input_cntr div-name">
               <PhoneInput
-                defaultCountry="in"
-                value={`+${shippingCountryCode?.replace("+", "") || "91"}${shippingPhone || ""}`}
-                className="delivery__phone_btn"
-                inputClassName="delivery__input__phone"
-                onChange={(value, metadata) => {
-                  const countryCode = `+${metadata?.country?.dialCode || "91"}`;
-                  const numberOnly = value.replace(countryCode, "").trim();
-
+                label="Phone"
+                countryCode={shippingCountryCode}
+                phone={shippingPhone}
+                onChange={({ countryCode, phone }) => {
                   setValue("shippingAddress.countryCode", countryCode, {
                     shouldValidate: true,
                   });
-                  setValue("shippingAddress.phone", numberOnly, {
+                  setValue("shippingAddress.phone", phone, {
                     shouldValidate: true,
                   });
                 }}
+                error={errors?.shippingAddress?.phone?.message || ""}
               />
               <input
                 type="hidden"
                 {...register("shippingAddress.countryCode")}
               />
               <input type="hidden" {...register("shippingAddress.phone")} />
-              {errors?.shippingAddress?.phone && (
-                <span className="error">
-                  {errors?.shippingAddress?.phone?.message || ""}
-                </span>
-              )}
             </div>
           </div>
         </div>

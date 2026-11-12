@@ -5,12 +5,15 @@
  * `useCheckout().startGuest` → `pay()` (kit 1.1.0).
  *
  * One page, three steps in the store's checkout design:
- * - **Contact:** email and phone (required), first and last name, the
- *   "Email me with news and offers" box (unticked, PRD-014 UX-29) and
- *   "Already have an account? Sign in" (the code sign-in, back to
- *   `/checkout`, which opens the bag merged at sign-in);
+ * - **Contact:** the email only (required, owner 2026-11-12), the "Email
+ *   me with news and offers" box (unticked, PRD-014 UX-29, sent as the
+ *   kit's `contact.acceptsMarketing`) and "Already have an account? Sign
+ *   in" (the code sign-in, back to `/checkout`, which opens the bag merged
+ *   at sign-in);
  * - **Delivery:** the address form (`Delivery`, no saved addresses for a
- *   guest) and the billing address;
+ *   guest; first name, last name and phone required) and the billing
+ *   address. The guest contact's name and phone are the delivery
+ *   address's (`toGuestContact`);
  * - **Payment:** "Continue to payment" opens the guest session (its 15
  *   minute stock hold only on this explicit action, W0V2-02) and shows the
  *   server pricing; "Pay now" (disabled until then, with "Continue to
@@ -36,8 +39,6 @@ import { useRouter } from "next/navigation";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PhoneInput } from "react-international-phone";
-import "react-international-phone/style.css";
 import { toast } from "react-toastify";
 import { useCheckout } from "@zcom/storefront-kit/client";
 import {
@@ -83,9 +84,9 @@ const CART_REFRESH_KEYS = [
   "EMPTY_CART",
 ];
 /** Answers that belong to the delivery address. */
-const ADDRESS_KEYS = ["SHIPPING_UNAVAILABLE", "ADDRESS_REQUIRED"];
-/** Answers that belong to the contact. */
-const CONTACT_KEYS = ["INVALID_EMAIL", "INVALID_PHONE"];
+const ADDRESS_KEYS = ["SHIPPING_UNAVAILABLE", "ADDRESS_REQUIRED", "INVALID_PHONE"];
+/** Answers that belong to the contact (the email). */
+const CONTACT_KEYS = ["INVALID_EMAIL"];
 /** Failures with no placed order to retry (stay on this page). */
 const NO_RETRY_KEYS = ["INVALID_GUEST_TOKEN", "ORDER_CANCELLED", "ORDER_NOT_FOUND"];
 /** After any of these the checkout starts over from "Continue". */
@@ -152,7 +153,6 @@ const GuestCheckout = () => {
     register,
     handleSubmit,
     setValue,
-    getValues,
     control,
     formState: { errors },
   } = useForm({
@@ -160,13 +160,7 @@ const GuestCheckout = () => {
     mode: "onBlur",
     reValidateMode: "onBlur",
     defaultValues: {
-      contact: {
-        email: "",
-        countryCode: "+91",
-        phone: "",
-        firstName: "",
-        lastName: "",
-      },
+      contact: { email: "" },
       shippingAddress: { ...DEFAULT_ADDRESS, primary: true },
       billingAddress: { ...DEFAULT_ADDRESS, primary: false },
       // PRD-014 UX-29: marketing email is opt-in, never pre-ticked
@@ -176,8 +170,6 @@ const GuestCheckout = () => {
   });
 
   const values = useWatch({ control });
-  const contactPhone = values?.contact?.phone;
-  const contactCountryCode = values?.contact?.countryCode;
   const wantsNews =
     values?.emailSubscribedStatus === EmailSubscribedStatus.SUBSCRIBED;
 
@@ -233,24 +225,6 @@ const GuestCheckout = () => {
     if (CONTACT_KEYS.includes(key)) scrollTo(".contact_container");
   }, [checkout.step, checkout.error]);
 
-  // ─── Contact → delivery prefill ─────────────────────────────────────────
-
-  /** Copies the contact's names and phone into empty delivery fields. */
-  const prefillDelivery = () => {
-    const contact = getValues("contact") || {};
-    const address = getValues("shippingAddress") || {};
-    if (!address.firstname && contact.firstName) {
-      setValue("shippingAddress.firstname", contact.firstName);
-    }
-    if (!address.lastname && contact.lastName) {
-      setValue("shippingAddress.lastname", contact.lastName);
-    }
-    if (!address.phone && contact.phone) {
-      setValue("shippingAddress.phone", contact.phone);
-      setValue("shippingAddress.countryCode", contact.countryCode || "+91");
-    }
-  };
-
   // ─── Steps ──────────────────────────────────────────────────────────────
 
   const onInvalid = (formErrors) => {
@@ -261,7 +235,7 @@ const GuestCheckout = () => {
         : ".Payment_container";
     setFormError(
       formErrors?.contact
-        ? "Please check your contact details."
+        ? "Please check your email."
         : formErrors?.shippingAddress
           ? "Please complete your delivery address."
           : "Please complete your billing address.",
@@ -414,57 +388,6 @@ const GuestCheckout = () => {
               {contactErrors?.email && (
                 <span className="error">{contactErrors.email.message}</span>
               )}
-              <div className="Phone_input_cntr div-name">
-                <PhoneInput
-                  defaultCountry="in"
-                  value={`+${contactCountryCode?.replace("+", "") || "91"}${contactPhone || ""}`}
-                  className="delivery__phone_btn"
-                  inputClassName="delivery__input__phone"
-                  inputProps={{ "aria-label": "Phone", autoComplete: "tel" }}
-                  onChange={(value, metadata) => {
-                    const countryCode = `+${metadata?.country?.dialCode || "91"}`;
-                    const numberOnly = value.replace(countryCode, "").trim();
-                    setValue("contact.countryCode", countryCode);
-                    setValue("contact.phone", numberOnly, {
-                      shouldValidate: Boolean(contactErrors?.phone),
-                    });
-                  }}
-                  onBlur={prefillDelivery}
-                />
-                <input type="hidden" {...register("contact.countryCode")} />
-                <input type="hidden" {...register("contact.phone")} />
-              </div>
-              {contactErrors?.phone && (
-                <span className="error">{contactErrors.phone.message}</span>
-              )}
-              <div className="Name_input_cntr">
-                <div>
-                  <input
-                    className="w-100"
-                    type="text"
-                    placeholder="First Name"
-                    aria-label="First name"
-                    autoComplete="given-name"
-                    {...register("contact.firstName", { onBlur: prefillDelivery })}
-                  />
-                  {contactErrors?.firstName && (
-                    <span className="error">{contactErrors.firstName.message}</span>
-                  )}
-                </div>
-                <div>
-                  <input
-                    className="w-100"
-                    type="text"
-                    placeholder="Last Name"
-                    aria-label="Last name"
-                    autoComplete="family-name"
-                    {...register("contact.lastName", { onBlur: prefillDelivery })}
-                  />
-                  {contactErrors?.lastName && (
-                    <span className="error">{contactErrors.lastName.message}</span>
-                  )}
-                </div>
-              </div>
               <label className="checkbox-container">
                 <input
                   type="checkbox"

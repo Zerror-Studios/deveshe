@@ -1,5 +1,4 @@
 import React, { useEffect, useLayoutEffect } from "react";
-import PhoneInput from "react-phone-input-2";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,7 +8,8 @@ import { useMutation } from "@apollo/client/react";
 import { CREATE_ADDRESS, UPDATE_ADDRESS } from "@/graphql";
 import { addressType } from "@/helpers/Data";
 import { getErrorMessage } from "@/utils/api-error.util";
-import "react-phone-input-2/lib/style.css";
+import { PHONE_INVALID_MESSAGE, isValidPhone } from "@/utils/phone.util";
+import PhoneInput from "@/components/common/PhoneInput";
 
 // Zod schema
 const addressSchema = z.object({
@@ -22,11 +22,21 @@ const addressSchema = z.object({
   pincode: z.string().min(4, "Pincode is required"),
   country: z.string().min(1, "Country is required"),
   states: z.string().min(1, "State is required"),
-  phone: z.string().min(8, "Phone is required"),
+  phone: z.string().min(1, "Phone is required"),
   countryCode: z.string().min(1, "Country code is required"),
 });
 
 const ADDRESS_FIELDS = Object.keys(addressSchema.shape);
+
+// A real number for its country; for India a mobile (Shiprocket)
+const addressFormSchema = addressSchema.superRefine((values, ctx) => {
+  if (!values.phone || isValidPhone(values.countryCode, values.phone)) return;
+  ctx.addIssue({
+    code: "custom",
+    path: ["phone"],
+    message: PHONE_INVALID_MESSAGE,
+  });
+});
 
 const AddressPopup = ({ isOpen, address, setOpen, refetch }) => {
   const addressId = address?._id || null;
@@ -39,10 +49,11 @@ const AddressPopup = ({ isOpen, address, setOpen, refetch }) => {
     register,
     handleSubmit,
     setValue,
+    watch,
     reset,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(addressSchema),
+    resolver: zodResolver(addressFormSchema),
     defaultValues: {
       firstname: "",
       lastname: "",
@@ -191,29 +202,23 @@ const AddressPopup = ({ isOpen, address, setOpen, refetch }) => {
           <div className="form-row">
             <div style={{ flex: 1 }}>
               <PhoneInput
-                country={"in"}
-                onChange={(value, metadata) => {
-                  const countryCode = `+${metadata?.country?.dialCode || 91
-                    }`;
-                  const numberOnly = value?.replace(countryCode, "").trim();
-
+                label="Phone number"
+                placeholder="Phone number"
+                countryCode={watch("countryCode")}
+                phone={watch("phone")}
+                onChange={({ countryCode, phone }) => {
                   setValue("countryCode", countryCode, {
                     shouldValidate: true,
                   });
-                  setValue("phone", numberOnly, {
+                  setValue("phone", phone, {
                     shouldValidate: true,
                   });
                 }}
-                enableSearch={true}
-                inputStyle={{ width: "100%" }}
-                buttonStyle={{ border: "none" }}
-                placeholder="Phone number"
+                error={errors.phone?.message || ""}
+                errorClassName="error-text"
               />
               <input type="hidden" {...register("countryCode")} />
               <input type="hidden" {...register("phone")} />
-              {errors.phone && (
-                <span className="error-text">{errors.phone.message}</span>
-              )}
             </div>
             <div style={{ flex: 1 }}>
               <select {...register("addressType")}>

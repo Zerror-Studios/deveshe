@@ -150,7 +150,8 @@
   gap: 3px;
 }
 
-.user_form input {
+.user_form input,
+.user_form .phone_field select {
   width: 100%;
   padding: 10px;
   background-color: #f4e9ea;

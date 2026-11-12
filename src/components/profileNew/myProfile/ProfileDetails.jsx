@@ -8,11 +8,11 @@ import { useMutation } from "@apollo/client/react";
 import { UPDATE_MY_PROFILE } from "@/graphql";
 import { useAuthStore } from "@/store/auth-store";
 import { toast } from "react-toastify";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
 import Image from "next/image";
 import { MdOutlineDone } from "react-icons/md";
 import { getErrorMessage } from "@/utils/api-error.util";
+import { PHONE_INVALID_MESSAGE, isValidPhone } from "@/utils/phone.util";
+import PhoneInput from "@/components/common/PhoneInput";
 
 const SignupSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -20,6 +20,15 @@ const SignupSchema = z.object({
   countryCode: z.string().min(1, "Country Code is required"),
   phoneNumber: z.string().min(1, "Phone number is required"),
   email: z.string().email("Invalid email"),
+}).superRefine((values, ctx) => {
+  if (!values.phoneNumber || isValidPhone(values.countryCode, values.phoneNumber)) {
+    return;
+  }
+  ctx.addIssue({
+    code: "custom",
+    path: ["phoneNumber"],
+    message: PHONE_INVALID_MESSAGE,
+  });
 });
 
 const ProfileDetails = () => {
@@ -37,6 +46,7 @@ const ProfileDetails = () => {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(SignupSchema),
@@ -131,36 +141,26 @@ const ProfileDetails = () => {
 
           <div className="user_form_input">
             <PhoneInput
-              defaultCountry="in"
-              disabled={isEditable}
-              enableSearch={true}   // allows searching countries
-              inputStyle={{ width: "100%" }} // full width like other inputs
-              buttonStyle={{ border: "none" }} // clean flag dropdown
+              label="Phone number"
               placeholder="Enter phone number"
-              value={`+${user?.countryCode?.replace("+", "") || "91"}${user?.phoneNumber || ""
-                }`}
-              onChange={(value, metadata) => {
-                const countryCode = `+${metadata?.country?.dialCode || 91
-                  }`;
-                const numberOnly = value
-                  ?.replace(countryCode, "")
-                  .trim();
-
+              disabled={isEditable}
+              countryCode={watch("countryCode")}
+              phone={watch("phoneNumber")}
+              onChange={({ countryCode, phone }) => {
                 setValue("countryCode", countryCode, {
                   shouldValidate: true,
                 });
-                setValue("phoneNumber", numberOnly, {
+                setValue("phoneNumber", phone, {
                   shouldValidate: true,
                 });
               }}
+              error={errors.phoneNumber?.message || ""}
+              errorClassName="error-text"
             />
             <input type="hidden" {...register("countryCode")} />
             <input type="hidden" {...register("phoneNumber")} />
             {errors.countryCode && (
               <span className="error-text">{errors.countryCode.message}</span>
-            )}
-            {errors.phoneNumber && (
-              <span className="error-text">{errors.phoneNumber.message}</span>
             )}
           </div>
           <button

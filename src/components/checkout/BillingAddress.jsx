@@ -1,8 +1,7 @@
 import React from "react";
 import { useWatch } from "react-hook-form";
-import { PhoneInput } from "react-international-phone";
 import { countriesData, addressType } from "@/helpers/Data";
-import "react-international-phone/style.css";
+import PhoneInput from "../common/PhoneInput";
 
 const BillingAddress = ({ errors, control, register, setValue }) => {
   const useShippingAsBilling = useWatch({
@@ -212,21 +211,11 @@ const BillingAddress = ({ errors, control, register, setValue }) => {
 
                         <div className="Phone_input_cntr div-name">
                           <PhoneInput
+                            label="Billing phone"
                             disabled={useShippingAsBilling}
-                            value={`+${
-                              billingCountryCode?.replace("+", "") || "91"
-                            }${billingPhone || ""}`}
-                            defaultCountry="in"
-                            className="delivery__phone_btn"
-                            inputClassName="delivery__input__phone"
-                            onChange={(value, metadata) => {
-                              const countryCode = `+${
-                                metadata?.country?.dialCode || "91"
-                              }`;
-                              const numberOnly = value
-                                .replace(countryCode, "")
-                                .trim();
-
+                            countryCode={billingCountryCode}
+                            phone={billingPhone}
+                            onChange={({ countryCode, phone }) => {
                               setValue(
                                 "billingAddress.countryCode",
                                 countryCode,
@@ -234,10 +223,13 @@ const BillingAddress = ({ errors, control, register, setValue }) => {
                                   shouldValidate: true,
                                 }
                               );
-                              setValue("billingAddress.phone", numberOnly, {
+                              setValue("billingAddress.phone", phone, {
                                 shouldValidate: true,
                               });
                             }}
+                            error={
+                              errors?.billingAddress?.phone?.message || ""
+                            }
                           />
                           <input
                             type="hidden"
@@ -247,11 +239,6 @@ const BillingAddress = ({ errors, control, register, setValue }) => {
                             type="hidden"
                             {...register("billingAddress.phone")}
                           />
-                          {errors?.billingAddress?.phone && (
-                            <span className="error">
-                              {errors?.billingAddress?.phone?.message || ""}
-                            </span>
-                          )}
                         </div>
                       </div>
                     </div>

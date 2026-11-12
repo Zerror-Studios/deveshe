@@ -56,6 +56,7 @@ import "@/styles/components/home/featured-article.css";
 import "@/styles/components/shop/hero-section.css";
 import "@/styles/components/fonts.css";
 import "@/styles/components/common/consent-banner.css";
+import "@/styles/components/common/phone-input.css";
 import "@/styles/components/product-listing.css";
 import "@/styles/components/reviews.css";
 
