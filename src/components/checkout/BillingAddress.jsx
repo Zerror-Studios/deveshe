@@ -152,15 +152,6 @@ const BillingAddress = ({ errors, control, register, setValue }) => {
                         </div>
 
                         <div className="pincode_city_input_cntr">
-                          <div>
-                            <input
-                              disabled={useShippingAsBilling}
-                              className="w-100"
-                              type="text"
-                              placeholder="Company (optional)"
-                              {...register("billingAddress.company")}
-                            />
-                          </div>
                           <label htmlFor="Select0">
                             <select
                               disabled={useShippingAsBilling}

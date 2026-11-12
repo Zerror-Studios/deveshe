@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getEstimatedShipping, getShippingLabel } from "@/utils/shipping-label.util";
 import Link from "next/link";
 import z from "zod";
 import { useMutation } from "@apollo/client/react";
@@ -48,6 +49,8 @@ const OrderSummary = ({
   locked = false,
   pricing = null,
   isPricing = false,
+  shippingEstimate = null,
+  isEstimatingShipping = false,
 }) => {
   const {
     totalprice = 0,
@@ -267,15 +270,13 @@ const OrderSummary = ({
         <div className="cpp">
           Shipping:
           <div className="cpp-p">
-            {pricing
-              ? pricing.isFreeShipping || !pricing.shipping
-                ? "Free"
-                : `${String.fromCharCode(8377)} ${pricing.shipping}`
-              : isPricing
-                ? "Calculating…"
-                : isFreeShippingEnabled
-                  ? "Free"
-                  : "Calculated at payment"}
+            {getShippingLabel({
+              pricing,
+              isPricing,
+              estimate: shippingEstimate,
+              estimating: isEstimatingShipping,
+              isFreeShippingEnabled,
+            })}
           </div>
         </div>
 
@@ -314,7 +315,7 @@ const OrderSummary = ({
       <div className="checkout-total">
         {pricing
           ? "Total:"
-          : isFreeShippingEnabled
+          : isFreeShippingEnabled || shippingEstimate?.available
             ? "Estimated total:"
             : "Total before shipping:"}
         {pricing ? (
@@ -323,7 +324,9 @@ const OrderSummary = ({
           //   <FinalpriceLoader2 />
           <></>
         ) : (
-          <div className="checkout-price">&#8377; {discountedPrice}</div>
+          <div className="checkout-price">
+            &#8377; {Math.round((Number(discountedPrice) + getEstimatedShipping(pricing, shippingEstimate)) * 100) / 100}
+          </div>
         )}
       </div>
     </div>

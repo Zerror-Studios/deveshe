@@ -10,13 +10,52 @@
   width: 100%;
 }
 
-.phone_field .phone_field_country {
+/*
+ * Closed, the selector reads "🇮🇳 +91 ▾" (2026-11-13): the select keeps the
+ * form's own box (border, padding, background) but its text is
+ * transparent, and a compact label sits on top of it. Opening it still
+ * shows the full country names.
+ */
+.phone_field .phone_field_country_wrap {
+  position: relative;
   flex: 0 0 auto;
-  width: 11rem;
-  max-width: 45%;
+  display: flex;
+}
+
+.phone_field .phone_field_country {
+  width: 7rem;
   min-width: 0;
-  text-overflow: ellipsis;
+  color: transparent;
+  appearance: none;
+  -webkit-appearance: none;
   cursor: pointer;
+}
+
+.phone_field .phone_field_country option {
+  color: #000;
+}
+
+.phone_field .phone_field_country_display {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding-inline: 1rem;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.phone_field .phone_field_country_display::after {
+  content: "";
+  width: 0.4em;
+  height: 0.4em;
+  margin-left: 0.25rem;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: translateY(-25%) rotate(45deg);
 }
 
 .phone_field .phone_field_number {

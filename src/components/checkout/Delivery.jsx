@@ -274,14 +274,6 @@ const Delivery = ({
             </div>
 
             <div className="pincode_city_input_cntr">
-              <div>
-                <input
-                  className="w-100"
-                  type="text"
-                  placeholder="Company (optional)"
-                  {...register("shippingAddress.company")}
-                />
-              </div>
               <label htmlFor="Select0">
                 <select {...register("shippingAddress.addressType")}>
                   <option value="">Address Type</option>

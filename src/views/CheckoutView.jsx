@@ -67,6 +67,7 @@ import Shipping from "@/components/checkout/Shipping";
 import BillingAddress from "@/components/checkout/BillingAddress";
 import OrderSummary from "@/components/checkout/OrderSummery";
 import GuestCheckout from "@/components/checkout/GuestCheckout";
+import { useCheckoutShippingEstimate } from "@/hooks/useCheckoutShippingEstimate";
 import Loader from "@/components/checkout/Loader";
 import CommonButton from "@/components/common/CommonButton";
 import { useAuthStore } from "@/store/auth-store";
@@ -266,6 +267,9 @@ const CustomerCheckout = () => {
     ],
   });
   const cartFingerprint = cartData?._id ? getCartFingerprint(cartData) : null;
+  // Shipping for the address entered, before "Continue to payment"
+  const { estimate: shippingEstimate, estimating: isEstimatingShipping } =
+    useCheckoutShippingEstimate(watchedShipping, cartFingerprint);
   // Built from the raw form values (the parsed ones drop a saved
   // address's flat), exactly as `start` receives them
   const inputOf = (values) => toCustomerCheckoutInput(cartData, values);
@@ -541,6 +545,8 @@ const CustomerCheckout = () => {
               pricing={shownPricing}
               isPricing={checkout.step === "reserving"}
               isFreeShippingEnabled={cartData?.isFreeShippingEnabled}
+              estimate={shippingEstimate}
+              estimating={isEstimatingShipping}
             />
             <BillingAddress
               register={register}
@@ -604,6 +610,8 @@ const CustomerCheckout = () => {
             data={cartData}
             pricing={shownPricing}
             isPricing={checkout.step === "reserving"}
+            shippingEstimate={shippingEstimate}
+            isEstimatingShipping={isEstimatingShipping}
             locked={isBusy}
             refetch={() => refetch()}
           />

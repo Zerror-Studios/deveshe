@@ -70,6 +70,7 @@ import Delivery from "./Delivery";
 import Shipping from "./Shipping";
 import BillingAddress from "./BillingAddress";
 import OrderSummary from "./OrderSummery";
+import { useCheckoutShippingEstimate } from "@/hooks/useCheckoutShippingEstimate";
 import Loader from "./Loader";
 import CommonButton from "../common/CommonButton";
 
@@ -175,6 +176,9 @@ const GuestCheckout = () => {
 
   // The bag and every detail as sent: a change needs "Continue" again
   const cartFingerprint = cartData?._id ? getCartFingerprint(cartData) : null;
+  // Shipping for the address entered, before "Continue to payment"
+  const { estimate: shippingEstimate, estimating: isEstimatingShipping } =
+    useCheckoutShippingEstimate(values?.shippingAddress, cartFingerprint);
   const details = toGuestCheckoutInput(cartData, {
     acceptsMarketing: wantsNews,
     contact: values?.contact,
@@ -438,6 +442,8 @@ const GuestCheckout = () => {
             <Shipping
               pricing={isReserved ? checkout.pricing : null}
               isPricing={checkout.step === "reserving"}
+              estimate={shippingEstimate}
+              estimating={isEstimatingShipping}
               isFreeShippingEnabled={cartData?.isFreeShippingEnabled}
             />
             {!isReserved && !formError && (
@@ -483,6 +489,8 @@ const GuestCheckout = () => {
             data={cartData}
             pricing={isReserved ? checkout.pricing : null}
             isPricing={checkout.step === "reserving"}
+            shippingEstimate={shippingEstimate}
+            isEstimatingShipping={isEstimatingShipping}
             locked={isBusy}
             refetch={() => refetch()}
           />
