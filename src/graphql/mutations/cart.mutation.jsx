@@ -1,47 +1,9 @@
-import { gql } from "@apollo/client";
+export { AddItemToCartDocument as ADD_ITEM_TO_CART } from "@zcom/storefront-kit/graphql";
 
-// ADD ITEM TO CART (ids and qty only; the server prices the line)
-export const ADD_ITEM_TO_CART = gql`
-  mutation AddItemToCart($input: CreateCartInput!, $guestId: String) {
-    addItemToCart(input: $input, guestId: $guestId)
-  }
-`;
+export { RemoveItemFromCartDocument as REMOVE_ITEM_FROM_CART } from "@zcom/storefront-kit/graphql";
 
-// REMOVE ITEM FORM CART
-export const REMOVE_ITEM_FROM_CART = gql`
-  mutation RemoveItemFromCart($input: RemoveItemFromCartInput!) {
-    removeItemFromCart(input: $input)
-  }
-`;
+export { ApplyCartPromotionDocument as APPLY_CART_PROMOTION } from "@zcom/storefront-kit/graphql";
 
-// APPLY PROMOTION
-export const APPLY_CART_PROMOTION = gql`
-  mutation ApplyCartPromotion($promotionCode: String!, $guestId: String) {
-    applyCartPromotion(promotionCode: $promotionCode, guestId: $guestId) {
-      _id
-      itemcount
-      totalprice
-      discountedPrice
-      totalDiscount
-      promotion {
-        promotionId
-        promotionCode
-        discount
-      }
-    }
-  }
-`;
+export { RemoveCartPromotionDocument as REMOVE_CART_PROMOTION } from "@zcom/storefront-kit/graphql";
 
-// REMOVE PROMOTION
-export const REMOVE_CART_PROMOTION = gql`
-  mutation RemoveCartPromotion($guestId: String) {
-    removeCartPromotion(guestId: $guestId)
-  }
-`;
-
-// GUEST CART ID (PRD-002 R2-C2): a server-signed id for anonymous carts
-export const ISSUE_GUEST_CART_ID = gql`
-  mutation IssueGuestCartId {
-    issueGuestCartId
-  }
-`;
+export { IssueGuestCartIdDocument as ISSUE_GUEST_CART_ID } from "@zcom/storefront-kit/graphql";

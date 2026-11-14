@@ -32,44 +32,4 @@ export const GET_CLIENT_SIDE_BLOGS = gql`
   }
 `;
 
-export const GET_CLIENT_SIDE_BLOG = gql`
-  query GetClientSideBlog($slug: String) {
-    getClientSideBlog(slug: $slug) {
-      _id
-      asset {
-        altText
-        height
-        mediaId
-        path
-        type
-        width
-      }
-      content
-      excerpt
-      slug
-      title
-      publishedAt
-      updatedAt
-      meta {
-        author
-        canonical
-        description
-        keywords
-        og {
-          description
-          image
-          title
-        }
-        primaryKeywords
-        robots
-        title
-        twitter {
-          card
-          description
-          image
-          title
-        }
-      }
-    }
-  }
-`;
+export { GetBlogDocument as GET_CLIENT_SIDE_BLOG } from "@zcom/storefront-kit/graphql";
