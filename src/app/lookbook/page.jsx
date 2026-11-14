@@ -43,8 +43,9 @@ export const metadata = toMetadata(META, "/lookbook");
 
 // ─── Page ─────────────────────────────────────────────────────────────────
 
-// Rendered per request, like the other data pages (no build-time API call)
-export const dynamic = "force-dynamic";
+// Cached and rebuilt every 5 minutes (ISR, like Nahara's catalog pages);
+// each rebuild reads the gateway afresh (kit 1.2.2), and the CDN serves it.
+export const revalidate = 300; // literal: Next reads it at build (= STORE_REVALIDATE_SECONDS)
 
 const LOOKBOOK_LIST_LIMIT = 50;
 

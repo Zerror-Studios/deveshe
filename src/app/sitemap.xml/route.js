@@ -93,8 +93,8 @@ async function fetchBlogEntries(client) {
     }));
 }
 
-// Per request (the catalog changes); the CDN caches it.
-export const dynamic = "force-dynamic";
+// Rebuilt hourly from the catalog (ISR); the CDN caches it.
+export const revalidate = 3600;
 
 // ─── Route ────────────────────────────────────────────────────────────────
 

@@ -5,16 +5,24 @@
  * unless they are `NOT_FOUND` (then the field reads null and the page can
  * 404). Anonymous only: no shopper token or cookie is sent from here.
  *
- * Never cached (`revalidate: false`): the data pages render per request,
- * as their `getServerSideProps` did. The store's own documents (`@/graphql`)
- * keep their field selections, which the views read.
+ * The catalog pages are ISR (`export const revalidate = STORE_REVALIDATE_SECONDS`,
+ * like Nahara's, 2026-11-14): `revalidate` here is the page interval, and the
+ * kit reads the gateway afresh on every rebuild (kit 1.2.2). A call with a
+ * shopper's IP (`clientIp`, payment links) is never cached and keeps its
+ * page dynamic.
  */
 
 import { zcomFetch } from "@zcom/storefront-kit/server";
 
+/** The catalog pages rebuild every 5 minutes (`export const revalidate`). */
+export const STORE_REVALIDATE_SECONDS = 300;
+
 /** Runs one query; resolves its `data`. `options` as for kit `zcomFetch`. */
 export async function serverQuery(query, variables, options = {}) {
-  return await zcomFetch(query, variables, { revalidate: false, ...options });
+  return await zcomFetch(query, variables, {
+    revalidate: STORE_REVALIDATE_SECONDS,
+    ...options,
+  });
 }
 
 /**

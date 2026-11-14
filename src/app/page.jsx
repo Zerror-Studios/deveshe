@@ -7,8 +7,9 @@ import HomeView from "@/views/HomeView";
 import { HOME_META, loadHomePage } from "@/lib/page-data/home.server";
 import { toMetadata } from "@/lib/seo-metadata.util";
 
-// Rendered per request, as getServerSideProps was.
-export const dynamic = "force-dynamic";
+// Cached and rebuilt every 5 minutes (ISR, like Nahara's catalog pages);
+// each rebuild reads the gateway afresh (kit 1.2.2), and the CDN serves it.
+export const revalidate = 300; // literal: Next reads it at build (= STORE_REVALIDATE_SECONDS)
 
 export const metadata = toMetadata(HOME_META, "/");
 

@@ -19,7 +19,15 @@ import { htmlToPlainText } from "@/utils/lookbook-text.util";
 const SITE_NAME = "DeVeSheDreams";
 const META_DESCRIPTION_MAX_LENGTH = 160;
 
-export const dynamic = "force-dynamic";
+// Cached and rebuilt every 5 minutes (ISR, like Nahara's catalog pages);
+// each rebuild reads the gateway afresh (kit 1.2.2), and the CDN serves it.
+export const revalidate = 300; // literal: Next reads it at build (= STORE_REVALIDATE_SECONDS)
+
+// No page is built ahead (no build-time API call): each is rendered on its
+// first visit, then cached like the others.
+export async function generateStaticParams() {
+  return [];
+}
 
 // ─── Data ─────────────────────────────────────────────────────────────────
 

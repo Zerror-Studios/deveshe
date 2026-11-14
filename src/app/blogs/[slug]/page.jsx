@@ -14,8 +14,15 @@ import {
 } from "@/lib/page-data/blog.server";
 import { toMetadata } from "@/lib/seo-metadata.util";
 
-// Rendered per request, like the other data pages (no build-time API call)
-export const dynamic = "force-dynamic";
+// Cached and rebuilt every 5 minutes (ISR, like Nahara's catalog pages);
+// each rebuild reads the gateway afresh (kit 1.2.2), and the CDN serves it.
+export const revalidate = 300; // literal: Next reads it at build (= STORE_REVALIDATE_SECONDS)
+
+// No page is built ahead (no build-time API call): each is rendered on its
+// first visit, then cached like the others.
+export async function generateStaticParams() {
+  return [];
+}
 
 // One read of the post for the metadata and the page
 const getPost = cache((slug) => fetchBlogPost(slug));
