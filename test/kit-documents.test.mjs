@@ -18,6 +18,12 @@ const STORE_DOCUMENTS = [
   "GetClientSideBlogs",
   // one page of product URLs for this store's own sitemap route
   "GetSitemapProducts",
+  // Backend PRD-047, until the store pins kit 1.5.0 (which has all three
+  // under these names; the duplicate test then flags them): related posts,
+  // a blog poll's results, a blog poll vote
+  "GetRelatedBlogs",
+  "GetBlogPollResults",
+  "VoteBlogPoll",
 ];
 
 // ─── Helpers ────────────────────────────────────────────────────────────────

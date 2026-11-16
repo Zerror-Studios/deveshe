@@ -4,24 +4,39 @@
  * `getClientSideBlog`, published posts only).
  *
  * - `/blogs`: every published post, newest first, as listing cards.
- * - `/blogs/<slug>`: the post and up to four others; an unknown slug is a
- *   real 404 (`post: null`), a failed read throws (the error page).
+ * - `/blogs/<slug>`: the post and up to four related posts; an unknown slug
+ *   is a real 404 (`post: null`), a failed read throws (the error page).
+ *
+ * Related posts (backend PRD-047 FR-9, FR-11, D5): `getClientSideRelatedBlogs`
+ * (same category, then tags, then newest) for the bottom section and for
+ * a body `relatedPosts` block with no chosen posts; a block's chosen posts
+ * load in one `getClientSideBlogs(filter: { ids })` call. Until the backend
+ * serves FR-9 the bottom section falls back to the latest posts.
  */
 
 import { createServerQueryClient } from "@/lib/server-query";
-import { GET_CLIENT_SIDE_BLOG, GET_CLIENT_SIDE_BLOGS } from "@/graphql";
+import {
+  GET_CLIENT_SIDE_BLOG,
+  GET_CLIENT_SIDE_BLOGS,
+  GET_RELATED_BLOGS,
+} from "@/graphql";
 import { Const } from "@/utils/Constant";
 import {
   getRelatedPostsFromList,
   mapBlogForDetail,
   mapBlogForListing,
 } from "@/data/blogs";
+import {
+  BLOG_RELATED_POSTS_MAX_IDS,
+  getBlogBlocks,
+} from "@/utils/kit-blog-content.util";
 
 // ─── Constants ────────────────────────────────────────────────────────────
 
 /** The backend's list cap (clampPagination). */
 const BLOG_LIST_LIMIT = 100;
 const RELATED_FETCH_LIMIT = 5;
+const RELATED_POSTS_LIMIT = 4;
 
 const BLOGS_TITLE = "Blogs – DeVeSheDreams";
 const BLOGS_DESCRIPTION =
@@ -71,29 +86,81 @@ export async function fetchBlogPost(slug) {
   return data?.getClientSideBlog || null;
 }
 
-/**
- * The post page: the post and a few other posts. Pass the raw post when the
- * page already read it (generateMetadata), so it isn't read twice.
- */
-export async function loadBlogPost(slug, rawPost) {
-  const client = createServerQueryClient();
-  const [blog, list] = await Promise.all([
-    rawPost === undefined ? fetchBlogPost(slug) : rawPost,
-    client
+// ─── Related posts ────────────────────────────────────────────────────────
+
+/** FR-9's related posts, else (backend not deployed yet) the latest ones. */
+async function loadAutomaticRelated(client, slug) {
+  try {
+    const { data } = await client.query({
+      query: GET_RELATED_BLOGS,
+      variables: { slug, limit: RELATED_POSTS_LIMIT },
+    });
+    return (data?.getClientSideRelatedBlogs || [])
+      .map(mapBlogForListing)
+      .filter(Boolean);
+  } catch {
+    const list = await client
       .query({
         query: GET_CLIENT_SIDE_BLOGS,
         variables: { limit: RELATED_FETCH_LIMIT, offset: 0 },
       })
       // Related posts are optional
-      .catch(() => null),
-  ]);
-  const post = mapBlogForDetail(blog);
-  return {
-    post: post?.slug ? post : null,
-    relatedPosts: getRelatedPostsFromList(
+      .catch(() => null);
+    return getRelatedPostsFromList(
       list?.data?.getClientSideBlogs?.blogs,
       slug,
-    ),
+      RELATED_POSTS_LIMIT,
+    );
+  }
+}
+
+/** The merchant's chosen posts as listing cards, keyed by id (never this post). */
+async function loadChosenPosts(client, ids, slug) {
+  if (!ids.length) return {};
+  try {
+    const { data } = await client.query({
+      query: GET_CLIENT_SIDE_BLOGS,
+      variables: { limit: ids.length, offset: 0, filter: { ids } },
+    });
+    const cards = (data?.getClientSideBlogs?.blogs || [])
+      .filter((blog) => blog?.slug && blog.slug !== slug)
+      .map(mapBlogForListing)
+      .filter(Boolean);
+    return Object.fromEntries(cards.map((card) => [card._id, card]));
+  } catch {
+    // Optional: the block then shows nothing
+    return {};
+  }
+}
+
+/**
+ * The post page: the post, its related posts and what its body blocks need.
+ * Pass the raw post when the page already read it (generateMetadata), so
+ * it isn't read twice.
+ *
+ * `relatedBlocks` is `{ postsById, automatic }` for `BlogBody`. When the
+ * body has an automatic related-posts block, the bottom section is left
+ * out, so the same cards don't show twice.
+ */
+export async function loadBlogPost(slug, rawPost) {
+  const client = createServerQueryClient();
+  const [blog, automatic] = await Promise.all([
+    rawPost === undefined ? fetchBlogPost(slug) : rawPost,
+    loadAutomaticRelated(client, slug),
+  ]);
+  const post = mapBlogForDetail(blog);
+  if (!post?.slug) {
+    return { post: null, relatedPosts: [], relatedBlocks: null };
+  }
+  const blocks = getBlogBlocks(blog.content).relatedPosts;
+  const chosenIds = [...new Set(blocks.flatMap((block) => block.postIds))]
+    .slice(0, BLOG_RELATED_POSTS_MAX_IDS);
+  const postsById = await loadChosenPosts(client, chosenIds, slug);
+  const hasAutomaticBlock = blocks.some((block) => !block.postIds.length);
+  return {
+    post,
+    relatedPosts: hasAutomaticBlock ? [] : automatic,
+    relatedBlocks: { postsById, automatic },
   };
 }
 

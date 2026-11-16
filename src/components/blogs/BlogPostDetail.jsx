@@ -1,8 +1,8 @@
 import Image from "next/image";
 import BlogGridCard from "@/components/common/card/BlogGridCard";
+import BlogBody from "@/components/blogs/BlogBody";
 import BlogPostShare from "@/components/blogs/BlogPostShare";
 import ResponsiveHeroImage from "@/components/common/ResponsiveHeroImage";
-import { htmlParser } from "@/utils/Util";
 
 function getReadMinutes(readTime) {
   const match = readTime?.match(/(\d+)/);
@@ -48,7 +48,11 @@ function getIntroParagraphs(post) {
   return [];
 }
 
-export default function BlogPostDetail({ post, relatedPosts = [] }) {
+export default function BlogPostDetail({
+  post,
+  relatedPosts = [],
+  relatedBlocks = null,
+}) {
   const tags = post.tags?.length ? post.tags : post.category ? [post.category] : [];
   const readMinutes = getReadMinutes(post.readTime);
   const author = post.author || "DeVeSheDreams";
@@ -123,7 +127,12 @@ export default function BlogPostDetail({ post, relatedPosts = [] }) {
 
       <div className="blog-post__inner">
         {post.contentHtml ? (
-          <div className="blog-post__body">{htmlParser(post.contentHtml)}</div>
+          // PRD-047: polls and related-posts blocks become components
+          <BlogBody
+            html={post.contentHtml}
+            slug={post.slug}
+            related={relatedBlocks}
+          />
         ) : post.content?.length ? (
           <div className="blog-post__body">
             {post.content.map((block, index) => (

@@ -38,12 +38,19 @@ export default async function Page({ params }) {
   const { slug = "" } = await params;
   const blog = await getPost(slug);
   if (!blog) notFound();
-  const { post, relatedPosts } = await loadBlogPost(slug, blog);
+  const { post, relatedPosts, relatedBlocks } = await loadBlogPost(
+    slug,
+    blog,
+  );
   if (!post) notFound();
   return (
     <>
       <PageSchemas meta={toBlogPostMeta(blog, slug)} path={`/blogs/${slug}`} />
-      <BlogPostView post={post} relatedPosts={relatedPosts} />
+      <BlogPostView
+        post={post}
+        relatedPosts={relatedPosts}
+        relatedBlocks={relatedBlocks}
+      />
     </>
   );
 }

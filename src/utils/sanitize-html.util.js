@@ -9,8 +9,20 @@
  * Keep in sync with `storefronts/rare-element/src/utils/sanitize-html.js`
  * and `zcom-backend/packages/core/src/utils/sanitize-html.ts` (PRD-002
  * RMAINT-7; a shared package is an ADR-level decision).
+ *
+ * Blog bodies (backend PRD-047 FR-11): `details`, `summary`, `mark` and
+ * `video` are kept, the blog block placeholders keep their `data-zc-*`
+ * attributes (the post page swaps them for components through `replace`),
+ * and an `iframe` survives only with an allowlisted embed `src`
+ * (`toSafeEmbedSrc`), always sandboxed. Rare has no blog, so these
+ * additions aren't mirrored there.
  */
 import { domToReact, htmlToDOM } from "html-react-parser";
+import {
+  EMBED_IFRAME_ALLOW,
+  EMBED_IFRAME_SANDBOX,
+  toSafeEmbedSrc,
+} from "@/utils/kit-blog-content.util";
 
 // ─── Allowlists ───────────────────────────────────────────────────────────
 
@@ -18,7 +30,6 @@ import { domToReact, htmlToDOM } from "html-react-parser";
 const DROP_TAGS = new Set([
   "script",
   "style",
-  "iframe",
   "frame",
   "frameset",
   "object",
@@ -46,6 +57,7 @@ const ALLOWED_TAGS = new Set([
   "blockquote",
   "br",
   "code",
+  "details",
   "div",
   "em",
   // Blog image blocks (`utils/parseBlogContent.js`)
@@ -59,8 +71,11 @@ const ALLOWED_TAGS = new Set([
   "h6",
   "hr",
   "i",
+  // Blog embeds only, with an allowlisted src (`sanitizeIframe`)
+  "iframe",
   "img",
   "li",
+  "mark",
   "ol",
   "p",
   "pre",
@@ -69,6 +84,7 @@ const ALLOWED_TAGS = new Set([
   "span",
   "strong",
   "sub",
+  "summary",
   "sup",
   "table",
   "tbody",
@@ -79,6 +95,7 @@ const ALLOWED_TAGS = new Set([
   "tr",
   "u",
   "ul",
+  "video",
 ]);
 
 const GLOBAL_ATTRIBUTES = new Set(["class", "title", "lang", "dir", "style"]);
@@ -89,9 +106,13 @@ const TAG_ATTRIBUTES = {
   td: new Set(["colspan", "rowspan"]),
   th: new Set(["colspan", "rowspan"]),
   ol: new Set(["start"]),
+  details: new Set(["open"]),
+  // Blog block placeholders (`renderBlogContent`, PRD-047)
+  div: new Set(["data-zc-block", "data-zc-payload", "data-zc-poll-id"]),
+  video: new Set(["src", "controls", "preload", "playsinline", "poster"]),
 };
 
-const URL_ATTRIBUTES = new Set(["href", "src"]);
+const URL_ATTRIBUTES = new Set(["href", "src", "poster"]);
 const SAFE_URL_SCHEMES = ["http:", "https:", "mailto:", "tel:"];
 // A backslash can hide any of these behind a CSS escape (RSEC-11).
 const UNSAFE_STYLE =
@@ -148,6 +169,7 @@ function sanitizeNode(node, parent) {
   if (!ALLOWED_TAGS.has(tagName)) {
     return sanitizeNodes(node.children, parent);
   }
+  if (tagName === "iframe") return sanitizeIframe(node, parent);
 
   node.attribs = sanitizeAttributes(tagName, node.attribs);
   node.children = sanitizeNodes(node.children, node);
@@ -155,11 +177,39 @@ function sanitizeNode(node, parent) {
   return [node];
 }
 
+/**
+ * An embed iframe: kept only when its `src` is an allowlisted provider (the
+ * rebuilt URL replaces it), with our own sandbox and policy, never the
+ * content's; anything else is dropped with its content.
+ */
+function sanitizeIframe(node, parent) {
+  const src = toSafeEmbedSrc(node.attribs?.src);
+  if (!src) return [];
+  node.attribs = {
+    src,
+    title: node.attribs?.title || "Embedded content",
+    sandbox: EMBED_IFRAME_SANDBOX,
+    allow: EMBED_IFRAME_ALLOW,
+    loading: "lazy",
+    referrerpolicy: "strict-origin-when-cross-origin",
+    allowfullscreen: "",
+  };
+  node.children = [];
+  node.parent = parent;
+  return [node];
+}
+
 // ─── API ──────────────────────────────────────────────────────────────────
 
-/** Sanitised React elements for an HTML string. */
-export const parseSafeHtml = (html = "") => {
+/**
+ * Sanitised React elements for an HTML string. `options.replace` is
+ * html-react-parser's: it sees the sanitised nodes only (the blog body swaps
+ * its placeholders for components with it).
+ */
+export const parseSafeHtml = (html = "", options = {}) => {
   if (!html) return "";
   const nodes = sanitizeNodes(htmlToDOM(String(html)));
-  return domToReact(nodes);
+  return options.replace
+    ? domToReact(nodes, { replace: options.replace })
+    : domToReact(nodes);
 };
