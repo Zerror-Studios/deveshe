@@ -9,7 +9,7 @@
  * `getClientSideProducts` for the next page with the same filters, so every
  * published product is reachable by navigation. A failed load shows an
  * error with a retry instead of an endless skeleton. The sort control
- * (W2-STORE) keeps its value in `?sort=` (NEWEST is the default and left
+ * (W2-STORE) keeps its value in `?sort=` (the default, FEATURED, is left
  * out); changing it reloads the page server-side from the first page.
  * Without a `title` the header holds only the sort control (the search
  * page shows its own centred heading) and `listName` labels the section.

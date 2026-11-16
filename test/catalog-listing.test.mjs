@@ -15,6 +15,7 @@ import { fileURLToPath } from "node:url";
 const { toListingFilters, toProductPageVariables } = await import(
   "@/utils/catalog-listing.util"
 );
+const { DEFAULT_LISTING_SORT } = await import("@/utils/listing-sort.util");
 
 // ─── Constants ────────────────────────────────────────────────────────────
 
@@ -67,8 +68,10 @@ describe("catalog listing query", () => {
     assert.equal(variables.filters.status, "PUBLISHED");
     assert.equal(variables.filters.search, "dress");
     assert.equal(variables.sort, "PRICE_ASC");
+    // The default sort is never sent (kit 1.4: FEATURED, the collection's
+    // own order, backend PRD-045; kit 1.3: NEWEST)
     assert.equal(
-      "sort" in toProductPageVariables({ limit: 12, sort: "NEWEST" }),
+      "sort" in toProductPageVariables({ limit: 12, sort: DEFAULT_LISTING_SORT }),
       false,
     );
   });

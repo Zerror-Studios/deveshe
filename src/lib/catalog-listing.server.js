@@ -29,7 +29,7 @@ export { toListingFilters };
 
 /**
  * One page of `getClientSideProducts`: `{ products, totalCount }`, in the
- * listing's `sort` (W2-STORE; the default NEWEST is not sent).
+ * listing's `sort` (W2-STORE; the default sort, FEATURED since kit 1.4, is not sent).
  */
 export const fetchProductPage = async (
   client,
