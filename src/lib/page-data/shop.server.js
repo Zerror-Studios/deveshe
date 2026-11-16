@@ -203,6 +203,8 @@ export async function loadShopCategoryPage(slug) {
         slug: category.slug,
         description: category.description || "",
         imgsrc: category.imgsrc || "",
+        // PRD-045 D6: desktop + mobile banner (kit 1.4.0; absent before)
+        banner: category.banner || null,
       },
       products: productResult.value || [],
       categories: categoryResult,

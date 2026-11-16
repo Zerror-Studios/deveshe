@@ -15,6 +15,7 @@ import HeroSection, {
   SHOP_DEFAULT_HERO_IMAGE,
 } from "@/components/shop/HeroSection";
 import { ShopFilterProvider } from "@/context/ShopFilterContext";
+import { getCategoryBanner } from "@/utils/responsive-image.util";
 
 // ─── View ─────────────────────────────────────────────────────────────────
 
@@ -27,6 +28,8 @@ const ShopView = ({
 }) => {
   const router = useRouter();
   const categoryName = category?.name || "";
+  // PRD-045 FR-7: banner.desktop (else the legacy imgsrc) and banner.mobile
+  const banner = getCategoryBanner(category);
 
   return (
     <ShopFilterProvider
@@ -39,7 +42,9 @@ const ShopView = ({
       <h1 className="sr-only">{categoryName || "Shop"}</h1>
       {category ? (
         <HeroSection
-          heroImageSrc={category.imgsrc || undefined}
+          heroImageSrc={banner.desktop?.src || undefined}
+          heroImage={banner.desktop}
+          heroImageMobile={banner.mobile}
           categoryName={categoryName || "Shop"}
           categoryDescription={category.description || ""}
           showFilter={!loadError}

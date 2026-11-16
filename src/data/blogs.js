@@ -492,6 +492,8 @@ export function mapBlogForDetail(blog) {
     excerpt,
     intro: hasBody ? [] : excerpt ? [excerpt] : [],
     image: blog.asset?.path || "",
+    // PRD-045 D6: the cover on phones (kit 1.4.0 `assetMobile`; "" = none)
+    imageMobile: blog.assetMobile?.path || "",
     imageAlt: blog.asset?.altText || blog.title,
     date: blog.publishedAt ? formatDateTime(blog.publishedAt) : "",
     author: blog.meta?.author || BLOG_DEFAULT_AUTHOR,

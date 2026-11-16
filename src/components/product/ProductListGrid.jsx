@@ -1,4 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
+import { getFeaturedImage } from "@zcom/storefront-kit/core";
 import { getProductPriceLabel } from "@/utils/Util";
 import ProductCard from "../common/card/ProductCard";
 import CommonButton from "@/components/common/CommonButton";
@@ -97,12 +98,14 @@ const ProductListGrid = ({
       </h2>
       <div className="Similar_prd_cntr">
         {(!isMobile ? data : data?.slice(0, 4))?.map((item, idx) => {
+          // PRD-045 FR-4: the featured image, else the first
+          const image = item ? getFeaturedImage(item) : null;
           return (
             <ProductCard
               key={idx}
               href={`/product/${item?.slug || ""}`}
-              src={item?.assets?.[0]?.path || ""}
-              alt={item?.assets?.[0]?.altText || ""}
+              src={image?.path || ""}
+              alt={image?.altText || ""}
               name={item?.name || ""}
               price={getProductPriceLabel(item?.variants)}
               sizes={SIMILAR_GRID_SIZES}

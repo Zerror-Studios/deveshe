@@ -8,6 +8,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { getFeaturedImage } from "@zcom/storefront-kit/core";
 import { getProductPriceLabel } from "@/utils/Util";
 import { trackSelectItem } from "@/utils/analytics-events.util";
 import { getListingBadge } from "@/utils/stock-signal.util";
@@ -15,7 +16,9 @@ import { getListingBadge } from "@/utils/stock-signal.util";
 const DEFAULT_GRID_SIZES = "(max-width: 768px) 50vw, 25vw";
 
 export function getProductGridCardProps(product) {
-  const asset = product?.assets?.[0];
+  // PRD-045 FR-4: the merchant's featured image, else the first (videos
+  // skipped)
+  const asset = product ? getFeaturedImage(product) : null;
   return {
     href: `/product/${product?.slug || product?._id || ""}`,
     src: asset?.path || "",

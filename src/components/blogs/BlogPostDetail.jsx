@@ -1,6 +1,7 @@
 import Image from "next/image";
 import BlogGridCard from "@/components/common/card/BlogGridCard";
 import BlogPostShare from "@/components/blogs/BlogPostShare";
+import ResponsiveHeroImage from "@/components/common/ResponsiveHeroImage";
 import { htmlParser } from "@/utils/Util";
 
 function getReadMinutes(readTime) {
@@ -57,10 +58,11 @@ export default function BlogPostDetail({ post, relatedPosts = [] }) {
     <article className="blog-post">
       {post.image ? (
         <div className="blog-post__hero">
-          <Image
-            src={post.image}
+          {/* PRD-045 FR-7: the phone cover up to 768 px, if there is one */}
+          <ResponsiveHeroImage
+            desktop={{ src: post.image }}
+            mobile={post.imageMobile ? { src: post.imageMobile } : null}
             alt={post.imageAlt || post.title}
-            fill
             className="blog-post__heroImage"
             sizes="100vw"
             priority

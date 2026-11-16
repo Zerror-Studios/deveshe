@@ -21,6 +21,7 @@ import ImageSectionThree from "@/components/lookbookChapter/ImageSectionThree";
 import ImageSectionTwo from "@/components/lookbookChapter/ImageSectionTwo";
 import VideoContainer from "@/components/lookbookChapter/VideoContainer";
 import ProductContainer from "@/components/lookbookChapter/ProductContainer";
+import { getLookbookCover } from "@/utils/responsive-image.util";
 import {
   lookbookItemListId,
   trackLookbookHotspotClick,
@@ -74,6 +75,7 @@ const LookbookDetail = ({ lookbook }) => {
           path: lookbook?.cover?.url || "",
           altText: lookbook?.cover?.alt || "",
         }}
+        cover={getLookbookCover(lookbook)}
       />
       <ProductContainer
         data={featuredProducts(lookbook)}

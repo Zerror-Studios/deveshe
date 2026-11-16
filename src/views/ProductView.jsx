@@ -32,8 +32,10 @@ import { getLowestPrice, isVariantUnavailable } from "@/utils/catalog.util";
 import { getNotifyMeSuccessMessage } from "@/utils/back-in-stock.util";
 import { useVariantAvailability } from "@/hooks/useVariantAvailability";
 import {
+  getBackorderNote,
   getStockNote,
   isSoldOut,
+  resolveSignal,
   resolveVariantSignal,
 } from "@/utils/stock-signal.util";
 
@@ -86,7 +88,13 @@ const ProductDetail = ({
   }, [variantMatched?._id]);
   const variantSignal = resolveVariantSignal(variantMatched, freshStock);
   const soldOut = Boolean(variantMatched) && isSoldOut(variantSignal);
-  const stockNote = cartBtn && variantMatched ? getStockNote(variantSignal) : null;
+  // Backend PRD-046 FR-20: "Available on backorder" for the chosen variant,
+  // or the product's rollup before one is chosen; the button stays enabled.
+  const backorderNote = getBackorderNote(
+    variantMatched ? variantSignal : resolveSignal(data?._id, data, freshStock),
+  );
+  const stockNote =
+    (cartBtn && variantMatched ? getStockNote(variantSignal) : null) || backorderNote;
   const isMissingCombination = cartBtn && !variantMatched;
   const isOutOfStock =
     isRejected ||

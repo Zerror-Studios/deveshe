@@ -6,6 +6,7 @@ import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
 import React, { useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import ResponsivePicture from "@/components/common/ResponsivePicture";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,7 +27,9 @@ const splitText = (element) => {
   element.dataset.split = "true";
 };
 
-const LookBookHero = ({ title, subheading, description, asset }) => {
+// `cover` (optional): the PRD-045 pair from getLookbookCover; its mobile
+// image shows up to 768 px and its focal points set the crop.
+const LookBookHero = ({ title, subheading, description, asset, cover = null }) => {
   const pathname = usePathname();
 
   const sectionRef = useRef(null);
@@ -97,9 +100,12 @@ const LookBookHero = ({ title, subheading, description, asset }) => {
           </div>
         </div>
         <div className="lb-header-image" ref={headerImageRef}>
-          <img
-            ref={imgRef}
-            src={asset?.path || ""}
+          <ResponsivePicture
+            imgRef={imgRef}
+            src={cover?.desktop?.src || asset?.path || ""}
+            mobileSrc={cover?.mobile?.src || null}
+            desktop={cover?.desktop}
+            mobile={cover?.mobile}
             alt={asset?.altText || ""}
           />
         </div>

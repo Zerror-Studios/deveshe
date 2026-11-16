@@ -10,12 +10,17 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import CuratedFilterStrip from "@/components/home/CuratedFilterStrip";
+import ResponsivePicture from "@/components/common/ResponsivePicture";
 
 // The shop's own cover, also used by a category without a cover image.
 export const SHOP_DEFAULT_HERO_IMAGE = "/assets/images/home/shop page.webp";
 
 const HeroSection = ({
   heroImageSrc,
+  // PRD-045 FR-7: the collection's banner pair (getCategoryBanner); its
+  // mobile image shows up to 768 px, its focal points set the crop
+  heroImage = null,
+  heroImageMobile = null,
   categoryName,
   isDefault = false,
   showFilter = true,
@@ -27,6 +32,10 @@ const HeroSection = ({
     isDefault || !heroImageSrc
       ? heroImageSrc || SHOP_DEFAULT_HERO_IMAGE
       : encodeURI(heroImageSrc);
+  const mobileSrc =
+    !isDefault && heroImageSrc && heroImageMobile?.src
+      ? encodeURI(heroImageMobile.src)
+      : null;
   const sectionRef = useRef(null);
   const innerRef = useRef(null);
   const imgRef = useRef(null);
@@ -123,7 +132,7 @@ const HeroSection = ({
     }, section);
 
     return () => ctx.revert();
-  }, [resolvedSrc, showFilter]);
+  }, [resolvedSrc, mobileSrc, showFilter]);
 
   return (
     <div ref={sectionRef} className="shop_hero_section">
@@ -140,10 +149,16 @@ const HeroSection = ({
       </div>
       <div ref={innerRef} className="shop_hero_section_inner">
         {/* The page's LCP: fetched first */}
-        <img
+        <ResponsivePicture
           src={resolvedSrc}
-          alt={categoryName ? `${categoryName} collection` : "DeVeSheDreams shop"}
-          ref={imgRef}
+          mobileSrc={mobileSrc}
+          desktop={heroImageSrc ? heroImage : null}
+          mobile={mobileSrc ? heroImageMobile : null}
+          alt={
+            heroImage?.alt ||
+            (categoryName ? `${categoryName} collection` : "DeVeSheDreams shop")
+          }
+          imgRef={imgRef}
           fetchPriority="high"
         />
       </div>
