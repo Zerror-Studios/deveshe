@@ -7,9 +7,9 @@
  * year, `SameSite=Lax`, `Secure` on https), which the backend keeps only as
  * a keyed hash. Votes go through the kit's same-origin `/v1/graphql` proxy.
  *
- * Until kit 1.5.0: the kit's `useBlogPoll` / `getPollVoterId`
- * (`client/use-blog.hook.ts`) do the same with the same cookie and storage
- * key, so switching keeps every shopper's vote.
+ * The kit's `useBlogPoll` / `getPollVoterId` (kit 1.5.0,
+ * `client/use-blog.hook.ts`) use the same cookie and storage key, so moving
+ * this store to them later keeps every shopper's vote.
  */
 
 // ─── Constants ────────────────────────────────────────────────────────────

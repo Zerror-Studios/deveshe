@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Implemented** 2026-11-17 (this repo's part: FR-10 use, FR-11); working tree on `microservice`, not committed, not browser-tested |
+| Status | **Implemented** 2026-11-17 (this repo's part: FR-10 use, FR-11); on kit **v1.5.0** (the local renderer, documents and `frame-src` workaround replaced by the kit's) and released to `dev`, `uat` and `main` the same day (owner); not browser-tested |
 | Source-of-truth PRD | [`../../../../zcom-backend/docs/prd/PRD-047-blog-blocks-ai-writing-insight-feedback.md`](../../../../zcom-backend/docs/prd/PRD-047-blog-blocks-ai-writing-insight-feedback.md) |
 | Approved by / on | Anand (owner), backend PRD-047 (2026-11-17) |
 | Needs | The backend's PRD-047 fields (`voteBlogPoll`, `blogPollResults`, `getClientSideRelatedBlogs`, `BlogsFilterInput.ids`) deployed first. Works on kit 1.4.0 through local copies (below); kit 1.5.0 replaces them |
@@ -24,5 +24,5 @@ This file holds only Deveshe Dreams's notes. Requirements, contract and decision
 ## Open
 
 - Browser check of each block once the backend and dashboard ship (PRD §9 definition of done).
-- Pin kit 1.5.0 and do the switch above.
+- ~~Pin kit 1.5.0 and do the switch above.~~ Done 2026-11-17: `utils/kit-blog-content.util.js` re-exports the kit's renderer, the three documents re-export the kit's, `STORE_DOCUMENTS` is back to 2, `withBlogEmbedFrames` removed (the kit's CSP lists the embed hosts). The store keeps its own poll helpers (`utils/blog-blocks.util.js`), which share the kit's cookie and storage key.
 - The backend's `validate:clients` manifest for this store needs `--write` in the backend repo (3 new operations).

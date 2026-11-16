@@ -34,39 +34,8 @@ export const GET_CLIENT_SIDE_BLOGS = gql`
 
 export { GetBlogDocument as GET_CLIENT_SIDE_BLOG } from "@zcom/storefront-kit/graphql";
 
-// ─── Backend PRD-047 (until kit 1.5.0) ────────────────────────────────────
-// Same operation names as kit 1.5.0's documents: once `package.json` pins
-// it, `test/kit-documents.test.mjs` flags them; replace each with
-// `export { GetRelatedBlogsDocument as GET_RELATED_BLOGS } from "@zcom/storefront-kit/graphql";`
-// (and `GetBlogPollResultsDocument`, `VoteBlogPollDocument`).
-
-/** FR-9: published posts like this one (category, then tags, then newest). */
-export const GET_RELATED_BLOGS = gql`
-  query GetRelatedBlogs($slug: String!, $limit: Int) {
-    getClientSideRelatedBlogs(slug: $slug, limit: $limit) {
-      _id
-      title
-      slug
-      excerpt
-      asset {
-        altText
-        path
-      }
-    }
-  }
-`;
-
-/** FR-8: a poll's counts (shown after voting, D4). */
-export const GET_BLOG_POLL_RESULTS = gql`
-  query GetBlogPollResults($blogSlug: String!, $pollId: ID!) {
-    blogPollResults(blogSlug: $blogSlug, pollId: $pollId) {
-      pollId
-      total
-      closed
-      options {
-        optionId
-        votes
-      }
-    }
-  }
-`;
+// Backend PRD-047 (kit 1.5.0): related posts and a blog poll's results
+export {
+  GetRelatedBlogsDocument as GET_RELATED_BLOGS,
+  GetBlogPollResultsDocument as GET_BLOG_POLL_RESULTS,
+} from "@zcom/storefront-kit/graphql";

@@ -69,31 +69,7 @@ const REVIEW_UPLOAD_ORIGINS = (process.env.REVIEW_UPLOAD_HOSTS || "")
   .filter(Boolean)
   .map((host) => (host.startsWith("https://") ? host : `https://${host}`));
 
-// Backend PRD-047: blog embeds are sandboxed iframes on these providers
-// only (`toSafeEmbedSrc`). Until kit 1.5.0, whose CSP lists them itself
-// (`EMBED_FRAME_ORIGINS`), add them to `frame-src` here; origins already
-// present are skipped, so this is a no-op once the kit has them.
-const BLOG_EMBED_FRAME_ORIGINS = [
-  "https://www.youtube.com",
-  "https://player.vimeo.com",
-  "https://www.instagram.com",
-  "https://platform.twitter.com",
-  "https://www.facebook.com",
-  "https://www.google.com",
-];
-
-const withBlogEmbedFrames = (headers) =>
-  headers.map((header) => {
-    if (!/^content-security-policy/i.test(header.key)) return header;
-    const value = header.value.replace(/frame-src ([^;]*)/, (_, sources) => {
-      const list = sources.split(" ");
-      const extra = BLOG_EMBED_FRAME_ORIGINS.filter((o) => !list.includes(o));
-      return `frame-src ${[...list, ...extra].join(" ")}`;
-    });
-    return { ...header, value };
-  });
-
-const SECURITY_HEADERS = withBlogEmbedFrames(buildSecurityHeaders({
+const SECURITY_HEADERS = buildSecurityHeaders({
   imageHosts: ASSET_ORIGINS,
   uploadHosts: REVIEW_UPLOAD_ORIGINS,
   // The contact page's 3D phone: GLTFLoader fetches its embedded textures
@@ -101,7 +77,7 @@ const SECURITY_HEADERS = withBlogEmbedFrames(buildSecurityHeaders({
   extraConnectHosts: ["blob:"],
   development: isDev,
   reportOnly: process.env.CSP_REPORT_ONLY === "true",
-}));
+});
 
 // PRD-028 FR-5.4: a shopper's payment link (`/pay/<token>`) is never
 // indexed and never sent on as a referrer (the URL holds the token).
