@@ -1,0 +1,1206 @@
+/*
+ * Shopping assistant (DD-PRD-001): the launcher and its bubble, the
+ * assistant's ripple and stage, the conversation, the input ring and the
+ * dictation glow. The reference assistant's motion in the store's red
+ * #fe0000 and blush #fadcde (D3); text stays #1a1a1a / #595959 on blush and
+ * white on the deep red #c8102e, for contrast.
+ */
+
+/* ─── Animated properties ──────────────────────────────────────────────── */
+
+@property --assistant-ring-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
+@property --assistant-glow-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
+@property --assistant-c1 {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: rgba(254, 0, 0, 0.7);
+}
+
+@property --assistant-c2 {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: rgba(255, 90, 110, 0.4);
+}
+
+@property --assistant-c3 {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: rgba(255, 150, 165, 0.25);
+}
+
+@property --assistant-c4 {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: rgba(150, 0, 30, 0.4);
+}
+
+@property --assistant-x1 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 55%;
+}
+
+@property --assistant-y1 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 60%;
+}
+
+/* ─── Launcher (FR-1, FR-2, FR-5) ──────────────────────────────────────── */
+
+.assistant_launcher {
+  position: fixed;
+  right: 32px;
+  bottom: 20px;
+  z-index: 60;
+  transition: transform 0.25s ease;
+}
+
+.assistant_launcher_btn {
+  position: relative;
+  display: block;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background-color: #c8102e;
+  box-shadow: 0 8px 22px rgba(200, 16, 46, 0.28);
+  cursor: pointer;
+}
+
+.assistant_launcher_btn:focus-visible {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 3px;
+}
+
+.assistant_launcher_canvas {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.assistant_launcher_canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.assistant_launcher_glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 50%;
+  background-color: #fe0000;
+  filter: blur(12px);
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+  pointer-events: none;
+}
+
+.assistant_launcher_btn:focus-visible .assistant_launcher_glow {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (hover: hover) {
+  .assistant_launcher_btn:hover .assistant_launcher_glow {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ─── Bubble (FR-3, FR-4) ──────────────────────────────────────────────── */
+
+.assistant_bubble {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 12px);
+  width: max-content;
+  max-width: 260px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background-color: #c8102e;
+  color: #fff;
+  font-family: subTitleFont;
+  font-size: 11px;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  isolation: isolate;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.assistant_bubble.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.assistant_bubble_gradient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(
+      circle at var(--assistant-x1) var(--assistant-y1),
+      var(--assistant-c1),
+      transparent 65%
+    ),
+    radial-gradient(circle at 20% 30%, var(--assistant-c2), transparent 55%),
+    radial-gradient(circle at 90% 85%, var(--assistant-c3), transparent 55%),
+    radial-gradient(circle at 10% 90%, var(--assistant-c4), transparent 50%);
+  animation: assistant-bubble-morph 14s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes assistant-bubble-morph {
+  from {
+    --assistant-c1: rgba(254, 0, 0, 0.7);
+    --assistant-c2: rgba(255, 90, 110, 0.4);
+    --assistant-c3: rgba(255, 150, 165, 0.25);
+    --assistant-c4: rgba(150, 0, 30, 0.4);
+    --assistant-x1: 55%;
+    --assistant-y1: 60%;
+  }
+  to {
+    --assistant-c1: rgba(220, 0, 30, 0.65);
+    --assistant-c2: rgba(255, 70, 95, 0.35);
+    --assistant-c3: rgba(255, 130, 150, 0.3);
+    --assistant-c4: rgba(130, 0, 25, 0.45);
+    --assistant-x1: 45%;
+    --assistant-y1: 50%;
+  }
+}
+
+.assistant_bubble_text {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+}
+
+.assistant_bubble_sizer {
+  visibility: hidden;
+}
+
+.assistant_bubble_live {
+  position: absolute;
+  inset: 0;
+}
+
+/* ─── Stage and ripple (FR-6, FR-7) ────────────────────────────────────── */
+
+.assistant_root {
+  --assistant-x: calc(100vw - 72px);
+  --assistant-y: 100vh;
+  --assistant-r: 0px;
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Blurs the page on the ripple's edge, like light bending through it */
+.assistant_ripple {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(10px) saturate(1.5);
+  backdrop-filter: blur(10px) saturate(1.5);
+  background: radial-gradient(
+    circle at var(--assistant-x) var(--assistant-y),
+    transparent calc(var(--assistant-r) - 90px),
+    rgba(254, 0, 0, 0.1) calc(var(--assistant-r) - 30px),
+    rgba(255, 255, 255, 0.4) calc(var(--assistant-r) - 4px),
+    rgba(255, 150, 165, 0.2) calc(var(--assistant-r) + 18px),
+    transparent calc(var(--assistant-r) + 60px)
+  );
+  -webkit-mask-image: radial-gradient(
+    circle at var(--assistant-x) var(--assistant-y),
+    transparent calc(var(--assistant-r) - 90px),
+    #000 calc(var(--assistant-r) - 36px),
+    #000 calc(var(--assistant-r) + 14px),
+    transparent calc(var(--assistant-r) + 60px)
+  );
+  mask-image: radial-gradient(
+    circle at var(--assistant-x) var(--assistant-y),
+    transparent calc(var(--assistant-r) - 90px),
+    #000 calc(var(--assistant-r) - 36px),
+    #000 calc(var(--assistant-r) + 14px),
+    transparent calc(var(--assistant-r) + 60px)
+  );
+}
+
+.assistant_stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-color: #fadcde;
+  color: #1a1a1a;
+  -webkit-mask-image: radial-gradient(
+    circle at var(--assistant-x) var(--assistant-y),
+    #000 calc(var(--assistant-r) - 60px),
+    transparent var(--assistant-r)
+  );
+  mask-image: radial-gradient(
+    circle at var(--assistant-x) var(--assistant-y),
+    #000 calc(var(--assistant-r) - 60px),
+    transparent var(--assistant-r)
+  );
+}
+
+/* Fully open: no mask to repaint while the orb moves */
+.assistant_stage.is-revealed {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+/* The site's grain (globals.css `noise`) */
+.assistant_stage::before {
+  content: "";
+  position: absolute;
+  top: -10rem;
+  left: -10rem;
+  width: calc(100% + 20rem);
+  height: calc(100% + 20rem);
+  background-image: url("/noise2.jpeg");
+  opacity: 0.2;
+  pointer-events: none;
+  animation: noise 1s steps(2) infinite;
+}
+
+/* ─── Panel and header (FR-10) ─────────────────────────────────────────── */
+
+.assistant_panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 24px 48px;
+  font-family: paragraph;
+  outline: none;
+}
+
+.assistant_header {
+  position: absolute;
+  top: 24px;
+  left: 48px;
+  right: 48px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.assistant_actions {
+  display: inline-flex;
+  gap: 8px;
+}
+
+/* As the reference's voice (secondary) and close (danger) buttons */
+.assistant_icon_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(26, 26, 26, 0.08);
+  border-radius: 50%;
+  background-color: #fff;
+  color: #c8102e;
+  font-size: 18px;
+  cursor: pointer;
+  transition:
+    color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.assistant_icon_btn:hover {
+  border-color: rgba(200, 16, 46, 0.35);
+}
+
+/* Spoken replies off: the reference's muted look */
+.assistant_icon_btn.is-muted {
+  border-color: rgba(254, 0, 0, 0.4);
+  background-color: rgba(254, 0, 0, 0.1);
+  color: #fe0000;
+}
+
+.assistant_icon_btn.is-close {
+  color: #fe0000;
+}
+
+.assistant_icon_btn.is-close:hover {
+  color: #a3001f;
+}
+
+.assistant_icon_btn:focus-visible,
+.assistant_round_btn:focus-visible,
+.assistant_chip:focus-visible,
+.assistant_link:focus-visible,
+.assistant_card:focus-visible,
+.assistant_order:focus-visible,
+.assistant_offer_copy:focus-visible,
+.assistant_jump:focus-visible,
+.assistant_error button:focus-visible {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 2px;
+}
+
+/* ─── Layout: conversation and orb (FR-10, FR-11) ──────────────────────── */
+
+.assistant_content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  padding-top: 64px;
+}
+
+.assistant_conversation {
+  display: flex;
+  flex-direction: column;
+  width: 550px;
+  max-width: 100%;
+  /* Sized to its messages and centred beside the orb (D12) */
+  height: auto;
+  max-height: 100%;
+  min-height: 0;
+}
+
+.assistant_orb {
+  flex: 0 0 auto;
+  width: min(520px, 46vw, calc(100vh - 160px));
+  aspect-ratio: 1;
+  margin-right: 20px;
+  transition: width 0.3s ease;
+}
+
+.assistant_orb_canvas,
+.assistant_orb_canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── Transcript (FR-12) ───────────────────────────────────────────────── */
+
+.assistant_transcript {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 40px 0;
+}
+
+.assistant_transcript_scroll {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  /* At rest, messages sit clear of the 25 px fades */
+  padding: 26px 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(
+    transparent,
+    #000 25px,
+    #000 calc(100% - 25px),
+    transparent
+  );
+  mask-image: linear-gradient(
+    transparent,
+    #000 25px,
+    #000 calc(100% - 25px),
+    transparent
+  );
+}
+
+.assistant_transcript_scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Messages gather at the bottom, as in a chat */
+.assistant_transcript_scroll::before {
+  content: "";
+  flex: 1 1 auto;
+}
+
+.assistant_transcript_list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.assistant_msg {
+  max-width: 88%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 16px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.assistant_msg.is-user {
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+  background: linear-gradient(135deg, #c8102e, #e0001f);
+  color: #fff;
+  white-space: pre-wrap;
+}
+
+.assistant_msg.is-assistant {
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.6);
+  box-shadow:
+    inset 0 8px 24px rgba(255, 255, 255, 0.6),
+    0 1px 1px rgba(255, 255, 255, 0.7);
+  color: #1a1a1a;
+}
+
+.assistant_msg.is-thinking {
+  color: #595959;
+  font-size: 14px;
+  font-style: italic;
+}
+
+.assistant_msg_text {
+  margin: 0;
+}
+
+.assistant_msg_visual,
+.assistant_line {
+  display: block;
+}
+
+.assistant_jump {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgba(26, 26, 26, 0.15);
+  border-radius: 50%;
+  background-color: #fff;
+  color: #1a1a1a;
+  cursor: pointer;
+  transform: translateX(-50%);
+  animation: assistant-jump-in 0.2s ease both;
+}
+
+@keyframes assistant-jump-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* ─── Reply extras (FR-23) ─────────────────────────────────────────────── */
+
+.assistant_extras {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 88%;
+}
+
+.assistant_extras.is-entering {
+  animation: assistant-rise-in 0.4s ease both;
+}
+
+@keyframes assistant-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.assistant_cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  width: min(440px, 100%);
+}
+
+.assistant_card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.65);
+  color: #1a1a1a;
+  text-decoration: none;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.assistant_card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(200, 16, 46, 0.12);
+}
+
+.assistant_card_image {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #f3c9cc;
+}
+
+.assistant_card_image img {
+  object-fit: cover;
+}
+
+.assistant_card_name,
+.assistant_card_price {
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.assistant_card_price {
+  color: #595959;
+}
+
+.assistant_orders,
+.assistant_offers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.assistant_order,
+.assistant_offer {
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.65);
+  padding: 10px 14px;
+}
+
+.assistant_order {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: #1a1a1a;
+  text-decoration: none;
+}
+
+.assistant_order_title,
+.assistant_offer_title {
+  margin: 0;
+  font-size: 14px;
+}
+
+.assistant_order_meta,
+.assistant_offer_detail {
+  margin: 2px 0 0;
+  color: #595959;
+  font-size: 13px;
+}
+
+.assistant_offer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.assistant_offer_copy {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border: 1px dashed #c8102e;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #c8102e;
+  font-family: subTitleFont;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.assistant_links,
+.assistant_chips,
+.assistant_quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.assistant_link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 1px solid #c8102e;
+  border-radius: 999px;
+  color: #c8102e;
+  font-size: 13px;
+  text-decoration: none;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.assistant_link:hover {
+  background-color: #c8102e;
+  color: #fff;
+}
+
+/* The reference's glass chip, small size */
+.assistant_chip {
+  flex-shrink: 0;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.4);
+  box-shadow:
+    inset 0 8px 24px rgba(255, 255, 255, 0.6),
+    0 1px 1px rgba(255, 255, 255, 0.7);
+  color: #1a1a1a;
+  font-family: paragraph;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.assistant_chip:hover {
+  border-color: rgba(200, 16, 46, 0.4);
+  background-color: #fff5f6;
+}
+
+/* FR-13: the quick actions arrive one after another */
+.assistant_quick {
+  justify-content: center;
+}
+
+.assistant_quick .assistant_chip {
+  animation: assistant-rise-in 0.4s ease both;
+}
+
+.assistant_error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 0 10px;
+  padding: 8px 12px;
+  border: 1px solid rgba(200, 16, 46, 0.4);
+  border-radius: 12px;
+  background-color: rgba(254, 0, 0, 0.08);
+  color: #a3001f;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.assistant_error button {
+  display: inline-flex;
+  padding: 4px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ─── Input and its ring (FR-14) ───────────────────────────────────────── */
+
+.assistant_footer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+@keyframes assistant-ring-spin {
+  to {
+    --assistant-ring-angle: 360deg;
+  }
+}
+
+.assistant_input {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 999px;
+  background-color: #fff;
+  animation: assistant-ring-spin 8s linear infinite;
+}
+
+/* Hover or focus: the ring eases to rest (the duration is set in JS) */
+.assistant_input.is-settling {
+  animation: none;
+  transition: --assistant-ring-angle 8s ease-out;
+}
+
+.assistant_input::before,
+.assistant_input::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.assistant_input::before {
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--assistant-ring-angle),
+    transparent 0,
+    #fe0000 8%,
+    transparent 22%,
+    transparent 48%,
+    #ff96a5 60%,
+    transparent 74%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.assistant_input::after {
+  z-index: -1;
+  /* The reference's halo: 40 px blur, 10 px spread */
+  box-shadow: 0 0 40px 10px rgba(254, 0, 0, 0.3);
+}
+
+/* As the reference's field: 14 px on 20 px lines (16 px on phones) */
+.assistant_textarea {
+  order: 2;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 6px 0;
+  border: 0;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: #1a1a1a;
+  font-family: paragraph;
+  font-size: 14px;
+  line-height: 20px;
+  scrollbar-width: none;
+}
+
+.assistant_textarea::-webkit-scrollbar {
+  display: none;
+}
+
+.assistant_textarea::placeholder {
+  color: #9ca3af;
+}
+
+.assistant_mic {
+  order: 1;
+}
+
+.assistant_send {
+  order: 3;
+  margin-left: auto;
+}
+
+/* Past one line, the text takes the top row and the buttons go under it */
+.assistant_input:has(.assistant_textarea[data-multiline]) {
+  flex-wrap: wrap;
+  border-radius: 20px;
+}
+
+.assistant_input:has(.assistant_textarea[data-multiline]) .assistant_textarea {
+  order: 1;
+  flex: 1 0 100%;
+}
+
+.assistant_input:has(.assistant_textarea[data-multiline]) .assistant_mic {
+  order: 2;
+  margin-right: auto;
+}
+
+.assistant_round_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.assistant_round_btn.is-primary {
+  background-color: #c8102e;
+  color: #fff;
+}
+
+.assistant_round_btn.is-primary:not(:disabled):hover {
+  background-color: #a3001f;
+}
+
+.assistant_round_btn.is-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.assistant_round_btn.is-ghost {
+  background-color: transparent;
+  color: #1a1a1a;
+}
+
+.assistant_round_btn.is-ghost:hover {
+  background-color: rgba(26, 26, 26, 0.06);
+}
+
+/* ─── Dictation (FR-17) ────────────────────────────────────────────────── */
+
+.assistant_dictation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 0;
+  min-width: 0;
+  animation: assistant-fade-in 0.15s ease-out;
+}
+
+@keyframes assistant-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.assistant_wave {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 40px;
+  color: #1a1a1a;
+}
+
+.assistant_wave canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes assistant-glow-spin {
+  to {
+    --assistant-glow-angle: 360deg;
+  }
+}
+
+.assistant_glow {
+  --assistant-glow-edge: 56px;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+  animation: assistant-glow-spin 12s linear infinite paused;
+}
+
+.assistant_glow.is-visible {
+  opacity: 1;
+  transition: opacity 0.6s ease 0.1s;
+  animation-play-state: running;
+}
+
+.assistant_glow::before,
+.assistant_glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(
+    from var(--assistant-glow-angle),
+    #fe0000,
+    #ff96a5 33%,
+    #fadcde 66%,
+    #fe0000
+  );
+}
+
+/* A 3 px border all round */
+.assistant_glow::before {
+  padding: 3px;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* And a soft glow fading 56 px in from every edge */
+.assistant_glow::after {
+  opacity: 0.85;
+  -webkit-mask:
+    linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.9),
+      rgba(0, 0, 0, 0.4) calc(var(--assistant-glow-edge) * 0.3),
+      rgba(0, 0, 0, 0.13) calc(var(--assistant-glow-edge) * 0.6),
+      transparent var(--assistant-glow-edge)
+    ),
+    linear-gradient(
+      to left,
+      rgba(0, 0, 0, 0.9),
+      rgba(0, 0, 0, 0.4) calc(var(--assistant-glow-edge) * 0.3),
+      rgba(0, 0, 0, 0.13) calc(var(--assistant-glow-edge) * 0.6),
+      transparent var(--assistant-glow-edge)
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.9),
+      rgba(0, 0, 0, 0.4) calc(var(--assistant-glow-edge) * 0.3),
+      rgba(0, 0, 0, 0.13) calc(var(--assistant-glow-edge) * 0.6),
+      transparent var(--assistant-glow-edge)
+    ),
+    linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.9),
+      rgba(0, 0, 0, 0.4) calc(var(--assistant-glow-edge) * 0.3),
+      rgba(0, 0, 0, 0.13) calc(var(--assistant-glow-edge) * 0.6),
+      transparent var(--assistant-glow-edge)
+    );
+  mask:
+    linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.9),
+      rgba(0, 0, 0, 0.4) calc(var(--assistant-glow-edge) * 0.3),
+      rgba(0, 0, 0, 0.13) calc(var(--assistant-glow-edge) * 0.6),
+      transparent var(--assistant-glow-edge)
+    ),
+    linear-gradient(
+      to left,
+      rgba(0, 0, 0, 0.9),
+      rgba(0, 0, 0, 0.4) calc(var(--assistant-glow-edge) * 0.3),
+      rgba(0, 0, 0, 0.13) calc(var(--assistant-glow-edge) * 0.6),
+      transparent var(--assistant-glow-edge)
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.9),
+      rgba(0, 0, 0, 0.4) calc(var(--assistant-glow-edge) * 0.3),
+      rgba(0, 0, 0, 0.13) calc(var(--assistant-glow-edge) * 0.6),
+      transparent var(--assistant-glow-edge)
+    ),
+    linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.9),
+      rgba(0, 0, 0, 0.4) calc(var(--assistant-glow-edge) * 0.3),
+      rgba(0, 0, 0, 0.13) calc(var(--assistant-glow-edge) * 0.6),
+      transparent var(--assistant-glow-edge)
+    );
+}
+
+/* ─── Shared ───────────────────────────────────────────────────────────── */
+
+.assistant_sr_only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ─── Phones and tablets: orb on top, conversation below ───────────────── */
+
+@media (max-width: 1024px) {
+  .assistant_launcher {
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .assistant_launcher_btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .assistant_bubble {
+    max-width: 220px;
+  }
+
+  .assistant_panel {
+    padding: 16px 16px 20px;
+  }
+
+  .assistant_header {
+    top: 16px;
+    left: 16px;
+    right: 16px;
+  }
+
+  .assistant_content {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 8px;
+    padding-top: 56px;
+  }
+
+  .assistant_conversation {
+    flex: 0 1 auto;
+    width: 100%;
+    height: auto;
+    transition: flex-grow 0.3s ease;
+  }
+
+  .assistant_content.is-interacted .assistant_conversation {
+    flex-grow: 1;
+  }
+
+  .assistant_orb {
+    align-self: center;
+    width: min(320px, 80vw, 42vh);
+    margin: auto 0;
+  }
+
+  .assistant_orb.is-interacted {
+    width: 100px;
+    margin: 0;
+  }
+
+  .assistant_transcript {
+    margin: 20px 0 24px;
+  }
+
+  .assistant_textarea {
+    font-size: 16px;
+  }
+
+  /* As the reference on phones: one row of chips that scrolls sideways */
+  .assistant_quick {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    margin: 0 -16px;
+    padding: 4px 16px;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 25px,
+      #000 calc(100% - 25px),
+      transparent
+    );
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 25px,
+      #000 calc(100% - 25px),
+      transparent
+    );
+  }
+
+  .assistant_quick::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .assistant_msg {
+    font-size: 15px;
+  }
+
+  .assistant_cards {
+    width: 100%;
+  }
+}
+
+/* ─── Reduced motion (§6.1) ────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .assistant_launcher,
+  .assistant_launcher_glow,
+  .assistant_bubble,
+  .assistant_card,
+  .assistant_orb,
+  .assistant_conversation,
+  .assistant_glow,
+  .assistant_glow.is-visible {
+    transition: none;
+  }
+
+  .assistant_bubble_gradient,
+  .assistant_stage::before,
+  .assistant_input,
+  .assistant_glow,
+  .assistant_extras.is-entering,
+  .assistant_quick .assistant_chip,
+  .assistant_jump,
+  .assistant_dictation {
+    animation: none;
+  }
+}

@@ -69,15 +69,31 @@ const REVIEW_UPLOAD_ORIGINS = (process.env.REVIEW_UPLOAD_HOSTS || "")
   .filter(Boolean)
   .map((host) => (host.startsWith("https://") ? host : `https://${host}`));
 
-const SECURITY_HEADERS = buildSecurityHeaders({
-  imageHosts: ASSET_ORIGINS,
-  uploadHosts: REVIEW_UPLOAD_ORIGINS,
-  // The contact page's 3D phone: GLTFLoader fetches its embedded textures
-  // from blob: URLs it creates itself.
-  extraConnectHosts: ["blob:"],
-  development: isDev,
-  reportOnly: process.env.CSP_REPORT_ONLY === "true",
-});
+// DD-PRD-001 D9 (owner, 2026-11-20): the shopping assistant's dictation
+// needs the microphone on this origin, and the kit sends `microphone=()` to
+// every store. A local exception for this store until the kit has an option
+// (FR-21): this origin only, never embedded frames; nothing else changes.
+const allowMicrophoneForSelf = (headers) =>
+  headers.map((header) =>
+    header.key === "Permissions-Policy"
+      ? {
+          ...header,
+          value: header.value.replace("microphone=()", "microphone=(self)"),
+        }
+      : header,
+  );
+
+const SECURITY_HEADERS = allowMicrophoneForSelf(
+  buildSecurityHeaders({
+    imageHosts: ASSET_ORIGINS,
+    uploadHosts: REVIEW_UPLOAD_ORIGINS,
+    // The contact page's 3D phone: GLTFLoader fetches its embedded textures
+    // from blob: URLs it creates itself.
+    extraConnectHosts: ["blob:"],
+    development: isDev,
+    reportOnly: process.env.CSP_REPORT_ONLY === "true",
+  }),
+);
 
 // PRD-028 FR-5.4: a shopper's payment link (`/pay/<token>`) is never
 // indexed and never sent on as a referrer (the URL holds the token).
@@ -92,6 +108,9 @@ const PAY_LINK_HEADERS = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // `next dev` only: Next's badge sits bottom left by default, right on the
+  // shopping assistant's mic button on phones (DD-PRD-001)
+  devIndicators: { position: "top-left" },
   images: {
     remotePatterns: IMAGE_HOSTS.map((hostname) => ({
       protocol: "https",

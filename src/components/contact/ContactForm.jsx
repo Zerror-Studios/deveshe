@@ -4,28 +4,14 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { toast } from 'react-toastify';
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client/react";
 import { CREATE_CONTACT_FORM } from "@/graphql";
 import BracketSlideCta from "@/components/common/BracketSlideCta";
 import { getErrorMessage } from "@/utils/api-error.util";
+// Contact Form Validation (shared with the shopping assistant, DD-PRD-001)
+import { contactSchema } from "@/validations/ContactValidation";
 
-// Contact Form Validation
-const contactSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().min(1, "Email is required").email("Invalid email"),
-  subject: z.string().min(1, "Topic is required"),
-  phoneNumber: z
-    .string()
-    .min(1, "Phone number is required")
-    .transform((val) => val.replace(/\D/g, ""))
-    .refine((val) => val.length === 10, {
-      message: "Phone number must be exactly 10 digits",
-    }),
-
-  message: z.string().min(5, "Message must be at least 5 characters"),
-});
 const ContactForm = () => {
   const formRef = useRef(null);
   const [createContact, { loading }] = useMutation(CREATE_CONTACT_FORM);
