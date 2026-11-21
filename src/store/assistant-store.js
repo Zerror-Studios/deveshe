@@ -1,10 +1,13 @@
 /**
  * Shopping assistant state (DD-PRD-001): open or closed, the phase, the
- * conversation and the "leave a message" flow.
+ * conversation and the "Talk to us" flow (backend PRD-049 B0).
  *
  * In memory only (FR-9): never persisted, so nothing the shopper typed
  * outlives a reload. The conversation stays while they move around the
  * site and shows again, without animation, when the assistant reopens.
+ * A signed-in shopper's messages with the team live on the server (the
+ * store's Inbox) and come back from there (`chatSeenIds` marks the ones
+ * already shown).
  */
 
 import { create } from "zustand";
@@ -37,8 +40,12 @@ export const useAssistantStore = create((set) => ({
   messages: [],
   /** True after the shopper's first message (chips go, the orb shrinks). */
   hasInteracted: false,
-  /** FR-24: the running "leave a message" flow, or null. */
-  contactFlow: null,
+  /** B0: the running "Talk to us" flow, or null. */
+  chatFlow: null,
+  /** B0: ids of the team thread's messages already in the conversation. */
+  chatSeenIds: [],
+  /** B0: the thread's earlier messages were shown once. */
+  chatHistoryShown: false,
   error: null,
 
   open: (origin) =>
@@ -55,7 +62,12 @@ export const useAssistantStore = create((set) => ({
   close: () => set((state) => (state.isOpen ? { isOpen: false } : state)),
   setPhase: (phase) => set({ phase }),
   setError: (error) => set({ error }),
-  setContactFlow: (contactFlow) => set({ contactFlow }),
+  setChatFlow: (chatFlow) => set({ chatFlow }),
+  markChatSeen: (ids) =>
+    set((state) => ({
+      chatSeenIds: [...new Set([...state.chatSeenIds, ...ids])],
+    })),
+  setChatHistoryShown: (chatHistoryShown) => set({ chatHistoryShown }),
 
   /** Adds a message and returns its id. */
   addMessage: (message) => {

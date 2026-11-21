@@ -11,7 +11,8 @@
  * shopper dictates, the row becomes the waveform with Cancel and Insert;
  * Insert puts the words after the field's text without sending them.
  *
- * `ref` gives `focus()` and `insert(text)`.
+ * `ref` gives `focus()`, `insert(text)` and, for "Talk to us" (backend
+ * PRD-049 B0.1), `getValue()` and `clear()`.
  */
 
 import React, {
@@ -67,6 +68,8 @@ const AssistantInput = forwardRef(function AssistantInput(
           textareaRef.current?.focus({ preventScroll: true }),
         );
       },
+      getValue: () => textareaRef.current?.value ?? "",
+      clear: () => setValue(""),
     }),
     [],
   );

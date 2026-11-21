@@ -1,6 +1,7 @@
 /**
- * Shopping assistant (DD-PRD-001): the reply rules, "leave a message",
- * the route rule, the dictation and voice helpers and the motion maths.
+ * Shopping assistant (DD-PRD-001): the reply rules, the store's own
+ * answers and "Talk to us" (backend PRD-049 B0), the route rule, the
+ * dictation and voice helpers and the motion maths.
  *
  * The replies run on fake loaders: no network, no Apollo, no browser.
  */
@@ -12,7 +13,6 @@ const replies = await import("@/utils/assistant-replies.util");
 const speech = await import("@/utils/assistant-dictation.util");
 const visuals = await import("@/utils/assistant-gradient.util");
 const constants = await import("@/components/assistant/assistant.constants");
-const { contactSchema } = await import("@/validations/ContactValidation");
 
 const { AssistantIntentEnum: Intent, AssistantActionEnum: Action } = replies;
 
@@ -97,7 +97,7 @@ describe("matchAssistantIntent", () => {
       Exchanges: Intent.EXCHANGES,
       "Track my order": Intent.ORDERS,
       Offers: Intent.OFFERS,
-      "Talk to us": Intent.CONTACT,
+      "Talk to us": Intent.TALK_TO_US,
     };
     assert.deepEqual(Object.keys(expected), replies.QUICK_ACTIONS);
     for (const [label, intent] of Object.entries(expected)) {
@@ -117,8 +117,10 @@ describe("matchAssistantIntent", () => {
       ["any coupon codes?", Intent.OFFERS],
       ["what size should I get", Intent.SIZING],
       ["what do you sell", Intent.COLLECTIONS],
-      ["I want to talk to a human", Intent.CONTACT],
-      ["Leave a message", Intent.LEAVE_MESSAGE],
+      ["I want to talk to a human", Intent.TALK_TO_US],
+      ["Leave a message", Intent.TALK_TO_US],
+      ["Reply to the team", Intent.TALK_TO_US],
+      ["what's your email address", Intent.CONTACT],
       ["new arrival", Intent.NEW_ARRIVALS],
       ["hi", Intent.GREETING],
       ["Hello there!", Intent.GREETING],
@@ -196,7 +198,7 @@ describe("getAssistantReply", () => {
     const exchanges = await replies.getAssistantReply("exchanges");
     assert.match(exchanges.text, /don't give refunds/);
     assert.match(exchanges.text, /deveshedreams@gmail\.com/);
-    assert.equal(exchanges.contactFlow, null);
+    assert.equal(exchanges.chatFlow, null);
   });
 
   it("shows up to 4 products and the search link", async () => {
@@ -341,99 +343,344 @@ describe("getAssistantReply", () => {
   });
 });
 
-// ─── Leave a message (FR-24) ──────────────────────────────────────────────
+// ─── The store's answers (backend PRD-049 B0) ─────────────────────────────
 
-describe("leave a message", () => {
-  const say = (flow, text) => replies.getAssistantReply(text, { contactFlow: flow });
+/** A kit `StoreChatAnswer`. */
+const storeAnswer = (overrides = {}) => ({
+  answersEnabled: true,
+  matched: false,
+  faqId: null,
+  question: null,
+  answer: null,
+  links: [],
+  suggestions: [],
+  offerPerson: false,
+  ...overrides,
+});
 
-  it("asks one question at a time and checks every answer", async () => {
-    let answer = await replies.getAssistantReply("leave a message");
-    assert.equal(answer.contactFlow.step, "name");
+/** Loaders with `askStore` answering `answer` (or throwing it). */
+const storeLoaders = (answer, data = {}) => {
+  const loaders = fakeLoaders(data);
+  loaders.askStore = async (text) => {
+    loaders.calls.push(["askStore", text]);
+    if (answer instanceof Error) throw answer;
+    return typeof answer === "function" ? answer(text) : answer;
+  };
+  return loaders;
+};
 
-    answer = await say(answer.contactFlow, "Priya Sharma");
-    assert.match(answer.text, /^Thanks, Priya\./);
-    assert.equal(answer.contactFlow.step, "email");
+const signedIn = {
+  messagingEnabled: true,
+  signedIn: true,
+  signInPrompt: "Sign in to message us.",
+  returnPath: "/shop?q=red",
+};
+const guest = { ...signedIn, signedIn: false };
 
-    answer = await say(answer.contactFlow, "priya-at-example");
-    assert.equal(answer.contactFlow.step, "email");
-    assert.match(answer.text, /doesn't look right/);
-
-    answer = await say(answer.contactFlow, "priya@example.com");
-    answer = await say(answer.contactFlow, "12345");
-    assert.equal(answer.contactFlow.step, "phoneNumber");
-
-    answer = await say(answer.contactFlow, "98765 43210");
-    assert.equal(answer.contactFlow.step, "subject");
-    assert.deepEqual(answer.chips, [
-      "My order",
-      "Sizing",
-      "An exchange",
-      "A collaboration",
-    ]);
-
-    // "My order" is a topic here, not a question about orders
-    answer = await say(answer.contactFlow, "My order");
-    assert.equal(answer.contactFlow.step, "message");
-
-    answer = await say(answer.contactFlow, "hi");
-    assert.equal(answer.contactFlow.step, "message");
-
-    answer = await say(answer.contactFlow, "Can I change the colour of my order?");
-    assert.equal(answer.contactFlow.step, "confirm");
-    assert.match(answer.text, /Phone: 9876543210/);
-    assert.deepEqual(answer.chips, ["Send", "Edit", "Cancel"]);
-
-    const sent = await say(answer.contactFlow, "Send");
-    assert.deepEqual(sent.action, {
-      type: Action.SEND_CONTACT,
-      input: {
-        name: "Priya Sharma",
-        email: "priya@example.com",
-        subject: "My order",
-        phoneNumber: "9876543210",
-        message: "Can I change the colour of my order?",
-      },
-    });
-
-    const edited = await say(answer.contactFlow, "Edit");
-    assert.equal(edited.contactFlow.step, "name");
-    assert.equal(edited.contactFlow.values.email, "");
-  });
-
-  it("starts from the profile's name and email", () => {
-    const answer = replies.startContactFlow({
-      firstName: "Priya",
-      lastName: "Sharma",
-      email: "priya@example.com",
-    });
-    assert.equal(answer.contactFlow.step, "phoneNumber");
-    assert.match(answer.text, /Priya Sharma \(priya@example\.com\)/);
-  });
-
-  it("ends on cancel, and on a real question at the first steps", async () => {
-    const started = await replies.getAssistantReply("leave a message");
-    const cancelled = await say(started.contactFlow, "cancel");
-    assert.equal(cancelled.contactFlow, null);
-    assert.equal(cancelled.text, replies.ASSISTANT_COPY.contactCancelled);
-
-    const asked = await say(started.contactFlow, "where is my order");
-    assert.equal(asked.intent, Intent.ORDERS);
-    assert.equal(asked.contactFlow, null);
-  });
-
-  it("sends the same input as the contact form", () => {
-    const parsed = contactSchema.parse({
-      name: "A",
-      email: "a@b.co",
-      subject: "Hi",
-      phoneNumber: "98765-43210",
-      message: "Hello team",
-    });
-    assert.equal(parsed.phoneNumber, "9876543210");
-    assert.equal(
-      replies.getContactSentReply().text,
-      replies.ASSISTANT_COPY.contactSent,
+describe("the store's answers", () => {
+  it("uses the store's FAQ answer when it matches", async () => {
+    const loaders = storeLoaders(
+      storeAnswer({
+        matched: true,
+        faqId: "f1",
+        answer: "We dispatch in 3 days.",
+        offerPerson: true,
+        links: [
+          { label: "Shipping", url: "/shipping-returns" },
+          { label: "Courier", url: "https://courier.example/track" },
+          { label: "Bad", url: "javascript:alert(1)" },
+        ],
+      }),
     );
+    const answer = await replies.getAssistantReply("how long does delivery take", {
+      loaders,
+      chat: signedIn,
+    });
+    assert.equal(answer.intent, Intent.FAQ);
+    assert.equal(answer.text, "We dispatch in 3 days.");
+    assert.deepEqual(answer.links, [
+      { label: "Shipping", href: "/shipping-returns" },
+      { label: "Courier", href: "https://courier.example/track", external: true },
+    ]);
+    // B0.1: "Talk to us" under the answer, with the question to start it
+    assert.equal(answer.offerPerson, true);
+    assert.equal(answer.question, "how long does delivery take");
+    assert.equal(answer.chips.includes(replies.TALK_TO_US), false);
+    assert.deepEqual(loaders.calls, [["askStore", "how long does delivery take"]]);
+  });
+
+  it("falls back to the scripted answers when the FAQs are off or unreachable", async () => {
+    for (const failing of [
+      storeAnswer({ answersEnabled: false }),
+      new Error("offline"),
+    ]) {
+      const loaders = storeLoaders(failing);
+      const answer = await replies.getAssistantReply("delivery", { loaders });
+      assert.equal(answer.intent, Intent.DELIVERY);
+      assert.match(answer.text, /free across India/);
+      assert.equal(answer.missed, undefined);
+      assert.equal(answer.offerPerson, undefined);
+    }
+  });
+
+  it("keeps the scripted answer when an FAQ misses but we know the topic", async () => {
+    const loaders = storeLoaders(storeAnswer());
+    const answer = await replies.getAssistantReply("I got the wrong size", {
+      loaders,
+    });
+    assert.equal(answer.intent, Intent.EXCHANGES);
+  });
+
+  it("answers live-data questions before asking the FAQs", async () => {
+    const loaders = storeLoaders(storeAnswer({ matched: true, answer: "FAQ" }), {
+      products: { "": [product(1)] },
+    });
+    for (const text of ["track my order", "New arrivals", "offers", "hi", "take me to the lookbook"]) {
+      const answer = await replies.getAssistantReply(text, { loaders });
+      assert.notEqual(answer.intent, Intent.FAQ, text);
+    }
+    assert.equal(loaders.calls.filter((call) => call[0] === "askStore").length, 0);
+  });
+
+  it("asks the FAQs before searching products, and searches when they miss", async () => {
+    const faq = storeLoaders(storeAnswer({ matched: true, answer: "Yes, gift cards from ₹1,000." }));
+    const giftCards = await replies.getAssistantReply("do you have gift cards", {
+      loaders: faq,
+    });
+    assert.equal(giftCards.intent, Intent.FAQ);
+    assert.equal(faq.calls.some((call) => call[0] === "searchProducts"), false);
+
+    const search = storeLoaders(storeAnswer(), {
+      products: { "red dresses": [product(1)] },
+    });
+    const found = await replies.getAssistantReply("show me red dresses", {
+      loaders: search,
+    });
+    assert.equal(found.intent, Intent.PRODUCTS);
+    assert.equal(found.products.length, 1);
+  });
+
+  it("is a miss only when nothing answered, with Did you mean chips", async () => {
+    const loaders = storeLoaders(
+      storeAnswer({ suggestions: [{ id: "f2", question: "Do you gift wrap?" }] }),
+    );
+    const answer = await replies.getAssistantReply(
+      "my sister said this brand is lovely and she told me to say hello",
+      { loaders, chat: signedIn },
+    );
+    assert.equal(answer.missed, true);
+    assert.match(answer.text, /^I don't have an answer for that yet\. Did you mean/);
+    assert.deepEqual(answer.chips, ["Do you gift wrap?"]);
+    assert.equal(answer.messageTeam, false);
+  });
+
+  it("ends a miss with Message the team (B0.1 offerPerson), only with messaging on", async () => {
+    const missed = storeAnswer({ offerPerson: true });
+    const withChat = await replies.getAssistantReply("??? qwerty zxcv", {
+      loaders: storeLoaders(missed),
+      chat: signedIn,
+    });
+    assert.match(withChat.text, /message the team/);
+    assert.equal(withChat.messageTeam, true);
+    assert.equal(withChat.question, "??? qwerty zxcv");
+    assert.deepEqual(withChat.chips, []);
+
+    const noProducts = await replies.getAssistantReply("velvet capes", {
+      loaders: storeLoaders(missed),
+      chat: signedIn,
+    });
+    assert.match(noProducts.text, /^I couldn't find "velvet capes"\. Would you like/);
+    assert.ok(noProducts.links.length > 0);
+
+    const off = await replies.getAssistantReply("??? qwerty zxcv", {
+      loaders: storeLoaders(missed),
+      chat: { ...signedIn, messagingEnabled: false },
+    });
+    assert.equal(off.chips.includes(replies.TALK_TO_US), false);
+    assert.equal(off.messageTeam, undefined);
+
+    // FAQs off: the backend still offers a person, so no dead end
+    const answersOff = await replies.getAssistantReply("??? qwerty zxcv", {
+      loaders: storeLoaders(
+        storeAnswer({
+          answersEnabled: false,
+          offerPerson: true,
+          suggestions: [{ id: "f9", question: "Hidden FAQ" }],
+        }),
+      ),
+      chat: signedIn,
+    });
+    assert.equal(answersOff.messageTeam, true);
+    assert.deepEqual(answersOff.chips, []);
+  });
+
+  it("puts Talk to us under our own answer when the FAQs offer a person (B0.1)", async () => {
+    const answer = await replies.getAssistantReply("delivery", {
+      loaders: storeLoaders(storeAnswer({ offerPerson: true })),
+      chat: signedIn,
+    });
+    assert.equal(answer.intent, Intent.DELIVERY);
+    assert.equal(answer.offerPerson, true);
+    assert.equal(answer.question, "delivery");
+    // Not twice: the chip goes
+    assert.deepEqual(answer.chips, ["Exchanges", "Track my order"]);
+  });
+
+  it("uses the store's welcome and quick buttons once its answers are on", () => {
+    const config = {
+      answersEnabled: true,
+      messagingEnabled: true,
+      welcome: "Welcome to DeVeShe!",
+      chips: [{ label: "Delivery", question: "How long does delivery take?" }],
+    };
+    assert.equal(replies.getWelcomeText(config), "Welcome to DeVeShe!");
+    assert.deepEqual(replies.getQuickActions(config), [
+      { label: "Delivery", question: "How long does delivery take?" },
+      { label: "Talk to us", question: "Talk to us" },
+    ]);
+    // Answers off, or no config: our own copy and chips
+    const off = { ...config, answersEnabled: false };
+    assert.equal(replies.getWelcomeText(off), replies.ASSISTANT_COPY.welcome);
+    assert.deepEqual(
+      replies.getQuickActions(null).map((action) => action.label),
+      replies.QUICK_ACTIONS,
+    );
+    assert.equal(
+      replies
+        .getQuickActions({ ...off, messagingEnabled: false })
+        .some((action) => action.label === "Talk to us"),
+      false,
+    );
+  });
+});
+
+// ─── Talk to us (backend PRD-049 B0, D15) ─────────────────────────────────
+
+describe("talk to us", () => {
+  it("asks a guest to sign in and come back to the open chat", async () => {
+    const answer = await replies.getAssistantReply("Talk to us", { chat: guest });
+    assert.equal(answer.text, "Sign in to message us.");
+    assert.deepEqual(answer.links, [
+      {
+        label: "Sign in",
+        href: `/login?next=${encodeURIComponent("/shop?q=red&chat=open")}`,
+      },
+    ]);
+    assert.equal(answer.chatFlow, null);
+    assert.equal(answer.handoff, true);
+  });
+
+  it("lets a signed-in shopper type a message, then sends it", async () => {
+    const started = await replies.getAssistantReply("Talk to us", { chat: signedIn });
+    assert.equal(started.chatFlow.step, "compose");
+    assert.deepEqual(started.chips, ["Cancel"]);
+    assert.equal(started.handoff, true);
+
+    // Anything typed now is the message, even a question
+    const send = await replies.getAssistantReply("Where is my order #1042?", {
+      chatFlow: started.chatFlow,
+      chat: signedIn,
+    });
+    assert.deepEqual(send.action, {
+      type: Action.SEND_CHAT,
+      text: "Where is my order #1042?",
+    });
+
+    const cancelled = await replies.getAssistantReply("cancel", {
+      chatFlow: started.chatFlow,
+      chat: signedIn,
+    });
+    assert.equal(cancelled.chatFlow, null);
+    assert.equal(cancelled.text, replies.ASSISTANT_COPY.talkCancelled);
+    assert.equal(cancelled.cancelledChat, true);
+
+    // B0.1: "Don't send" drops a message kept through sign-in
+    const discarded = await replies.getAssistantReply(replies.DISCARD_DRAFT, {
+      chatFlow: started.chatFlow,
+      chat: signedIn,
+    });
+    assert.equal(discarded.cancelledChat, true);
+    assert.equal(discarded.action, undefined);
+  });
+
+  it("shows the reply time, and out of hours the away line and when the team is back (B0.1)", () => {
+    const status = {
+      replyTime: "We usually reply within a few hours.",
+      awayMessage: "We're away for the night.",
+      isOpen: false,
+      nextOpenAt: "2026-11-23T04:30:00.000Z",
+    };
+    assert.equal(replies.formatTeamBackAt(status.nextOpenAt, "en-GB"), "Mon 23 Nov, 10:00");
+    const lines = replies.getTeamStatusLines(status, "en-GB");
+    assert.deepEqual(lines, [
+      "We're away for the night.",
+      "The team is back Mon 23 Nov, 10:00. You can still send a message now, and we'll email you their reply.",
+      "We usually reply within a few hours.",
+    ]);
+    // Open, or empty texts: only what the store wrote
+    assert.deepEqual(replies.getTeamStatusLines({ ...status, isOpen: true }), [
+      "We usually reply within a few hours.",
+    ]);
+    assert.deepEqual(
+      replies.getTeamStatusLines({ replyTime: "", awayMessage: "", isOpen: false, nextOpenAt: null }),
+      [],
+    );
+    assert.equal(replies.formatTeamBackAt("not a date"), "");
+    assert.equal(replies.formatTeamBackAt(null), "");
+  });
+
+  it("shows the contact details when the store takes no chat messages", async () => {
+    const answer = await replies.getAssistantReply("Talk to us", {
+      chat: { ...signedIn, messagingEnabled: false },
+    });
+    assert.equal(answer.intent, Intent.CONTACT);
+    assert.equal(answer.text, replies.ASSISTANT_COPY.contact);
+    // No chat state at all (the backend unreachable): the same
+    const unknown = await replies.getAssistantReply("Talk to us");
+    assert.equal(unknown.text, replies.ASSISTANT_COPY.contact);
+  });
+
+  it("answers each send failure by its key", () => {
+    assert.equal(
+      replies.getChatSendFailedReply("CHAT_SIGN_IN_REQUIRED", signedIn).links[0].label,
+      "Sign in",
+    );
+    assert.equal(
+      replies.getChatSendFailedReply("CHAT_MESSAGING_OFF", signedIn).text,
+      replies.ASSISTANT_COPY.contact,
+    );
+    assert.equal(
+      replies.getChatSendFailedReply("RATE_LIMITED", signedIn).text,
+      replies.ASSISTANT_COPY.talkRateLimited,
+    );
+    // Anything else keeps the flow open, so the next message sends
+    assert.equal(
+      replies.getChatSendFailedReply("NETWORK", signedIn).chatFlow.step,
+      "compose",
+    );
+    assert.equal(replies.getChatSentReply().text, replies.ASSISTANT_COPY.talkSent);
+  });
+
+  it("shows the team's replies as theirs, with a way to answer", () => {
+    const reply = replies.toStoreReplyMessage({
+      id: "r1",
+      from: "STORE",
+      text: "Yes, it's back!",
+      createdAt: "2026-11-20T10:00:00Z",
+    });
+    assert.deepEqual(reply, {
+      role: "assistant",
+      from: "store",
+      text: "Yes, it's back!",
+      chatMessageId: "r1",
+      chips: [replies.REPLY_TO_TEAM],
+    });
+    const mine = replies.toStoreReplyMessage(
+      { id: "m1", from: "SHOPPER", text: "Hi" },
+      { isHistory: true },
+    );
+    assert.equal(mine.role, "user");
+    assert.equal(mine.chips, undefined);
   });
 });
 

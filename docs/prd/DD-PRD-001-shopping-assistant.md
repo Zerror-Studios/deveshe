@@ -2,11 +2,11 @@
 
 | Field | Value |
 |---|---|
-| Status | Implemented 2026-11-20 (working tree, not committed). Dictation waits for the kit option (FR-21) |
+| Status | Implemented 2026-11-20 (working tree, not committed). **Dynamic since 2026-11-20 (backend PRD-049 step B0, D14/D15; working tree):** the store's own answers and "Talk to us" come from the backend through the kit's `useStoreChat` (needs kit ≥ 1.6.0, not released yet, §11). **B0.1 (D14 here, backend D17, 2026-11-21; working tree):** "Talk to us" in the header and under every answer, "Message the team" after a miss, the reply time and away line, the question kept through sign-in (§12). Dictation waits for the kit option (FR-21) |
 | Owner | Store owner; requested by sunny-zerror on 2026-11-20 |
-| Repos affected | storefronts/deveshe-dreams; zcom-storefront-kit (one security-header option, FR-21) |
-| Source-of-truth PRD | This file. The feature is store-only; the kit option gets its own entry in the kit's changelog |
-| Created / Updated | 2026-11-20 / 2026-11-20 |
+| Repos affected | storefronts/deveshe-dreams; zcom-storefront-kit (one security-header option, FR-21; the store chat engine, B0) |
+| Source-of-truth PRD | This file for the look and the store's own answers. The dynamic part (FAQs, settings, "Talk to us", replies) is backend PRD-049 step B0: `zcom-backend/docs/prd/PRD-049-support-help-centre-and-store-inbox.md` (D14, D15), kit pointer `zcom-storefront-kit/docs/prd/PRD-049-store-chat.md` |
+| Created / Updated | 2026-11-20 / 2026-11-21 (B0.1) |
 | Approved by / on | Owner (sunny-zerror), in conversation: "yes approved now make the changes in code" / 2026-11-20 |
 
 **Numbering:** this PRD is numbered in the store's own series (`DD-PRD-`, like `KIT-PRD-`) because it has no backend part and the backend's PRD index, which assigns platform numbers, isn't on the machine where it was drafted. Rename it if the workspace gives it a platform number (Q4).
@@ -72,6 +72,8 @@ Order answers come from `myOrders`, which the server answers only with the signe
 | D10 | Replies are read by Google Cloud Text-to-Speech (en-IN Neural2-A, a woman's voice), as the reference does with Google TTS, through a server route holding `GOOGLE_TTS_API_KEY`; the browser voice reads while no key is set (owner, 2026-11-20, "the voice is not clear and not similar"). Cost: Google's per-character price after its monthly free tier | Browser voices only |
 | D11 | The open assistant matches the reference's layout, sizes, icons, glow and type exactly, in DeVeSheDreams' red and blush (owner, 2026-11-20, "not looks similar … check the input field alignment") | The reference's violet |
 | D8 | The button moves to the bottom-right corner (owner, 2026-11-20: "should be present in bottom right side"); supersedes the side in D2 and D7. Next's dev badge goes back to its default bottom left. On a first visit the cookie banner covers it until the shopper chooses | Bottom left |
+| D13 | **Dynamic (backend PRD-049 D14, D15, owner 2026-11-20):** not rebuilt; answers come from what staff edit in the dashboard (Inbox › Chat answers: FAQs, welcome, bubble text, quick buttons) through the kit's `useStoreChat`, no AI. "Talk to us" needs a signed-in shopper: guests see the store's sign-in prompt and a sign-in link back to the open chat; messages go to the dashboard Inbox and the team's replies come back into the chat. Replaces FR-24 (the in-chat contact form) and supersedes D1's "scripted only" (§11) | Keep the scripted answers only |
+| D14 | **Talk to us everywhere (backend PRD-049 D17, step B0.1, owner 2026-11-21):** "Talk to us" in the chat header and under every answer while the store takes messages; "Message the team" ends a reply that found nothing; the store's reply time near the message box and, outside its chat hours, its away line and when the team is back (messages still go); a guest's question is kept through sign-in and put back in the message box, never sent without a tap. Supersedes §11 item 6's "second miss in a row" (§12) | Offer a person only after two misses (B0) |
 | D7 | The button stays in its corner on every page, the footer included ("place the assistance on bottom left side"). It still rises above the phone add-to-bag bar, so it never covers the buy button | Rising above the footer's last row |
 
 ## 5. Functional requirements
@@ -195,7 +197,7 @@ Order answers come from `myOrders`, which the server answers only with the signe
 | Navigation | "open my bag", "take me to the lookbook", "blogs", "about", "home", "my account" | Says where it is going, closes the assistant (FR-7), then navigates. "My bag" opens the bag drawer | – |
 | Fallback | anything else | "I can help with pieces, delivery, exchanges, orders and offers, or pass a message to the team.", plus the chips | – |
 
-- **FR-24 Leave a message.**
+- **FR-24 Leave a message.** *Superseded by §11 (backend PRD-049 B0, D13): "Talk to us" now sends `sendStoreChatMessage` for signed-in shoppers; the in-chat contact form below was removed.*
   - The chat asks one question at a time: name, email, phone (10 digits), topic, then message.
   - Each answer is checked with the contact form's rules. The zod schema moves from `components/contact/ContactForm.jsx` to `validations/ContactValidation.jsx`, and both use it.
   - A summary follows, with Send, Edit and Cancel.
@@ -396,3 +398,40 @@ The reference was read from its production bundle on 2026-11-20 (components `AIB
     - On the dev server: `Permissions-Policy` shows `microphone=(self)`, and the voice route answers `{"available":false}` until a key is set.
   - **Couldn't check:** the Google voice itself (no key yet), and the reference rendered side by side (its 3D page doesn't finish loading on this machine).
 - 2026-11-20: D12. Voice removed: the speaker button, `hooks/useAssistantVoice.jsx`, `app/api/assistant/speak`, `lib/assistant-tts.server.js`, the voice helpers and their tests, and `GOOGLE_TTS_API_KEY` from `amplify.yml`. The desktop chat column sizes to its content and is centred vertically. Dictation (microphone) stays. Tests 203/203; checked on the dev server at 1920×906.
+- 2026-11-20: **D13, backend PRD-049 B0 (dynamic answers and "Talk to us").** See §11. Files: `utils/assistant-replies.util.js` (routing, store answers, Talk to us; the contact-form flow removed), `components/assistant/AssistantOverlay.jsx` (`useStoreChat`, the team's replies, the store's welcome and quick buttons), `AssistantLauncher.jsx` (the store's bubble text, `?chat=open`), `AssistantTranscript.jsx` ("The team" label, https links in a new tab), `store/assistant-store.js` (`chatFlow`, `chatSeenIds`), `assistant.css` (`.assistant_msg_from`). Tests 212/212 (+9 net in `test/assistant.test.mjs`); `next build` compiled; both run against the unreleased kit build copied into `node_modules` and then restored (§11).
+
+- 2026-11-21: **D14, backend PRD-049 B0.1.** See §12. Files: `utils/assistant-replies.util.js` (`offerPerson` / `messageTeam` / `question` / `handoff` / `cancelledChat` on replies, `getTeamStatusLines`, `formatTeamBackAt`, `MESSAGE_THE_TEAM`, `DISCARD_DRAFT`; the FAQs' answer is used for `offerPerson` even with answers off; `resetMisses` gone), `AssistantOverlay.jsx` (header "Talk to us", `talkToTeam`, the restored draft, the team status lines), `AssistantTranscript.jsx` (quiet "Talk to us", "Message the team"), `AssistantInput.jsx` (`getValue()`, `clear()`), `assistant.css` (`.assistant_header_talk`, `.assistant_talk`, `.assistant_team_status`). Tests 214/214 (+2 net in `test/assistant.test.mjs`), run against the working-tree kit build through a temporary resolve hook outside the repo (the pinned v1.5.0 lacks the store chat exports, so plain `npm test` fails that one file as before); the JSX parses with Next's SWC. Not run: `next build`, the browser, a live backend.
+
+## 11. Dynamic answers and "Talk to us" (backend PRD-049 step B0)
+
+**Decision:** D13 (backend PRD-049 D14, D15). The look, launcher, orb, ripple, transcript and dictation are unchanged; the reply logic and "Talk to us" change.
+
+**Routing (`getAssistantReply`, in this order):**
+1. A running "Talk to us" flow takes the text as the message (or "Cancel").
+2. **Live data first** when the intent is clear: navigation, orders, new arrivals, offers, collections, greetings and thanks never ask the FAQs (their answers depend on the shopper's data, which FAQs can't know).
+3. **"Talk to us"** ("talk to us", "a human", "leave a message", "reply to the team"): signed-in → "What would you like to tell the team?", then the next message goes to `sendStoreChatMessage`; guest → the store's `signInPrompt` and "Sign in" (`/login?next=<this page>?chat=open`); the store not taking messages, or the backend unreachable → the contact details (email, contact page).
+4. **The store's FAQs** (`askStoreChat`, through the kit) for delivery, exchanges, payment, sizing, contact, product words and anything else. A match is the answer (with its links: site paths, or https links in a new tab).
+5. **Our scripted answers** when the FAQs miss, are off or can't be reached, so the assistant works before staff fill in their FAQs (the backend seeds them switched off). Product words then search the catalog.
+6. **A miss** only when nothing answered (the fallback, or a product search that found nothing): the FAQs' "Did you mean" questions as chips and, ~~on the second miss in a row~~ (superseded by §12, D14: with every answer while the store takes messages, the backend's `offerPerson`), "Would you like to message the team?" with a clear "Message the team".
+
+**Store texts:** once the store's answers are on (`answersEnabled`), the welcome, the intro bubble and the quick buttons are the store's (`storeChatConfig`; a button sends its `question`); otherwise ours. "Talk to us" is added to the buttons while the store takes messages. The hover bubble stays ours. Note for the owner: the backend's defaults have answers on with generic texts, so save the Deveshe welcome, bubble text and buttons in the dashboard (Inbox › Chat answers) before this ships, or the generic ones show.
+
+**Replies:** while the assistant is open and the shopper is signed in, the kit reads the thread every 5 s (15 s in a hidden tab). On the first read the latest 6 messages show as history; then each new reply from the team appears with a "The team" label and a "Reply to the team" chip. The thread lives on the server; the assistant's own conversation stays in memory. The backend emails the shopper "The store replied" with a link to `/?chat=open`; the launcher opens the assistant for `?chat=open` on any page (also after signing in from the chat) and removes it from the address.
+
+**Send failures:** `CHAT_SIGN_IN_REQUIRED` → the sign-in prompt; `CHAT_MESSAGING_OFF` → the contact details; `RATE_LIMITED` (20 an hour) → "You've sent a lot of messages…" with the contact page; anything else → "I couldn't send that" with the flow still open.
+
+**Kit release needed:** the store imports `useStoreChat`, `useStoreChatConfig`, `takeStoreChatOpenRequest`, `withStoreChatOpen`, `toStoreChatLinkHref` and `isExternalStoreChatLink`, which ship in kit 1.6.0 (not released). Until `package.json` pins it (`#v1.6.0`, with the lockfile), `npm test` and `npm run build` fail on the missing exports. Verified on 2026-11-20 by copying the local kit build into `node_modules/@zcom/storefront-kit/dist`, running `npm test` (212/212) and `next build` (compiled; the prerender then stopped on `/blogs` because no gateway was running on :4000, as before), and restoring the original copy byte for byte.
+
+**Not checked:** the browser, a live backend (the Inbox round trip, the email link) and phones. `submitContactForm` is no longer used by the assistant (the contact page still uses it).
+
+## 12. Talk to us everywhere, team hours, the question kept through sign-in (backend PRD-049 step B0.1)
+
+**Decision:** D14 (backend PRD-049 D17). Needs the backend's B0.1 fields and kit 1.6.0 (unreleased; the B0.1 kit changes are folded into it).
+
+- **Header:** a "Talk to us" pill beside the close button while the store takes messages (`canTalkToUs`). It starts the "Talk to us" flow (§11 item 3); a guest's text already in the message box is kept for after sign-in. While the flow is running it only focuses the box.
+- **Under every answer:** the kit's `askStoreChat` now returns `offerPerson` with every answer while the store takes messages, so an FAQ answer, and our own scripted answer to a question the FAQs were asked about, carries a quiet underlined "Talk to us" (and loses the "Talk to us" chip, so it isn't shown twice). Live-data answers (orders, new arrivals, offers, collections, greetings) don't ask the FAQs, so they have none; the header button covers them.
+- **After a miss:** "I don't have an answer for that yet. … Would you like to message the team?" ends with a filled "Message the team" button (latest reply only), also when the store's FAQs are off. Tapping it, or the quiet "Talk to us", starts the flow with the shopper's question in the message box (signed in) or keeps it for after sign-in (guest). Nothing is sent until the shopper taps send.
+- **Team hours:** near the message box, while the shopper is writing to the team or was just handed to them (the flow, the sign-in prompt, "Sent!"): the store's `replyTime` and, while `isOpen` is false, its `awayMessage` and "The team is back Mon 23 Nov, 10:00 am. You can still send a message now, and we'll email you their reply." (`nextOpenAt`, in the shopper's locale, Asia/Kolkata time). Empty texts are left out.
+- **Kept through sign-in:** a guest's question goes into the kit's draft (`saveDraft`, session storage, 30 minutes). The sign-in link returns with `?chat=open` (unchanged), which opens the assistant; once signed in the kit's `pendingDraft` is put back in the message box with "Here's the message you started before signing in…" and a "Don't send" chip, and the flow is open. The shopper taps send (the kit drops the draft once sent) or "Don't send" (dropped, box cleared). It is offered once per draft per visit.
+- **Removed:** the miss count (`resetMisses`), which the kit no longer has.
+

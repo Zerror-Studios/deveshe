@@ -1,35 +1,60 @@
 /**
- * Shopping assistant replies (DD-PRD-001 FR-13, FR-23..FR-26)
+ * Shopping assistant replies (DD-PRD-001 FR-13, FR-23..FR-26; dynamic since
+ * backend PRD-049 step B0, D14, D15)
  *
- * Scripted answers on the store's own data (D1): keyword rules pick one
- * intent per message, checked in a fixed order. The delivery and exchange
- * answers quote `/shipping-returns`, so when a policy changes, change both.
+ * Keyword rules pick one intent per message, checked in a fixed order, and
+ * each intent is answered in this order (DD-PRD-001 §10 "B0 routing"):
+ * 1. **Live data first** when the intent is clear: navigation, orders, new
+ *    arrivals, offers, collections, greetings and thanks never ask the FAQs.
+ * 2. **"Talk to us"** (and "leave a message", "a real person") starts a
+ *    message to the team: signed-in shoppers type it here and it goes to the
+ *    store's dashboard Inbox (`sendStoreChatMessage`, the caller sends it);
+ *    guests get the store's sign-in prompt and a sign-in link that comes
+ *    back to the open chat (`?chat=open`).
+ * 3. **The store's own answers** (FAQs staff edit in the dashboard, asked
+ *    through `loaders.askStore`, the kit's `useStoreChat().ask`) for policy
+ *    questions, product words and anything else. A match is the answer.
+ * 4. **The scripted answers below** when the FAQs don't match, are switched
+ *    off (`answersEnabled: false`) or can't be reached, so the store keeps
+ *    working before staff fill in their FAQs. Product words then search the
+ *    catalog. A question nothing answered is a miss.
+ * 5. **"Talk to us" with every answer** (backend PRD-049 B0.1, D17): while
+ *    the store takes messages, the backend's `offerPerson` comes with every
+ *    answer it gave, so the reply carries `offerPerson` (a quiet "Talk to
+ *    us" under it) or, after a miss, `messageTeam` (a clear "Message the
+ *    team" button), with the shopper's `question` to start the message.
+ *
+ * The delivery and exchange answers quote `/shipping-returns`, so when a
+ * policy changes, change both (or let staff answer it in the dashboard).
  * Data comes from loaders the caller passes in (the assistant's Apollo
- * reads), so this file has no browser or Apollo import and `node:test`
- * loads it. `getAssistantReply(text, context)` is the one entry point an
- * AI transport can replace later (PRD §2).
+ * reads and the kit's store chat), so this file has no browser or Apollo
+ * import and `node:test` loads it. `getAssistantReply(text, context)` is the
+ * one entry point.
  *
- * A reply is `{ intent, text, contactFlow, products?, links?, chips?,
- * orders?, offers?, action?, searchTerm?, resultCount?, speech? }`; `speech`
- * replaces `text` when read aloud (no contact details). Links are internal
- * paths only, and prices stay the server's.
+ * A reply is `{ intent, text, chatFlow, products?, links?, chips?, orders?,
+ * offers?, action?, searchTerm?, resultCount?, speech?, missed?,
+ * offerPerson?, messageTeam?, question?, handoff?, cancelledChat? }`;
+ * `speech` replaces `text` when read aloud. Links are paths on this site or
+ * the store's https links (`external: true`), and prices stay the server's.
  */
 
 import {
   formatMoney,
   getShipmentStatusLabel,
+  isExternalStoreChatLink,
+  toStoreChatLinkHref,
+  withStoreChatOpen,
 } from "@zcom/storefront-kit/core";
 import {
   formatOrderDate,
   getOrderStatusLabel,
 } from "@/utils/order-detail.util";
 import { getLoginPath } from "@/utils/redirect.util";
-import { contactSchema } from "@/validations/ContactValidation";
 
 // ─── Vocabulary ───────────────────────────────────────────────────────────
 
 export const AssistantIntentEnum = {
-  LEAVE_MESSAGE: "LEAVE_MESSAGE",
+  TALK_TO_US: "TALK_TO_US",
   NAVIGATE: "NAVIGATE",
   ORDERS: "ORDERS",
   EXCHANGES: "EXCHANGES",
@@ -43,33 +68,38 @@ export const AssistantIntentEnum = {
   THANKS: "THANKS",
   GREETING: "GREETING",
   PRODUCTS: "PRODUCTS",
+  /** The store's own answer (an FAQ staff wrote in the dashboard). */
+  FAQ: "FAQ",
   FALLBACK: "FALLBACK",
 };
 
 export const AssistantActionEnum = {
   NAVIGATE: "navigate",
   OPEN_BAG: "open-bag",
-  SEND_CONTACT: "send-contact",
+  /** Send `text` to the team (`sendStoreChatMessage`, signed in). */
+  SEND_CHAT: "send-chat",
 };
 
-export const ContactStepEnum = {
-  NAME: "name",
-  EMAIL: "email",
-  PHONE: "phoneNumber",
-  SUBJECT: "subject",
-  MESSAGE: "message",
-  CONFIRM: "confirm",
+/** The "Talk to us" flow: the shopper is typing a message for the team. */
+export const ChatStepEnum = {
+  COMPOSE: "compose",
 };
 
 const Intent = AssistantIntentEnum;
-const Step = ContactStepEnum;
 
 // ─── Copy (the owner reviews it, Q1) ──────────────────────────────────────
 
 /** As on `/contact`. */
 export const ASSISTANT_SUPPORT_EMAIL = "deveshedreams@gmail.com";
 
-/** FR-13: the chips under the welcome message. */
+/** FR-13: the chips under the welcome message (the store's own, B0). */
+export const TALK_TO_US = "Talk to us";
+export const REPLY_TO_TEAM = "Reply to the team";
+/** B0.1: the clear button after a question nothing answered. */
+export const MESSAGE_THE_TEAM = "Message the team";
+/** B0.1: the chip that drops a message kept through sign-in. */
+export const DISCARD_DRAFT = "Don't send";
+
 export const QUICK_ACTIONS = [
   "New arrivals",
   "Delivery",
@@ -94,7 +124,8 @@ export const ASSISTANT_COPY = {
     "Each product page has its own size guide next to the sizes. Every piece is made to order, so if you're between sizes, leave the team a message and they'll help. Tell me what you're looking for and I'll find it.",
   payment:
     "You pay online on the checkout's payment step, where the ways you can pay are shown.",
-  contact: `You can email the team at ${ASSISTANT_SUPPORT_EMAIL}, use the form on the contact page, or leave a message right here and I'll pass it on.`,
+  contact: `You can email the team at ${ASSISTANT_SUPPORT_EMAIL} or use the form on the contact page.`,
+  contactWithChat: `You can email the team at ${ASSISTANT_SUPPORT_EMAIL}, use the form on the contact page, or tap Talk to us to message them right here.`,
   ordersGuest:
     "Sign in to see your orders. For an order you placed as a guest, open the status link in your order email.",
   ordersNone: "You haven't placed an order with this account yet.",
@@ -106,13 +137,23 @@ export const ASSISTANT_COPY = {
   collections: "Here are our collections:",
   shopOnly: "Browse everything in the shop:",
   openBag: "Opening your bag.",
-  contactStart: "Sure, I'll pass a message to the team.",
-  contactSent:
-    "Thanks! Your message is with the team, and they'll get back to you soon.",
-  contactCancelled: "No problem, I haven't sent anything.",
-  contactConfirm: "Send it to the team?",
-  contactConfirmHelp: "Tap Send to pass it on, Edit to change it, or Cancel.",
-  contactAgain: "Let's go again.",
+  talkStart:
+    "Sure. What would you like to tell the team? Their reply will show up here, and we'll email you too.",
+  talkSent:
+    "Sent! The team will reply here, and we'll email you when they do.",
+  talkCancelled: "No problem, I haven't sent anything.",
+  talkRateLimited:
+    "You've sent a lot of messages in the last hour. Please wait a little, or email the team.",
+  talkFailed: "I couldn't send that just now. Please try again.",
+  signInPrompt:
+    "Sign in to message the team. They'll reply here and by email.",
+  missed: "I don't have an answer for that yet.",
+  missedSuggestions: "Did you mean one of these?",
+  offerPerson: "Would you like to message the team?",
+  draftRestored:
+    "Here's the message you started before signing in. Check it and tap send when you're ready.",
+  teamBack: (when) =>
+    `The team is back ${when}. You can still send a message now, and we'll email you their reply.`,
   networkError: "I couldn't reach the store just now. Please try again.",
 };
 
@@ -120,6 +161,7 @@ const productsFoundText = (term) => `Here's what I found for "${term}":`;
 const productsNoneText = (term) =>
   `I couldn't find "${term}". Try another word, or browse a collection:`;
 const navigateText = (label) => `Taking you to ${label}.`;
+const productsMissedText = (term) => `I couldn't find "${term}".`;
 
 const SHOP_LINK = { label: "Browse the shop", href: "/shop" };
 const POLICY_LINK = { label: "Shipping & returns", href: "/shipping-returns" };
@@ -156,8 +198,9 @@ const normalise = (text) =>
     .replace(/\s+/g, " ")
     .trim();
 
-const LEAVE_MESSAGE_PATTERN =
-  /\b(leave (a |me a |the team a )?(message|note)|send (a |the team a )?message|message the team|write to (you|the team)|drop (a |us a )?(line|note))\b/;
+/** B0: wanting a person, which "Talk to us" answers. */
+const TALK_TO_US_PATTERN =
+  /\b(talk to (us|you|someone|somebody|a person|a human|a real person|the team|an agent)|speak (to|with) (us|you|someone|somebody|a person|a human|a real person|the team|an agent)|real person|human|(live )?agent|reply to the team|leave (a |me a |the team a )?(message|note)|send (a |the team a )?message|message (the team|you|us)|write to (you|the team)|drop (a |us a )?(line|note))\b/;
 
 const NAVIGATION_TARGETS = [
   { words: "bag|cart|basket|checkout|check out", label: "your bag", bag: true },
@@ -219,7 +262,7 @@ const INTENT_RULES = [
   ],
   [
     Intent.CONTACT,
-    /\b(contact|talk to|speak to|speak with|human|real person|agent|support|customer care|customer service|email|e-mail|phone number|call you|whatsapp|complain|complaint|collab|collaboration|collaborate|wholesale|bulk order)\b/,
+    /\b(contact|support|customer care|customer service|email|e-mail|phone number|call you|whatsapp|complain|complaint|collab|collaboration|collaborate|wholesale|bulk order)\b/,
   ],
   [
     Intent.COLLECTIONS,
@@ -277,7 +320,7 @@ const matchNavigation = (said) => {
 export const matchAssistantIntent = (text) => {
   const said = normalise(text);
   if (!said) return { intent: Intent.FALLBACK };
-  if (LEAVE_MESSAGE_PATTERN.test(said)) return { intent: Intent.LEAVE_MESSAGE };
+  if (TALK_TO_US_PATTERN.test(said)) return { intent: Intent.TALK_TO_US };
 
   const navigation = matchNavigation(said);
   if (navigation) return { intent: Intent.NAVIGATE, ...navigation };
@@ -302,7 +345,7 @@ export const matchAssistantIntent = (text) => {
 const reply = (intent, text, extra = {}) => ({
   intent,
   text,
-  contactFlow: null,
+  chatFlow: null,
   ...extra,
 });
 
@@ -457,232 +500,299 @@ async function replyWithOffers(loaders) {
   return reply(Intent.OFFERS, ASSISTANT_COPY.offersIntro, { offers });
 }
 
-// ─── Leave a message (FR-24) ──────────────────────────────────────────────
+// ─── The store's answers (backend PRD-049 B0) ─────────────────────────────
 
-const CONTACT_STEPS = [
-  Step.NAME,
-  Step.EMAIL,
-  Step.PHONE,
-  Step.SUBJECT,
-  Step.MESSAGE,
-];
-
-const CONTACT_QUESTIONS = {
-  [Step.NAME]: "What's your name?",
-  [Step.EMAIL]: "What's your email, so the team can reply?",
-  [Step.PHONE]: "And your phone number? 10 digits, please.",
-  [Step.SUBJECT]: "What's it about? A few words is enough.",
-  [Step.MESSAGE]: "Go ahead: what would you like to tell the team?",
-};
-
-const CONTACT_STEP_ERRORS = {
-  [Step.NAME]: "Could you tell me your name?",
-  [Step.EMAIL]: "That email doesn't look right. Could you check it?",
-  [Step.PHONE]: "Please send a 10-digit phone number.",
-  [Step.SUBJECT]: "A few words about the topic, please.",
-  [Step.MESSAGE]: "Could you write a little more? At least 5 characters.",
-};
-
-const CONTACT_SUBJECT_CHIPS = [
-  "My order",
-  "Sizing",
-  "An exchange",
-  "A collaboration",
-];
-const CONTACT_CONFIRM_CHIPS = ["Send", "Edit", "Cancel"];
-
-const CANCEL_PATTERN =
-  /^(cancel|stop|never ?mind|exit|quit|forget it|no thanks|don't send( it)?)$/;
-const SEND_PATTERN = /^(send( it)?|yes|yep|yeah|ok|okay|sure|confirm|go ahead)$/;
-const EDIT_PATTERN = /^(edit|change( it)?|no|start (over|again))$/;
-
-/** Questions that leave the flow instead of being taken as an answer. */
-const LEAVING_INTENTS = new Set([
+/** Intents answered with live data before any FAQ is asked. */
+const LIVE_FIRST_INTENTS = new Set([
   Intent.NAVIGATE,
   Intent.ORDERS,
-  Intent.EXCHANGES,
-  Intent.PAYMENT,
   Intent.NEW_ARRIVALS,
-  Intent.DELIVERY,
   Intent.OFFERS,
-  Intent.SIZING,
   Intent.COLLECTIONS,
+  Intent.THANKS,
+  Intent.GREETING,
 ]);
-/** The steps where such a question can arrive (not the topic or message). */
-const LEAVABLE_STEPS = new Set([Step.NAME, Step.EMAIL, Step.PHONE]);
 
-const emptyContactValues = () => ({
-  name: "",
-  email: "",
-  phoneNumber: "",
-  subject: "",
-  message: "",
+/** True when `text`'s intent asks the store's FAQs first. */
+export const asksStoreFirst = (intent) =>
+  intent !== Intent.TALK_TO_US && !LIVE_FIRST_INTENTS.has(intent);
+
+/**
+ * The chat's state from the kit's `useStoreChat`, with safe defaults:
+ * `messagingEnabled` (the store takes messages), `signedIn` (a shopper
+ * session), `signInPrompt` (the store's words) and `returnPath` (where
+ * signing in comes back to, with the chat open).
+ */
+const readChat = (chat) => ({
+  messagingEnabled: !!chat?.messagingEnabled,
+  signedIn: !!chat?.signedIn,
+  signInPrompt: String(chat?.signInPrompt || "").trim(),
+  returnPath: chat?.returnPath || "/",
 });
 
-/** One answer checked with the contact form's own rule. */
-const checkContactAnswer = (step, answer) => {
-  const result = contactSchema.shape[step].safeParse(String(answer || "").trim());
-  return result.success ? { ok: true, value: result.data } : { ok: false };
-};
-
-const getNextContactStep = (values) =>
-  CONTACT_STEPS.find((step) => !values[step]) || Step.CONFIRM;
-
-const isLeavingQuestion = (answer) =>
-  LEAVING_INTENTS.has(matchAssistantIntent(answer).intent);
-
-/** FR-24: the message as the shopper will send it. */
-export const summariseContact = (values) =>
-  [
-    "Here's your message:",
-    `Name: ${values.name}`,
-    `Email: ${values.email}`,
-    `Phone: ${values.phoneNumber}`,
-    `Topic: ${values.subject}`,
-    `Message: ${values.message}`,
-    "",
-    ASSISTANT_COPY.contactConfirm,
-  ].join("\n");
-
-/**
- * A flow step. `speech` is what is read aloud (D10): never the shopper's
- * name, email or phone, so no contact details reach the voice service.
- */
-const askContactStep = (flow, lead = "", speechLead = "") => {
-  if (flow.step === Step.CONFIRM) {
-    return reply(Intent.LEAVE_MESSAGE, summariseContact(flow.values), {
-      contactFlow: flow,
-      chips: CONTACT_CONFIRM_CHIPS,
-      speech: `Here's your message. ${ASSISTANT_COPY.contactConfirm}`,
-    });
-  }
-  const question = CONTACT_QUESTIONS[flow.step];
-  return reply(Intent.LEAVE_MESSAGE, lead ? `${lead} ${question}` : question, {
-    contactFlow: flow,
-    chips: flow.step === Step.SUBJECT ? CONTACT_SUBJECT_CHIPS : ["Cancel"],
-    speech: speechLead ? `${speechLead} ${question}` : question,
-  });
-};
-
-/**
- * FR-24: starts "leave a message". A signed-in shopper's name and email
- * come from the profile; they can change them with Edit before sending.
- */
-export const startContactFlow = (profile) => {
-  const values = emptyContactValues();
-  const name = [profile?.firstName, profile?.lastName]
+/** The FAQ's links as transcript links (unsafe ones dropped). */
+export const toStoreAnswerLinks = (links) =>
+  (links || [])
+    .map((link) => {
+      const href = toStoreChatLinkHref(link?.url);
+      const label = String(link?.label || "").trim();
+      if (!href || !label) return null;
+      return isExternalStoreChatLink(href)
+        ? { label, href, external: true }
+        : { label, href };
+    })
     .filter(Boolean)
-    .join(" ")
-    .trim();
-  if (name && checkContactAnswer(Step.NAME, name).ok) values.name = name;
-  const email = String(profile?.email || "").trim();
-  if (email && checkContactAnswer(Step.EMAIL, email).ok) values.email = email;
-  const lead =
-    values.name && values.email
-      ? `${ASSISTANT_COPY.contactStart} I'll send it as ${values.name} (${values.email}); you can change that before it goes.`
-      : ASSISTANT_COPY.contactStart;
-  return askContactStep(
-    { step: getNextContactStep(values), values },
-    lead,
-    ASSISTANT_COPY.contactStart,
+    .slice(0, 5);
+
+/**
+ * Asks the store's FAQs: the answer (with `offerPerson`, B0.1, even when
+ * the FAQs are off), or null when the store can't be reached.
+ */
+const askStore = async (text, loaders) => {
+  if (typeof loaders.askStore !== "function") return null;
+  try {
+    return (await loaders.askStore(text)) || null;
+  } catch {
+    // Unreachable, rate limited or too long: the scripted answers stand in
+    return null;
+  }
+};
+
+/** A matched FAQ as a reply. */
+export const toStoreAnswerReply = (answer, chat) =>
+  reply(Intent.FAQ, String(answer?.answer || "").trim(), {
+    links: toStoreAnswerLinks(answer?.links),
+    chips: ["New arrivals"],
+    // B0.1: "Talk to us" sits under the answer itself
+    offerPerson: !!answer?.offerPerson && readChat(chat).messagingEnabled,
+  });
+
+/**
+ * Nothing answered `text`: "Did you mean" chips from the FAQs and, while
+ * the store takes messages (`offerPerson`, B0.1), a clear "Message the
+ * team" (`messageTeam`) instead of a dead end. `base` is a reply that
+ * already says it found nothing (a product search), else the miss copy.
+ */
+export const toMissedReply = (answer, chat, base = null) => {
+  const { messagingEnabled } = readChat(chat);
+  const suggestions = (answer?.suggestions || [])
+    .map((suggestion) => String(suggestion?.question || "").trim())
+    .filter(Boolean)
+    .slice(0, 3);
+  const offerPerson = !!answer?.offerPerson && messagingEnabled;
+  const fallback = base || reply(Intent.FALLBACK, ASSISTANT_COPY.missed);
+  if (!suggestions.length && !offerPerson) {
+    return {
+      ...fallback,
+      chips: fallback.chips?.length
+        ? fallback.chips
+        : QUICK_ACTIONS.filter(
+            (label) => messagingEnabled || label !== TALK_TO_US,
+          ),
+      missed: true,
+    };
+  }
+  const lead = base?.searchTerm
+    ? productsMissedText(base.searchTerm)
+    : ASSISTANT_COPY.missed;
+  const parts = [lead];
+  if (suggestions.length) parts.push(ASSISTANT_COPY.missedSuggestions);
+  if (offerPerson) parts.push(ASSISTANT_COPY.offerPerson);
+  return {
+    ...fallback,
+    text: parts.join(" "),
+    chips: suggestions,
+    missed: true,
+    messageTeam: offerPerson,
+  };
+};
+
+// ─── Talk to us (backend PRD-049 B0, D15) ─────────────────────────────────
+
+const CANCEL_PATTERN =
+  /^(cancel|stop|never ?mind|exit|quit|forget it|no thanks|don't send( it)?|back( to the assistant)?)$/;
+
+/** The contact details, for a store that isn't taking chat messages. */
+const contactReply = (chat) =>
+  reply(
+    Intent.CONTACT,
+    readChat(chat).messagingEnabled
+      ? ASSISTANT_COPY.contactWithChat
+      : ASSISTANT_COPY.contact,
+    {
+      links: [CONTACT_LINK],
+      chips: readChat(chat).messagingEnabled ? [TALK_TO_US] : [],
+    },
   );
+
+/** A guest: the store's sign-in prompt and a link back to the open chat. */
+export const getSignInReply = (chat) => {
+  const { signInPrompt, returnPath } = readChat(chat);
+  return reply(Intent.TALK_TO_US, signInPrompt || ASSISTANT_COPY.signInPrompt, {
+    links: [
+      { label: "Sign in", href: getLoginPath(withStoreChatOpen(returnPath)) },
+    ],
+    handoff: true,
+  });
 };
 
 /**
- * FR-24: the flow's reply to `text`, or `null` when the shopper asked
- * something else (the caller answers that instead, and the flow ends).
+ * "Talk to us": a signed-in shopper types the message next (the flow), a
+ * guest is asked to sign in, and a store without chat messaging shows its
+ * contact details.
  */
-export const advanceContactFlow = (flow, text) => {
-  const answer = String(text || "").trim();
-  const said = normalise(answer);
-  if (CANCEL_PATTERN.test(said)) {
-    return reply(Intent.LEAVE_MESSAGE, ASSISTANT_COPY.contactCancelled, {
-      chips: QUICK_ACTIONS,
-    });
-  }
-
-  if (flow.step === Step.CONFIRM) {
-    if (SEND_PATTERN.test(said)) {
-      const parsed = contactSchema.safeParse(flow.values);
-      if (parsed.success) {
-        return reply(Intent.LEAVE_MESSAGE, "", {
-          contactFlow: flow,
-          action: { type: AssistantActionEnum.SEND_CONTACT, input: parsed.data },
-        });
-      }
-    }
-    // Edit starts again; so does a Send that doesn't validate (it can't
-    // happen, every answer was checked, but it never sends a bad message)
-    if (EDIT_PATTERN.test(said) || SEND_PATTERN.test(said)) {
-      return askContactStep(
-        { step: Step.NAME, values: emptyContactValues() },
-        ASSISTANT_COPY.contactAgain,
-      );
-    }
-    if (isLeavingQuestion(answer)) return null;
-    return reply(Intent.LEAVE_MESSAGE, ASSISTANT_COPY.contactConfirmHelp, {
-      contactFlow: flow,
-      chips: CONTACT_CONFIRM_CHIPS,
-    });
-  }
-
-  const step = flow.step;
-  const leavable = LEAVABLE_STEPS.has(step);
-  const checked = checkContactAnswer(step, answer);
-  if (!checked.ok) {
-    if (leavable && isLeavingQuestion(answer)) return null;
-    return reply(Intent.LEAVE_MESSAGE, CONTACT_STEP_ERRORS[step], {
-      contactFlow: flow,
-      chips: ["Cancel"],
-    });
-  }
-  // A name passes any check, so a question there is caught here
-  if (step === Step.NAME && isLeavingQuestion(answer)) return null;
-
-  const values = { ...flow.values, [step]: checked.value };
-  const lead =
-    step === Step.NAME ? `Thanks, ${checked.value.split(" ")[0]}.` : "";
-  return askContactStep({ step: getNextContactStep(values), values }, lead);
+export const startTalkToUs = (chat) => {
+  const { messagingEnabled, signedIn } = readChat(chat);
+  if (!messagingEnabled) return contactReply(chat);
+  if (!signedIn) return getSignInReply(chat);
+  return reply(Intent.TALK_TO_US, ASSISTANT_COPY.talkStart, {
+    chatFlow: { step: ChatStepEnum.COMPOSE },
+    chips: ["Cancel"],
+    handoff: true,
+  });
 };
 
-/** FR-24: after `submitContactForm` saved the message. */
-export const getContactSentReply = () =>
-  reply(Intent.LEAVE_MESSAGE, ASSISTANT_COPY.contactSent, {
-    chips: ["New arrivals", "Track my order"],
+/** The flow's reply to `text`: cancel, or send it to the team. */
+export const advanceTalkToUs = (flow, text, chat) => {
+  const message = String(text || "").trim();
+  if (!message || CANCEL_PATTERN.test(normalise(message))) {
+    // `cancelledChat`: the caller drops a message kept through sign-in
+    return reply(Intent.TALK_TO_US, ASSISTANT_COPY.talkCancelled, {
+      chips: QUICK_ACTIONS,
+      cancelledChat: true,
+    });
+  }
+  if (!readChat(chat).signedIn) return getSignInReply(chat);
+  return reply(Intent.TALK_TO_US, "", {
+    chatFlow: flow,
+    action: { type: AssistantActionEnum.SEND_CHAT, text: message },
   });
+};
+
+/** After `sendStoreChatMessage` stored the message. */
+export const getChatSentReply = () =>
+  reply(Intent.TALK_TO_US, ASSISTANT_COPY.talkSent, {
+    chips: ["New arrivals", "Track my order"],
+    handoff: true,
+  });
+
+/**
+ * A send that failed, by the kit's error key: sign in, messaging off, the
+ * hourly limit, or try again (the flow stays open, so the next message
+ * sends).
+ */
+export const getChatSendFailedReply = (key, chat) => {
+  if (key === "CHAT_SIGN_IN_REQUIRED") return getSignInReply(chat);
+  if (key === "CHAT_MESSAGING_OFF") {
+    return contactReply({ ...chat, messagingEnabled: false });
+  }
+  if (key === "RATE_LIMITED") {
+    return reply(Intent.TALK_TO_US, ASSISTANT_COPY.talkRateLimited, {
+      links: [CONTACT_LINK],
+    });
+  }
+  return reply(Intent.TALK_TO_US, ASSISTANT_COPY.talkFailed, {
+    chatFlow: { step: ChatStepEnum.COMPOSE },
+    chips: ["Cancel"],
+  });
+};
+
+/** A message from the store's team, as the transcript shows it. */
+export const toStoreReplyMessage = (message, { isHistory = false } = {}) => ({
+  role: message?.from === "SHOPPER" ? "user" : "assistant",
+  from: message?.from === "SHOPPER" ? "shopper" : "store",
+  text: String(message?.text || ""),
+  chatMessageId: message?.id || null,
+  chips: !isHistory && message?.from !== "SHOPPER" ? [REPLY_TO_TEAM] : undefined,
+});
+
+// ─── Quick actions (B0: the store's chips) ────────────────────────────────
+
+/**
+ * The chips under the welcome: the store's own (`{ label, question }`,
+ * tapping asks `question`) once its answers are on, else these; "Talk to
+ * us" is added when the store takes messages and has none.
+ */
+export const getQuickActions = (config) => {
+  const own =
+    config?.answersEnabled && Array.isArray(config.chips)
+      ? config.chips
+          .filter((chip) => chip?.label && chip?.question)
+          .map((chip) => ({ label: chip.label, question: chip.question }))
+      : [];
+  const actions = own.length
+    ? own
+    : QUICK_ACTIONS.filter((label) => label !== TALK_TO_US).map((label) => ({
+        label,
+        question: label,
+      }));
+  const messaging = config ? !!config.messagingEnabled : true;
+  const hasTalk = actions.some(
+    (action) => matchAssistantIntent(action.question).intent === Intent.TALK_TO_US,
+  );
+  if (messaging && !hasTalk) {
+    actions.push({ label: TALK_TO_US, question: TALK_TO_US });
+  }
+  return actions;
+};
+
+// ─── The team's hours (B0.1, D17) ─────────────────────────────────────────
+
+/** The store's time zone, for "Back Mon, 10:00 am". */
+export const TEAM_TIME_ZONE = "Asia/Kolkata";
+
+/**
+ * When the team is back, in the shopper's words ("Mon, 23 Nov, 10:00 am"),
+ * or "" for a missing or unreadable date.
+ */
+export const formatTeamBackAt = (iso, locale = undefined) => {
+  const date = iso ? new Date(iso) : null;
+  if (!date || Number.isNaN(date.getTime())) return "";
+  try {
+    return new Intl.DateTimeFormat(locale, {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+      hour: "numeric",
+      minute: "2-digit",
+      timeZone: TEAM_TIME_ZONE,
+    }).format(date);
+  } catch {
+    return "";
+  }
+};
+
+/**
+ * The lines near the message box: the store's reply time and, while the
+ * team is out (`isOpen: false`), its away message and when it is back.
+ * Shoppers can message either way. Empty texts are left out.
+ */
+export const getTeamStatusLines = (status, locale = undefined) => {
+  const lines = [];
+  const replyTime = String(status?.replyTime || "").trim();
+  if (status && status.isOpen === false) {
+    const away = String(status.awayMessage || "").trim();
+    if (away) lines.push(away);
+    const back = formatTeamBackAt(status.nextOpenAt, locale);
+    if (back) lines.push(ASSISTANT_COPY.teamBack(back));
+  }
+  if (replyTime) lines.push(replyTime);
+  return lines;
+};
+
+/** The store's welcome once its answers are on, else ours. */
+export const getWelcomeText = (config) =>
+  (config?.answersEnabled && String(config.welcome || "").trim()) ||
+  ASSISTANT_COPY.welcome;
 
 // ─── Entry point ──────────────────────────────────────────────────────────
 
-/**
- * FR-23: the reply to `text`.
- *
- * `context`:
- * - `contactFlow`: the running "leave a message" flow, or null;
- * - `profile`: the signed-in shopper's profile (name and email), or null;
- * - `isLoggedIn`: whether a customer session may exist (orders);
- * - `loaders`: `searchProducts(term, { newest })` → `{ products,
- *   totalCount }`, `getCollections()` → categories, `getOffers()` →
- *   promotions, `getMyOrders()` → orders, or null for a guest.
- *
- * A loader that fails rejects the reply; the caller shows the error.
- */
-export async function getAssistantReply(text, context = {}) {
-  const {
-    contactFlow = null,
-    profile = null,
-    isLoggedIn = false,
-    loaders = {},
-  } = context;
-
-  if (contactFlow) {
-    const next = advanceContactFlow(contactFlow, text);
-    if (next) return next;
-  }
-
-  const match = matchAssistantIntent(text);
+/** The scripted answer to a matched intent (live data or our own copy). */
+async function getScriptedReply(match, context) {
+  const { isLoggedIn, loaders, chat } = context;
   switch (match.intent) {
-    case Intent.LEAVE_MESSAGE:
-      return startContactFlow(profile);
+    case Intent.TALK_TO_US:
+      return startTalkToUs(chat);
     case Intent.NAVIGATE:
       return match.action === AssistantActionEnum.OPEN_BAG
         ? reply(Intent.NAVIGATE, ASSISTANT_COPY.openBag, {
@@ -696,7 +806,7 @@ export async function getAssistantReply(text, context = {}) {
     case Intent.EXCHANGES:
       return reply(Intent.EXCHANGES, ASSISTANT_COPY.exchanges, {
         links: [POLICY_LINK],
-        chips: ["Leave a message", "Track my order"],
+        chips: [TALK_TO_US, "Track my order"],
       });
     case Intent.PAYMENT:
       return reply(Intent.PAYMENT, ASSISTANT_COPY.payment, {
@@ -707,24 +817,21 @@ export async function getAssistantReply(text, context = {}) {
     case Intent.DELIVERY:
       return reply(Intent.DELIVERY, ASSISTANT_COPY.delivery, {
         links: [POLICY_LINK],
-        chips: ["Exchanges", "Track my order", "Talk to us"],
+        chips: ["Exchanges", "Track my order", TALK_TO_US],
       });
     case Intent.OFFERS:
       return replyWithOffers(loaders);
     case Intent.SIZING:
       return reply(Intent.SIZING, ASSISTANT_COPY.sizing, {
-        chips: ["New arrivals", "Leave a message"],
+        chips: ["New arrivals", TALK_TO_US],
       });
     case Intent.CONTACT:
-      return reply(Intent.CONTACT, ASSISTANT_COPY.contact, {
-        links: [CONTACT_LINK],
-        chips: ["Leave a message"],
-      });
+      return contactReply(chat);
     case Intent.COLLECTIONS:
       return replyWithCollections(loaders);
     case Intent.THANKS:
       return reply(Intent.THANKS, ASSISTANT_COPY.thanks, {
-        chips: ["New arrivals", "Talk to us"],
+        chips: ["New arrivals", TALK_TO_US],
       });
     case Intent.GREETING:
       return reply(Intent.GREETING, ASSISTANT_COPY.greeting, {
@@ -737,4 +844,67 @@ export async function getAssistantReply(text, context = {}) {
         chips: QUICK_ACTIONS,
       });
   }
+}
+
+/**
+ * FR-23 (B0): the reply to `text`.
+ *
+ * `context`:
+ * - `chatFlow`: the running "Talk to us" flow, or null;
+ * - `isLoggedIn`: whether a customer session may exist (orders);
+ * - `chat`: the store chat's state (`messagingEnabled`, `signedIn`,
+ *   `signInPrompt`, `returnPath`), from the kit's `useStoreChat`;
+ * - `loaders`: `searchProducts(term, { newest })` → `{ products,
+ *   totalCount }`, `getCollections()` → categories, `getOffers()` →
+ *   promotions, `getMyOrders()` → orders, or null for a guest;
+ *   `askStore(text)` → the kit's `StoreChatAnswer` (with `offerPerson`
+ *   on every answer while the store takes messages, B0.1).
+ *
+ * A data loader that fails rejects the reply; the caller shows the error.
+ * The FAQs failing never does: the scripted answers stand in.
+ */
+export async function getAssistantReply(text, context = {}) {
+  const {
+    chatFlow = null,
+    isLoggedIn = false,
+    chat = null,
+    loaders = {},
+  } = context;
+  const scriptedContext = { isLoggedIn, loaders, chat };
+
+  if (chatFlow) return advanceTalkToUs(chatFlow, text, chat);
+
+  const match = matchAssistantIntent(text);
+  const answer = asksStoreFirst(match.intent)
+    ? await askStore(text, loaders)
+    : null;
+  const question = String(text || "").trim();
+  if (
+    answer?.answersEnabled &&
+    answer.matched &&
+    String(answer.answer || "").trim()
+  ) {
+    return { ...toStoreAnswerReply(answer, chat), question };
+  }
+
+  // The FAQs missed (or are off): our own answer, if we have one
+  let result = await getScriptedReply(match, scriptedContext);
+  const foundNothing =
+    match.intent === Intent.FALLBACK ||
+    (match.intent === Intent.PRODUCTS && result.resultCount === 0);
+  if (answer && foundNothing) {
+    result = toMissedReply(
+      answer.answersEnabled ? answer : { ...answer, suggestions: [] },
+      chat,
+      match.intent === Intent.FALLBACK ? null : result,
+    );
+  } else if (answer?.offerPerson && readChat(chat).messagingEnabled) {
+    // B0.1: "Talk to us" under our own answer, not twice in its chips
+    result = {
+      ...result,
+      offerPerson: true,
+      chips: result.chips?.filter((chip) => chip !== TALK_TO_US),
+    };
+  }
+  return answer ? { ...result, question } : result;
 }

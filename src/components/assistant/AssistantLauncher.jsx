@@ -11,12 +11,21 @@
  * never covers the buy button. The assistant itself
  * (`AssistantOverlay`) is a lazy chunk, fetched on the first hover, focus
  * or click, so it adds nothing to a page's first load.
+ *
+ * Backend PRD-049 B0: once the page has loaded, the store's chat texts are
+ * read (`useStoreChatConfig`, one cached request shared with the
+ * assistant), so the intro bubble says what staff wrote in the dashboard
+ * when the store's answers are on. A page opened with `?chat=open` (the
+ * link in the "The store replied" email, or the way back from signing in)
+ * opens the assistant.
  */
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
+import { takeStoreChatOpenRequest } from "@zcom/storefront-kit/core";
+import { useStoreChatConfig } from "@zcom/storefront-kit/client";
 import AssistantBubble from "@/components/assistant/AssistantBubble";
 import {
   ASSISTANT_DIALOG_ID,
@@ -97,16 +106,17 @@ const AssistantLauncher = () => {
   const [hovered, setHovered] = useState(false);
   const [intro, setIntro] = useState(false);
   const [lastBubble, setLastBubble] = useState("");
+  const [wantConfig, setWantConfig] = useState(false);
+  const { config } = useStoreChatConfig({ skip: hidden || !wantConfig });
+  const introText =
+    (config?.answersEnabled && String(config.bubbleText || "").trim()) ||
+    ASSISTANT_INTRO_BUBBLE;
   const wrapperRef = useRef(null);
   const buttonRef = useRef(null);
   const canvasRef = useRef(null);
   const pausedRef = useRef(false);
 
-  const bubble = hovered
-    ? ASSISTANT_HOVER_BUBBLE
-    : intro
-      ? ASSISTANT_INTRO_BUBBLE
-      : "";
+  const bubble = hovered ? ASSISTANT_HOVER_BUBBLE : intro ? introText : "";
 
   // The bubble keeps its last words while it fades out
   useEffect(() => {
@@ -170,6 +180,13 @@ const AssistantLauncher = () => {
       observer.disconnect();
     };
   }, [hidden]);
+
+  // ─── The store's chat texts (B0), after the page has loaded ────────────
+
+  useEffect(() => {
+    if (hidden || wantConfig) return undefined;
+    return afterPageLoad(() => setWantConfig(true));
+  }, [hidden, wantConfig]);
 
   // ─── Intro bubble (FR-3) ───────────────────────────────────────────────
 
@@ -249,9 +266,9 @@ const AssistantLauncher = () => {
     loadAssistant().catch(() => {});
   }, []);
 
-  const handleClick = () => {
+  const openAssistant = useCallback(() => {
     const rect = buttonRef.current?.getBoundingClientRect();
-    const origin = rect
+    const origin = rect?.width
       ? { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }
       : null;
     setHovered(false);
@@ -259,7 +276,15 @@ const AssistantLauncher = () => {
     writeIntroShown();
     setMountAssistant(true);
     useAssistantStore.getState().open(origin);
-  };
+  }, []);
+
+  const handleClick = () => openAssistant();
+
+  // B0: `?chat=open` opens the assistant (the reply email, signing in)
+  useEffect(() => {
+    if (hidden || !takeStoreChatOpenRequest()) return;
+    openAssistant();
+  }, [hidden, pathname, openAssistant]);
 
   if (hidden) return null;
 

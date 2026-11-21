@@ -10,10 +10,20 @@
  * entry makes Back close the assistant (FR-8), and links inside close it
  * before they navigate, so that entry never stays behind.
  *
- * Replies come from `getAssistantReply` (the scripted engine, D1) on the
- * store's existing reads through the kit's Apollo client; prices stay the
- * server's. The conversation lives in `store/assistant-store.js`, in
- * memory only. Loaded on demand by the launcher (`ssr: false`).
+ * Replies come from `getAssistantReply` on the store's existing reads
+ * through the kit's Apollo client and, since backend PRD-049 B0 (D14,
+ * D15), the store's own answers and "Talk to us" through the kit's
+ * `useStoreChat`: the welcome and quick buttons are the ones staff edit in
+ * the dashboard, a signed-in shopper's message goes to the store's Inbox,
+ * and the team's replies are read every 5 s (15 s in a hidden tab) while
+ * the assistant is open. Since B0.1 (D17) "Talk to us" sits in the header
+ * and under every answer ("Message the team" after a miss), the message
+ * box shows the team's reply time and, outside chat hours, when they are
+ * back; a guest's question is kept through sign-in by the kit and put back
+ * in the message box afterwards, never sent without the shopper's tap.
+ * Prices stay the server's. The conversation lives
+ * in `store/assistant-store.js`, in memory only. Loaded on demand by the
+ * launcher (`ssr: false`).
  */
 
 import React, {
@@ -26,9 +36,10 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
-import { useApolloClient, useMutation } from "@apollo/client/react";
+import { useApolloClient } from "@apollo/client/react";
+import { useStoreChat } from "@zcom/storefront-kit/client";
 import gsap from "gsap";
-import { FiX } from "react-icons/fi";
+import { FiMessageCircle, FiX } from "react-icons/fi";
 import AssistantInput from "@/components/assistant/AssistantInput";
 import AssistantOrb from "@/components/assistant/AssistantOrb";
 import AssistantTranscript from "@/components/assistant/AssistantTranscript";
@@ -47,7 +58,6 @@ import {
   prefersReducedMotion,
 } from "@/components/assistant/assistant.constants";
 import {
-  CREATE_CONTACT_FORM,
   GET_CATEGORIES,
   GET_PRODUCTS,
   GET_VALID_PROMOTIONS,
@@ -70,12 +80,19 @@ import { getRippleRadius } from "@/utils/assistant-gradient.util";
 import {
   ASSISTANT_COPY,
   AssistantActionEnum,
-  QUICK_ACTIONS,
+  ChatStepEnum,
+  DISCARD_DRAFT,
+  TALK_TO_US,
   getAssistantReply,
-  getContactSentReply,
+  getChatSendFailedReply,
+  getChatSentReply,
+  getQuickActions,
   getRevealDuration,
+  getTeamStatusLines,
   getThinkingPhrase,
+  getWelcomeText,
   matchAssistantIntent,
+  toStoreReplyMessage,
 } from "@/utils/assistant-replies.util";
 import { toProductPageVariables } from "@/utils/catalog-listing.util";
 import { ListingSortEnum } from "@/utils/listing-sort.util";
@@ -90,6 +107,8 @@ const COLLECTION_LIMIT = 12;
 const ORDER_LIMIT = 3;
 const MESSAGE_MAX_LENGTH = 2000;
 const LEVEL_BUMP_MS = 1000;
+/** B0: earlier messages with the team shown when the assistant opens. */
+const CHAT_HISTORY_LIMIT = 6;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
 
@@ -126,13 +145,25 @@ const getInternalHref = (event) => {
 const AssistantOverlay = () => {
   const router = useRouter();
   const client = useApolloClient();
-  const [submitContact] = useMutation(CREATE_CONTACT_FORM);
 
   const isOpen = useAssistantStore((state) => state.isOpen);
   const phase = useAssistantStore((state) => state.phase);
   const messages = useAssistantStore((state) => state.messages);
   const hasInteracted = useAssistantStore((state) => state.hasInteracted);
   const error = useAssistantStore((state) => state.error);
+  const hasMessages = messages.length > 0;
+
+  // B0: the store's answers, "Talk to us" and the team's replies (polled
+  // only while open and signed in)
+  const storeChat = useStoreChat({ open: isOpen });
+  const {
+    ask: askStore,
+    send: sendToTeam,
+    config: chatConfig,
+    canTalkToUs,
+    pendingDraft,
+  } = storeChat;
+  const chatFlow = useAssistantStore((state) => state.chatFlow);
 
   const [thinkingText, setThinkingText] = useState(null);
   const [isRendered, setIsRendered] = useState(false);
@@ -152,6 +183,8 @@ const AssistantOverlay = () => {
   const phaseTimerRef = useRef(null);
   const lastLevelBumpRef = useRef(0);
   const latestRef = useRef({});
+  /** B0.1: the kept draft already put back in the message box. */
+  const offeredDraftRef = useRef(null);
 
   // D12: replies are silent (no voice)
   const stopVoice = useCallback(() => {}, []);
@@ -283,9 +316,22 @@ const AssistantOverlay = () => {
           throw failure;
         }
       },
+      // B0: the store's FAQs (B0.1: `offerPerson` with every answer)
+      askStore,
     }),
-    [client],
+    [client, askStore],
   );
+
+  /** B0: the chat's state for the reply engine, read when a message goes. */
+  const readChat = useCallback(() => {
+    const current = latestRef.current.storeChat;
+    return {
+      messagingEnabled: !!current?.messagingEnabled,
+      signedIn: !!current?.signedIn,
+      signInPrompt: current?.config?.signInPrompt || "",
+      returnPath: `${window.location.pathname}${window.location.search}`,
+    };
+  }, []);
 
   // ─── Closing (FR-7, FR-8) ──────────────────────────────────────────────
 
@@ -343,9 +389,7 @@ const AssistantOverlay = () => {
       store.addMessage({ role: "user", text });
 
       const token = (replyTokenRef.current += 1);
-      const intent = store.contactFlow
-        ? null
-        : matchAssistantIntent(text).intent;
+      const intent = store.chatFlow ? null : matchAssistantIntent(text).intent;
       setThinkingText(getThinkingPhrase(intent));
       store.setPhase(Phase.THINKING);
       const startedAt = performance.now();
@@ -353,27 +397,31 @@ const AssistantOverlay = () => {
       let reply;
       try {
         const auth = useAuthStore.getState();
+        const chat = readChat();
         reply = await getAssistantReply(text, {
-          contactFlow: useAssistantStore.getState().contactFlow,
-          profile: auth.user,
+          chatFlow: useAssistantStore.getState().chatFlow,
           isLoggedIn: auth.isLoggedIn,
+          chat,
           loaders,
         });
-        if (reply.action?.type === AssistantActionEnum.SEND_CONTACT) {
+        if (reply.action?.type === AssistantActionEnum.SEND_CHAT) {
+          // B0: to the store's Inbox; the flow ends even if the shopper
+          // has closed meanwhile
           sendingRef.current = true;
+          let result;
           try {
-            const { data } = await submitContact({
-              variables: { input: reply.action.input },
-            });
-            if (!data?.submitContactForm?._id) {
-              throw new Error("The contact form was not saved");
-            }
+            result = await sendToTeam(reply.action.text);
           } finally {
             sendingRef.current = false;
           }
-          // Sent: the flow ends even if the shopper has closed meanwhile
-          useAssistantStore.getState().setContactFlow(null);
-          reply = getContactSentReply();
+          if (result.message) {
+            // The kit drops a draft kept through sign-in once it is sent
+            useAssistantStore.getState().markChatSeen([result.message.id]);
+            reply = getChatSentReply();
+          } else {
+            reply = getChatSendFailedReply(result.error, chat);
+          }
+          useAssistantStore.getState().setChatFlow(reply.chatFlow || null);
         }
       } catch (failure) {
         if (replyTokenRef.current !== token) return;
@@ -391,7 +439,12 @@ const AssistantOverlay = () => {
 
       setThinkingText(null);
       const current = useAssistantStore.getState();
-      current.setContactFlow(reply.contactFlow || null);
+      current.setChatFlow(reply.chatFlow || null);
+      if (reply.cancelledChat) {
+        // B0.1: "Don't send" drops a message kept through sign-in
+        latestRef.current.storeChat?.discardDraft();
+        inputRef.current?.clear();
+      }
       if (reply.searchTerm) trackSearch(reply.searchTerm, reply.resultCount);
       current.addMessage({
         role: "assistant",
@@ -401,6 +454,11 @@ const AssistantOverlay = () => {
         offers: reply.offers,
         links: reply.links,
         chips: reply.chips,
+        // B0.1: "Talk to us" under the answer, "Message the team" after a miss
+        offerPerson: !!reply.offerPerson,
+        messageTeam: !!reply.messageTeam,
+        question: reply.question || "",
+        handoff: !!reply.handoff,
       });
       playReply(reply.text, token, reply.speech);
 
@@ -424,10 +482,40 @@ const AssistantOverlay = () => {
       stopVoice,
       bump,
       loaders,
-      submitContact,
+      readChat,
+      sendToTeam,
       playReply,
       requestClose,
     ],
+  );
+
+  /**
+   * B0.1: "Talk to us" from the header or under an answer. A guest's
+   * `question` (or the text in the box) is kept through sign-in by the
+   * kit; a signed-in shopper starts the message with it in the box. Never
+   * sends anything by itself.
+   */
+  const talkToTeam = useCallback(
+    (question = "") => {
+      const current = latestRef.current.storeChat;
+      const typed = inputRef.current?.getValue?.() || "";
+      const text = String(question || "").trim();
+      if (useAssistantStore.getState().chatFlow) {
+        // Already writing to the team: just help with the message
+        if (text && !typed.trim()) inputRef.current?.insert(text);
+        inputRef.current?.focus();
+        return;
+      }
+      if (current?.messagingEnabled && !current.signedIn) {
+        const draft = text || typed.trim();
+        if (draft) current.saveDraft(draft);
+      }
+      void sendMessage(TALK_TO_US);
+      if (current?.messagingEnabled && current.signedIn && text && !typed) {
+        inputRef.current?.insert(text);
+      }
+    },
+    [sendMessage],
   );
 
   const startDictation = useCallback(() => {
@@ -438,19 +526,73 @@ const AssistantOverlay = () => {
     startListening();
   }, [interrupt, stopVoice, bump, startListening]);
 
-  /** FR-13: the welcome message, once, as the content fades in. */
+  /**
+   * FR-13: the welcome message, once, as the content fades in (the
+   * store's own once its answers are on, B0).
+   */
   const addWelcome = useCallback(() => {
     const state = useAssistantStore.getState();
     if (state.messages.length) return;
-    state.addMessage({ role: "assistant", text: ASSISTANT_COPY.welcome });
+    const welcome = getWelcomeText(latestRef.current.storeChat?.config);
+    state.addMessage({ role: "assistant", text: welcome });
     replyTokenRef.current += 1;
-    playReply(ASSISTANT_COPY.welcome, replyTokenRef.current);
+    playReply(welcome, replyTokenRef.current);
   }, [playReply]);
 
   // The timelines call these after renders; keep the latest at hand
   useLayoutEffect(() => {
-    latestRef.current = { addWelcome, bump };
+    latestRef.current = { addWelcome, bump, storeChat };
   });
+
+  // ─── The message kept through sign-in (B0.1) ───────────────────────────
+
+  // Back from signing in: the kit holds what the guest typed; put it in
+  // the message box with the "Talk to us" flow open. Never sent for them.
+  useEffect(() => {
+    if (!isOpen || !hasMessages || !pendingDraft || !canTalkToUs) return;
+    if (offeredDraftRef.current === pendingDraft) return;
+    offeredDraftRef.current = pendingDraft;
+    const state = useAssistantStore.getState();
+    state.setChatFlow({ step: ChatStepEnum.COMPOSE });
+    state.addMessage({
+      role: "assistant",
+      text: ASSISTANT_COPY.draftRestored,
+      chips: [DISCARD_DRAFT],
+      handoff: true,
+    });
+    replyTokenRef.current += 1;
+    playReply(ASSISTANT_COPY.draftRestored, replyTokenRef.current);
+    inputRef.current?.clear();
+    inputRef.current?.insert(pendingDraft);
+  }, [isOpen, hasMessages, pendingDraft, canTalkToUs, playReply]);
+
+  // ─── The team's replies (B0) ───────────────────────────────────────────
+
+  // The thread's messages join the conversation once: on the first read
+  // the latest few as history, then each new reply from the team
+  useEffect(() => {
+    if (!isOpen || !hasMessages || !storeChat.threadLoaded) return;
+    const state = useAssistantStore.getState();
+    const seen = new Set(state.chatSeenIds);
+    const fresh = storeChat.messages.filter((message) => !seen.has(message.id));
+    if (!state.chatHistoryShown) {
+      const history = fresh.slice(-CHAT_HISTORY_LIMIT);
+      history.forEach((message, index) =>
+        state.addMessage({
+          ...toStoreReplyMessage(message, {
+            isHistory: index < history.length - 1,
+          }),
+          revealed: true,
+        }),
+      );
+      state.setChatHistoryShown(true);
+    } else {
+      fresh
+        .filter((message) => message.from === "STORE")
+        .forEach((message) => state.addMessage(toStoreReplyMessage(message)));
+    }
+    if (fresh.length) state.markChatSeen(fresh.map((message) => message.id));
+  }, [isOpen, hasMessages, storeChat.threadLoaded, storeChat.messages]);
 
   // ─── Open and close (FR-6, FR-7) ───────────────────────────────────────
 
@@ -687,6 +829,13 @@ const AssistantOverlay = () => {
 
   const canInterrupt = BUSY_PHASES.has(phase);
   const { markRevealed, setError } = useAssistantStore.getState();
+  // B0.1: the reply time and away line near the message box, while the
+  // shopper is writing to the team or was just handed to them
+  const lastMessage = messages[messages.length - 1];
+  const teamLines =
+    canTalkToUs && (chatFlow || lastMessage?.handoff)
+      ? getTeamStatusLines(storeChat)
+      : [];
 
   return createPortal(
     <div ref={rootRef} className="assistant_root" data-lenis-prevent>
@@ -711,9 +860,20 @@ const AssistantOverlay = () => {
             {dictation.isDictating ? "Listening to you" : ""}
           </p>
 
-          {/* Only the close button, top right */}
+          {/* B0.1: Talk to us and the close button, top right */}
           <header className="assistant_header">
             <div className="assistant_actions">
+              {canTalkToUs && (
+                <button
+                  type="button"
+                  className="assistant_header_talk"
+                  aria-label="Talk to us: message the team"
+                  onClick={() => talkToTeam()}
+                >
+                  <FiMessageCircle aria-hidden="true" />
+                  <span>{TALK_TO_US}</span>
+                </button>
+              )}
               <button
                 type="button"
                 className="assistant_icon_btn is-close"
@@ -733,6 +893,7 @@ const AssistantOverlay = () => {
                 messages={messages}
                 thinkingText={phase === Phase.THINKING ? thinkingText : null}
                 onChip={sendMessage}
+                onTalk={talkToTeam}
                 onRevealed={markRevealed}
               />
               {error && (
@@ -751,16 +912,23 @@ const AssistantOverlay = () => {
               <div className="assistant_footer">
                 {!hasInteracted && messages.length > 0 && (
                   <div className="assistant_quick">
-                    {QUICK_ACTIONS.map((label, index) => (
+                    {getQuickActions(chatConfig).map((action, index) => (
                       <button
-                        key={label}
+                        key={action.label}
                         type="button"
                         className="assistant_chip"
                         style={{ animationDelay: `${1.2 + index * 0.06}s` }}
-                        onClick={() => sendMessage(label)}
+                        onClick={() => sendMessage(action.question)}
                       >
-                        {label}
+                        {action.label}
                       </button>
+                    ))}
+                  </div>
+                )}
+                {teamLines.length > 0 && (
+                  <div className="assistant_team_status" aria-live="polite">
+                    {teamLines.map((line) => (
+                      <p key={line}>{line}</p>
                     ))}
                   </div>
                 )}

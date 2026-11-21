@@ -356,11 +356,39 @@
   color: #fe0000;
 }
 
+/* B0.1 (backend PRD-049, D17): "Talk to us" beside the close button */
+.assistant_header_talk {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid rgba(26, 26, 26, 0.08);
+  border-radius: 999px;
+  background-color: #fff;
+  color: #c8102e;
+  font-family: paragraph;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.assistant_header_talk:hover {
+  border-color: rgba(200, 16, 46, 0.35);
+}
+
+.assistant_header_talk svg {
+  font-size: 16px;
+}
+
 .assistant_icon_btn.is-close:hover {
   color: #a3001f;
 }
 
 .assistant_icon_btn:focus-visible,
+.assistant_header_talk:focus-visible,
+.assistant_talk:focus-visible,
 .assistant_round_btn:focus-visible,
 .assistant_chip:focus-visible,
 .assistant_link:focus-visible,
@@ -498,6 +526,15 @@
 
 .assistant_msg_text {
   margin: 0;
+}
+
+/* Backend PRD-049 B0: a reply from the store's team */
+.assistant_msg_from {
+  display: block;
+  margin-bottom: 2px;
+  color: #595959;
+  font-size: 12px;
+  letter-spacing: 0.02em;
 }
 
 .assistant_msg_visual,
@@ -721,6 +758,54 @@
 .assistant_chip:hover {
   border-color: rgba(200, 16, 46, 0.4);
   background-color: #fff5f6;
+}
+
+/* B0.1: a quiet "Talk to us" under an answer… */
+.assistant_talk {
+  align-self: flex-start;
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: #c8102e;
+  font-family: paragraph;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.assistant_talk:hover {
+  color: #a3001f;
+}
+
+/* …and a clear "Message the team" after a question nothing answered */
+.assistant_talk.is-primary {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background-color: #c8102e;
+  color: #fff;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.assistant_talk.is-primary:hover {
+  background-color: #a3001f;
+  color: #fff;
+}
+
+/* B0.1: the team's reply time and, out of hours, when they are back */
+.assistant_team_status {
+  margin: 0 0 -8px;
+  color: rgba(26, 26, 26, 0.65);
+  font-size: 12px;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.assistant_team_status p {
+  margin: 0;
 }
 
 /* FR-13: the quick actions arrive one after another */

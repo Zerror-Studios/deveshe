@@ -9,7 +9,12 @@
  * at once from a visually hidden copy, the animated copy is `aria-hidden`.
  * Under a reply: product cards, orders, offers with "copy code", links and
  * the latest reply's follow-up chips. New messages scroll into view unless
- * the shopper has scrolled up; then "Scroll to latest" appears.
+ * the shopper has scrolled up; then "Scroll to latest" appears. Replies
+ * from the store's team (backend PRD-049 B0, `from: "store"`) carry a
+ * "The team" label; the store's https links open in a new tab. Since B0.1
+ * (D17) an answer the store offers a person with (`offerPerson`) has a
+ * quiet "Talk to us" under it, and the latest reply after a miss
+ * (`messageTeam`) ends with a clear "Message the team".
  */
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -25,7 +30,11 @@ import {
   prefersReducedMotion,
 } from "@/components/assistant/assistant.constants";
 import { trackSelectItem } from "@/utils/analytics-events.util";
-import { getRevealDuration } from "@/utils/assistant-replies.util";
+import {
+  getRevealDuration,
+  MESSAGE_THE_TEAM,
+  TALK_TO_US,
+} from "@/utils/assistant-replies.util";
 
 // ─── Constants ────────────────────────────────────────────────────────────
 
@@ -186,14 +195,27 @@ const OfferList = ({ offers }) => {
 
 // ─── Message ──────────────────────────────────────────────────────────────
 
-const AssistantMessage = ({ message, isLatest, animate, onChip, onRevealed }) => {
+const AssistantMessage = ({
+  message,
+  isLatest,
+  animate,
+  onChip,
+  onTalk,
+  onRevealed,
+}) => {
   const isUser = message.role === "user";
+  // B0.1: a clear button on the latest miss, a quiet one under answers
+  const showMessageTeam = !isUser && isLatest && message.messageTeam;
+  const showTalk =
+    !isUser && !showMessageTeam && (message.offerPerson || message.messageTeam);
   const hasExtras =
     !isUser &&
     (message.products?.length ||
       message.orders?.length ||
       message.offers?.length ||
       message.links?.length ||
+      showMessageTeam ||
+      showTalk ||
       (isLatest && message.chips?.length));
 
   return (
@@ -204,6 +226,9 @@ const AssistantMessage = ({ message, isLatest, animate, onChip, onRevealed }) =>
             <p className="assistant_msg_text">{message.text}</p>
           ) : (
             <p className="assistant_msg_text">
+              {message.from === "store" && (
+                <span className="assistant_msg_from">The team</span>
+              )}
               <span className="assistant_sr_only">{message.text}</span>
               <RevealText
                 text={message.text}
@@ -230,16 +255,29 @@ const AssistantMessage = ({ message, isLatest, animate, onChip, onRevealed }) =>
           {message.offers?.length > 0 && <OfferList offers={message.offers} />}
           {message.links?.length > 0 && (
             <div className="assistant_links">
-              {message.links.map((link) => (
-                <Link
-                  key={`${link.href}-${link.label}`}
-                  href={link.href}
-                  className="assistant_link"
-                >
-                  {link.label}
-                  <span aria-hidden="true">→</span>
-                </Link>
-              ))}
+              {message.links.map((link) =>
+                link.external ? (
+                  <a
+                    key={`${link.href}-${link.label}`}
+                    href={link.href}
+                    className="assistant_link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {link.label}
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                ) : (
+                  <Link
+                    key={`${link.href}-${link.label}`}
+                    href={link.href}
+                    className="assistant_link"
+                  >
+                    {link.label}
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                ),
+              )}
             </div>
           )}
           {isLatest && message.chips?.length > 0 && (
@@ -256,6 +294,25 @@ const AssistantMessage = ({ message, isLatest, animate, onChip, onRevealed }) =>
               ))}
             </div>
           )}
+          {showMessageTeam && (
+            <button
+              type="button"
+              className="assistant_talk is-primary"
+              onClick={() => onTalk(message.question)}
+            >
+              {MESSAGE_THE_TEAM}
+            </button>
+          )}
+          {showTalk && (
+            <button
+              type="button"
+              className="assistant_talk"
+              aria-label="Talk to us about this"
+              onClick={() => onTalk(message.question)}
+            >
+              {TALK_TO_US}
+            </button>
+          )}
         </div>
       ) : null}
     </>
@@ -264,7 +321,13 @@ const AssistantMessage = ({ message, isLatest, animate, onChip, onRevealed }) =>
 
 // ─── Transcript ───────────────────────────────────────────────────────────
 
-const AssistantTranscript = ({ messages, thinkingText, onChip, onRevealed }) => {
+const AssistantTranscript = ({
+  messages,
+  thinkingText,
+  onChip,
+  onTalk,
+  onRevealed,
+}) => {
   const scrollRef = useRef(null);
   const listRef = useRef(null);
   const stickRef = useRef(true);
@@ -328,6 +391,7 @@ const AssistantTranscript = ({ messages, thinkingText, onChip, onRevealed }) => 
                 !reducedMotion
               }
               onChip={onChip}
+              onTalk={onTalk}
               onRevealed={onRevealed}
             />
           ))}
