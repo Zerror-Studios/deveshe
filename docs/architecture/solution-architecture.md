@@ -106,7 +106,7 @@ sequenceDiagram
     participant P as /checkout (CustomerCheckout)
     participant K as kit useCheckout
     participant GW as Gateway
-    participant NB as Payment app (Razorpay / Cashfree / PayU / CCAvenue / Nimbbl)
+    participant NB as Payment app (Razorpay / Cashfree / PayU / CCAvenue)
     participant ST as /orders/status/[token] (else thank-you)
 
     S->>P: "Continue to payment" (zod CheckoutSchema)

@@ -26,7 +26,6 @@
     "libphonenumber-js": "^1.13.16",
     "next": "^16.4.6",
     "next-transition-router": "^0.2.11",
-    "nimbbl_sonic": "^6.3.3",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-hook-form": "^7.91.0",
