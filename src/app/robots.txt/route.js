@@ -15,7 +15,8 @@ const ROBOTS_CACHE_SECONDS = 86400;
 // `/back-in-stock/` holds single-use email links (CP-22): a crawler that
 // runs scripts must not confirm someone's alert. `/pay/` links are a
 // shopper's payment link (PRD-028 FR-5.4). `/review` pages hold an
-// order's review link or an opt-out link (PRD-032 FR-R3, FR-R5).
+// order's review link or an opt-out link (PRD-032 FR-R3, FR-R5). `/email/`
+// holds the double opt-in and preference links (PRD-050 FR-3.8).
 const DISALLOWED_PATHS = [
   "/profile",
   "/checkout",
@@ -23,6 +24,8 @@ const DISALLOWED_PATHS = [
   "/back-in-stock/",
   "/pay/",
   "/review",
+  // PRD-050 FR-3.8: the double opt-in link and the preference page
+  "/email/",
   "/api/",
 ];
 

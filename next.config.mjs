@@ -133,6 +133,13 @@ const nextConfig = {
         destination: "/shop/co-ord-sets",
         permanent: true,
       },
+      // PRD-050 D18: every store's emails link products as /products/<slug>
+      // (one link for every store); this store's product page is /product/<slug>
+      {
+        source: "/products/:slug",
+        destination: "/product/:slug",
+        permanent: true,
+      },
     ];
   },
 };

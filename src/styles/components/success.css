@@ -87,3 +87,8 @@
     width: 45%;
   }
 }
+
+/* PRD-050 FR-3.8: the email preference page's second buttons */
+#status_section .email_consent_btn {
+  margin-top: 1rem;
+}

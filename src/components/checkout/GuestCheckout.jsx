@@ -6,8 +6,9 @@
  *
  * One page, three steps in the store's checkout design:
  * - **Contact:** the email only (required, owner 2026-11-12), the "Email
- *   me with news and offers" box (unticked, PRD-014 UX-29, sent as the
- *   kit's `contact.acceptsMarketing`) and "Already have an account? Sign
+ *   me news and offers from DeVeSheDreams" box (unticked, PRD-014 UX-29,
+ *   sent as the kit's `contact.acceptsMarketing`; a confirmation email
+ *   follows since backend PRD-050 FR-3.6) and "Already have an account? Sign
  *   in" (the code sign-in, back to `/checkout`, which opens the bag merged
  *   at sign-in);
  * - **Delivery:** the address form (`Delivery`, no saved addresses for a
@@ -56,6 +57,10 @@ import {
 } from "@/utils/coupon.util";
 import { GuestCheckoutSchema } from "@/validations/CheckoutValidation";
 import { EmailSubscribedStatus } from "@/utils/Constant";
+import {
+  EMAIL_CONFIRMATION_HINT,
+  EMAIL_CONSENT_LABEL,
+} from "@/utils/email-consent.util";
 import { getKitKeyMessage } from "@/utils/api-error.util";
 import { getLoginPath } from "@/utils/redirect.util";
 import {
@@ -420,8 +425,13 @@ const GuestCheckout = () => {
                     ></path>
                   </svg>
                 </span>
-                <h6 className="">Email me with news and offers</h6>
+                <h6 className="">{EMAIL_CONSENT_LABEL}</h6>
               </label>
+              {wantsNews && (
+                <p className="checkout_consent_hint">
+                  {EMAIL_CONFIRMATION_HINT}
+                </p>
+              )}
             </div>
 
             {/* ─── Delivery ─── */}

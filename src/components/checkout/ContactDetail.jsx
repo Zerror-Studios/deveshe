@@ -2,6 +2,10 @@ import React from "react";
 import Link from "next/link";
 import { useAuthStore } from "@/store/auth-store";
 import { EmailSubscribedStatus } from "@/utils/Constant";
+import {
+  EMAIL_CONFIRMATION_HINT,
+  EMAIL_CONSENT_LABEL,
+} from "@/utils/email-consent.util";
 
 const ContactDetail = ({ register, setValue, watch, errors }) => {
   const { isLoggedIn } = useAuthStore((state) => state);
@@ -54,8 +58,11 @@ const ContactDetail = ({ register, setValue, watch, errors }) => {
             ></path>
           </svg>
         </span>
-        <h6 className="">Email me with news and offers</h6>
+        <h6 className="">{EMAIL_CONSENT_LABEL}</h6>
       </label>
+      {watch("emailSubscribedStatus") === EmailSubscribedStatus.SUBSCRIBED && (
+        <p className="checkout_consent_hint">{EMAIL_CONFIRMATION_HINT}</p>
+      )}
     </div>
   );
 };

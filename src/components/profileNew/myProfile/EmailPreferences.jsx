@@ -1,57 +1,60 @@
 /**
- * Email preferences (PRD-014 FR-2.8, UX-29)
+ * Email preferences (backend PRD-050 FR-3.6, FR-3.8; was PRD-014 FR-2.8)
  *
- * One real choice, the customer's marketing-email consent
- * (`emailSubscribedStatus`, 1 = opted in), saved with `updateMyProfile`.
- * Replaces four unbound checkboxes and a button that did nothing.
+ * One real choice, the shopper's marketing-email consent, read with the
+ * kit's `useMyEmailPreferences` (`myEmailPreferences`: subscribed, waiting
+ * for the confirmation click, or not) and saved with
+ * `updateMyEmailPreferences`, which records the version of the wording
+ * shown here. The box is never ticked for the shopper; ticking it starts
+ * double opt-in (a confirmation email), unticking it stops news and offers
+ * only (order emails keep coming).
+ *
+ * Keep in sync with
+ * `storefronts/rare-element/src/components/account/settings/EmailPreference.jsx`.
  */
 
 import React, { useEffect, useState } from "react";
-import { useMutation } from "@apollo/client/react";
 import { toast } from "react-toastify";
+import { useMyEmailPreferences } from "@zcom/storefront-kit/client";
 
 import CommonButton from "@/components/common/CommonButton";
-import { UPDATE_MY_PROFILE } from "@/graphql";
-import { useAuthStore } from "@/store/auth-store";
-import { getErrorMessage } from "@/utils/api-error.util";
-
-// ─── Constants ────────────────────────────────────────────────────────────
-
-const EMAIL_STATUS_SUBSCRIBED_CODE = 1;
-const EMAIL_STATUS_UNSUBSCRIBED_CODE = 0;
+import {
+  EMAIL_CONFIRMATION_HINT,
+  EMAIL_CONSENT_LABEL,
+  EMAIL_NOTICE_VERSION,
+  getConsentErrorMessage,
+  getSavedMessage,
+  getSubscriptionCopy,
+} from "@/utils/email-consent.util";
 
 // ─── Component ────────────────────────────────────────────────────────────
 
 const EmailPreferences = () => {
-  const { user, setUser } = useAuthStore((state) => state);
-  const [updateProfile, { loading }] = useMutation(UPDATE_MY_PROFILE);
-  const isSubscribed =
-    user?.emailSubscribedStatus === EMAIL_STATUS_SUBSCRIBED_CODE;
-  const [wantsEmail, setWantsEmail] = useState(isSubscribed);
+  const {
+    preferences,
+    loading,
+    error,
+    save,
+    saving,
+    saveError,
+    retryAfterMs,
+    reload,
+  } = useMyEmailPreferences({ noticeVersion: EMAIL_NOTICE_VERSION });
+  const subscription = preferences?.subscription ?? null;
+  // A pending sign-up counts as "yes" until the shopper unticks it.
+  const isOptedIn = subscription === "subscribed" || subscription === "pending";
+  const [wantsEmail, setWantsEmail] = useState(isOptedIn);
+  const status = subscription ? getSubscriptionCopy(subscription) : null;
 
   useEffect(() => {
-    setWantsEmail(isSubscribed);
-  }, [isSubscribed]);
+    setWantsEmail(isOptedIn);
+  }, [isOptedIn]);
 
   const handleSave = async () => {
-    if (loading || wantsEmail === isSubscribed) return;
-    try {
-      const { data } = await updateProfile({
-        variables: {
-          input: {
-            emailSubscribedStatus: wantsEmail
-              ? EMAIL_STATUS_SUBSCRIBED_CODE
-              : EMAIL_STATUS_UNSUBSCRIBED_CODE,
-          },
-        },
-      });
-      if (data?.updateMyProfile) {
-        setUser({ ...user, ...data.updateMyProfile });
-        toast.success("Your email preference is saved.");
-      }
-    } catch (error) {
-      toast.error(getErrorMessage(error, "Couldn't save your preference."));
-    }
+    if (saving || !preferences || wantsEmail === isOptedIn) return;
+    const next = await save(wantsEmail);
+    // A failed save shows `saveError` under the box
+    if (next) toast.success(getSavedMessage(next.subscription));
   };
 
   return (
@@ -64,21 +67,46 @@ const EmailPreferences = () => {
         </p>
       </div>
       <div className="profile_right_container">
+        <p aria-live="polite">
+          {status
+            ? `${status.label}. ${status.description}`
+            : loading
+              ? "Loading your preference…"
+              : ""}
+        </p>
         <label className="checkbox_container" htmlFor="email_pref_marketing">
           <input
             id="email_pref_marketing"
             type="checkbox"
             checked={wantsEmail}
-            disabled={!user}
+            disabled={!preferences || saving}
             onChange={(event) => setWantsEmail(event.target.checked)}
+            aria-describedby="email_pref_hint"
           />
-          <p>Email me with news and offers</p>
+          <p>{EMAIL_CONSENT_LABEL}</p>
         </label>
+        <p id="email_pref_hint">{EMAIL_CONFIRMATION_HINT}</p>
+        {saveError && (
+          <p className="error" role="alert">
+            {getConsentErrorMessage(saveError, retryAfterMs)}
+          </p>
+        )}
+        {error && (
+          <p className="error" role="alert">
+            {getConsentErrorMessage(error)}{" "}
+            {error !== "no_email" && (
+              <button type="button" className="underline" onClick={reload}>
+                Try again
+              </button>
+            )}
+          </p>
+        )}
         <CommonButton
           type="button"
           title="Update My Preferences"
           onClick={handleSave}
-          loading={loading}
+          loading={saving}
+          disabled={!preferences || wantsEmail === isOptedIn}
         />
       </div>
     </div>

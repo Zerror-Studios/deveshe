@@ -1,0 +1,185 @@
+/* PRD-050 D22: the store's sign-up pop-up (components/common/SignupPopup.jsx).
+   Mobile first: a sheet at the bottom of the screen, a centred card from
+   750 px. Fixed, so it never moves the page; the kit locks the scroll and
+   pads the body for the scrollbar. The merchant's colours and radius come in
+   as --zc-signup-* (kit styleVars); the brand's pink, black and red are the
+   fallbacks, and the brand fonts always stay. Below the consent banner
+   (999999). */
+.signup_popup_backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99990;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 16px;
+  background-color: rgba(0, 0, 0, 0.45);
+  overscroll-behavior: contain;
+  animation: signup_popup_fade 0.3s ease-out both;
+}
+
+.signup_popup {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  max-height: calc(100svh - 32px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 36px 20px 20px;
+  background-color: var(--zc-signup-bg, #fadcde);
+  color: var(--zc-signup-text, #000);
+  border: 1px solid currentColor;
+  border-radius: var(--zc-signup-radius, 5px);
+  text-align: var(--zc-signup-align, left);
+  font-family: paragraph, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  outline: none;
+  animation: signup_popup_rise 0.35s ease-out both;
+}
+
+.signup_popup_close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.signup_popup_close:focus-visible,
+.signup_popup_submit:focus-visible {
+  outline: 2px solid #fe0000;
+  outline-offset: 2px;
+}
+
+.signup_popup_title {
+  margin: 0;
+  padding-right: 32px;
+  font-family: heading, serif;
+  font-size: clamp(20px, 2vw, 26px);
+  letter-spacing: 0.3px;
+}
+
+.signup_popup_description,
+.signup_popup_notice {
+  margin: 0;
+  opacity: 0.8;
+}
+
+.signup_popup_notice {
+  font-size: 12px;
+}
+
+.signup_popup_form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.signup_popup_field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.signup_popup_label {
+  font-family: subTitleFont, sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.signup_popup_input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid currentColor;
+  border-radius: var(--zc-signup-radius, 5px);
+  background-color: #fff;
+  color: #000;
+  font: inherit;
+}
+
+.signup_popup_input::placeholder {
+  color: #595959;
+}
+
+.signup_popup_input:focus-visible {
+  outline: 2px solid #fe0000;
+  outline-offset: 2px;
+}
+
+.signup_popup_submit {
+  min-height: 44px;
+  padding: 8px 18px;
+  border: 0;
+  border-radius: var(--zc-signup-radius, 5px);
+  background-color: var(--zc-signup-button-bg, #000);
+  color: var(--zc-signup-button-text, #fff);
+  font-family: subTitleFont, sans-serif;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.signup_popup_submit:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.signup_popup_message {
+  min-height: 1.2em;
+  margin: 0;
+  font-size: 13px;
+}
+
+.signup_popup_message.is_error {
+  color: #fe0000;
+  font-weight: 600;
+}
+
+@media (min-width: 750px) {
+  .signup_popup_backdrop {
+    align-items: center;
+  }
+
+  .signup_popup {
+    padding: 44px 32px 32px;
+  }
+}
+
+@keyframes signup_popup_fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes signup_popup_rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+.signup_popup_backdrop.is_still,
+.signup_popup_backdrop.is_still .signup_popup {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signup_popup_backdrop,
+  .signup_popup {
+    animation: none;
+  }
+}

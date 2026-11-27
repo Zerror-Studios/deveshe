@@ -963,3 +963,10 @@ input:focus {
 .checkout_signin_hint a {
   text-decoration: underline;
 }
+
+/* PRD-050 FR-3.8: the news box's double opt-in line */
+.checkout_consent_hint {
+  margin: 0.25rem 0 0;
+  font-size: 12px;
+  opacity: 0.75;
+}

@@ -360,6 +360,21 @@ footer .footer-bottom {
   cursor: progress;
 }
 
+/* PRD-050 FR-3.8: the double opt-in line and the bot trap */
+.newsletter_notice {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.newsletter_honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .newsletter_message {
   min-height: 1.2em;
   margin: 0;
@@ -369,6 +384,13 @@ footer .footer-bottom {
 
 .newsletter_message.is_error {
   font-weight: 600;
+}
+
+/* PRD-050 FR-3.8 (D20): the store's own sign-up form in the footer */
+.newsletter_description {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.75;
 }
 
 @media (max-width: 768px) {
