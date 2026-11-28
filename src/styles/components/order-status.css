@@ -165,3 +165,31 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+/* Backend PRD-051 FR-12: the delivery update page (`/delivery/update`) */
+#order_status_section .delivery_update_form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+#order_status_section .delivery_update_form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 14px;
+}
+
+#order_status_section .delivery_update_form input,
+#order_status_section .delivery_update_form textarea {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  padding: 0.6rem 0.75rem;
+  font-family: paragraph;
+  font-size: 14px;
+  background: transparent;
+}
+
+#order_status_section .delivery_update_error {
+  color: #b00020;
+}
