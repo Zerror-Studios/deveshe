@@ -15,7 +15,7 @@ This is the brand storefront for Deveshe Dreams: an editorial home page, lookboo
 
 ```mermaid
 flowchart LR
-    SH(["👤 Shopper"]) --> NX["deveshe-dreams<br/>Next.js 16 App Router<br/>(Vercel)"]
+    SH(["👤 Shopper"]) --> NX["deveshe-dreams<br/>Next.js 16 App Router<br/>(AWS Amplify)"]
     NX -- "browser: same-origin /v1/graphql<br/>proxy.js → API_GATEWAY_URL<br/>Authorization: Bearer (memory) · cookie __Host-zc_cust_rt<br/>+ x-zcom-client-ip · x-tenant-domain · x-zcom-edge-secret (optional)" --> GW["ZCommerce gateway"]
     NX -- "server pages: API_GATEWAY_URL/v1/graphql<br/>x-tenant-domain / x-forwarded-host = NEXT_PUBLIC_TENANT_DOMAIN<br/>+ x-zcom-edge-secret (optional)" --> GW
     NX -- "payment app checkout (kit launchPayment)" --> NB["Razorpay / Cashfree / PayU"]
@@ -60,14 +60,14 @@ On `@zcom/storefront-kit` since 2026-11-11 (kit PRD-002 step 5): the kit owns th
 ```mermaid
 flowchart LR
     Q["store views<br/>useQuery / useMutation (@apollo/client/react)"] --> KC["kit Apollo client (ZcomSsrProvider)<br/>error link: TOKEN_EXPIRED / UNAUTHENTICATED → refresh once, retry<br/>INVALID_AUTH_TOKEN / TENANT_MISMATCH → session ended<br/>TENANT_NOT_FOUND → onStoreUnavailable toast<br/>TENANT_SUSPENDED → one reload a minute<br/>auth link: Bearer token from memory · skipAuth for anonymous calls"]
-    KC -- "browser: same-origin /v1/graphql" --> PX["proxy.js = kit createZcomMiddleware<br/>strips client x-zcom-*, x-tenant-domain, x-forwarded-host, Origin, Referer<br/>adds x-tenant-domain · x-zcom-edge-secret · x-zcom-client-ip<br/>(Vercel's x-vercel-forwarded-for; off Vercel only trustedIpHeader)<br/>no tenant domain → fails closed"]
+    KC -- "browser: same-origin /v1/graphql" --> PX["proxy.js = kit createZcomMiddleware<br/>strips client x-zcom-*, x-tenant-domain, x-forwarded-host, Origin, Referer<br/>adds x-tenant-domain · x-zcom-edge-secret · x-zcom-client-ip<br/>(Amplify: ZCOM_TRUSTED_IP_HEADER, else last x-forwarded-for hop if ZCOM_TRUST_FORWARDED_FOR=last; Vercel: its own header)<br/>no tenant domain → fails closed"]
     PX --> GW["Gateway"]
     SV["server pages, loaders, sitemap<br/>lib/server-query.js → kit zcomFetch<br/>(never cached; NOT_FOUND → null)"] -- "API_GATEWAY_URL + edge headers" --> GW
 ```
 
 **Edge headers (PRD-002 R2-C1).** The kit builds them in the proxy and in its server functions (`@zcom/storefront-kit/server`), the only places that read `EDGE_SHARED_SECRET`; server files import those, never a "use client" file. The gateway trusts `x-tenant-domain` and `x-zcom-client-ip` only with a valid `x-zcom-edge-secret`.
 
-**Client IP and tenant (PRD-002 round 3, VSEC-3/VSEC-4).** On Vercel (D9) the kit takes `x-vercel-forwarded-for`; off Vercel only a header named in `trustedIpHeader` (none is set). The proxy strips client tenant headers and fails closed without `NEXT_PUBLIC_TENANT_DOMAIN`. Server page reads send the tenant and the edge secret but no `x-zcom-client-ip`; `/pay/[token]` sends the shopper's IP (`getRequestClientIp`).
+**Client IP and tenant (PRD-002 round 3, VSEC-3/VSEC-4).** On Vercel (D9) the kit takes `x-vercel-forwarded-for`; off Vercel, as here on AWS Amplify, the header named in `ZCOM_TRUSTED_IP_HEADER`, else the right-most `x-forwarded-for` hop when `ZCOM_TRUST_FORWARDED_FOR=last`, else none. The proxy strips client tenant headers and fails closed without `NEXT_PUBLIC_TENANT_DOMAIN`. Server page reads send the tenant and the edge secret but no `x-zcom-client-ip`; `/pay/[token]` sends the shopper's IP (`getRequestClientIp`).
 
 **Unsubscribe (VCON-1).** `/unsubscribe` (`views/UnsubscribeView.jsx`, `noindex`) reads `?email=&token=` once, strips them from the URL (`history.replaceState`), and calls `unsubscribeNewsletter(email, token)`; the backend signs the link (`https://<tenant domain>/unsubscribe?…`) with `NEWSLETTER_TOKEN_SECRET` and answers uniformly, so the page shows one neutral message.
 
@@ -151,7 +151,7 @@ A retry reuses the same unpaid order, also after a reload (the kit's `PendingOrd
 
 ```mermaid
 flowchart LR
-    NPMRC[".npmrc → GITHUB_TOKEN reference only<br/>(no token; GSAP from public npm)"] --> CI["npm ci"] --> NB["next build<br/>(production build needs API_GATEWAY_URL<br/>and NEXT_PUBLIC_TENANT_DOMAIN)"] --> HOST["Vercel<br/>env: + EDGE_SHARED_SECRET (server-only), CSP_REPORT_ONLY"]
+    NPMRC[".npmrc → GITHUB_TOKEN reference only<br/>(no token; GSAP from public npm)"] --> CI["npm ci"] --> NB["next build<br/>(production build needs API_GATEWAY_URL<br/>and NEXT_PUBLIC_TENANT_DOMAIN)"] --> HOST["AWS Amplify (amplify.yml)<br/>env: + EDGE_SHARED_SECRET (server-only), CSP_REPORT_ONLY"]
 ```
 
 `react-tooltip` and `cross-fetch` were removed (RMAINT-9), and the lockfile no longer lists MUI/emotion/styled-components.
